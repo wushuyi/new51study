@@ -28,20 +28,20 @@
   -webkit-align-items: center;
       -ms-flex-align: center;
           align-items: center;
-  color: #108ee9;
+  color: #FF4F00;
   font-size: 0.5410628rem;
   line-height: 1;
   -webkit-transition: background .2s;
   transition: background .2s;
   position: relative;
-  border: 1PX solid #108ee9;
+  border: 1PX solid #FF4F00;
   width: 100%;
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
   border-left-width: 0;
 }
 .am-segment-item-tintcolor {
-  border-color: #108ee9;
+  border-color: #FF4F00;
 }
 .am-segment-item:first-child {
   border-left-width: 1PX;
@@ -51,7 +51,7 @@
   border-radius: 0 0.19323671rem 0.19323671rem 0;
 }
 .am-segment-item-selected {
-  background: #108ee9;
+  background: #FF4F00;
   color: #fff;
 }
 .am-segment-item-active .am-segment-item-inner {
@@ -63,5 +63,5 @@
   opacity: 0.1;
   -webkit-transition: background .2s;
   transition: background .2s;
-  background-color: #108ee9;
+  background-color: #FF4F00;
 }

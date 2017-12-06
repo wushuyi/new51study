@@ -8,7 +8,7 @@
       -ms-flex-align: center;
           align-items: center;
   height: 1.73913043rem;
-  background-color: #108ee9;
+  background-color: #FF4F00;
   color: #fff;
 }
 .am-navbar-left,
@@ -54,7 +54,7 @@
 }
 .am-navbar-light {
   background-color: #fff;
-  color: #108ee9;
+  color: #FF4F00;
 }
 .am-navbar-light .am-navbar-title {
   color: #000;

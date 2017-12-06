@@ -49,7 +49,7 @@
 }
 .am-radio.am-radio-checked .am-radio-inner:after {
   display: block;
-  border-color: #108ee9;
+  border-color: #FF4F00;
 }
 .am-radio.am-radio-disabled.am-radio-checked .am-radio-inner:after {
   display: block;

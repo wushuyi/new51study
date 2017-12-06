@@ -1,0 +1,16 @@
+@import 'libs/hotcss/px2rem';
+
+.auth-ui-input-with-code {
+  position: relative;
+  .am-button {
+    $height: 34*$hd;
+    position: absolute;
+    top: 10*$hd;
+    right: 10*$hd;
+    width: 85*$hd;
+    height: $height;
+    line-height: $height;
+    padding: 0;
+    border-radius: 3*$hd;
+  }
+}

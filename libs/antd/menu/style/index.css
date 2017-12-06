@@ -123,7 +123,7 @@
           flex: 0;
 }
 .am-menu .am-flexbox .am-flexbox-item:last-child .am-list .am-list-item.am-sub-menu-item-selected .am-list-line .am-list-content {
-  color: #108ee9;
+  color: #FF4F00;
 }
 .am-menu .am-flexbox .am-flexbox-item:last-child .am-list .am-list-item.am-sub-menu-item-disabled .am-list-line .am-list-content {
   color: #bbb;

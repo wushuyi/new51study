@@ -32,7 +32,7 @@
   right: 0;
   top: 10%;
   height: 80%;
-  border-right: 0.05797101rem solid #108ee9;
+  border-right: 0.05797101rem solid #FF4F00;
   -webkit-animation: keyboard-cursor infinite 1s step-start;
           animation: keyboard-cursor infinite 1s step-start;
 }
@@ -201,7 +201,7 @@
 .am-number-keyboard-wrapper table tr .am-number-keyboard-item.keyboard-confirm {
   color: #fff;
   font-size: 0.8115942rem;
-  background-color: #108ee9;
+  background-color: #FF4F00;
   border-bottom: 1PX solid #ddd;
 }
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 2dppx) {
@@ -236,10 +236,10 @@
   }
 }
 .am-number-keyboard-wrapper table tr .am-number-keyboard-item.keyboard-confirm.am-number-keyboard-item-active {
-  background-color: #0e80d2;
+  background-color: #FF741E;
 }
 .am-number-keyboard-wrapper table tr .am-number-keyboard-item.keyboard-confirm.am-number-keyboard-item-disabled {
-  background-color: #0e80d2;
+  background-color: #FF741E;
   color: rgba(255, 255, 255, 0.45);
 }
 .am-number-keyboard-wrapper table tr .am-number-keyboard-item.keyboard-delete {
@@ -398,7 +398,7 @@
   background-position: 0.07729469rem 0.07729469rem;
 }
 .am-list-item .am-input-clear-active {
-  background-color: #108ee9;
+  background-color: #FF4F00;
 }
 .am-list-item.am-input-focus .am-input-clear {
   display: block;

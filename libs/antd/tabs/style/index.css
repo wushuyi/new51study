@@ -144,11 +144,11 @@
           transform: translateX(0);
 }
 .am-tabs-default-bar-tab-active {
-  color: #108ee9;
+  color: #FF4F00;
 }
 .am-tabs-default-bar-underline {
   position: absolute;
-  border: 1px #108ee9 solid;
+  border: 1px #FF4F00 solid;
 }
 .am-tabs-default-bar-animated .am-tabs-default-bar-content {
   -webkit-transition: -webkit-transform 0.3s cubic-bezier(0.35, 0, 0.25, 1);

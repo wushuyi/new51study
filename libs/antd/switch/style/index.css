@@ -115,7 +115,7 @@
   top: 1PX;
 }
 .am-switch.am-switch-android input[type="checkbox"]:checked + .checkbox {
-  background: #108ee9;
+  background: #FF4F00;
 }
 .am-switch.am-switch-android input[type="checkbox"]:checked + .checkbox:before {
   -webkit-transform: scale(0);
