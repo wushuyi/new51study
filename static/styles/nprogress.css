@@ -1,0 +1,60 @@
+/* Make clicks pass-through */
+#nprogress {
+  pointer-events: none; }
+#nprogress .bar {
+  background: #ff6121;
+  position: fixed;
+  z-index: 1031;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 0.07729rem; }
+/* Fancy blur effect */
+#nprogress .peg {
+  display: block;
+  position: absolute;
+  right: 0rem;
+  width: 3.86473rem;
+  height: 100%;
+  -webkit-box-shadow: 0 0 0.38647rem #ff6121, 0 0 0.19324rem #ff6121;
+          box-shadow: 0 0 0.38647rem #ff6121, 0 0 0.19324rem #ff6121;
+  opacity: 1.0;
+  -webkit-transform: rotate(3deg) translate(0rem, -0.15459rem);
+  -ms-transform: rotate(3deg) translate(0rem, -0.15459rem);
+  transform: rotate(3deg) translate(0rem, -0.15459rem); }
+/* Remove these to get rid of the spinner */
+#nprogress .spinner {
+  display: block;
+  position: fixed;
+  z-index: 1031;
+  top: 0.57971rem;
+  right: 0.57971rem; }
+#nprogress .spinner-icon {
+  width: 0.69565rem;
+  height: 0.69565rem;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  border: solid 0.07729rem transparent;
+  border-top-color: #ff6121;
+  border-left-color: #ff6121;
+  border-radius: 50%;
+  -webkit-animation: nprogress-spinner 400ms linear infinite;
+  animation: nprogress-spinner 400ms linear infinite; }
+.nprogress-custom-parent {
+  overflow: hidden;
+  position: relative; }
+.nprogress-custom-parent #nprogress .spinner,
+.nprogress-custom-parent #nprogress .bar {
+  position: absolute; }
+@-webkit-keyframes nprogress-spinner {
+  0% {
+    -webkit-transform: rotate(0deg); }
+  100% {
+    -webkit-transform: rotate(360deg); } }
+@keyframes nprogress-spinner {
+  0% {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg); }
+  100% {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg); } }

@@ -1,0 +1,21 @@
+{
+  "plugins": [
+    "transform-decorators-legacy",
+    [
+      "module-resolver",
+      {
+        "root": [
+          "."
+        ],
+        "alias": {
+        }
+      }
+    ]
+  ],
+  "presets": [
+    [
+      "next/babel"
+    ]
+  ],
+  "ignore": []
+}
