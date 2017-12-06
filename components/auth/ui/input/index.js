@@ -7,7 +7,7 @@ export default class AuthInputItem extends React.PureComponent {
     const {props} = this
     const {children, ...resProps} = props
     return (
-      <div className="auth-ui-input">
+      <div className="auth-ui_input">
         <BaseInputItem {...resProps}>{children}</BaseInputItem>
         {/*language=SCSS*/}
         <style global jsx>{Style}</style>

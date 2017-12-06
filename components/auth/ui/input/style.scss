@@ -1,7 +1,7 @@
 @import 'libs/hotcss/px2rem';
 
-.auth-ui-input {
-  border-bottom: 1*$hd solid #dbdbdb;
+.auth-ui_input {
+  border-bottom: 1px solid #dbdbdb;
   &:last-child{
     border-bottom: none;
   }
@@ -12,5 +12,6 @@
   .am-list-item .am-list-line{
     font-size: 16*$hd;
     padding: 0.375em 0.625em;
+    border-bottom: none;
   }
 }

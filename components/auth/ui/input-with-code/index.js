@@ -9,7 +9,7 @@ export default class InputWithCode extends React.PureComponent {
     const {props} = this
     const {children, ...resProps} = props
     return (
-      <div className="auth-ui-input auth-ui-input-with-code">
+      <div className="auth-ui_input auth-ui_input-with-code">
         <BaseInputItem {...resProps}>{children}</BaseInputItem>
         <Button type="primary" size="small" inline>获取验证码</Button>
         {/*language=SCSS*/}
