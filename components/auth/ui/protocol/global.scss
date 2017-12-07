@@ -1,0 +1,30 @@
+@import 'libs/hotcss/px2rem';
+
+.auth-ui_protocol-warp {
+  position: absolute;
+  right: 0;
+  left: 0;
+  top: 40 * $hd;
+  bottom: 0 * $hd;
+}
+
+.auth-ui_protocol {
+  position: absolute;
+  top: 0;
+  bottom: 50*$hd;
+  color: #2a2b2c;
+  font-size: 16*$hd;
+  text-align: left;
+  padding: 0 10 * $hd;
+  overflow: scroll;
+  -webkit-overflow-scrolling: touch;
+}
+
+.auth-ui_protocol-btn {
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  .am-button {
+    border-radius: 0;
+  }
+}

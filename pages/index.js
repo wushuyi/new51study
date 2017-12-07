@@ -10,6 +10,7 @@ import List from 'antd-mobile/lib/list'
 import InputItem from 'antd-mobile/lib/input-item'
 import Toast from 'antd-mobile/lib/toast'
 import Button from 'antd-mobile/lib/button'
+import { deferred } from 'redux-saga/utils'
 
 class ErrorInputExample extends React.Component {
   state = {
@@ -114,8 +115,16 @@ class Page extends React.Component {
         <Link href='./next' prefetch>
           <a href='./next'>next</a>
         </Link>
-        <Button type="primary">primary</Button>
-        <Button disabled>default disabled</Button>
+        {/*<div>{data.get('name')}</div>*/}
+        <Button onClick={(e) => {
+          const def = deferred()
+          actions.testDef(def)
+          def.promise.then(function (data) {
+            console.log(data)
+          })
+        }} type="primary">primary</Button>
+
+        <Button  disabled>default disabled</Button>
         <ErrorInputExample/>
 
         {/*<div>{JSON.stringify(data)}</div>*/}
@@ -132,6 +141,7 @@ export default withRedux(Page, function (KeaContext) {
   const logic = connect({
     actions: [
       mainLogic, [
+        'testDef',
         'initPage',
         'title'
       ]

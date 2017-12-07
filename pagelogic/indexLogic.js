@@ -1,11 +1,17 @@
-import PropTypes from 'prop-types';
-import {put, race, take, call} from 'redux-saga/effects';
-import {delay} from 'redux-saga';
+import PropTypes from 'prop-types'
+import { put, race, take, call } from 'redux-saga/effects'
+import { delay } from 'redux-saga'
 // import {isServer} from 'utils/runEnv'
-import request from 'superagent';
+import request from 'superagent'
+import { fromJS } from 'immutable'
+import { isBrowser } from 'utils/runEnv'
+
+if (isBrowser) {
+  window.fromJS = fromJS
+}
 
 export default KeaContext => {
-  const {kea} = KeaContext;
+  const {kea} = KeaContext
   return kea({
     path: (key) => ['scenes', 'pages', 'index'],
     actions: () => ({
@@ -13,6 +19,7 @@ export default KeaContext => {
       title: (text) => ({text}),
       initPage: (title) => ({title}),
       asyncData: (json) => ({json}),
+      testDef: (def) => ({def}),
     }),
 
     reducers: ({actions}) => ({
@@ -36,12 +43,12 @@ export default KeaContext => {
       ]
     }),
 
-    start: function* () {
+    start: function * () {
       // yield call(delay, 2000);
       // console.log('start!');
     },
 
-    stop: function* () {
+    stop: function * () {
 
       // yield call(delay, 2000);
       // console.log('stop');
@@ -50,20 +57,31 @@ export default KeaContext => {
 
     takeEvery: ({actions, workers}) => ({
       [actions.noop]: workers.noop,
-      [actions.initPage]: workers.initPage
+      [actions.initPage]: workers.initPage,
+      [actions.testDef]: workers.testDef,
     }),
 
     workers: {
-      noop: function* () {
+      noop: function * () {
       },
-      initPage: function* (action) {
-        const {actions} = this;
-        const {title} = action.payload;
-        let res = yield call(() => {
-          return request.get('http://localhost:8080/temp/es6/package-lock.json');
-        });
-        yield put(actions.asyncData(res.body));
+      testDef: function * testDef(action) {
+        const {def} = action.payload
+        yield call(delay, 2000)
+        def.resolve('ok')
+      },
+      initPage: function * (action) {
+        const {actions} = this
+        const {title} = action.payload
+        try {
+          let res = yield call(() => {
+            return request.get('http://localhost:8080/temp/es6/package-lock.json')
+          })
+          yield put(actions.asyncData(res.body))
+        } catch (e) {
+          yield put(actions.asyncData(fromJS({name: 'xiaowu'})))
+        } finally {
 
+        }
 
         // yield call(delay, 1000);
         // console.log('initPage!');
@@ -74,5 +92,5 @@ export default KeaContext => {
         // }
       }
     }
-  });
+  })
 }

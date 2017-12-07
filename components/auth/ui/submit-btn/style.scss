@@ -1,5 +1,8 @@
 @import 'libs/hotcss/px2rem';
 
-.auth-ui_submit-btn{
-  margin-top: 30*$hd;
+.auth-ui_submit-btn {
+  //margin-top: 30*$hd;
+  $height: 49*$hd;
+  height: $height;
+  line-height: $height;
 }

@@ -1,0 +1,14 @@
+@import 'libs/hotcss/px2rem';
+
+.is-pulled-left {
+  float: left;
+}
+
+.is-pulled-right {
+  float: right;
+}
+
+a {
+  font-size: 18*$hd;
+  color: #4E7CB1;
+}
