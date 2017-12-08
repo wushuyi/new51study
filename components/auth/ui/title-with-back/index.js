@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import Link from 'next/link'
 import Style from './style.scss'
 
-export default class a extends React.PureComponent {
+export default class TitleWithBack extends React.PureComponent {
 
   static propTypes = {
     linkProps: PropTypes.object,

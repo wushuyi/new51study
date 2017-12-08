@@ -1,12 +1,12 @@
-import {select} from 'redux-saga/effects'
+import { select } from 'redux-saga/effects'
 
 // import { startSaga, cancelSaga } from './saga'
 
 import createSaga from './create-saga'
 import createCombinedSaga from './create-combined'
 import createSagas from './saga'
-import {getCache} from "../../next-kea";
-import {startSaga} from "../../next-kea-saga/saga/saga";
+import { getCache } from '../../next-kea'
+import { startSaga } from '../../next-kea-saga/saga/saga'
 
 // import { getCache } from 'kea'
 
@@ -30,16 +30,15 @@ export default function injectSagasIntoClass(Klass, input, output, cache) {
 
   // console.log(Object.keys(Klass))
   if (Klass.getInitialProps) {
-    const originalGetInitialProps = Klass.getInitialProps;
+    const originalGetInitialProps = Klass.getInitialProps
     Klass.getInitialProps = async function (ctx) {
       if (DEBUG) {
         console.log('component did mount')
       }
 
       // this === component instance
-      let _keaSagaBase = {};
-      let _keaRunningSaga = null;
-
+      let _keaSagaBase = {}
+      let _keaRunningSaga = null
 
       const key = input.key ? input.key(ctx) : null
       const path = input.path(key)
@@ -58,11 +57,11 @@ export default function injectSagasIntoClass(Klass, input, output, cache) {
           key: key,
           path: path,
           props: ctx,
-          get: function* (key) {
+          get: function * (key) {
             const {selectors, selector} = getCache(path)
             return yield select(key ? selectors[key] : selector)
           },
-          fetch: function* () {
+          fetch: function * () {
             let results = {}
             const keys = Array.isArray(arguments[0]) ? arguments[0] : arguments
             for (let i = 0; i < keys.length; i++) {
@@ -96,9 +95,9 @@ export default function injectSagasIntoClass(Klass, input, output, cache) {
         const startSaga = createCombinedSaga(sagas, sagaPath, cache)
         _keaRunningSaga = mainSaga.startSaga(startSaga, sagaPath)
       }
-      const props = await originalGetInitialProps(ctx);
+      const props = await originalGetInitialProps(ctx)
       return props
-    };
+    }
   }
 
   const originalComponentDidMount = Klass.prototype.componentDidMount
@@ -129,11 +128,11 @@ export default function injectSagasIntoClass(Klass, input, output, cache) {
         key: key,
         path: path,
         props: this.props,
-        get: function* (key) {
+        get: function * (key) {
           const {selectors, selector} = getCache(path)
           return yield select(key ? selectors[key] : selector)
         },
-        fetch: function* () {
+        fetch: function * () {
           let results = {}
           const keys = Array.isArray(arguments[0]) ? arguments[0] : arguments
           for (let i = 0; i < keys.length; i++) {

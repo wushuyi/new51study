@@ -1,17 +1,26 @@
-import {default as BaseInputItem} from 'antd-mobile/lib/input-item'
-import Button from 'antd-mobile/lib/button'
-import React from 'react'
+import PropTypes from 'prop-types'
+import { default as BaseInputItem } from 'antd-mobile/lib/input-item'
+import React, { Fragment } from 'react'
+import CodeButton from './code-button'
 import Style1 from 'components/auth/ui/input/style.scss'
 import Style from './style.scss'
 
-export default class InputWithCode extends React.PureComponent {
+class InputWithCode extends React.PureComponent {
+  static propTypes = {
+    children: PropTypes.any
+  }
+
   render() {
-    const {props} = this
-    const {children, ...resProps} = props
+    const {children, time, logicKey, ...resProps} = this.props
+    const buttonProps = {
+      time,
+      logicKey
+    }
+
     return (
       <div className="auth-ui_input auth-ui_input-with-code">
         <BaseInputItem {...resProps}>{children}</BaseInputItem>
-        <Button type="primary" size="small" inline>获取验证码</Button>
+        <CodeButton {...buttonProps}/>
         {/*language=SCSS*/}
         <style global jsx>{Style1}</style>
         <style global jsx>{Style}</style>
@@ -19,3 +28,5 @@ export default class InputWithCode extends React.PureComponent {
     )
   }
 }
+
+export default InputWithCode
