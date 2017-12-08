@@ -107,6 +107,7 @@ class Page extends React.Component {
       {text: '12321',},
     ]
     let {title, actions, data} = this.props
+    console.log(data)
     return (
       <Layout>
         <Head>
@@ -115,7 +116,7 @@ class Page extends React.Component {
         <Link href='./next' prefetch>
           <a href='./next'>next</a>
         </Link>
-        {/*<div>{data.get('name')}</div>*/}
+        <div>{data.name}</div>
         <Button onClick={(e) => {
           const def = deferred()
           actions.testDef(def)
@@ -124,7 +125,7 @@ class Page extends React.Component {
           })
         }} type="primary">primary</Button>
 
-        <Button  disabled>default disabled</Button>
+        <Button disabled>default disabled</Button>
         <ErrorInputExample/>
 
         {/*<div>{JSON.stringify(data)}</div>*/}

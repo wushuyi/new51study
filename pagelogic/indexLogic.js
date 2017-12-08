@@ -1,13 +1,12 @@
 import PropTypes from 'prop-types'
 import { put, race, take, call } from 'redux-saga/effects'
 import { delay } from 'redux-saga'
-// import {isServer} from 'utils/runEnv'
 import request from 'superagent'
-import { fromJS } from 'immutable'
+import Immutable, { from } from 'seamless-immutable'
 import { isBrowser } from 'utils/runEnv'
 
 if (isBrowser) {
-  window.fromJS = fromJS
+  window.Immutable = Immutable
 }
 
 export default KeaContext => {
@@ -76,9 +75,9 @@ export default KeaContext => {
           let res = yield call(() => {
             return request.get('http://localhost:8080/temp/es6/package-lock.json')
           })
-          yield put(actions.asyncData(res.body))
+          yield put(actions.asyncData(from(res.body)))
         } catch (e) {
-          yield put(actions.asyncData(fromJS({name: 'xiaowu'})))
+          yield put(actions.asyncData(from({name: 'xiaowu'})))
         } finally {
 
         }
