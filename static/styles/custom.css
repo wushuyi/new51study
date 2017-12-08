@@ -1,5 +1,7 @@
 body{
   line-height: 1.5;
+  background-color: #F6F6F6;
+  min-height: 60vh;
 }
 
 .is-clearfix:after {
