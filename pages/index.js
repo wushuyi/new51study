@@ -107,7 +107,6 @@ class Page extends React.Component {
       {text: '12321',},
     ]
     let {title, actions, data} = this.props
-    console.log(data)
     return (
       <Layout>
         <Head>

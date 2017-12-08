@@ -1,0 +1,28 @@
+@import '../../../libs/hotcss/px2rem';
+
+.title {
+  padding-top: 58*$hd;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18*$hd;
+  color: #000;
+  span {
+    color: #FF4F00;
+  }
+}
+
+.form-wrap{
+  margin: 24*$hd 20*$hd 0;
+}
+
+.form-group{
+  border: 1px solid #dbdbdb;
+  border-radius: 4*$hd;
+  overflow: hidden;
+}
+
+.link{
+  font-size: 18*$hd;
+  color: #4E7CB1;
+}

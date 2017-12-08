@@ -1,0 +1,33 @@
+@import 'libs/hotcss/px2rem';
+
+.warp {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 34*$hd;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-left: 34*$hd;
+  font-size: 18*$hd;
+  color: #323232;
+  position: relative;
+  &.is-active {
+    color: #FF4F00;
+    &:after {
+      position: absolute;
+      bottom: -4*$hd;
+      left: 50%;
+      margin-left: -2*$hd;
+      content: '';
+      display: block;
+      width: 4*$hd;
+      height: 4*$hd;
+      border-radius: 4*$hd;
+      background: #FF4F00;
+    }
+  }
+}

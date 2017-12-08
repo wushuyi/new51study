@@ -19,7 +19,7 @@ function getBody(content) {
   return content
 }
 
-export default class a extends React.PureComponent {
+export default class Protocol extends React.PureComponent {
   static PropsType = {
     text: PropTypes.string,
   }

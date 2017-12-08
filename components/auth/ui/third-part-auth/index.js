@@ -9,7 +9,7 @@ const PlaceHolder = ({className = '', ...restProps}) => (
   <div className={`${className} placeholder`} {...restProps}>Block</div>
 )
 
-export default class a extends React.PureComponent {
+export default class ThirdPartAuth extends React.PureComponent {
   render() {
     return (
       <Fragment>
