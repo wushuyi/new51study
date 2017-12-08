@@ -1,7 +1,7 @@
 @import 'libs/hotcss/px2rem';
 
 .auth-ui_input {
-  border-bottom: 0.8*$hd solid #dbdbdb;
+  border-bottom: 1*$hd solid #F6F6F6;
   &:last-child{
     border-bottom: none;
   }

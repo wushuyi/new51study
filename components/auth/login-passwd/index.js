@@ -9,8 +9,8 @@ import LoginNavBanner from 'components/auth/ui/login-nav-banner'
 
 import Link from 'next/link'
 import Style1 from 'components/auth/style/style.scss'
-import Style from './style.scss'
-import { $hd } from 'utils/hotcss'
+// import Style from './style.scss'
+// import { $hd } from 'utils/hotcss'
 
 export default class Pages extends React.Component {
   render() {
@@ -33,7 +33,7 @@ export default class Pages extends React.Component {
           <SubmitBtn type="primary">登录</SubmitBtn>
           <WhiteSpace height="8"/>
           <div className="is-clearfix">
-            <Link href='./login-passwd' prefetch>
+            <Link href='./passwd-forget' prefetch>
               <a className="link is-pulled-left">忘记密码?</a>
             </Link>
             <Link href='./login-code' prefetch>
@@ -47,7 +47,7 @@ export default class Pages extends React.Component {
         <ThirdPartAuth/>
         {/*language=SCSS*/}
         <style jsx>{Style1}</style>
-        <style jsx>{Style}</style>
+        {/*<style jsx>{Style}</style>*/}
       </Fragment>
     )
   }

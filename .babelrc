@@ -14,7 +14,10 @@
   ],
   "presets": [
     [
-      "next/babel"
+      "next/babel",
+      {
+        "styled-jsx": { "optimizeForSpeed": true }
+      }
     ]
   ],
   "ignore": []

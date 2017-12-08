@@ -9,8 +9,8 @@ import ThirdPartAuth from 'components/auth/ui/third-part-auth'
 
 import Link from 'next/link'
 import Style1 from 'components/auth/style/style.scss'
-import Style from './style.scss'
-import { $hd } from 'utils/hotcss'
+// import Style from './style.scss'
+// import { $hd } from 'utils/hotcss'
 
 export default class Pages extends React.Component {
   render() {
@@ -50,7 +50,7 @@ export default class Pages extends React.Component {
 
         {/*language=SCSS*/}
         <style jsx>{Style1}</style>
-        <style jsx>{Style}</style>
+        {/*<style jsx>{Style}</style>*/}
       </Fragment>
     )
   }

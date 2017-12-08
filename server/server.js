@@ -1,6 +1,8 @@
 const express = require('express')
 const cookieParser = require('cookie-parser')
+const favicon = require('serve-favicon')
 const compression = require('compression')
+const path = require('path')
 const next = require('next')
 const routes = require('./routes')
 
@@ -12,6 +14,8 @@ const handler = routes.getRequestHandler(app)
 const server = express()
 server.use(cookieParser())
 server.use(compression())
+console.log(path.join(__dirname, '../static/images', 'favicon.ico'));
+server.use(favicon(path.join(__dirname, '../static/images', 'favicon.ico')))
 
 app.prepare()
   .then(() => {
