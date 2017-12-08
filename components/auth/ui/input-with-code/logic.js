@@ -59,8 +59,12 @@ export default (KeaContext, key) => {
         yield localforage.setItem(key, end.getTime())
 
         const {refreshCountdown, unlock} = this.actions
+
         let lock = true
         while (lock) {
+          if (window.onRouter) {
+            break
+          }
           yield call(delay, 1000)
           yield put(refreshCountdown())
           let countdown = yield this.get('countdown')

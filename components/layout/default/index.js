@@ -5,10 +5,17 @@ import Head from 'next/head'
 import Router from 'next/router'
 
 Router.onRouteChangeStart = (url) => {
+  window.onRouter = true
   window.NProgress.start()
 }
-Router.onRouteChangeComplete = () => window.NProgress.done()
-Router.onRouteChangeError = () => window.NProgress.done()
+Router.onRouteChangeComplete = () => {
+  window.onRouter = false
+  window.NProgress.done()
+}
+Router.onRouteChangeError = () => {
+  window.onRouter = false
+  window.NProgress.done()
+}
 
 class Layout extends React.Component {
   static defaultProps = {
