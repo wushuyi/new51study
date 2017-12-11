@@ -5,6 +5,8 @@ const xhrError = createError('xhrError')
 const msgError = createError('msgError')
 const resError = createError('resError')
 
+const DEV = APPEnv === 'dev'
+
 const Version = APIVersion
 
 export function * baseXhrError(res) {

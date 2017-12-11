@@ -3,7 +3,6 @@ export const resError = '服务端响应错误,请稍后重试!'
 export const msgError = '1400'
 
 export function matchXhrError(err) {
-  console.log(err.name, err.message)
   let res
   switch (err.name) {
     case 'xhrError':
