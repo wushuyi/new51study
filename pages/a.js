@@ -7,7 +7,7 @@ class Page extends React.Component {
 
   render() {
     return (
-      <div onClick={this.linkClicked}>test</div>
+      <div onClick={this.linkClicked}>{JSON.stringify(APIService)}</div>
     )
   }
 }

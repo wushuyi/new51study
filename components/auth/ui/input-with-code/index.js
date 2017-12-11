@@ -11,10 +11,11 @@ class InputWithCode extends React.PureComponent {
   }
 
   render() {
-    const {children, time, logicKey, ...resProps} = this.props
+    const {children, time, logicKey, phone, ...resProps} = this.props
     const buttonProps = {
       time,
-      logicKey
+      logicKey,
+      phone,
     }
 
     return (

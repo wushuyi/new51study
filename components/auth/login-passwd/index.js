@@ -45,6 +45,7 @@ export default class Pages extends React.Component {
         <Protocol text="注册或登录"/>
         <WhiteSpace height="92"/>
         <ThirdPartAuth/>
+        <WhiteSpace height="30"/>
         {/*language=SCSS*/}
         <style jsx>{Style1}</style>
         {/*<style jsx>{Style}</style>*/}

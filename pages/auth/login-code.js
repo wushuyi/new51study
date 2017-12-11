@@ -2,13 +2,14 @@ import React, { Fragment } from 'react'
 import Layout from 'components/layout/default'
 import LoginCode from 'components/auth/login-code'
 import { withRedux } from 'store'
-import createLogic from 'pagelogic/noop'
+import createLogic from 'pagelogic/auth/login-code'
 
 class Page extends React.Component {
   render() {
+    const {...resPorps} = this.props
     return (
       <Layout>
-        <LoginCode/>
+        <LoginCode {...resPorps}/>
       </Layout>
     )
   }
@@ -19,10 +20,14 @@ export default withRedux(Page, function (KeaContext) {
   const mainLogic = createLogic(KeaContext)
   const logic = connect({
     actions: [
-      mainLogic, []
+      mainLogic, [
+        'login'
+      ]
     ],
     props: [
-      mainLogic, []
+      mainLogic, [
+        'btnLock'
+      ]
     ]
   })
   return {

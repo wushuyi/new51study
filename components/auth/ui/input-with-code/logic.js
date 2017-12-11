@@ -3,15 +3,18 @@ import { put, race, fork, take, call } from 'redux-saga/effects'
 import { delay } from 'redux-saga'
 import addSeconds from 'date-fns/add_seconds'
 import differenceInSeconds from 'date-fns/difference_in_seconds'
+import isError from 'lodash/isError'
 
 export default (KeaContext, key) => {
   const {kea} = KeaContext
   return kea({
     path: () => ['scenes', 'uis', 'form', 'ButtonWithCode', key || 'index'],
     actions: () => ({
+      getCode: (phone, def) => ({phone, def}),
       buttonTimedout: (countdown) => ({countdown}),
       refreshCountdown: () => ({}),
       unlock: () => ({}),
+      lock: () => ({}),
       start: () => ({}),
     }),
 
@@ -24,15 +27,28 @@ export default (KeaContext, key) => {
       lock: [false, PropTypes.bool, {
         [actions.buttonTimedout]: (state, payload) => true,
         [actions.unlock]: (state, payload) => false,
+        [actions.lock]: (state, payload) => true,
       }]
     }),
 
     takeLatest: ({actions, workers}) => ({
+      [actions.getCode]: workers.getCode,
       [actions.buttonTimedout]: workers.countdown,
       [actions.start]: workers.start
     }),
 
     workers: {
+      getCode: function * (action) {
+        const {phone, def} = action.payload
+        const {getCode, baseXhrError} = yield import('apis/auth')
+        const res = yield call(getCode, phone)
+        if (isError(res)) {
+          yield call(baseXhrError, res)
+          def.reject(res)
+          return false
+        }
+        def.resolve(res)
+      },
       start: function * () {
         const {buttonTimedout, unlock} = this.actions
         let key = this.path.join('.') + 'endDate'

@@ -1,11 +1,10 @@
 import PropTypes from 'prop-types'
-import { default as BaseInputItem } from 'antd-mobile/lib/input-item'
 import Button from 'antd-mobile/lib/button'
 import React, { Fragment } from 'react'
-import Style1 from 'components/auth/ui/input/style.scss'
-import Style from './style.scss'
 import createLoginc from './logic'
-import memoize from 'lodash/memoize'
+import { deferred } from 'redux-saga/utils'
+
+const DEV = APPEnv === 'dev'
 
 const getBaseCodeButton = (logic) => {
   @logic
@@ -29,17 +28,29 @@ const getBaseCodeButton = (logic) => {
     }
 
     onGetCodeBtn = (e) => {
-      const {actions, time} = this.props
-      actions.buttonTimedout(time)
+      const {actions, time, phone} = this.props
+      const getCodedef = deferred()
+      actions.getCode(phone, getCodedef)
+      actions.lock()
+      getCodedef.promise.then(async (data) => {
+        const Toast = await import('antd-mobile/lib/toast')
+        Toast.success('验证码发送成功,请查看短信!', 2)
+        DEV && console.log(data)
+        actions.buttonTimedout(time)
+      }).catch(function (err) {
+        // console.log(err)
+        actions.unlock()
+      })
     }
 
     render() {
       const {root, actions, time, countdown, lock, dispatch, ...props} = this.props
+      const {phone, ...resProps} = props
       const buttonProps = {
         disabled: lock,
-        ...props
+        ...resProps
       }
-      let btnText = lock ? `重发(${countdown}s)` : `获取验证码`
+      let btnText = (lock && countdown) ? `重发(${countdown}s)` : `获取验证码`
       return (
         <Button type="primary"
                 onClick={this.onGetCodeBtn}
