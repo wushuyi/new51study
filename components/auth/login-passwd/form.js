@@ -69,7 +69,7 @@ const InnerForm = (props) => {
                  disabled={btnLock}
                  loading={btnLock}>登录</SubmitBtn>
       <style jsx>{Style1}</style>
-      <Persist name="auth-login-passwd"/>
+      <Persist name="form-auth-login-passwd"/>
     </Fragment>
   )
 }

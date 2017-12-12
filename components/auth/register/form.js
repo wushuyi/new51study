@@ -94,12 +94,12 @@ const InnerForm = (props) => {
                  disabled={btnLock}
                  loading={btnLock}>登录</SubmitBtn>
       <style jsx>{Style1}</style>
-      <Persist name="auth-register"/>
+      <Persist name="form-auth-register"/>
     </Fragment>
   )
 }
 
-const getLoginCodeForm = () => {
+const createForm = () => {
   return withFormik({
     validateOnChange: false,
     // Transform outer props into form values
@@ -185,17 +185,17 @@ class ConnectForm extends React.PureComponent {
       ]
     })
 
-    const LoginCodeForm = getLoginCodeForm()
+    const Form = createForm()
 
-    // const originalComponentDidMount = LoginCodeForm.prototype.componentDidMount
-    // LoginCodeForm.prototype.componentDidMount = function () {
+    // const originalComponentDidMount = Form.prototype.componentDidMount
+    // Form.prototype.componentDidMount = function () {
     //   const {actions} = this.props
     //   // actions.btnUnlock()
     //   originalComponentDidMount && originalComponentDidMount.bind(this)()
     // }
 
     this.state = {
-      Component: logic(LoginCodeForm)
+      Component: logic(Form)
     }
   }
 

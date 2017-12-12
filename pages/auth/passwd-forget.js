@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react'
 import Layout from 'components/layout/default'
 import PasswdForget from 'components/auth/passwd-forget'
-import createLogic from 'pagelogic/noop'
+import createLogic from 'pagelogic/auth/passwd-forget'
 import { withRedux } from 'store'
 
 class Page extends React.Component {

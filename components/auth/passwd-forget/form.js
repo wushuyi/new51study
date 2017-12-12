@@ -44,46 +44,66 @@ const InnerForm = (props) => {
       <div className="form-group">
         <InputItem
           type="number"
-          name="phone"
-          maxLength={11}
           placeholder="手机号"
+          name="passwd"
+          maxLength={11}
           onChange={val => setFieldValue('phone', val)}
           onBlur={val => setFieldTouched('phone', true)}
           value={values.phone}
         />
         <InputWithCode
-          time={30}
-          logicKey="auth-login-code"
-          codeType="login"
           type="number"
           name="code"
-          maxLength={6}
           placeholder="验证码"
+          codeType="forget"
+          logicKey="auth-passwd-forget"
+          time={30}
+          maxLength={6}
           onChange={val => setFieldValue('code', val)}
           onBlur={val => setFieldTouched('code', true)}
           value={values.code}
           phone={values.phone}
         />
+        <InputItem
+          type="password"
+          placeholder="密码(请输入6位以上的数字或字母)"
+          name="passwd"
+          maxLength={32}
+          onChange={val => setFieldValue('passwd', val)}
+          onBlur={val => setFieldTouched('passwd', true)}
+          value={values.passwd}
+        />
+        <InputItem
+          type="password"
+          placeholder="确认密码"
+          name="repasswd"
+          maxLength={32}
+          onChange={val => setFieldValue('repasswd', val)}
+          onBlur={val => setFieldTouched('repasswd', true)}
+          value={values.repasswd}
+        />
       </div>
-
       <WhiteSpace height="30"/>
       <SubmitBtn type="primary"
                  onClick={(e) => {
                    checkForm(e, props)
                  }}
                  disabled={btnLock}
-                 loading={btnLock}>进入</SubmitBtn>
+                 loading={btnLock}
+      >完成</SubmitBtn>
       <style jsx>{Style1}</style>
-      <Persist name="form-auth-login-code"/>
+      <Persist name="form-auth-passwd-forget"/>
     </Fragment>
   )
 }
 
-const getForm = () => {
+const createForm = () => {
   return withFormik({
     validateOnChange: false,
     // Transform outer props into form values
-    mapPropsToValues: props => ({}),
+    mapPropsToValues: props => {
+      return {}
+    },
     // Add a custom validation function (this can be async too!)
     validate: (values, props) => {
       const errors = {}
@@ -95,20 +115,29 @@ const getForm = () => {
       if (!values.code) {
         errors.code = '请填写验证码'
       }
+      if (!values.passwd) {
+        errors.passwd = '请填写密码'
+      } else if (values.passwd.length < 6) {
+        errors.passwd = '请填写6位以上的数字或字母'
+      } else if (values.repasswd !== values.passwd) {
+        errors.passwd = errors.repasswd = '两次填写密码不一致'
+      }
       return errors
     },
     // Submission handler
     handleSubmit: (values, ctx) => {
-      console.log(ctx)
       const {
         props,
         setSubmitting,
         resetForm,
       } = ctx
       const {actions} = props
-      const {phone, code} = values
+      const {phone, code, passwd, yjcode} = values
+
       const def = deferred()
-      actions.login(phone, code, def)
+      const regData = [phone, passwd, code, yjcode ? yjcode : '']
+      actions.register(regData, def)
+
       def.promise.then(() => {
         resetForm()
       }).catch(() => {
@@ -124,7 +153,7 @@ class ConnectForm extends React.PureComponent {
   }
 
   static defaultProps = {
-    logicKey: 'auth-login-code-form',
+    logicKey: 'auth-passwd-forget-form',
     logicIndex: 1
   }
 
@@ -139,11 +168,14 @@ class ConnectForm extends React.PureComponent {
     const {logicKey, logicIndex} = props
 
     const {connect, kea} = KeaContext
+    // console.log(logics)
     const mainLogic = logics[logicIndex]
     const logic = connect({
       actions: [
         mainLogic, [
-          'login'
+          'register',
+          'btnUnlock',
+          'btnLock',
         ]
       ],
       props: [
@@ -153,7 +185,14 @@ class ConnectForm extends React.PureComponent {
       ]
     })
 
-    const Form = getForm()
+    const Form = createForm()
+
+    // const originalComponentDidMount = Form.prototype.componentDidMount
+    // Form.prototype.componentDidMount = function () {
+    //   const {actions} = this.props
+    //   // actions.btnUnlock()
+    //   originalComponentDidMount && originalComponentDidMount.bind(this)()
+    // }
 
     this.state = {
       Component: logic(Form)

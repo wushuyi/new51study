@@ -3,7 +3,7 @@ import { delay } from 'redux-saga'
 import { call, put } from 'redux-saga/effects'
 import isError from 'lodash/isError'
 import Cookies from 'js-cookie'
-import { passwordLogin, baseXhrError } from 'apis/auth'
+import { forgetPasswd, baseXhrError } from 'apis/auth'
 
 const DEV = APPEnv === 'dev'
 
@@ -15,7 +15,7 @@ export default KeaContext => {
     actions: () => ({
       btnUnlock: () => ({}),
       btnLock: () => ({}),
-      login: (phone, password, def) => ({phone, password, def}),
+      login: (phone, password, code, def) => ({phone, password, code, def}),
     }),
 
     reducers: ({actions}) => ({
@@ -31,11 +31,11 @@ export default KeaContext => {
 
     workers: {
       login: function * (action) {
-        const {phone, password, def} = action.payload
+        const {phone, password, code, def} = action.payload
         const {actions} = this
         yield put(actions.btnLock())
 
-        const res = yield call(passwordLogin, phone, password)
+        const res = yield call(forgetPasswd, phone, password, code)
         yield call([null, delay], 1000)
         if (isError(res)) {
           yield call(baseXhrError, res)
@@ -44,8 +44,8 @@ export default KeaContext => {
           return false
         }
         const data = res.body.data
-        console.log(data, Cookies)
-        Cookies.set('token', data.token, {expires: 30})
+        // console.log(data, Cookies)
+        // Cookies.set('token', data.token, {expires: 30})
         yield put(actions.btnUnlock())
         def.resolve(res)
       }

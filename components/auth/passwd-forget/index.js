@@ -25,7 +25,7 @@ export default class Pages extends React.Component {
             />
             <InputWithCode
               time={30}
-              logicKey="auth-login-register"
+              logicKey="auth-passwd-forget"
               type="number"
               placeholder="验证码"
             />
