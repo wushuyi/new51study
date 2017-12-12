@@ -11,7 +11,7 @@ export default (KeaContext, key) => {
   return kea({
     path: () => ['scenes', 'uis', 'form', 'ButtonWithCode', key || 'index'],
     actions: () => ({
-      getCode: (phone, def) => ({phone, def}),
+      getCode: (phone, type, def) => ({phone, type, def}),
       buttonTimedout: (countdown) => ({countdown}),
       refreshCountdown: () => ({}),
       unlock: () => ({}),
@@ -40,8 +40,8 @@ export default (KeaContext, key) => {
 
     workers: {
       getCode: function * (action) {
-        const {phone, def} = action.payload
-        const res = yield call(getCode, phone)
+        const {phone, type, def} = action.payload
+        const res = yield call(getCode, phone, type)
         if (isError(res)) {
           yield call(baseXhrError, res)
           def.reject(res)

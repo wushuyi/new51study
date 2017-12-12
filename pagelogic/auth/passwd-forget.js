@@ -10,7 +10,7 @@ const DEV = APPEnv === 'dev'
 export default KeaContext => {
   const {kea} = KeaContext
   const logic = kea({
-    path: (key) => ['scenes', 'pages', 'auth', 'login-passwd'],
+    path: (key) => ['scenes', 'pages', 'auth', 'passwd-forget'],
 
     actions: () => ({
       btnUnlock: () => ({}),

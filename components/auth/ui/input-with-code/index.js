@@ -7,15 +7,20 @@ import Style from './style.scss'
 
 class InputWithCode extends React.PureComponent {
   static propTypes = {
-    children: PropTypes.any
+    children: PropTypes.any,
+    codeType: PropTypes.oneOf(['register', 'forget', 'login']),
+    logicKey: PropTypes.any,
+    phone: PropTypes.any,
+    time: PropTypes.any
   }
 
   render() {
-    const {children, time, logicKey, phone, ...resProps} = this.props
+    const {children, time, codeType, logicKey, phone, ...resProps} = this.props
     const buttonProps = {
       time,
       logicKey,
       phone,
+      codeType
     }
 
     return (

@@ -12,15 +12,18 @@ const getBaseCodeButton = (logic) => {
   class BaseCodeButton extends React.PureComponent {
     static propTypes = {
       actions: PropTypes.any,
+      codeType: PropTypes.any,
       countdown: PropTypes.any,
       dispatch: PropTypes.any,
       lock: PropTypes.any,
+      phone: PropTypes.any,
       root: PropTypes.any,
       time: PropTypes.number
     }
 
     static defaultProps = {
-      time: 5
+      time: 5,
+      codeType: 'login'
     }
 
     componentDidMount() {
@@ -29,7 +32,7 @@ const getBaseCodeButton = (logic) => {
     }
 
     onGetCodeBtn = (e) => {
-      const {actions, time, phone} = this.props
+      const {actions, time, phone, codeType} = this.props
       const getCodedef = deferred()
       if (!phone) {
         Toast.fail('请填写手机号', 2)
@@ -38,7 +41,7 @@ const getBaseCodeButton = (logic) => {
         Toast.fail('请填写正确的手机号', 2)
         return false
       }
-      actions.getCode(phone, getCodedef)
+      actions.getCode(phone, codeType, getCodedef)
       actions.lock()
       getCodedef.promise.then(async (data) => {
         Toast.success('验证码发送成功,请查看短信!', 2)
@@ -51,7 +54,7 @@ const getBaseCodeButton = (logic) => {
     }
 
     render() {
-      const {root, actions, time, countdown, lock, dispatch, ...props} = this.props
+      const {root, actions, time, codeType, countdown, lock, dispatch, ...props} = this.props
       const {phone, ...resProps} = props
       const buttonProps = {
         disabled: lock,

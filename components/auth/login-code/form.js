@@ -54,6 +54,7 @@ const InnerForm = (props) => {
         <InputWithCode
           time={30}
           logicKey="auth-login-code"
+          codeType="login"
           type="number"
           name="code"
           maxLength={6}

@@ -25,8 +25,8 @@ export default withRedux(Page, function (KeaContext) {
       mainLogic, []
     ]
   })
-  return {
+  return [
     logic,
     mainLogic
-  }
+  ]
 })

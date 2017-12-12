@@ -54,6 +54,7 @@ const InnerForm = (props) => {
         <InputWithCode
           time={30}
           logicKey="auth-register"
+          codeType="register"
           type="number"
           placeholder="验证码"
           name="code"

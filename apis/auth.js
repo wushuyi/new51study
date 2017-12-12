@@ -4,6 +4,7 @@ import createError from 'create-error'
 const xhrError = createError('xhrError')
 const msgError = createError('msgError')
 const resError = createError('resError')
+const argsError = createError('argsError')
 
 const DEV = APPEnv === 'dev'
 
@@ -31,13 +32,22 @@ function baseChcek(res) {
 }
 
 /**
- * API: /users/login_code
+ * API: /users/${type}_code
  * @param phone
+ * @param type [register| forget| login]
  * @returns {Promise<*>}
  */
-export async function getCode(phone) {
+export async function getCode(phone, type) {
+  const types = {
+    register: 'reg_code',
+    forget: 'for_code',
+    login: 'login_code'
+  }
   let res
-  const api = '/users/login_code'
+  if (!types[type]) {
+    return new argsError('getCode type arg error')
+  }
+  const api = `/users/${types[type]}`
   const requestURL = `${APIService}${api}`
 
   try {
@@ -129,3 +139,30 @@ export async function register(phone, password, code, yjCode = '') {
     return err
   }
 }
+
+/**
+ * API: /users/forget
+ * @param phone
+ * @param password
+ * @param code
+ * @returns {Promise<*>}
+ */
+export async function forgetPasswd(phone, password, code) {
+  let res
+  const api = '/users/forget'
+  const requestURL = `${APIService}${api}`
+
+  try {
+    res = await request.post(requestURL)
+      .query(Version)
+      .send({
+        phone,
+        password,
+        code,
+      })
+    return baseChcek(res)
+  } catch (err) {
+    return err
+  }
+}
+
