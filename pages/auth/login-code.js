@@ -6,10 +6,9 @@ import createLogic from 'pagelogic/auth/login-code'
 
 class Page extends React.Component {
   render() {
-    const {...resPorps} = this.props
     return (
       <Layout>
-        <LoginCode {...resPorps}/>
+        <LoginCode/>
       </Layout>
     )
   }
@@ -19,19 +18,11 @@ export default withRedux(Page, function (KeaContext) {
   const {connect} = KeaContext
   const mainLogic = createLogic(KeaContext)
   const logic = connect({
-    actions: [
-      mainLogic, [
-        'login'
-      ]
-    ],
-    props: [
-      mainLogic, [
-        'btnLock'
-      ]
-    ]
+    actions: [],
+    props: []
   })
-  return {
+  return [
     logic,
-    mainLogic
-  }
+    mainLogic,
+  ]
 })

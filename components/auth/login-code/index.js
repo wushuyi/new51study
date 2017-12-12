@@ -7,12 +7,13 @@ import LoginCodeForm from './form'
 import Link from 'next/link'
 import Style1 from 'components/auth/style/style.scss'
 
-export default class Pages extends React.PureComponent {
+export default class LoginCode extends React.PureComponent {
   render() {
     const {actions, btnLock} = this.props
     const formPorps = {
       actions,
-      btnLock
+      btnLock,
+      logicIndex: 1
     }
     return (
       <Fragment>

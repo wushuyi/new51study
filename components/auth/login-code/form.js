@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react'
+import PropTypes from 'prop-types'
 import WhiteSpace from 'components/ui/white-space'
 // import WingBlank from 'components/ui/wing-blank'
 import InputItem from 'components/auth/ui/input'
@@ -8,7 +9,9 @@ import { withFormik } from 'formik'
 import { Persist } from 'formik-persist'
 import { deferred } from 'redux-saga/utils'
 import Toast from 'antd-mobile/lib/toast/index'
+import cloneDeep from 'lodash/cloneDeep'
 import Style1 from 'components/auth/style/style.scss'
+import createLoginc from '../ui/input-with-code/logic'
 
 function checkForm(props) {
   return (e) => {
@@ -79,42 +82,96 @@ const InnerForm = (props) => {
   )
 }
 
-const LoginCodeForm = withFormik({
-  validateOnChange: false,
-  // Transform outer props into form values
-  mapPropsToValues: props => ({}),
-  // Add a custom validation function (this can be async too!)
-  validate: (values, props) => {
-    const errors = {}
-    if (!values.phone) {
-      errors.phone = '请填写手机号'
-    } else if (values.phone.length < 11) {
-      errors.email = '请填写正确的手机号'
-    }
-    if (!values.code) {
-      errors.code = '请填写验证码'
-    }
-    return errors
-  },
-  // Submission handler
-  handleSubmit: (values, ctx) => {
-    console.log(ctx)
-    const {
-      props,
-      setSubmitting,
-      resetForm,
-    } = ctx
-    const {actions} = props
-    const {phone, code} = values
-    const def = deferred()
-    actions.login(phone, code, def)
-    def.promise.then(() => {
-      setSubmitting(false)
-      resetForm()
-    }).catch(() => {
-      setSubmitting(false)
-    })
-  },
-})(InnerForm)
+const getLoginCodeForm = (logic) => {
+  const form = withFormik({
+    validateOnChange: false,
+    // Transform outer props into form values
+    mapPropsToValues: props => ({}),
+    // Add a custom validation function (this can be async too!)
+    validate: (values, props) => {
+      const errors = {}
+      if (!values.phone) {
+        errors.phone = '请填写手机号'
+      } else if (values.phone.length < 11) {
+        errors.email = '请填写正确的手机号'
+      }
+      if (!values.code) {
+        errors.code = '请填写验证码'
+      }
+      return errors
+    },
+    // Submission handler
+    handleSubmit: (values, ctx) => {
+      console.log(ctx)
+      const {
+        props,
+        setSubmitting,
+        resetForm,
+      } = ctx
+      const {actions} = props
+      const {phone, code} = values
+      const def = deferred()
+      actions.login(phone, code, def)
+      def.promise.then(() => {
+        setSubmitting(false)
+        resetForm()
+      }).catch(() => {
+        setSubmitting(false)
+      })
+    },
+  })(InnerForm)
+  const LoginCodeForm = logic(form)
+  return LoginCodeForm
+}
 
-export default LoginCodeForm
+class ConnectForm extends React.PureComponent {
+  static propTypes = {
+    logicIndex: PropTypes.any,
+    logicKey: PropTypes.any
+  }
+
+  static defaultProps = {
+    logicKey: 'auth-login-code-form',
+    logicIndex: 1
+  }
+
+  static contextTypes = {
+    KeaContext: PropTypes.any,
+    logics: PropTypes.any,
+  }
+
+  constructor(props, context) {
+    super()
+    const {KeaContext, logics} = context
+    const {logicKey, logicIndex} = props
+
+    const {connect, kea} = KeaContext
+    const mainLogic = logics[logicIndex]
+    const logic = connect({
+      actions: [
+        mainLogic, [
+          'login'
+        ]
+      ],
+      props: [
+        mainLogic, [
+          // 'btnLock'
+        ]
+      ]
+    })
+
+    this.state = {
+      Component: getLoginCodeForm(logic)
+    }
+  }
+
+  render() {
+    const {Component} = this.state
+    const {logicKey, logicIndex, ...restProps} = this.props
+    return (
+      <Component {...restProps}/>
+    )
+  }
+}
+
+export default ConnectForm

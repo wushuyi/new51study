@@ -2,6 +2,7 @@ import PropTypes from 'prop-types'
 import { delay } from 'redux-saga'
 import { call } from 'redux-saga/effects'
 import isError from 'lodash/isError'
+import Cookies from 'js-cookie'
 
 const DEV = APPEnv === 'dev'
 
@@ -38,6 +39,8 @@ export default KeaContext => {
           def.reject(res)
           return false
         }
+        const data = res.body.data
+        Cookies.set('token', data.token, {expires: 30, secure: true})
         def.resolve(res)
       }
     }

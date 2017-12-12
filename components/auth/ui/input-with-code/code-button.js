@@ -3,6 +3,7 @@ import Button from 'antd-mobile/lib/button'
 import React, { Fragment } from 'react'
 import createLoginc from './logic'
 import { deferred } from 'redux-saga/utils'
+import Toast from 'antd-mobile/lib/toast'
 
 const DEV = APPEnv === 'dev'
 
@@ -30,10 +31,16 @@ const getBaseCodeButton = (logic) => {
     onGetCodeBtn = (e) => {
       const {actions, time, phone} = this.props
       const getCodedef = deferred()
+      if (!phone) {
+        Toast.fail('请填写手机号', 2)
+        return false
+      } else if (phone.length < 11) {
+        Toast.fail('请填写正确的手机号', 2)
+        return false
+      }
       actions.getCode(phone, getCodedef)
       actions.lock()
       getCodedef.promise.then(async (data) => {
-        const Toast = await import('antd-mobile/lib/toast')
         Toast.success('验证码发送成功,请查看短信!', 2)
         DEV && console.log(data)
         actions.buttonTimedout(time)
@@ -74,6 +81,7 @@ class CodeButton extends React.PureComponent {
 
   static contextTypes = {
     KeaContext: PropTypes.any,
+    logics: PropTypes.any,
   }
 
   constructor(props, context) {
