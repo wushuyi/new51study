@@ -20,6 +20,7 @@
     "redux-saga": "^0.16.0",
     "reselect": "^3.0.1",
     "seamless-immutable": "^7.1.2",
+    "store": "^2.0.12",
     "superagent": "^3.8.1"
   },
   "devDependencies": {

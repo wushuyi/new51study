@@ -9,7 +9,10 @@ import { withFormik } from 'formik'
 import { Persist } from 'formik-persist'
 import { deferred } from 'redux-saga/utils'
 import Toast from 'antd-mobile/lib/toast/index'
+import { syncPhone, getPhone } from 'components/auth/utils'
 import Style1 from 'components/auth/style/style.scss'
+
+const DEV = APPEnv === 'dev'
 
 function checkForm(e, props) {
   const {isValid, errors, submitForm, setTouched} = props
@@ -47,7 +50,10 @@ const InnerForm = (props) => {
           name="phone"
           placeholder="手机号"
           maxLength={11}
-          onChange={val => setFieldValue('phone', val)}
+          onChange={val => {
+            syncPhone(val)
+            setFieldValue('phone', val)
+          }}
           onBlur={val => setFieldTouched('phone', true)}
           value={values.phone}
         />
@@ -69,7 +75,7 @@ const InnerForm = (props) => {
                  disabled={btnLock}
                  loading={btnLock}>登录</SubmitBtn>
       <style jsx>{Style1}</style>
-      <Persist name="form-auth-login-passwd"/>
+      {/*<Persist name="form-auth-login-passwd"/>*/}
     </Fragment>
   )
 }
@@ -79,7 +85,8 @@ const getForm = () => {
     validateOnChange: false,
     // Transform outer props into form values
     mapPropsToValues: props => {
-      return {}
+      let phone = getPhone()
+      return {phone: phone}
     },
     // Add a custom validation function (this can be async too!)
     validate: (values, props) => {
@@ -127,6 +134,7 @@ class ConnectForm extends React.PureComponent {
   static contextTypes = {
     KeaContext: PropTypes.any,
     logics: PropTypes.any,
+    store: PropTypes.any,
   }
 
   constructor(props, context) {
@@ -157,6 +165,7 @@ class ConnectForm extends React.PureComponent {
     Form.prototype.componentDidMount = function () {
       const {actions} = this.props
       actions.btnUnlock()
+      this.setState({_refresh: true})
       originalComponentDidMount && originalComponentDidMount.bind(this)()
     }
 

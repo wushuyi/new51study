@@ -10,6 +10,7 @@ import { Persist } from 'formik-persist'
 import { deferred } from 'redux-saga/utils'
 import Toast from 'antd-mobile/lib/toast/index'
 import Style1 from 'components/auth/style/style.scss'
+import { syncPhone, getPhone } from 'components/auth/utils'
 
 function checkForm(e, props) {
   const {isValid, errors, submitForm, setTouched} = props
@@ -47,7 +48,10 @@ const InnerForm = (props) => {
           name="phone"
           maxLength={11}
           placeholder="手机号"
-          onChange={val => setFieldValue('phone', val)}
+          onChange={val => {
+            syncPhone(val)
+            setFieldValue('phone', val)
+          }}
           onBlur={val => setFieldTouched('phone', true)}
           value={values.phone}
         />
@@ -74,7 +78,7 @@ const InnerForm = (props) => {
                  disabled={btnLock}
                  loading={btnLock}>进入</SubmitBtn>
       <style jsx>{Style1}</style>
-      <Persist name="form-auth-login-code"/>
+      {/*<Persist name="form-auth-login-code"/>*/}
     </Fragment>
   )
 }
@@ -83,7 +87,10 @@ const getForm = () => {
   return withFormik({
     validateOnChange: false,
     // Transform outer props into form values
-    mapPropsToValues: props => ({}),
+    mapPropsToValues: props => {
+      let phone = getPhone()
+      return {phone: phone}
+    },
     // Add a custom validation function (this can be async too!)
     validate: (values, props) => {
       const errors = {}

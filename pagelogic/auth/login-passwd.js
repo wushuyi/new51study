@@ -2,8 +2,11 @@ import PropTypes from 'prop-types'
 import { delay } from 'redux-saga'
 import { call, put } from 'redux-saga/effects'
 import isError from 'lodash/isError'
-import Cookies from 'js-cookie'
 import { passwordLogin, baseXhrError } from 'apis/auth'
+import { isBrowser } from '../../utils/runEnv'
+
+import ldb from 'store/dist/store.modern'
+import Cookies from 'js-cookie'
 
 const DEV = APPEnv === 'dev'
 
@@ -46,6 +49,7 @@ export default KeaContext => {
         const data = res.body.data
         DEV && console.log(data)
         Cookies.set('token', data.token, {expires: 30})
+        ldb && ldb.set('auth-token', data.token)
         yield put(actions.btnUnlock())
         def.resolve(res)
       }
