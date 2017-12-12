@@ -132,11 +132,10 @@ const createForm = () => {
         resetForm,
       } = ctx
       const {actions} = props
-      const {phone, code, passwd, yjcode} = values
+      const {phone, code, passwd} = values
 
       const def = deferred()
-      const regData = [phone, passwd, code, yjcode ? yjcode : '']
-      actions.register(regData, def)
+      actions.forget(phone, passwd, code, def)
 
       def.promise.then(() => {
         resetForm()
@@ -173,7 +172,7 @@ class ConnectForm extends React.PureComponent {
     const logic = connect({
       actions: [
         mainLogic, [
-          'register',
+          'forget',
           'btnUnlock',
           'btnLock',
         ]

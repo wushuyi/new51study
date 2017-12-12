@@ -5,6 +5,7 @@ import InputItem from 'components/auth/ui/input'
 import InputWithCode from 'components/auth/ui/input-with-code'
 import SubmitBtn from 'components/auth/ui/submit-btn'
 import TitleWithBack from 'components/auth/ui/title-with-back'
+import ForgetForm from './form'
 
 // import Link from 'next/link'
 import Style1 from 'components/auth/style/style.scss'
@@ -18,28 +19,7 @@ export default class Pages extends React.Component {
           <TitleWithBack title="忘记密码" linkProps={{href: './login-passwd'}}/>
         </WingBlank>
         <WingBlank space="27 20 0">
-          <div className="form-group">
-            <InputItem
-              type="phone"
-              placeholder="手机号"
-            />
-            <InputWithCode
-              time={30}
-              logicKey="auth-passwd-forget"
-              type="number"
-              placeholder="验证码"
-            />
-            <InputItem
-              type="passwd"
-              placeholder="密码(请输入6位以上的数字或字母)"
-            />
-            <InputItem
-              type="passwd"
-              placeholder="确认密码"
-            />
-          </div>
-          <WhiteSpace height="30"/>
-          <SubmitBtn type="primary">完成</SubmitBtn>
+          <ForgetForm logicIndex={1}/>
         </WingBlank>
 
         {/*language=SCSS*/}

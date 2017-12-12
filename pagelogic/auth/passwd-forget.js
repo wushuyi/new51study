@@ -15,7 +15,7 @@ export default KeaContext => {
     actions: () => ({
       btnUnlock: () => ({}),
       btnLock: () => ({}),
-      login: (phone, password, code, def) => ({phone, password, code, def}),
+      forget: (phone, password, code, def) => ({phone, password, code, def}),
     }),
 
     reducers: ({actions}) => ({
@@ -26,11 +26,11 @@ export default KeaContext => {
     }),
 
     takeLatest: ({actions, workers}) => ({
-      [actions.login]: workers.login,
+      [actions.forget]: workers.forget,
     }),
 
     workers: {
-      login: function * (action) {
+      forget: function * (action) {
         const {phone, password, code, def} = action.payload
         const {actions} = this
         yield put(actions.btnLock())
