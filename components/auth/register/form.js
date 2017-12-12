@@ -11,6 +11,7 @@ import { deferred } from 'redux-saga/utils'
 import Toast from 'antd-mobile/lib/toast/index'
 import Style1 from 'components/auth/style/style.scss'
 import { syncPhone, getPhone } from 'components/auth/utils'
+import Router from 'next/router'
 
 function checkForm(e, props) {
   const {isValid, errors, submitForm, setTouched} = props
@@ -145,6 +146,7 @@ const createForm = () => {
 
       def.promise.then(() => {
         resetForm()
+        Router.replace('/auth/login-passwd')
       }).catch(() => {
       })
     },
