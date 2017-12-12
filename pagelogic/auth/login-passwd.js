@@ -44,7 +44,7 @@ export default KeaContext => {
           return false
         }
         const data = res.body.data
-        console.log(data, Cookies)
+        DEV && console.log(data)
         Cookies.set('token', data.token, {expires: 30})
         yield put(actions.btnUnlock())
         def.resolve(res)
