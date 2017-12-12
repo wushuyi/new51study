@@ -58,7 +58,10 @@ function createKeaWapper(KeaContext, createLogic, Cmp) {
   }
   if (createLogic) {
     logics = createLogic(KeaContext)
-    ConnectedCmp = logics[0](Cmp)
+    ConnectedCmp = Cmp
+    if (logics[0]) {
+      ConnectedCmp = logics[0](Cmp)
+    }
     if (logics.length > 0) {
       WrappedKea = class newWrappedKea extends React.Component {
         static childContextTypes = {

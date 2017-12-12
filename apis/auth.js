@@ -67,9 +67,9 @@ export async function codeLogin(phone, code) {
     res = await request.post(requestURL)
       .query(Version)
       .send({
-        'phone': phone,
-        'code': code,
-        'qudao': 'H5:wyx'
+        phone,
+        code,
+        qudao: 'H5:wyx'
       })
     return baseChcek(res)
   } catch (err) {
@@ -77,3 +77,27 @@ export async function codeLogin(phone, code) {
   }
 }
 
+/**
+ * API: /account/passwordLogin
+ * @param phone
+ * @param password
+ * @returns {Promise<*>}
+ */
+export async function passwordLogin(phone, password) {
+  let res
+  const api = '/account/passwordLogin'
+  const requestURL = `${APIService}${api}`
+
+  try {
+    res = await request.post(requestURL)
+      .query(Version)
+      .send({
+        info: 'NONE', // 手机型号 防止500错误
+        phone,
+        password
+      })
+    return baseChcek(res)
+  } catch (err) {
+    return err
+  }
+}

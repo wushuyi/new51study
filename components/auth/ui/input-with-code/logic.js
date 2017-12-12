@@ -4,6 +4,7 @@ import { delay } from 'redux-saga'
 import addSeconds from 'date-fns/add_seconds'
 import differenceInSeconds from 'date-fns/difference_in_seconds'
 import isError from 'lodash/isError'
+import { getCode, baseXhrError } from 'apis/auth'
 
 export default (KeaContext, key) => {
   const {kea} = KeaContext
@@ -40,7 +41,6 @@ export default (KeaContext, key) => {
     workers: {
       getCode: function * (action) {
         const {phone, def} = action.payload
-        const {getCode, baseXhrError} = yield import('apis/auth')
         const res = yield call(getCode, phone)
         if (isError(res)) {
           yield call(baseXhrError, res)
@@ -64,10 +64,6 @@ export default (KeaContext, key) => {
       },
 
       countdown: function * () {
-        yield fork(this.workers.test)
-      },
-
-      test: function * () {
         let countdown = yield this.get('countdown')
         const end = addSeconds(new Date(), countdown)
         const localforage = yield import('localforage')
@@ -90,7 +86,7 @@ export default (KeaContext, key) => {
             yield put(unlock())
           }
         }
-      }
+      },
     }
   })
 }
