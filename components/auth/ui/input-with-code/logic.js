@@ -77,7 +77,7 @@ export default (KeaContext, key) => {
           if (window.onRouter) {
             break
           }
-          yield call(delay, 1000)
+          yield call([null, delay], 1000)
           yield put(refreshCountdown())
           let countdown = yield this.get('countdown')
           if (countdown < 1) {

@@ -1,21 +1,22 @@
 import PropTypes from 'prop-types'
 import { delay } from 'redux-saga'
-import { call, put } from 'redux-saga/effects'
+import { call, put, apply } from 'redux-saga/effects'
 import isError from 'lodash/isError'
 import Cookies from 'js-cookie'
-import { codeLogin, baseXhrError } from 'apis/auth'
+import { register, baseXhrError } from 'apis/auth'
+import values from 'lodash/values'
 
 const DEV = APPEnv === 'dev'
 
 export default KeaContext => {
   const {kea} = KeaContext
   const logic = kea({
-    path: (key) => ['scenes', 'pages', 'auth', 'login-code'],
+    path: (key) => ['scenes', 'pages', 'auth', 'register'],
 
     actions: () => ({
       btnUnlock: () => ({}),
       btnLock: () => ({}),
-      login: (phone, code, def) => ({phone, code, def}),
+      register: (regData, def) => ({regData, def}),
     }),
 
     reducers: ({actions}) => ({
@@ -26,15 +27,15 @@ export default KeaContext => {
     }),
 
     takeLatest: ({actions, workers}) => ({
-      [actions.login]: workers.login
+      [actions.register]: workers.register
     }),
 
     workers: {
-      login: function * (action) {
-        const {phone, code, def} = action.payload
+      register: function * (action) {
+        const {regData, def} = action.payload
         const {actions} = this
+        const res = yield apply(null, register, regData)
         yield put(actions.btnLock())
-        const res = yield call(codeLogin, phone, code)
         yield call([null, delay], 1000)
         if (isError(res)) {
           yield call(baseXhrError, res)
@@ -43,7 +44,7 @@ export default KeaContext => {
           return false
         }
         const data = res.body.data
-        Cookies.set('token', data.token, {expires: 30})
+        DEV && console.log(data)
         yield put(actions.btnUnlock())
         def.resolve(res)
       }

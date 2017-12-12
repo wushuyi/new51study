@@ -37,6 +37,7 @@ const InnerForm = (props) => {
     isSubmitting,
     setFieldTouched,
     setFieldValue,
+    btnLock,
   } = props
   return (
     <Fragment>
@@ -69,16 +70,16 @@ const InnerForm = (props) => {
                  onClick={(e) => {
                    checkForm(e, props)
                  }}
-                 disabled={isSubmitting}
-                 loading={isSubmitting}>进入</SubmitBtn>
+                 disabled={btnLock}
+                 loading={btnLock}>进入</SubmitBtn>
       <style jsx>{Style1}</style>
-      <Persist name="login-code"/>
+      <Persist name="auth-login-code"/>
     </Fragment>
   )
 }
 
-const getLoginCodeForm = (logic) => {
-  const form = withFormik({
+const getForm = () => {
+  return withFormik({
     validateOnChange: false,
     // Transform outer props into form values
     mapPropsToValues: props => ({}),
@@ -88,7 +89,7 @@ const getLoginCodeForm = (logic) => {
       if (!values.phone) {
         errors.phone = '请填写手机号'
       } else if (values.phone.length < 11) {
-        errors.email = '请填写正确的手机号'
+        errors.phone = '请填写正确的手机号'
       }
       if (!values.code) {
         errors.code = '请填写验证码'
@@ -108,15 +109,11 @@ const getLoginCodeForm = (logic) => {
       const def = deferred()
       actions.login(phone, code, def)
       def.promise.then(() => {
-        setSubmitting(false)
         resetForm()
       }).catch(() => {
-        setSubmitting(false)
       })
     },
   })(InnerForm)
-  const LoginCodeForm = logic(form)
-  return LoginCodeForm
 }
 
 class ConnectForm extends React.PureComponent {
@@ -150,13 +147,15 @@ class ConnectForm extends React.PureComponent {
       ],
       props: [
         mainLogic, [
-          // 'btnLock'
+          'btnLock',
         ]
       ]
     })
 
+    const Form = getForm()
+
     this.state = {
-      Component: getLoginCodeForm(logic)
+      Component: logic(Form)
     }
   }
 

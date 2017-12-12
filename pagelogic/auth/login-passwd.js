@@ -37,7 +37,7 @@ export default KeaContext => {
         yield put(actions.btnLock())
 
         const res = yield call(passwordLogin, phone, password)
-        yield call(delay, 1000)
+        yield call([null, delay], 1000)
         if (isError(res)) {
           yield call(baseXhrError, res)
           yield put(actions.btnUnlock())
@@ -46,7 +46,7 @@ export default KeaContext => {
         }
         const data = res.body.data
         console.log(data, Cookies)
-        Cookies.set('token', data.token, {expires: 30, secure: true})
+        Cookies.set('token', data.token, {expires: 30})
         yield put(actions.btnUnlock())
         def.resolve(res)
       }

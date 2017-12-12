@@ -101,3 +101,31 @@ export async function passwordLogin(phone, password) {
     return err
   }
 }
+
+/**
+ * API: /users/newRegister
+ * @param phone
+ * @param password
+ * @param code
+ * @param yjCode 邀请码 可不传
+ * @returns {Promise<*>}
+ */
+export async function register(phone, password, code, yjCode = '') {
+  let res
+  const api = '/users/newRegister'
+  const requestURL = `${APIService}${api}`
+
+  try {
+    res = await request.post(requestURL)
+      .query(Version)
+      .send({
+        phone,
+        password,
+        code,
+        yjCode,
+      })
+    return baseChcek(res)
+  } catch (err) {
+    return err
+  }
+}

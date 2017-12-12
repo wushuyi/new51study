@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react'
 import Layout from 'components/layout/default'
-import LoginRegister from 'components/auth/login-register'
-import createLogic from 'pagelogic/noop'
+import LoginRegister from 'components/auth/register'
+import createLogic from 'pagelogic/auth/register'
 import { withRedux } from 'store'
 
 class Page extends React.Component {
@@ -25,8 +25,8 @@ export default withRedux(Page, function (KeaContext) {
       mainLogic, []
     ]
   })
-  return {
+  return [
     logic,
     mainLogic
-  }
+  ]
 })

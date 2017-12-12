@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import WhiteSpace from 'components/ui/white-space'
 // import WingBlank from 'components/ui/wing-blank'
 import InputItem from 'components/auth/ui/input'
-// import InputWithCode from 'components/auth/ui/input-with-code'
+import InputWithCode from 'components/auth/ui/input-with-code'
 import SubmitBtn from 'components/auth/ui/submit-btn'
 import { withFormik } from 'formik'
 import { Persist } from 'formik-persist'
@@ -44,21 +44,45 @@ const InnerForm = (props) => {
       <div className="form-group">
         <InputItem
           type="number"
-          name="phone"
           placeholder="手机号"
+          name="passwd"
           maxLength={11}
           onChange={val => setFieldValue('phone', val)}
           onBlur={val => setFieldTouched('phone', true)}
           value={values.phone}
         />
+        <InputWithCode
+          time={30}
+          logicKey="auth-register"
+          type="number"
+          placeholder="验证码"
+          name="code"
+          maxLength={6}
+          onChange={val => setFieldValue('code', val)}
+          onBlur={val => setFieldTouched('code', true)}
+          value={values.code}
+          phone={values.phone}
+        />
         <InputItem
           type="password"
+          placeholder="密码(请输入6位以上的数字或字母)"
           name="passwd"
-          placeholder="密码"
           maxLength={32}
           onChange={val => setFieldValue('passwd', val)}
           onBlur={val => setFieldTouched('passwd', true)}
           value={values.passwd}
+        />
+      </div>
+      <WhiteSpace height="10"/>
+      <div className="form-group">
+        <InputItem
+          type="number"
+          placeholder="输入邀请码(可不填)"
+          name="yjcode"
+          maxLength={6}
+          onChange={val => setFieldValue('yjcode', val)}
+          onBlur={val => setFieldTouched('yjcode', true)}
+          value={values.yjcode}
         />
       </div>
       <WhiteSpace height="30"/>
@@ -69,12 +93,12 @@ const InnerForm = (props) => {
                  disabled={btnLock}
                  loading={btnLock}>登录</SubmitBtn>
       <style jsx>{Style1}</style>
-      <Persist name="auth-login-passwd"/>
+      <Persist name="auth-register"/>
     </Fragment>
   )
 }
 
-const getForm = () => {
+const getLoginCodeForm = () => {
   return withFormik({
     validateOnChange: false,
     // Transform outer props into form values
@@ -89,8 +113,13 @@ const getForm = () => {
       } else if (values.phone.length < 11) {
         errors.phone = '请填写正确的手机号'
       }
+      if (!values.code) {
+        errors.code = '请填写验证码'
+      }
       if (!values.passwd) {
         errors.passwd = '请填写密码'
+      } else if (values.passwd.length < 6) {
+        errors.passwd = '请填写6位以上的数字或字母'
       }
       return errors
     },
@@ -102,9 +131,12 @@ const getForm = () => {
         resetForm,
       } = ctx
       const {actions} = props
-      const {phone, passwd} = values
+      const {phone, code, passwd, yjcode} = values
+
       const def = deferred()
-      actions.login(phone, passwd, def)
+      const regData = [phone, passwd, code, yjcode ? yjcode : '']
+      actions.register(regData, def)
+
       def.promise.then(() => {
         resetForm()
       }).catch(() => {
@@ -120,7 +152,7 @@ class ConnectForm extends React.PureComponent {
   }
 
   static defaultProps = {
-    logicKey: 'auth-login-passwd-form',
+    logicKey: 'auth-register-form',
     logicIndex: 1
   }
 
@@ -131,15 +163,16 @@ class ConnectForm extends React.PureComponent {
 
   constructor(props, context) {
     super()
-    const {KeaContext, logics, store} = context
+    const {KeaContext, logics} = context
     const {logicKey, logicIndex} = props
 
     const {connect, kea} = KeaContext
+    // console.log(logics)
     const mainLogic = logics[logicIndex]
     const logic = connect({
       actions: [
         mainLogic, [
-          'login',
+          'register',
           'btnUnlock',
           'btnLock',
         ]
@@ -151,17 +184,17 @@ class ConnectForm extends React.PureComponent {
       ]
     })
 
-    const Form = getForm()
+    const LoginCodeForm = getLoginCodeForm()
 
-    const originalComponentDidMount = Form.prototype.componentDidMount
-    Form.prototype.componentDidMount = function () {
-      const {actions} = this.props
-      actions.btnUnlock()
-      originalComponentDidMount && originalComponentDidMount.bind(this)()
-    }
+    // const originalComponentDidMount = LoginCodeForm.prototype.componentDidMount
+    // LoginCodeForm.prototype.componentDidMount = function () {
+    //   const {actions} = this.props
+    //   // actions.btnUnlock()
+    //   originalComponentDidMount && originalComponentDidMount.bind(this)()
+    // }
 
     this.state = {
-      Component: logic(Form)
+      Component: logic(LoginCodeForm)
     }
   }
 
