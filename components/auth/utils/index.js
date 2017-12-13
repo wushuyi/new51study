@@ -2,8 +2,6 @@ import throttle from 'lodash/throttle'
 import { isBrowser } from 'utils/runEnv'
 import Router from 'next/router'
 
-console.log(Router)
-
 let ldb, Cookies
 if (isBrowser) {
   ldb = require('store/dist/store.modern')

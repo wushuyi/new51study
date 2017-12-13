@@ -5,3 +5,4 @@ node_modules
 temp
 libs/antd/**.js
 libs/antd/**.ts
+nginx.conf

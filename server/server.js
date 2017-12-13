@@ -14,18 +14,15 @@ const handler = routes.getRequestHandler(app)
 const server = express()
 server.use(cookieParser())
 server.use(compression())
-console.log(path.join(__dirname, '../static/images', 'favicon.ico'));
+console.log(path.join(__dirname, '../static/images', 'favicon.ico'))
 server.use(favicon(path.join(__dirname, '../static/images', 'favicon.ico')))
 
 app.prepare()
   .then(() => {
-
-    server.get('/a', (req, res) => {
-      return app.render(req, res, '/b', req.query)
-    })
-
-    server.get('/b', (req, res) => {
-      return app.render(req, res, '/a', req.query)
+    server.get('/auth/login-code', (req, res) => {
+      // console.log(res.query)
+      // res.send('Hello World!');
+      return app.render(req, res, '/auth/login-code', req.query)
     })
 
     server.get('*', (req, res) => {
