@@ -1,8 +1,10 @@
-const path = require('path');
-const glob = require('glob');
+const path = require('path')
+const glob = require('glob')
+const {BundleAnalyzerPlugin} = require('webpack-bundle-analyzer')
+const {ANALYZE} = process.env
 
 module.exports = {
-  transpileModules:[
+  transpileModules: [
     /rmc-cascader/
   ],
   webpack: function (config, {dev}) {
@@ -52,8 +54,16 @@ module.exports = {
           }
         ]
       }
-    );
+    )
 
-    return config;
+    if (ANALYZE) {
+      config.plugins.push(new BundleAnalyzerPlugin({
+        analyzerMode: 'server',
+        analyzerPort: 8888,
+        openAnalyzer: true
+      }))
+    }
+
+    return config
   }
-};
+}

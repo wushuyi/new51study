@@ -23,9 +23,9 @@ class Page extends React.Component {
   }
 
   static getInitialProps(ctx) {
-    const {withLogic, KeaContext, isServer, store} = ctx
+    const {logics, KeaContext, isServer, store} = ctx
     // ctx.store.dispatch(ctx.withLogic.logic.actions());
-    const {actions} = withLogic.logic
+    const {actions} = logics[0]
     if (!isServer) {
       const {getCache} = KeaContext
       window.getCache = getCache
@@ -88,8 +88,8 @@ export default withRedux(Page, function (KeaContext) {
       mainLogic, ['title', 'data']
     ]
   })
-  return {
+  return [
     logic,
     mainLogic
-  }
+  ]
 })

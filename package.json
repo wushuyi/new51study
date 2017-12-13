@@ -32,6 +32,7 @@
     "babel-plugin-wrap-in-js": "^1.1.1",
     "compression": "^1.7.1",
     "cookie-parser": "^1.4.3",
+    "cross-env": "^5.1.1",
     "css-loader": "^0.28.7",
     "date-fns": "^1.29.0",
     "express": "^4.16.2",
@@ -48,13 +49,15 @@
     "raw-loader": "^0.5.1",
     "sass-loader": "^6.0.6",
     "serve-favicon": "^2.4.5",
-    "styled-jsx-css-loader": "^0.3.0"
+    "styled-jsx-css-loader": "^0.3.0",
+    "webpack-bundle-analyzer": "^2.9.1"
   },
   "main": "index.js",
   "scripts": {
     "dev": "node server/server.js",
     "build": "next build",
-    "start": "NODE_ENV=production node server/server.js",
+    "analyze": "cross-env ANALYZE=1 next build",
+    "start": "cross-env NODE_ENV=production node server/server.js",
     "style": "webpack --config ./style.config.js"
   },
   "keywords": [],
