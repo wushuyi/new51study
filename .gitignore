@@ -6,3 +6,4 @@ temp
 libs/antd/**.js
 libs/antd/**.ts
 nginx.conf
+dist

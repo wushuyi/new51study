@@ -1,6 +1,8 @@
-const nextRoutes = require('next-routes');
-const routes = module.exports = nextRoutes();
+import nextRoutes from 'next-routes'
 
-routes.add('contests/contest-class', '/contests/contest-class/:id');
+const routes = nextRoutes()
+export default routes
+
+routes.add('contests/contest-class', '/contests/contest-class/:id')
 // routes.add('blog', '/blog/:slug')
 // routes.add('about', '/about-us/:foo(bar|baz)')

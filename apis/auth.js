@@ -4,7 +4,7 @@ import { auth } from 'config/settings'
 import Router from 'next/router'
 import { isBrowser } from 'utils/runEnv'
 import { getLocationOrigin, getURL } from 'utils/index'
-import querystring from 'querystring'
+import querystring from 'query-string'
 
 const xhrError = createError('xhrError')
 const msgError = createError('msgError')
@@ -229,7 +229,7 @@ export function getQQOpenId(access_token) {
   return url
 }
 
-export function loginQQ(access_token, openid) {
+export async function loginQQ(access_token, openid) {
   let data = {
     accessToken: access_token,
     openid: openid,
@@ -239,18 +239,16 @@ export function loginQQ(access_token, openid) {
     type: 'H5'
   }
 
-  data = {
-    accessToken: 'ABDCE47A87B222728D72ABC6D905663D',
-    openid: '3CD80376E9B0934FAFA83B1E4F6444C9',
-    loginType: 'qq',
-    qudao: 'H5:wyx',
-    info: 'NONE',
-    type: 'H5'
-  }
+  // data = {
+  //   accessToken: 'ABDCE47A87B222728D72ABC6D905663D',
+  //   openid: '3CD80376E9B0934FAFA83B1E4F6444C9',
+  //   loginType: 'qq',
+  //   qudao: 'H5:wyx',
+  //   info: 'NONE',
+  //   type: 'H5'
+  // }
 
-  otherLogin(data).then((val) => {
-    console.log(val)
-  })
+  return await otherLogin(data)
 }
 
 if (isBrowser) {

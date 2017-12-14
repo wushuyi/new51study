@@ -1,6 +1,5 @@
 import React, { Fragment } from 'react'
 import Layout from 'components/layout/default'
-import LoginCode from 'components/auth/login-code'
 import { withRedux } from 'store'
 import createLogic from 'pagelogic/auth/login-code'
 
@@ -12,7 +11,7 @@ class Page extends React.Component {
   render() {
     return (
       <Layout>
-        <LoginCode/>
+        <h1>登录成功!</h1>
       </Layout>
     )
   }

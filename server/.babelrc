@@ -1,5 +1,6 @@
 {
   "plugins": [
+    "transform-es2015-modules-commonjs",
     "transform-decorators-legacy",
     [
       "module-resolver",
@@ -23,10 +24,6 @@
       "config/env-config.js"
     ]
   ],
-  "presets": [
-    [
-      "next/babel"
-    ]
-  ],
+  "presets": [],
   "ignore": []
 }

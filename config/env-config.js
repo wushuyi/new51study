@@ -1,3 +1,4 @@
+const settings = require('./settings')
 const prod = process.env.NODE_ENV === 'production'
 
 module.exports = {
@@ -13,6 +14,7 @@ module.exports = {
     title: '我要学',
     imgUrl: 'http://7xpx8n.com1.z0.glb.clouddn.com/logo256.png',
   },
+  authSetting: settings.auth,
   'APIVersion': {
     'version': '1.0.0',
     'platform': 'H5'
