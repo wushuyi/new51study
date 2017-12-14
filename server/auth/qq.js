@@ -1,4 +1,3 @@
-import querystring from 'query-string'
 import { getOrigin } from 'server/utils'
 import request from 'superagent'
 
@@ -10,6 +9,11 @@ import differenceInMilliseconds from 'date-fns/difference_in_milliseconds'
 
 const auth = authSetting
 
+/**
+ *
+ * @param req
+ * @returns {boolean}
+ */
 export function checkIsQQ(req) {
   const {query} = req
   if (
@@ -28,11 +32,9 @@ export function checkIsQQ(req) {
  * @param code
  * @param origin
  * @returns {Promise<{}>}
- * tokenData = {
- *   access_token: 'ABDCE47A87B222728D72ABC6D905663D',
- *   expires_in: '7776000',
- *   refresh_token: '81377B4A7D0E91E7B31B8C4EA99B43E0'
- * }
+ { access_token: 'ABDCE47A87B222728D72ABC6D905663D',
+   expires_in: '7776000',
+   refresh_token: '81377B4A7D0E91E7B31B8C4EA99B43E0' }
  */
 export async function getAccessToken(code, origin) {
   const url = getQQaccessTokenUrl(code, origin)
@@ -58,6 +60,8 @@ export async function getAccessToken(code, origin) {
  *
  * @param access_token
  * @returns {Promise<any>}
+ { client_id: '101347657',
+  openid: '3CD80376E9B0934FAFA83B1E4F6444C9' }
  */
 export async function getOpenId(access_token) {
   const url = getQQOpenIdUrl(access_token)
@@ -73,6 +77,25 @@ export async function getOpenId(access_token) {
   return JSON.parse(res.text.match(/{.+}/)[0])
 }
 
+/**
+ *
+ * @param access_token
+ * @param openid
+ * @returns {Promise<void>}
+ { gender: '男',
+  modifiedAt: 1518158562000,
+  isNewUser: '0',
+  type: 'STUDY',
+  operatePoint: 54,
+  token: 'token:400d388b56c94b3babfd3e5cba2975a6-H5-STUDY-ODk6NDU2MzU=',
+  number: 82845635,
+  createdAt: 1513158566000,
+  phone: null,
+  birthYear: '1996',
+  inviteCode: 'nxbms',
+  name: 'xxx',
+  addressCity: 'xxx' }
+ */
 export async function authQQ(access_token, openid) {
   let data = {
     accessToken: access_token,
@@ -95,6 +118,24 @@ export async function authQQ(access_token, openid) {
   return res.body.data
 }
 
+/**
+ *
+ * @param req
+ * @returns {Promise<*>}
+ { gender: '男',
+  modifiedAt: 1518158562000,
+  isNewUser: '0',
+  type: 'STUDY',
+  operatePoint: 54,
+  token: 'token:400d388b56c94b3babfd3e5cba2975a6-H5-STUDY-ODk6NDU2MzU=',
+  number: 82845635,
+  createdAt: 1513158566000,
+  phone: null,
+  birthYear: '1996',
+  inviteCode: 'nxbms',
+  name: 'xxx',
+  addressCity: 'xxx' }
+ */
 export async function loginQQ(req) {
   const origin = getOrigin(req)
   const code = checkIsQQ(req)

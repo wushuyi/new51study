@@ -7,3 +7,4 @@ libs/antd/**.js
 libs/antd/**.ts
 nginx.conf
 dist
+config/settings.js
