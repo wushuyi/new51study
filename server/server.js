@@ -7,6 +7,7 @@ import next from 'next'
 import routes from './routes'
 import { loginQQ, checkIsQQ } from 'server/auth/qq'
 import { loginSina, checkIsSina } from 'server/auth/sina'
+import { loginWX, checkIsWx } from 'server/auth/weixin'
 
 const port = parseInt(process.env.PORT, 10) || 2000
 const dev = process.env.NODE_ENV !== 'production'
@@ -28,36 +29,50 @@ server.use(favicon(path.join(__dirname, '../static/images', 'favicon.ico')))
 app.prepare()
   .then(() => {
     server.get('/auth/login-code', (req, res) => {
-      if (checkIsQQ(req)) {
-        loginQQ(req).then((loginData) => {
-          if (loginData) {
-            res.cookie('auth-token', loginData.token, {expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30)})
-            res.redirect('/authok')
-            // console.log(loginData)
-            // res.send(JSON.stringify(loginData))
-          }
-        }).catch((err) => {
-          res.redirect('/auth/login-code')
-          console.log(err)
-          // res.send(JSON.stringify(err))
-        })
-        return false
-      }
+      if (req.query.state) {
+        if (checkIsQQ(req)) {
+          loginQQ(req).then((loginData) => {
+            if (loginData) {
+              res.cookie('auth-token', loginData.token, {expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30)})
+              res.redirect('/authok')
+              // console.log(loginData)
+              // res.send(JSON.stringify(loginData))
+            }
+          }).catch((err) => {
+            res.redirect('/auth/login-code')
+            console.log(err)
+            // res.send(JSON.stringify(err))
+          })
+          return false
+        }
 
-      if (checkIsSina(req)) {
-        loginSina(req).then((loginData) => {
-          if (loginData) {
-            res.cookie('auth-token', loginData.token, {expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30)})
-            // res.redirect('/authok')
-            // console.log(loginData)
-            res.send(JSON.stringify(loginData))
-          }
-        }).catch((err) => {
-          // res.redirect('/auth/login-code')
-          console.log(err)
-          res.send(JSON.stringify(err))
-        })
-        return false
+        if (checkIsSina(req)) {
+          loginSina(req).then((loginData) => {
+            if (loginData) {
+              res.cookie('auth-token', loginData.token, {expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30)})
+              res.redirect('/authok')
+            }
+          }).catch((err) => {
+            res.redirect('/auth/login-code')
+            console.log(err)
+            // res.send(JSON.stringify(err))
+          })
+          return false
+        }
+
+        if (checkIsWx(req)) {
+          loginWX(req).then((loginData) => {
+            if (loginData) {
+              res.cookie('auth-token', loginData.token, {expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30)})
+              res.redirect('/authok')
+            }
+          }).catch((err) => {
+            res.redirect('/auth/login-code')
+            console.log(err)
+            // res.send(JSON.stringify(err))
+          })
+          return false
+        }
       }
 
       return app.render(req, res, '/auth/login-code', req.query)

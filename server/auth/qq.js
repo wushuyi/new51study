@@ -45,7 +45,7 @@ export async function getAccessToken(code, origin) {
   } catch (err) {
     throw new xhrError('QQ access_token 请求失败')
   }
-  if (!includes(res.text, 'access_token=')) {
+  if (!res.text || !includes(res.text, 'access_token=')) {
     throw new authError('QQ access_token 获取失败')
   }
   const data = res.text.split('&')

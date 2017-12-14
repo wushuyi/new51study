@@ -32,26 +32,27 @@ export function checkIsWx(req) {
  * @param code
  * @param origin
  * @returns {Promise<{}>}
- { access_token: '2.00J6URyD0j7rNG00509697b70T247n',
-   remind_in: '2622884',
-   expires_in: 2622884,
-   uid: '3639147111',
-   isRealName: 'true' }
+ {
+   "access_token": "4_rWlSKUWyLtctCBXtWEBnO51IdbZPc3j5u77u4SanrhP-7Qtg_WY9Dl2qI3aa_asmukUpImldBX_4l8eFwJlmPQ",
+   "expires_in": 7200,
+   "refresh_token": "4_MuLXSF2E_twNDYjewyzg_qLR8rR8yuDJCiuPqy4z_xJVY7pUaSvoEbTmZeSoPaSXEPczfWsnPfLKWWIdPNWJIA",
+   "openid": "o50gb1vQUKKO9-dqFP8dwEWdZOaY",
+   "scope": "snsapi_userinfo",
+   "unionid": "ovZ1XuBCcBBZOlj1n3CB6boUv94Y"
+ }
  */
 export async function getAccessToken(code, origin) {
   const url = getWXTokenUrl(code, origin)
-  console.log(url)
-  throw new xhrError('微信 access_token 请求失败')
   let res
   try {
-    res = await request.post(url)
+    res = await request.get(url)
   } catch (err) {
     throw new xhrError('微信 access_token 请求失败')
   }
-  if (!res.body || !res.body.access_token) {
+  if (!res.text || !includes(res.text, 'access_token')) {
     throw new authError('微信 access_token 获取失败')
   }
-  return res.body
+  return JSON.parse(res.text)
 }
 
 /**
@@ -108,14 +109,14 @@ export async function loginWX(req) {
   const code = checkIsWx(req)
   if (code) {
     const origin = getOrigin(req)
-    let accessTokenData, openIdData, loginData
+    let accessTokenData, loginData
     try {
       accessTokenData = await getAccessToken(code, origin)
     } catch (err) {
       throw err
     }
     try {
-      loginData = await login(accessTokenData.access_token, openIdData.uid)
+      loginData = await login(accessTokenData.access_token, accessTokenData.openid)
     } catch (err) {
       throw err
     }

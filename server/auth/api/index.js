@@ -146,7 +146,7 @@ export function getWXTokenUrl(code, origin) {
     grant_type: 'authorization_code'
   }
   const querystr = querystring.stringify(query)
-  return auth.sina.token_url + '?' + querystr
+  return auth.weixin.token_url + '?' + querystr
 }
 
 export async function authWX(access_token, openid) {
