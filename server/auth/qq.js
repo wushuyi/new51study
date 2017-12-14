@@ -4,7 +4,7 @@ import request from 'superagent'
 import includes from 'lodash/includes'
 import each from 'lodash/each'
 import { authError, xhrError } from './errors'
-import { getQQaccessTokenUrl, getQQOpenIdUrl, otherLogin } from 'server/auth/api'
+import { getQQaccessTokenUrl, getQQOpenIdUrl, authQQ } from 'server/auth/api'
 import differenceInMilliseconds from 'date-fns/difference_in_milliseconds'
 
 const auth = authSetting
@@ -43,10 +43,10 @@ export async function getAccessToken(code, origin) {
   try {
     res = await request.get(url)
   } catch (err) {
-    throw new xhrError('access_token 请求失败')
+    throw new xhrError('QQ access_token 请求失败')
   }
   if (!includes(res.text, 'access_token=')) {
-    throw new authError('access_token 获取失败')
+    throw new authError('QQ access_token 获取失败')
   }
   const data = res.text.split('&')
   each(data, function (val, key) {
@@ -69,10 +69,10 @@ export async function getOpenId(access_token) {
   try {
     res = await request.get(url)
   } catch (err) {
-    throw new xhrError('openid 请求失败')
+    throw new xhrError('QQ openid 请求失败')
   }
   if (!includes(res.text, '"openid":')) {
-    throw new authError('openid 获取失败')
+    throw new authError('QQ openid 获取失败')
   }
   return JSON.parse(res.text.match(/{.+}/)[0])
 }
@@ -96,24 +96,15 @@ export async function getOpenId(access_token) {
   name: 'xxx',
   addressCity: 'xxx' }
  */
-export async function authQQ(access_token, openid) {
-  let data = {
-    accessToken: access_token,
-    openid: openid,
-    loginType: 'qq',
-    qudao: 'H5:wyx',
-    info: 'NONE',
-    type: 'H5'
-  }
-
+export async function login(access_token, openid) {
   let res
   try {
-    res = await otherLogin(data)
+    res = await authQQ(access_token, openid)
   } catch (err) {
-    throw new xhrError('QQ登录 请求失败')
+    throw new xhrError('QQ 登录 请求失败')
   }
   if (res.body.code !== 200) {
-    throw new xhrError('QQ登录 后端错误')
+    throw new xhrError('QQ 登录 后端错误')
   }
   return res.body.data
 }
@@ -137,9 +128,9 @@ export async function authQQ(access_token, openid) {
   addressCity: 'xxx' }
  */
 export async function loginQQ(req) {
-  const origin = getOrigin(req)
   const code = checkIsQQ(req)
   if (code) {
+    const origin = getOrigin(req)
     let accessTokenData, openIdData, loginData
     try {
       accessTokenData = await getAccessToken(code, origin)
@@ -152,7 +143,7 @@ export async function loginQQ(req) {
       throw err
     }
     try {
-      loginData = await authQQ(accessTokenData.access_token, openIdData.openid)
+      loginData = await login(accessTokenData.access_token, openIdData.openid)
     } catch (err) {
       throw err
     }

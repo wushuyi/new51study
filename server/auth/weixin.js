@@ -4,7 +4,7 @@ import request from 'superagent'
 import includes from 'lodash/includes'
 import each from 'lodash/each'
 import { authError, xhrError } from './errors'
-import { getSinaTokenUrl, authSina } from 'server/auth/api'
+import { getWXTokenUrl, authWX } from 'server/auth/api'
 import differenceInMilliseconds from 'date-fns/difference_in_milliseconds'
 
 const auth = authSetting
@@ -14,13 +14,13 @@ const auth = authSetting
  * @param req
  * @returns {boolean}
  */
-export function checkIsSina(req) {
+export function checkIsWx(req) {
   const {query} = req
   if (
     query &&
     query.state &&
     query.code &&
-    query.state === auth.sina.url_state
+    query.state === auth.weixin.url_state
   ) {
     return query.code
   }
@@ -39,15 +39,17 @@ export function checkIsSina(req) {
    isRealName: 'true' }
  */
 export async function getAccessToken(code, origin) {
-  const url = getSinaTokenUrl(code, origin)
+  const url = getWXTokenUrl(code, origin)
+  console.log(url)
+  throw new xhrError('微信 access_token 请求失败')
   let res
   try {
     res = await request.post(url)
   } catch (err) {
-    throw new xhrError('Sina access_token 请求失败')
+    throw new xhrError('微信 access_token 请求失败')
   }
   if (!res.body || !res.body.access_token) {
-    throw new authError('Sina access_token 获取失败')
+    throw new authError('微信 access_token 获取失败')
   }
   return res.body
 }
@@ -74,12 +76,12 @@ export async function getAccessToken(code, origin) {
 export async function login(access_token, openid) {
   let res
   try {
-    res = await authSina(access_token, openid)
+    res = await authWX(access_token, openid)
   } catch (err) {
-    throw new xhrError('Sina 登录 请求失败')
+    throw new xhrError('微信 登录 请求失败')
   }
   if (res.body.code !== 200) {
-    throw new xhrError('Sina 登录 后端错误')
+    throw new xhrError('微信 登录 后端错误')
   }
   return res.body.data
 }
@@ -102,18 +104,18 @@ export async function login(access_token, openid) {
   name: 'xxx',
   addressCity: 'xxx' }
  */
-export async function loginSina(req) {
-  const code = checkIsSina(req)
+export async function loginWX(req) {
+  const code = checkIsWx(req)
   if (code) {
     const origin = getOrigin(req)
-    let accessTokenData, loginData
+    let accessTokenData, openIdData, loginData
     try {
       accessTokenData = await getAccessToken(code, origin)
     } catch (err) {
       throw err
     }
     try {
-      loginData = await login(accessTokenData.access_token, accessTokenData.uid)
+      loginData = await login(accessTokenData.access_token, openIdData.uid)
     } catch (err) {
       throw err
     }

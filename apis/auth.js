@@ -191,69 +191,46 @@ export async function otherLogin(loginData) {
   }
 }
 
-export function getQQAuthLink() {
+export function getQQAuthLink(origin) {
   const query = {
     response_type: 'code',
     client_id: auth.qq.appid,
-    redirect_uri: getLocationOrigin() + auth.qq.redirect_uri,
+    redirect_uri: origin + auth.qq.redirect_uri,
     state: 'wyx_qq',
     scope: 'get_user_info'
   }
 
   const querystr = querystring.stringify(query)
-  const url = auth.qq.auth_url + '?' + querystr
-  //ABDCE47A87B2227238F35010A9EF4EFE
-  //ABDCE47A87B222728D72ABC6D905663D
-  return url
+  return auth.qq.auth_url + '?' + querystr
 }
 
-export function getQQaccessToken(code) {
+export function getSinaAuthLink(origin) {
   const query = {
-    grant_type: 'authorization_code',
-    client_id: auth.qq.appid,
-    client_secret: auth.qq.appkey,
-    code: code,
-    redirect_uri: 'http://h5.5151study.com/auth/login-code'
+    response_type: 'code',
+    client_id: auth.sina.appkey,
+    redirect_uri: origin + auth.sina.redirect_uri,
+    scope: 'follow_app_official_microblog',
+    state: auth.sina.url_state,
   }
+
   const querystr = querystring.stringify(query)
-  const url = auth.qq.token_url + '?' + querystr
-  return url
+  return auth.sina.auth_url + '?' + querystr
 }
 
-export function getQQOpenId(access_token) {
-  let query = {
-    access_token: 'ABDCE47A87B222728D72ABC6D905663D'
+export function getWXAuthLink(origin) {
+  const query = {
+    response_type: 'code',
+    appid: auth.weixin.appid,
+    redirect_uri: origin + auth.weixin.redirect_uri,
+    scope: 'snsapi_userinfo',
+    state: auth.weixin.url_state,
   }
-  let querystr = querystring.stringify(query)
-  const url = auth.qq.openid_url + '?' + querystr
+
+  const querystr = querystring.stringify(query)
+  const url = auth.weixin.auth_url + '?' + querystr + '#wechat_redirect'
   return url
-}
-
-export async function loginQQ(access_token, openid) {
-  let data = {
-    accessToken: access_token,
-    openid: openid,
-    loginType: 'qq',
-    qudao: 'H5:wyx',
-    info: 'NONE',
-    type: 'H5'
-  }
-
-  // data = {
-  //   accessToken: 'ABDCE47A87B222728D72ABC6D905663D',
-  //   openid: '3CD80376E9B0934FAFA83B1E4F6444C9',
-  //   loginType: 'qq',
-  //   qudao: 'H5:wyx',
-  //   info: 'NONE',
-  //   type: 'H5'
-  // }
-
-  return await otherLogin(data)
 }
 
 if (isBrowser) {
-  window.getQQaccessToken = getQQaccessToken
-  window.getQQAuthLink = getQQAuthLink
-  window.getQQOpenId = getQQOpenId
-  window.loginQQ = loginQQ
+
 }
