@@ -1,11 +1,10 @@
-import PropTypes from 'prop-types'
-import Button from 'antd-mobile/lib/button'
 import React, { Fragment } from 'react'
+import PropTypes from 'prop-types'
+import {isDev} from 'config/settings'
+import Button from 'antd-mobile/lib/button'
 import createLoginc from './logic'
 import { deferred } from 'redux-saga/utils'
 import Toast from 'antd-mobile/lib/toast'
-
-const DEV = APPEnv === 'dev'
 
 const getBaseCodeButton = (logic) => {
   @logic
@@ -45,7 +44,7 @@ const getBaseCodeButton = (logic) => {
       actions.lock()
       getCodedef.promise.then(async (data) => {
         Toast.success('验证码发送成功,请查看短信!', 2)
-        DEV && console.log(data)
+        isDev && console.log(data)
         actions.buttonTimedout(time)
       }).catch(function (err) {
         // console.log(err)

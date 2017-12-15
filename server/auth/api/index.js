@@ -3,9 +3,6 @@ import request from 'superagent'
 import { auth as privateAuth } from 'config/privateSettings'
 import { auth, APIVersion, APIService } from 'config/settings'
 
-const auth = authSetting
-const Version = APIVersion
-
 /**
  * API: /account/otherLogin
  * @param loginData
@@ -18,7 +15,7 @@ export async function otherLogin(loginData) {
 
   try {
     res = await request.post(requestURL)
-      .query(Version)
+      .query(APIVersion)
       .send(loginData)
   } catch (err) {
     throw err

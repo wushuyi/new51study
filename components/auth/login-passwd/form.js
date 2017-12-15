@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
+import { isDev } from 'config/settings'
 import WhiteSpace from 'components/ui/white-space'
 // import WingBlank from 'components/ui/wing-blank'
 import InputItem from 'components/auth/ui/input'
@@ -11,8 +12,6 @@ import { deferred } from 'redux-saga/utils'
 import Toast from 'antd-mobile/lib/toast/index'
 import { syncPhone, getPhone, formInjectAutoInit } from 'components/auth/utils'
 import Style1 from 'components/auth/style/style.scss'
-
-const DEV = APPEnv === 'dev'
 
 function checkForm(e, props) {
   const {isValid, errors, submitForm, setTouched} = props

@@ -1,12 +1,11 @@
 import PropTypes from 'prop-types'
+import { isDev } from 'config/settings'
 import { delay } from 'redux-saga'
 import { call, put, apply } from 'redux-saga/effects'
 import isError from 'lodash/isError'
-import Cookies from 'js-cookie'
 import { register, baseXhrError } from 'apis/auth'
-import values from 'lodash/values'
 
-const DEV = APPEnv === 'dev'
+const isDev = APPEnv === 'dev'
 
 export default KeaContext => {
   const {kea} = KeaContext
@@ -44,7 +43,7 @@ export default KeaContext => {
           return false
         }
         const data = res.body.data
-        DEV && console.log(data)
+        isDev && console.log(data)
         yield put(actions.btnUnlock())
         def.resolve(res)
       }

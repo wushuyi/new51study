@@ -17,10 +17,6 @@
         "baseDir": "static",
         "baseUri": "/"
       }
-    ],
-    [
-      "transform-define",
-      "config/env-config.js"
     ]
   ],
   "presets": [
