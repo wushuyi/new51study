@@ -8,6 +8,8 @@ import routes from './routes'
 import { loginQQ, checkIsQQ } from 'server/auth/qq'
 import { loginSina, checkIsSina } from 'server/auth/sina'
 import { loginWX, checkIsWx } from 'server/auth/weixin'
+import startsWith from 'lodash/startsWith'
+import { addHrefToken } from 'server/utils'
 
 const port = parseInt(process.env.PORT, 10) || 2000
 const dev = process.env.NODE_ENV !== 'production'
@@ -34,7 +36,19 @@ app.prepare()
           loginQQ(req).then((loginData) => {
             if (loginData) {
               res.cookie('auth-token', loginData.token, {expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30)})
-              res.redirect('/authok')
+              const redirect_uri = req.cookies.redirect_uri
+
+              if (redirect_uri) {
+                res.clearCookie('redirect_uri')
+                if (startsWith(redirect_uri, 'http')) {
+                  let href = addHrefToken(redirect_uri, loginData.token)
+                  res.redirect(href)
+                } else {
+                  res.redirect(redirect_uri)
+                }
+              } else {
+                res.redirect('/authok')
+              }
               // console.log(loginData)
               // res.send(JSON.stringify(loginData))
             }
