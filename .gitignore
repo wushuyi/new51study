@@ -8,3 +8,4 @@ libs/antd/**.ts
 nginx.conf
 dist
 config/settings.js
+config/privateSettings.js
