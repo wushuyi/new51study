@@ -5,8 +5,6 @@ import { call, put, apply } from 'redux-saga/effects'
 import isError from 'lodash/isError'
 import { register, baseXhrError } from 'apis/auth'
 
-const isDev = APPEnv === 'dev'
-
 export default KeaContext => {
   const {kea} = KeaContext
   const logic = kea({
