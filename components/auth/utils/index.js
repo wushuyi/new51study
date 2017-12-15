@@ -7,6 +7,7 @@ if (isBrowser) {
   ldb = require('store/dist/store.modern')
   Cookies = require('js-cookie')
 }
+
 export const syncPhone = throttle(function (val) {
   ldb && ldb.set('auth-phone', val)
 }, 600)
@@ -33,6 +34,16 @@ export function getToken() {
 export function setToken(token) {
   Cookies && Cookies.set('token', token, {expires: 30})
   ldb && ldb.set('auth-token', token)
+}
+
+export function formInjectAutoInit(Form) {
+  const originalComponentDidMount = Form.prototype.componentDidMount
+  Form.prototype.componentDidMount = function () {
+    const {actions} = this.props
+    actions.btnUnlock()
+    this.setState({_refresh: true})
+    originalComponentDidMount && originalComponentDidMount.bind(this)()
+  }
 }
 
 if (isBrowser) {

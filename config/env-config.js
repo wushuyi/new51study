@@ -1,5 +1,8 @@
 const settings = require('./settings')
+const private_settings = require('./privateSettings')
 const prod = process.env.NODE_ENV === 'production'
+
+console.log('prod:', prod)
 
 module.exports = {
   // 'process.env.BACKEND_URL': prod ? 'https://api.example.com' : 'https://localhost:8080'
@@ -15,6 +18,7 @@ module.exports = {
     imgUrl: 'http://7xpx8n.com1.z0.glb.clouddn.com/logo256.png',
   },
   authSetting: settings.auth,
+  authPrivateSetting: private_settings.auth,
   'APIVersion': {
     'version': '1.0.0',
     'platform': 'H5'

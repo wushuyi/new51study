@@ -1,24 +1,17 @@
 import request from 'superagent'
 import createError from 'create-error'
-import { auth } from 'config/settings'
-import Router from 'next/router'
-import { isBrowser } from 'utils/runEnv'
-import { getLocationOrigin, getURL } from 'utils/index'
 import querystring from 'query-string'
+import { auth, APIVersion, APIService, isDev } from 'config/settings'
 
 const xhrError = createError('xhrError')
 const msgError = createError('msgError')
 const resError = createError('resError')
 const argsError = createError('argsError')
 
-const DEV = APPEnv === 'dev'
-
-const Version = APIVersion
-
 export function * baseXhrError(res) {
   const Toast = yield import('antd-mobile/lib/toast')
   const {matchXhrError} = yield import('config/error-config')
-  DEV && console.log(res.message)
+  isDev && console.log(res.message)
   Toast.fail(matchXhrError(res), 1)
 }
 
@@ -57,7 +50,7 @@ export async function getCode(phone, type) {
 
   try {
     res = await request.post(requestURL)
-      .query(Version)
+      .query(APIVersion)
       .send({
         phone: phone
       })
@@ -80,7 +73,7 @@ export async function codeLogin(phone, code) {
 
   try {
     res = await request.post(requestURL)
-      .query(Version)
+      .query(APIVersion)
       .send({
         phone,
         code,
@@ -105,7 +98,7 @@ export async function passwordLogin(phone, password) {
 
   try {
     res = await request.post(requestURL)
-      .query(Version)
+      .query(APIVersion)
       .send({
         info: 'NONE', // 手机型号 防止500错误
         phone,
@@ -132,7 +125,7 @@ export async function register(phone, password, code, yjCode = '') {
 
   try {
     res = await request.post(requestURL)
-      .query(Version)
+      .query(APIVersion)
       .send({
         phone,
         password,
@@ -159,7 +152,7 @@ export async function forgetPasswd(phone, password, code) {
 
   try {
     res = await request.post(requestURL)
-      .query(Version)
+      .query(APIVersion)
       .send({
         phone,
         password,
@@ -183,7 +176,7 @@ export async function otherLogin(loginData) {
 
   try {
     res = await request.post(requestURL)
-      .query(Version)
+      .query(APIVersion)
       .send(loginData)
     return baseChcek(res)
   } catch (err) {
@@ -227,10 +220,5 @@ export function getWXAuthLink(origin) {
   }
 
   const querystr = querystring.stringify(query)
-  const url = auth.weixin.auth_url + '?' + querystr + '#wechat_redirect'
-  return url
-}
-
-if (isBrowser) {
-
+  return auth.weixin.auth_url + '?' + querystr + '#wechat_redirect'
 }

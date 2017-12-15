@@ -10,7 +10,7 @@ import { Persist } from 'formik-persist'
 import { deferred } from 'redux-saga/utils'
 import Toast from 'antd-mobile/lib/toast/index'
 import Style1 from 'components/auth/style/style.scss'
-import { syncPhone, getPhone } from 'components/auth/utils'
+import { syncPhone, getPhone, formInjectAutoInit } from 'components/auth/utils'
 
 function checkForm(e, props) {
   const {isValid, errors, submitForm, setTouched} = props
@@ -150,7 +150,9 @@ class ConnectForm extends React.PureComponent {
     const logic = connect({
       actions: [
         mainLogic, [
-          'login'
+          'login',
+          'btnUnlock',
+          'btnLock',
         ]
       ],
       props: [
@@ -161,6 +163,8 @@ class ConnectForm extends React.PureComponent {
     })
 
     const Form = getForm()
+
+    formInjectAutoInit(Form)
 
     this.state = {
       Component: logic(Form)

@@ -1,6 +1,7 @@
 import querystring from 'query-string'
 import request from 'superagent'
-import { xhrError } from '../errors'
+import { auth as privateAuth } from 'config/privateSettings'
+import { auth, APIVersion, APIService } from 'config/settings'
 
 const auth = authSetting
 const Version = APIVersion
@@ -44,7 +45,7 @@ export function getQQaccessTokenUrl(code, origin) {
   const query = {
     grant_type: 'authorization_code',
     client_id: auth.qq.appid,
-    client_secret: auth.qq.appkey,
+    client_secret: privateAuth.qq.appkey,
     code: code,
     redirect_uri: origin + auth.qq.redirect_uri,
   }
@@ -97,7 +98,7 @@ export function getSinaTokenUrl(code, origin) {
   const query = {
     grant_type: 'authorization_code',
     client_id: auth.sina.appkey,
-    client_secret: auth.sina.appsecret,
+    client_secret: privateAuth.sina.appsecret,
     code: code,
     redirect_uri: origin + auth.sina.redirect_uri
   }
@@ -141,7 +142,7 @@ export function getWXAuthLink(origin) {
 export function getWXTokenUrl(code, origin) {
   const query = {
     appid: auth.weixin.appid,
-    secret: auth.weixin.secret,
+    secret: privateAuth.weixin.secret,
     code: code,
     grant_type: 'authorization_code'
   }
