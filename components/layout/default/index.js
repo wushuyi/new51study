@@ -3,18 +3,33 @@ import PropTypes from 'prop-types'
 // import Link from 'next/link';
 import Head from 'next/head'
 import Router from 'next/router'
+import startsWith from 'lodash/startsWith'
+import { isBrowser } from 'utils/runEnv'
+import { Auth } from 'utils'
+
+if (isBrowser) {
+  window.Router = require('next/router').default
+  window.Auth = Auth
+}
+
+function RouterDone() {
+  if (window.onRouter) {
+    window.onRouter = false
+    window.NProgress.done()
+  }
+}
 
 Router.onRouteChangeStart = (url) => {
-  window.onRouter = true
-  window.NProgress.start()
+  if (!startsWith(url, Router.pathname)) {
+    window.onRouter = true
+    window.NProgress.start()
+  }
 }
-Router.onRouteChangeComplete = () => {
-  window.onRouter = false
-  window.NProgress.done()
+Router.onRouteChangeComplete = (...args) => {
+  RouterDone()
 }
 Router.onRouteChangeError = () => {
-  window.onRouter = false
-  window.NProgress.done()
+  RouterDone()
 }
 
 class Layout extends React.Component {

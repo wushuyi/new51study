@@ -36,6 +36,10 @@ export function setToken(token) {
   ldb && ldb.set('auth-token', token)
 }
 
+export function setRedirect(uri) {
+  Cookies && Cookies.set('redirect_uri', uri, {expires: 30})
+}
+
 export function formInjectAutoInit(Form) {
   const originalComponentDidMount = Form.prototype.componentDidMount
   Form.prototype.componentDidMount = function () {

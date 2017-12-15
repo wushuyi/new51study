@@ -1,3 +1,5 @@
+import s from 'query-string'
+
 export const isBrowser = typeof window !== 'undefined'
 
 export const px2rem = function (px, designWidth = 414) {
@@ -22,13 +24,26 @@ export function closest(el, selector) {
   return null
 }
 
-export function getLocationOrigin () {
-  const { protocol, hostname, port } = window.location
+export function getLocationOrigin() {
+  const {protocol, hostname, port} = window.location
   return `${protocol}//${hostname}${port ? ':' + port : ''}`
 }
 
-export function getURL () {
-  const { href } = window.location
+export function getURL() {
+  const {href} = window.location
   const origin = getLocationOrigin()
   return href.substring(origin.length)
+}
+
+export async function Auth(redirect_uri) {
+  const {default: Router} = await import('next/router')
+  const uri = {
+    pathname: '/auth/login-code',
+    query: {redirect_uri}
+  }
+  Router.push(
+    uri,
+    uri,
+    {shallow: true}
+  )
 }
