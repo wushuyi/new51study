@@ -1,4 +1,4 @@
-import querystring from 'query-string'
+import qs from 'query-string'
 import request from 'superagent'
 import { auth as privateAuth } from 'config/privateSettings'
 import { auth, APIVersion, APIService } from 'config/settings'
@@ -34,7 +34,7 @@ export function getQQAuthLink(origin) {
     scope: 'get_user_info'
   }
 
-  const querystr = querystring.stringify(query)
+  const querystr = qs.stringify(query)
   return auth.qq.auth_url + '?' + querystr
 }
 
@@ -46,7 +46,7 @@ export function getQQaccessTokenUrl(code, origin) {
     code: code,
     redirect_uri: origin + auth.qq.redirect_uri,
   }
-  const querystr = querystring.stringify(query)
+  const querystr = qs.stringify(query)
   return auth.qq.token_url + '?' + querystr
 }
 
@@ -54,7 +54,7 @@ export function getQQOpenIdUrl(access_token) {
   let query = {
     access_token: access_token
   }
-  let querystr = querystring.stringify(query)
+  let querystr = qs.stringify(query)
   return auth.qq.openid_url + '?' + querystr
 }
 
@@ -87,7 +87,7 @@ export function getSinaAuthLink(origin) {
     state: auth.sina.url_state,
   }
 
-  const querystr = querystring.stringify(query)
+  const querystr = qs.stringify(query)
   return auth.sina.auth_url + '?' + querystr
 }
 
@@ -99,7 +99,7 @@ export function getSinaTokenUrl(code, origin) {
     code: code,
     redirect_uri: origin + auth.sina.redirect_uri
   }
-  const querystr = querystring.stringify(query)
+  const querystr = qs.stringify(query)
   return auth.sina.token_url + '?' + querystr
 }
 
@@ -132,7 +132,7 @@ export function getWXAuthLink(origin) {
     state: auth.weixin.url_state,
   }
 
-  const querystr = querystring.stringify(query)
+  const querystr = qs.stringify(query)
   return auth.weixin.auth_url + '?' + querystr + '#wechat_redirect'
 }
 
@@ -143,7 +143,7 @@ export function getWXTokenUrl(code, origin) {
     code: code,
     grant_type: 'authorization_code'
   }
-  const querystr = querystring.stringify(query)
+  const querystr = qs.stringify(query)
   return auth.weixin.token_url + '?' + querystr
 }
 

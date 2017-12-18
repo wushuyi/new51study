@@ -2,29 +2,21 @@ import { APIService, APIVersion } from 'config/settings'
 import request from 'superagent'
 
 /**
- * API: /users/${type}_code
- * @param phone
- * @param type [register| forget| login]
+ * API: /blogpools/kaoji
+ * @param size
+ * @param page
  * @returns {Promise<*>}
  */
-export async function getCode(phone, type) {
-  const types = {
-    register: 'reg_code',
-    forget: 'for_code',
-    login: 'login_code'
-  }
-  let res
-  if (!types[type]) {
-    return new argsError('getCode type arg error')
-  }
-  const api = `/users/${types[type]}`
+export async function getKaojiList(size, page) {
+  const api = `/blogpools/kaoji`
   const requestURL = `${APIService}${api}`
 
   try {
-    res = await request.post(requestURL)
+    res = await request.get(requestURL)
       .query(APIVersion)
       .send({
-        phone: phone
+        size,
+        page,
       })
     return baseChcek(res)
   } catch (err) {

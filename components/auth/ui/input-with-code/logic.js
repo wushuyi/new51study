@@ -4,7 +4,8 @@ import { delay } from 'redux-saga'
 import addSeconds from 'date-fns/add_seconds'
 import differenceInSeconds from 'date-fns/difference_in_seconds'
 import isError from 'lodash/isError'
-import { getCode, baseXhrError } from 'apis/auth'
+import { getCode } from 'apis/auth'
+import { baseXhrError } from 'apis/utils/error'
 
 export default (KeaContext, key) => {
   const {kea} = KeaContext

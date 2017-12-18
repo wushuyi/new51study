@@ -1,5 +1,3 @@
-import s from 'query-string'
-
 export const isBrowser = typeof window !== 'undefined'
 
 export const px2rem = function (px, designWidth = 414) {

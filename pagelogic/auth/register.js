@@ -3,7 +3,8 @@ import { isDev } from 'config/settings'
 import { delay } from 'redux-saga'
 import { call, put, apply } from 'redux-saga/effects'
 import isError from 'lodash/isError'
-import { register, baseXhrError } from 'apis/auth'
+import { register } from 'apis/auth'
+import { baseXhrError } from 'apis/utils/error'
 
 export default KeaContext => {
   const {kea} = KeaContext

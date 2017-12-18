@@ -1,33 +1,7 @@
 import request from 'superagent'
-import createError from 'create-error'
-import querystring from 'query-string'
-import { auth, APIVersion, APIService, isDev } from 'config/settings'
-
-const xhrError = createError('xhrError')
-const msgError = createError('msgError')
-const resError = createError('resError')
-const argsError = createError('argsError')
-
-export function * baseXhrError(res) {
-  const Toast = yield import('antd-mobile/lib/toast')
-  const {matchXhrError} = yield import('config/error-config')
-  isDev && console.log(res.message)
-  Toast.fail(matchXhrError(res), 1)
-}
-
-function baseChcek(res) {
-  if (res.status !== 200) {
-    return new xhrError()
-  }
-  if (res.body.code === 1400) {
-    return new msgError(res.body.message)
-  }
-  if (res.body.code === 200) {
-    return res
-  } else {
-    return new resError()
-  }
-}
+import qs from 'query-string'
+import { APIService, APIVersion, auth } from 'config/settings'
+import { baseChcek } from './utils/error'
 
 /**
  * API: /users/${type}_code
@@ -193,7 +167,7 @@ export function getQQAuthLink(origin) {
     scope: 'get_user_info'
   }
 
-  const querystr = querystring.stringify(query)
+  const querystr = qs.stringify(query)
   return auth.qq.auth_url + '?' + querystr
 }
 
@@ -206,7 +180,7 @@ export function getSinaAuthLink(origin) {
     state: auth.sina.url_state,
   }
 
-  const querystr = querystring.stringify(query)
+  const querystr = qs.stringify(query)
   return auth.sina.auth_url + '?' + querystr
 }
 
@@ -219,6 +193,6 @@ export function getWXAuthLink(origin) {
     state: auth.weixin.url_state,
   }
 
-  const querystr = querystring.stringify(query)
+  const querystr = qs.stringify(query)
   return auth.weixin.auth_url + '?' + querystr + '#wechat_redirect'
 }
