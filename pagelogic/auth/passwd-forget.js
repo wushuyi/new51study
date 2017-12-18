@@ -3,7 +3,6 @@ import { isDev } from 'config/settings'
 import { delay } from 'redux-saga'
 import { call, put } from 'redux-saga/effects'
 import isError from 'lodash/isError'
-import Cookies from 'js-cookie'
 import { forgetPasswd, baseXhrError } from 'apis/auth'
 
 export default KeaContext => {
@@ -44,7 +43,6 @@ export default KeaContext => {
         }
         const data = res.body.data
         isDev && console.log(data)
-        // Cookies.set('token', data.token, {expires: 30})
         yield put(actions.btnUnlock())
         def.resolve(res)
       }

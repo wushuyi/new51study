@@ -5,7 +5,7 @@ import { withRedux } from 'store'
 import createLogic from 'pagelogic/auth/login-code'
 import Router from 'next/router'
 import { isBrowser } from 'utils/runEnv'
-import { setRedirect } from 'components/auth/utils'
+import { setRedirect } from 'utils/auth'
 
 class Page extends React.PureComponent {
   static async getInitialProps(ctx) {

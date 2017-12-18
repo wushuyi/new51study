@@ -4,8 +4,7 @@ import { delay } from 'redux-saga'
 import { call, put } from 'redux-saga/effects'
 import isError from 'lodash/isError'
 import { passwordLogin, baseXhrError } from 'apis/auth'
-import ldb from 'store/dist/store.modern'
-import Cookies from 'js-cookie'
+import {setToken} from 'utils/auth'
 
 export default KeaContext => {
   const {kea} = KeaContext
@@ -45,8 +44,7 @@ export default KeaContext => {
         }
         const data = res.body.data
         isDev && console.log(data)
-        Cookies.set('token', data.token, {expires: 30})
-        ldb && ldb.set('auth-token', data.token)
+        setToken(data.token)
         yield put(actions.btnUnlock())
         def.resolve(res)
       }
