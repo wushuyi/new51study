@@ -1,0 +1,47 @@
+html {
+  box-sizing: border-box;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+body {
+  line-height: 1.5;
+  background-color: #F6F6F6;
+  min-height: 60vh;
+}
+
+.is-clearfix:after {
+  clear: both;
+  content: " ";
+  display: table;
+}
+
+.is-pulled-left {
+  float: left;
+}
+
+.is-pulled-right {
+  float: right;
+}
+
+.is-clipped {
+  overflow: hidden;
+}
+
+.is-overlay {
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+body {
+  user-select: none;
+}
+
+.is-selectable {
+  user-select: text;
+}

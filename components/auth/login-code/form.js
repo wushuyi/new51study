@@ -11,6 +11,7 @@ import { deferred } from 'redux-saga/utils'
 import Toast from 'antd-mobile/lib/toast/index'
 import Style1 from 'components/auth/style/style.scss'
 import { syncPhone, getPhone, formInjectAutoInit } from 'components/auth/utils'
+import { runRedirect } from 'utils/auth'
 
 function checkForm(e, props) {
   const {isValid, errors, submitForm, setTouched} = props
@@ -118,6 +119,7 @@ const getForm = () => {
       actions.login(phone, code, def)
       def.promise.then(() => {
         resetForm()
+        runRedirect()
       }).catch(() => {
       })
     },

@@ -49,6 +49,12 @@
 //   console.log(`> Ready on http://localhost:${port}`)
 // })
 
-let obj1 = {a: 1, b: 2, c: 3}
-let obj2 = {d: 4, ...obj1}
-console.log(obj2)
+// let obj1 = {a: 1, b: 2, c: 3}
+// let obj2 = {d: 4, ...obj1}
+// console.log(obj2)
+
+import urlParse from 'url-parse'
+
+let url = urlParse('https://github.com/search?o=desc&p=2&q=url+parse&s=stars&type=Repositories&utf8=%E2%9C%93', true)
+url.query.token = 'xiaowu'
+console.log(url.toString())

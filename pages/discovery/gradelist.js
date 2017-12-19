@@ -12,6 +12,9 @@ import PullToRefresh from 'antd-mobile/lib/pull-to-refresh'
 import ListView from 'antd-mobile/lib/list-view'
 import { isBrowser } from 'utils/runEnv'
 
+import { tokenKey, defaultAuthPage } from 'config/settings'
+import { getToken } from '../../utils/auth'
+
 const MatchType = [adminType.AdminEvaluateGroup, adminType.AdminEvaluate]
 const TopicType = [adminType.AdminZhuanTi, adminType.AdminActivity]
 
@@ -180,11 +183,24 @@ function isTopicType(type) {
 
 class Page extends React.PureComponent {
   static async getInitialProps(ctx) {
-    const {logics, KeaContext, isServer, store} = ctx
+    const {logics, KeaContext, isServer, store, req} = ctx
+    let token = getToken(req)
+
     const {actions} = logics[0]
-    const def = deferred()
-    store.dispatch(actions.getList(0, 10, def))
-    await def.promise
+
+    try {
+      const def = deferred()
+      store.dispatch(actions.getList(0, 10, def, token))
+      await def.promise
+    } catch (err) {
+      return {
+        err: {
+          name: err.name,
+          message: err.message
+        }
+      }
+    }
+
     return {}
   }
 
@@ -192,8 +208,23 @@ class Page extends React.PureComponent {
     super()
   }
 
+  componentDidMount() {
+    const {err} = this.props
+    if (err && err.name === 'needAuthError') {
+
+      Router.replace(`${defaultAuthPage}?redirect_uri=${Router.pathname}`)
+    }
+  }
+
   render() {
-    const {gradelist} = this.props
+    const {gradelist, err} = this.props
+    if (err) {
+      return (
+        <Layout>
+          <pre>{JSON.stringify(err, null, 2)}</pre>
+        </Layout>
+      )
+    }
     return (
       <Layout>
         <Demo data={gradelist}/>
@@ -223,17 +254,6 @@ export default withRedux(Page, function (KeaContext) {
   ]
 })
 
-const NUM_ROWS = 20
-let pageIndex = 0
-
-function genData(pIndex = 0) {
-  const dataArr = []
-  for (let i = 0; i < NUM_ROWS; i++) {
-    dataArr.push(`row - ${(pIndex * NUM_ROWS) + i}`)
-  }
-  return dataArr
-}
-
 class Demo extends React.Component {
   constructor(props) {
     super(props)
@@ -247,21 +267,14 @@ class Demo extends React.Component {
       dataSource,
       refreshing: false,
       isLoading: false,
-      refresh: false,
+      mount: false,
     }
   }
 
   componentDidMount() {
     isBrowser && this.setState({
-      refresh: !this.state.refresh
+      mount: true
     })
-    // simulate initial Ajax
-    // setTimeout(() => {
-    //   this.rData = genData()
-    //   this.setState({
-    //     dataSource: this.state.dataSource.cloneWithRows(this.rData),
-    //   })
-    // }, 600)
   }
 
   onRefresh = () => {
@@ -292,7 +305,7 @@ class Demo extends React.Component {
         dataSource: this.state.dataSource.cloneWithRows(this.rData),
         isLoading: false,
       })
-    }, 0)
+    }, 3000)
   }
 
   renderRow = (rowData) => {
@@ -321,7 +334,7 @@ class Demo extends React.Component {
         onEndReached={this.onEndReached}
         onEndReachedThreshold={100}
         pageSize={10}
-        pullToRefresh={this.state.refresh ? <PullToRefresh
+        pullToRefresh={this.state.mount ? <PullToRefresh
           refreshing={this.state.refreshing}
           onRefresh={this.onRefresh}
         /> : false}

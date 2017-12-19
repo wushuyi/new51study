@@ -57,8 +57,8 @@ export function baseChcek(res) {
 }
 
 export function * baseXhrError(res) {
-  isDev && console.log(res.message)
-  isServer && console.log(res.message)
+  // isDev && console.log(res.message)
+  // isServer && console.log(res.message)
   if (isBrowser) {
     const Toast = yield import('antd-mobile/lib/toast')
     Toast.fail(matchXhrError(res), 1)

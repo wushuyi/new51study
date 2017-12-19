@@ -31,14 +31,14 @@ server.use(favicon(path.join(__dirname, '../static/images', 'favicon.ico')))
 app.prepare()
   .then(() => {
     server.get('/auth/login-code', (req, res) => {
-      if (auth(res, req, req.route.path, '/authok')) {
+      if (auth(res, req, req.route.path)) {
         return false
       }
       return app.render(req, res, req.route.path, req.query)
     })
 
     server.get('/auth/login-passwd', (req, res) => {
-      if (auth(res, req, req.route.path, '/authok')) {
+      if (auth(res, req, req.route.path)) {
         return false
       }
       return app.render(req, res, req.route.path, req.query)

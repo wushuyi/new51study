@@ -1,59 +1,45 @@
 html {
-  box-sizing: border-box;
-}
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box; }
 
-* {
-  box-sizing: inherit;
-}
-
-*:before, *:after {
-  box-sizing: inherit;
-}
+*, *:before, *:after {
+  -webkit-box-sizing: inherit;
+          box-sizing: inherit; }
 
 body {
   line-height: 1.5;
   background-color: #F6F6F6;
-  min-height: 60vh;
-}
+  min-height: 60vh; }
 
 .is-clearfix:after {
   clear: both;
   content: " ";
-  display: table;
-}
+  display: table; }
 
 .is-pulled-left {
-  float: left;
-}
+  float: left; }
 
 .is-pulled-right {
-  float: right;
-}
+  float: right; }
 
 .is-clipped {
-  overflow: hidden;
-}
+  overflow: hidden; }
 
 .is-overlay {
   bottom: 0;
   left: 0;
   position: absolute;
   right: 0;
-  top: 0;
-}
+  top: 0; }
 
 body {
-  -webkit-touch-callout: none;
   -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none; }
 
 .is-selectable {
-  -webkit-touch-callout: text;
   -webkit-user-select: text;
-  -moz-user-select: text;
-  -ms-user-select: text;
-  user-select: text;
-}
+     -moz-user-select: text;
+      -ms-user-select: text;
+          user-select: text; }

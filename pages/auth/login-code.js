@@ -8,8 +8,6 @@ import { isBrowser } from 'utils/runEnv'
 import { setRedirect } from 'utils/auth'
 
 class Page extends React.PureComponent {
-  static async getInitialProps(ctx) {
-  }
 
   constructor(props) {
     super()

@@ -3,13 +3,29 @@ import Layout from 'components/layout/default'
 import LoginPasswd from 'components/auth/login-passwd'
 import createLogic from 'pagelogic/auth/login-passwd'
 import { withRedux } from 'store'
+import { setRedirect } from 'utils/auth'
+import Router from 'next/router'
+import { isBrowser } from 'utils/runEnv'
 
 class Page extends React.Component {
 
-  // static getInitialProps(ctx) {
-  //   const {store, logics} = ctx
-  //   store.dispatch(logics[0].actions.btnLock())
-  // }
+  constructor(props) {
+    super()
+    this.redirect(props.url)
+  }
+
+  redirect = (url) => {
+    if (isBrowser && url && url.query && url.query.redirect_uri) {
+      const uri = url.pathname
+      const redirect_uri = url.query.redirect_uri
+      setRedirect(redirect_uri)
+      Router.replace(uri, uri, {shallow: true})
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.redirect(nextProps.url)
+  }
 
   render() {
     return (

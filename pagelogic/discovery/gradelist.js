@@ -5,7 +5,7 @@ import { getKaojiList } from 'apis/discovery/grade-list'
 import isError from 'lodash/isError'
 import { baseXhrError } from 'apis/utils/error'
 import { isDev } from '../../config/settings'
-import { setToken } from '../../utils/auth'
+import { getToken, setToken } from '../../utils/auth'
 import { from } from 'seamless-immutable'
 
 export default KeaContext => {
@@ -13,7 +13,7 @@ export default KeaContext => {
   const logic = kea({
     path: (key) => ['scenes', 'pages', 'discovery', 'gradelist'],
     actions: () => ({
-      getList: (page, size, def) => ({page, size, def}),
+      getList: (page, size, def, token) => ({token: token || getToken(), page, size, def}),
       syncData: (data) => ({data})
     }),
 
@@ -44,8 +44,8 @@ export default KeaContext => {
     workers: {
       getList: function * (action) {
         const {actions} = this
-        const {page, size, def} = action.payload
-        const res = yield call(getKaojiList, page, size)
+        const {token, page, size, def} = action.payload
+        const res = yield call(getKaojiList, page, size, token)
         if (isError(res)) {
           yield call(baseXhrError, res)
           def.reject(res)

@@ -1,25 +1,25 @@
-const path = require('path');
-const glob = require('glob');
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const path = require('path')
+const glob = require('glob')
+const ExtractTextPlugin = require('extract-text-webpack-plugin')
 
-const extractBulma = new ExtractTextPlugin('bulma.css');
-const extractNprogress = new ExtractTextPlugin('nprogress.css');
+const extractCustom = new ExtractTextPlugin('custom.css')
+const extractNprogress = new ExtractTextPlugin('nprogress.css')
 
 module.exports = {
-  entry: ['./libs/bulma/bulma.sass', './libs/nprogress/0.2.0/nprogress.scss'],
+  entry: ['./libs/style/nprogress.scss', './libs/style/custom.scss'],
   output: {
-    filename: 'bulma.css',
+    filename: 'noop.js',
     path: path.resolve(__dirname, 'static/styles')
   },
   plugins: [
-    extractBulma,
+    extractCustom,
     extractNprogress,
   ],
   module: {
     rules: [
       {
-        test: /bulma\.sass/,
-        use: extractBulma.extract([
+        test: /custom\.scss/,
+        use: extractCustom.extract([
           'css-loader',
           'postcss-loader',
           'sass-loader',
@@ -35,4 +35,4 @@ module.exports = {
       }
     ]
   }
-};
+}

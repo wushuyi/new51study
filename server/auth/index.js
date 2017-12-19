@@ -3,7 +3,7 @@ import { checkIsWx, loginWX } from './weixin'
 import { checkIsQQ, loginQQ } from './qq'
 import { checkIsSina, loginSina } from './sina'
 import startsWith from 'lodash/startsWith'
-import { tokenKey } from 'config/settings'
+import { tokenKey, defaultAuthOkPage, defaultAuthPage } from 'config/settings'
 
 function loginOk(data, res, req, authUrl, defautlRedirect) {
   if (data) {
@@ -32,7 +32,7 @@ function loginErr(err, res, req, authUrl, defautlRedirect) {
   // res.send(JSON.stringify(err))
 }
 
-export function auth(res, req, authUrl = '/auth/login-code', defautlRedirect = '/authok') {
+export function auth(res, req, authUrl = defaultAuthPage, defautlRedirect = defaultAuthOkPage) {
   if (req.query.state) {
     const ctx = [res, req, authUrl, defautlRedirect]
     const Okfn = (data) => {
