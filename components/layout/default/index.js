@@ -55,7 +55,7 @@ class Layout extends React.Component {
           <title>{title}</title>
           <meta charSet='utf-8'/>
           <link rel='stylesheet' type='text/css' href='/static/styles/antd-mobile.css'/>
-          <link rel='stylesheet' type='text/css' href='/static/libs/nprogress/0.2.0/nprogress.css'/>
+          <link rel='stylesheet' type='text/css' href='/static/styles/nprogress.css'/>
           <link rel='stylesheet' type='text/css' href='/static/styles/custom.css'/>
           <script src="/static/libs/fastclick/1.0.6/fastclick.js" type='text/javascript'/>
           <script src="/static/libs/nprogress/0.2.0/nprogress.js" type='text/javascript'/>
