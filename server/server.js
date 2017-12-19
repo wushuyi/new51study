@@ -27,8 +27,8 @@ server.use(favicon(path.join(__dirname, '../static/images', 'favicon.ico')))
 //   console.log(`> Ready on http://localhost:${port}`)
 // })
 
-Promise.resolve('ok')
-// app.prepare()
+// Promise.resolve('ok')
+app.prepare()
   .then(() => {
     server.get('/auth/login-code', (req, res) => {
       if (auth(res, req, req.route.path, '/authok')) {

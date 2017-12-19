@@ -1,5 +1,6 @@
 import createError from 'create-error'
 import { isDev } from 'config/settings'
+import { isBrowser, isServer } from 'utils/runEnv'
 
 export const errMsg = {
   xhrError: '发送请求失败,请检查网络!',
@@ -56,8 +57,11 @@ export function baseChcek(res) {
 }
 
 export function * baseXhrError(res) {
-  const Toast = yield import('antd-mobile/lib/toast')
   isDev && console.log(res.message)
-  Toast.fail(matchXhrError(res), 1)
+  isServer && console.log(res.message)
+  if (isBrowser) {
+    const Toast = yield import('antd-mobile/lib/toast')
+    Toast.fail(matchXhrError(res), 1)
+  }
 }
 
