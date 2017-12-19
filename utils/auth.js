@@ -1,5 +1,6 @@
 import Router from 'next/router'
 import { isBrowser } from 'utils/runEnv'
+import { tokenKey } from 'config/settings'
 
 let ldb, Cookies
 if (isBrowser) {
@@ -12,19 +13,19 @@ export function getToken() {
   if (Router.query && Router.query.token) {
     return Router.query.token
   }
-  token = Cookies && Cookies.get('token')
+  token = Cookies && Cookies.get(tokenKey)
   if (token) {
     return token
   }
-  token = ldb && ldb.get('auth-token')
+  token = ldb && ldb.get(tokenKey)
   if (token) {
     return token
   }
 }
 
 export function setToken(token) {
-  Cookies && Cookies.set('token', token, {expires: 30})
-  ldb && ldb.set('auth-token', token)
+  Cookies && Cookies.set(tokenKey, token, {expires: 30})
+  ldb && ldb.set(tokenKey, token)
 }
 
 export function setRedirect(uri) {

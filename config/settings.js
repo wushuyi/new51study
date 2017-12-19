@@ -1,12 +1,13 @@
 const prod = process.env.NODE_ENV === 'production'
 
 module.exports = {
+  tokenKey: 'auth-token',
   isDev: !prod,
   APIVersion: {
     version: '1.0.0',
     platform: 'H5'
   },
-  APIService: prod ? 'http://api.5151study.com' : 'http://192.168.1.249:7080/API',
+  APIService: !prod ? 'http://api.5151study.com' : 'http://192.168.1.249:7080/API',
   NewAPIService: 'http://192.168.1.249:8003/api',
   QINIU: {
     url: prod ? 'http://7xpx8n.com1.z0.glb.clouddn.com/' : 'http://7xszyu.com1.z0.glb.clouddn.com/',

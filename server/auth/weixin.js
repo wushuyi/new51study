@@ -1,7 +1,7 @@
 import { getOrigin } from 'server/utils'
 import request from 'superagent'
 import includes from 'lodash/includes'
-import { authError, xhrError } from './errors'
+import { authError, noCodeError, xhrError } from './errors'
 import { getWXTokenUrl, authWX } from 'server/auth/api'
 import { auth } from 'config/settings'
 
@@ -118,5 +118,5 @@ export async function loginWX(req) {
     }
     return loginData
   }
-  return false
+  throw new noCodeError('weixin')
 }

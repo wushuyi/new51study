@@ -1,7 +1,14 @@
 {
   "plugins": [
     "transform-es2015-modules-commonjs",
-    "transform-decorators-legacy",
+    "transform-object-rest-spread",
+    [
+      "transform-assets-import-to-string",
+      {
+        "baseDir": "static",
+        "baseUri": "/"
+      }
+    ],
     [
       "module-resolver",
       {
@@ -10,13 +17,6 @@
         ],
         "alias": {
         }
-      }
-    ],
-    [
-      "transform-assets-import-to-string",
-      {
-        "baseDir": "static",
-        "baseUri": "/"
       }
     ]
   ],

@@ -1,6 +1,6 @@
 import { getOrigin } from 'server/utils'
 import request from 'superagent'
-import { authError, xhrError } from './errors'
+import { authError, noCodeError, xhrError } from './errors'
 import { getSinaTokenUrl, authSina } from 'server/auth/api'
 import { auth } from 'config/settings'
 
@@ -114,5 +114,5 @@ export async function loginSina(req) {
     }
     return loginData
   }
-  return false
+  throw new noCodeError('sina')
 }

@@ -1,7 +1,7 @@
 import request from 'superagent'
 import qs from 'query-string'
 import { APIService, APIVersion, auth } from 'config/settings'
-import { baseChcek } from './utils/error'
+import { baseChcek, argsError } from './utils/error'
 
 /**
  * API: /users/${type}_code

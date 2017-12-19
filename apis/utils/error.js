@@ -9,11 +9,11 @@ export const errMsg = {
   needAuthError: '需要登录',
 }
 
-const xhrError = createError('xhrError')
-const resError = createError('resError')
-const msgError = createError('msgError')
-const argsError = createError('argsError')
-const needAuthError = createError('needAuthError')
+export const xhrError = createError('xhrError')
+export const resError = createError('resError')
+export const msgError = createError('msgError')
+export const argsError = createError('argsError')
+export const needAuthError = createError('needAuthError')
 
 export function matchXhrError(err) {
   let res

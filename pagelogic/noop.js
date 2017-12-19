@@ -5,7 +5,7 @@ import { call } from 'redux-saga/effects'
 export default KeaContext => {
   const {kea} = KeaContext
   const logic = kea({
-    path: (key) => ['scenes', 'noop'],
+    path: (key) => ['scenes','noop'],
     actions: () => ({
       noop: () => ({}),
     }),

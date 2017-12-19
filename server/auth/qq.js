@@ -2,7 +2,7 @@ import { getOrigin } from 'server/utils'
 import request from 'superagent'
 import includes from 'lodash/includes'
 import each from 'lodash/each'
-import { authError, xhrError } from './errors'
+import { authError, xhrError, noCodeError } from './errors'
 import { getQQaccessTokenUrl, getQQOpenIdUrl, authQQ } from 'server/auth/api'
 import { auth } from 'config/settings'
 
@@ -146,5 +146,5 @@ export async function loginQQ(req) {
     }
     return loginData
   }
-  return false
+  throw new noCodeError('qq')
 }

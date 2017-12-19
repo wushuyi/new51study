@@ -1,0 +1,104 @@
+@import 'libs/hotcss/px2rem';
+
+.oneline {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.match-item-warp {
+  display: flex;
+  height: 162*$hd;
+  background: #FFFFFF;
+  padding: 11*$hd;
+  margin-bottom: 10*$hd;
+}
+
+.cover-outer {
+  position: relative;
+  width: 99*$hd;
+  height: 140*$hd;
+  &:before {
+    content: '';
+    display: block;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 55*$hd;
+    height: 25*$hd;
+  }
+}
+
+.content-outer {
+  flex: 1 0 280*$hd;
+  width: 280*$hd;
+  font-size: 13.24*$hd;
+  color: #7F7F7F;
+  margin: 9*$hd 0 0 17*$hd;
+
+  .title {
+    line-height: 25*$hd;
+    display: flex;
+    align-items: center;
+    font-size: 17.66*$hd;
+    color: #000000;
+  }
+
+  .content {
+    margin-top: 17*$hd;
+  }
+
+  .item {
+    display: flex;
+    align-items: center;
+    height: 14*$hd;
+    &:before {
+      content: '';
+      display: block;
+      width: 11*$hd;
+      height: 13*$hd;
+    }
+    & + .item {
+      margin-top: 8*$hd;
+    }
+    img {
+      display: block;
+      width: 11*$hd;
+      height: 13*$hd;
+    }
+    div {
+      margin-left: 12*$hd;
+    }
+  }
+}
+
+.run-icon:before {
+  background: url("/static/images/icon/icon_nmatch_run.png") center no-repeat;
+  background-size: contain;
+}
+
+.end-icon:before {
+  background: url("/static/images/icon/icon_nmatch_end.png") center no-repeat;
+  background-size: contain;
+}
+
+.addr-icon:before {
+  background: url("/static/images/icon/icon_nmatch_address.png") center no-repeat;
+  background-size: contain;
+}
+
+.charge-icon:before {
+  background: url("/static/images/icon/icon_nmatch_charge.png") center no-repeat;
+  background-size: contain;
+}
+
+.time-icon:before {
+  background: url("/static/images/icon/icon_nmatch_time.png") center no-repeat;
+  background-size: contain;
+}
+
+.org-icon:before {
+  background: url("/static/images/icon/icon_nmatch_org.png") center no-repeat;
+  background-size: contain;
+}
+

@@ -1,4 +1,16 @@
-body{
+html {
+  box-sizing: border-box;
+}
+
+* {
+  box-sizing: inherit;
+}
+
+*:before, *:after {
+  box-sizing: inherit;
+}
+
+body {
   line-height: 1.5;
   background-color: #F6F6F6;
   min-height: 60vh;
@@ -38,7 +50,7 @@ body {
   user-select: none;
 }
 
-.is-selectable{
+.is-selectable {
   -webkit-touch-callout: text;
   -webkit-user-select: text;
   -moz-user-select: text;
