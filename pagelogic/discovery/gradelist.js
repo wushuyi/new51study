@@ -9,6 +9,7 @@ import { getToken, setToken } from '../../utils/auth'
 import { from } from 'seamless-immutable'
 import map from 'lodash/map'
 import forEach from 'lodash/forEach'
+import indexOf from 'lodash/indexOf'
 
 function update(source, newSource) {
   let data = source
@@ -16,7 +17,7 @@ function update(source, newSource) {
     return o.id
   })
   forEach(newSource, function (o, i, s) {
-    let updateKey = _.indexOf(ids, o.id)
+    let updateKey = indexOf(ids, o.id)
     if (updateKey > -1) {
       data = data.set(updateKey, o)
     } else {
@@ -26,7 +27,7 @@ function update(source, newSource) {
   return data
 }
 
-const PATE_SIZE = 10
+const PATE_SIZE = 5
 
 export default KeaContext => {
   const {kea} = KeaContext
@@ -71,6 +72,7 @@ export default KeaContext => {
         const {token, page, def} = action.payload
         let res
         if (page === 'next') {
+          let page = Math.floor(gradelist.length / PATE_SIZE)
           res = yield call(getKaojiList, page, PATE_SIZE, token)
         } else {
           res = yield call(getKaojiList, page, PATE_SIZE, token)

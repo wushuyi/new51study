@@ -70,7 +70,7 @@ export default class Demo extends React.PureComponent {
     const def = deferred()
     actions.getList(0, def)
     await def.promise
-    this.rData = [...this.props.data]
+    this.rData = this.props.data
     this.setState({
       dataSource: this.state.dataSource.cloneWithRows(this.rData),
       refreshing: false,
@@ -79,18 +79,22 @@ export default class Demo extends React.PureComponent {
   }
 
   onEndReached = (event) => {
+    const {actions} = this.props
+
     if (this.state.isLoading && !this.state.hasMore) {
       return
     }
     // console.log('reach end', event)
     this.setState({isLoading: true})
-    setTimeout(() => {
-      this.rData = [...this.rData, ...this.props.data]
+    const def = deferred()
+    actions.getList('next', def)
+    def.promise.then(() => {
+      this.rData = this.props.data
       this.setState({
-        dataSource: this.state.dataSource.cloneWithRows(this.rData),
+        dataSource: this.state.dataSource.cloneWithRows(this.props.data),
         isLoading: false,
       })
-    }, 1000)
+    })
   }
 
   renderRow = (rowData) => {

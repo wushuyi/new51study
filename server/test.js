@@ -103,7 +103,7 @@
 import TripleDES from 'crypto-js/tripledes'
 import Core from 'crypto-js/core'
 import ECB from 'crypto-js/mode-ecb'
-import ZeroPadding from 'crypto-js/pad-zeropadding'
+import Pkcs7 from 'crypto-js/pad-pkcs7'
 import superAgent from 'superagent'
 import assign from 'lodash/assign'
 import qs from 'query-string'
@@ -118,7 +118,7 @@ key = Core.enc.Utf8.parse(key)
 let cfg = {
   // iv: iv,
   mode: ECB,
-  padding: ZeroPadding
+  padding: Pkcs7
 }
 
 function test() {
@@ -141,9 +141,9 @@ function encodeqs(srouce) {
 
   const defaultQuery = {
     apptype: 'wyx',
-    devicetype: 'iPhone',
-    networkstate: 'ViaWiFi',
-    sysversion: '11.2.1',
+    // devicetype: 'iPhone',
+    // networkstate: 'ViaWiFi',
+    // sysversion: '11.2.1',
     timestamp: (new Date()).getTime(),
     version: '1.0.0',
     platform: 'H5'
@@ -164,7 +164,10 @@ function encodebody(data) {
 //_finalizeQueryString
 function plugin(request) {
   console.log(request)
-  request.qs = {}
+  request.qs = {
+    version: '1.0.0',
+    platform: 'H5'
+  }
   request._data = encodebody(request._data)
   request.header = assign(request.header, encodeqs(request.qs))
   return request
