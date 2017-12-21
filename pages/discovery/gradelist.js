@@ -171,7 +171,7 @@ class Page extends React.PureComponent {
 
     try {
       const def = deferred()
-      store.dispatch(actions.getList(0, 10, def, token))
+      store.dispatch(actions.getList(0, def, token))
       await def.promise
     } catch (err) {
       return {
@@ -198,7 +198,7 @@ class Page extends React.PureComponent {
   }
 
   render() {
-    const {gradelist, err} = this.props
+    const {gradelist, err, actions} = this.props
     if (err) {
       return (
         <Layout>
@@ -206,9 +206,13 @@ class Page extends React.PureComponent {
         </Layout>
       )
     }
+    let porps = {
+      data: gradelist,
+      actions
+    }
     return (
       <Layout>
-        <Demo data={gradelist}/>
+        <Demo {...porps} />
       </Layout>
     )
   }

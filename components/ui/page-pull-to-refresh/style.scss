@@ -1,0 +1,35 @@
+@import 'libs/hotcss/px2rem';
+
+$prefixCls: ui-page-pull-to-refresh;
+$indicatorH: 30*$hd;
+
+.#{$prefixCls} {
+  &-content {
+    &-wrapper {
+      overflow: hidden;
+    }
+    transform-origin: left top 0;
+  }
+  &-transition {
+    transition: transform 0.3s;
+  }
+  &-indicator {
+    color: grey;
+    text-align: center;
+    height: $indicatorH;
+    font-size: $indicatorH * 0.6;
+    line-height: $indicatorH;
+    .am-icon-loading {
+      width: $indicatorH * 0.8;
+      height: $indicatorH * 0.8;
+    }
+  }
+
+  &-down .#{$prefixCls}-indicator {
+    margin-top: -$indicatorH;
+  }
+
+  &-up .#{$prefixCls}-indicator {
+    margin-bottom: -$indicatorH;
+  }
+}

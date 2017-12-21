@@ -20,7 +20,7 @@ export async function getKaojiList(page, size, token) {
       .query({
         token
       })
-      .send({
+      .query({
         size,
         page,
       })

@@ -52,7 +52,7 @@ export function baseChcek(res) {
   if (res.body.code === 200) {
     return res
   } else {
-    return new resError()
+    return new resError(res.body.message)
   }
 }
 
