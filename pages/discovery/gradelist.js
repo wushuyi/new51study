@@ -3,20 +3,9 @@ import Layout from 'components/layout/default'
 import { withRedux } from 'store'
 import createLogic from 'pagelogic/discovery/gradelist'
 import { deferred } from 'redux-saga/utils'
-import MatchItem from 'components/discovery/ui/match-item'
-import TopicItem from 'components/discovery/ui/topic-item'
-import includes from 'lodash/includes'
-import random from 'lodash/random'
-import { adminType } from 'utils/wyx_const'
-import PullToRefresh from 'antd-mobile/lib/pull-to-refresh'
-import ListView from 'antd-mobile/lib/list-view'
-import { isBrowser } from 'utils/runEnv'
-
-import { tokenKey, defaultAuthPage } from 'config/settings'
-import { getToken } from '../../utils/auth'
-
-const MatchType = [adminType.AdminEvaluateGroup, adminType.AdminEvaluate]
-const TopicType = [adminType.AdminZhuanTi, adminType.AdminActivity]
+import { defaultAuthPage } from 'config/settings'
+import { getToken } from 'utils/auth'
+import Demo from 'components/discovery/gradelist'
 
 const test = [{
   'id': 16421,
@@ -173,14 +162,6 @@ const test = [{
   'originalPrice': null
 }]
 
-function isMatchType(type) {
-  return includes(MatchType, type)
-}
-
-function isTopicType(type) {
-  return includes(TopicType, type)
-}
-
 class Page extends React.PureComponent {
   static async getInitialProps(ctx) {
     const {logics, KeaContext, isServer, store, req} = ctx
@@ -253,92 +234,3 @@ export default withRedux(Page, function (KeaContext) {
     mainLogic,
   ]
 })
-
-class Demo extends React.Component {
-  constructor(props) {
-    super(props)
-    let dataSource = new ListView.DataSource({
-      rowHasChanged: (row1, row2) => row1 !== row2,
-    })
-    this.rData = props.data
-    dataSource = dataSource.cloneWithRows(this.rData)
-
-    this.state = {
-      dataSource,
-      refreshing: false,
-      isLoading: false,
-      mount: false,
-    }
-  }
-
-  componentDidMount() {
-    isBrowser && this.setState({
-      mount: true
-    })
-  }
-
-  onRefresh = () => {
-    this.setState({refreshing: true, isLoading: true})
-    // simulate initial Ajax
-    setTimeout(() => {
-      this.rData = [...this.props.data]
-      this.setState({
-        dataSource: this.state.dataSource.cloneWithRows(this.rData),
-        refreshing: false,
-        isLoading: false,
-      })
-    }, 600)
-  }
-
-  onEndReached = (event) => {
-    // console.log('fire onEndReached')
-    // load new data
-    // hasMore: from backend data, indicates whether it is the last page, here is false
-    if (this.state.isLoading && !this.state.hasMore) {
-      return
-    }
-    // console.log('reach end', event)
-    this.setState({isLoading: true})
-    setTimeout(() => {
-      this.rData = [...this.rData, ...this.props.data]
-      this.setState({
-        dataSource: this.state.dataSource.cloneWithRows(this.rData),
-        isLoading: false,
-      })
-    }, 3000)
-  }
-
-  renderRow = (rowData) => {
-    // console.log(rowData)
-    return (
-      <Fragment>
-        {
-          (isMatchType(rowData.type) && <MatchItem {...rowData}/>) ||
-          (isTopicType(rowData.type) && <TopicItem {...rowData}/>)
-        }
-      </Fragment>
-    )
-  }
-
-  render() {
-    return (
-      <ListView
-        ref={el => this.lv = el}
-        dataSource={this.state.dataSource}
-        useBodyScroll
-        renderRow={this.renderRow}
-        renderFooter={() =>
-          <div style={{padding: 30}}>{this.state.isLoading ? 'loading...' : 'loaded'}</div>}
-        renderBodyComponent={() => <div className="for-body-demo"/>}
-        renderSectionBodyWrapper={(sectionID) => <div key={sectionID}/>}
-        onEndReached={this.onEndReached}
-        onEndReachedThreshold={100}
-        pageSize={10}
-        pullToRefresh={this.state.mount ? <PullToRefresh
-          refreshing={this.state.refreshing}
-          onRefresh={this.onRefresh}
-        /> : false}
-      />
-    )
-  }
-}

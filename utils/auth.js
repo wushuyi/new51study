@@ -40,6 +40,11 @@ export function setToken(token) {
   ldb && ldb.set(tokenKey, token)
 }
 
+export function clearToken() {
+  Cookies && Cookies.remove(tokenKey)
+  ldb && ldb.remove(tokenKey)
+}
+
 export function setRedirect(uri) {
   Cookies && Cookies.set('redirect_uri', uri, {expires: 30})
 }

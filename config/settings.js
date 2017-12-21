@@ -3,7 +3,7 @@ const prod = process.env.NODE_ENV === 'production'
 module.exports = {
   tokenKey: 'auth-token',
   defaultAuthPage: '/auth/login-code',
-  defaultAuthOkPage: '/authok',
+  defaultAuthOkPage: '/discovery/gradelist',
   isDev: !prod,
   APIVersion: {
     version: '1.0.0',
