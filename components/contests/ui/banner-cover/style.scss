@@ -1,0 +1,49 @@
+@import 'libs/hotcss/px2rem';
+.bgcover {
+  position: relative;
+  min-height: 150*$hd;
+  width: 100%;
+}
+.bgcover.fg{
+  background-size: contain;
+  position: absolute;
+  top: 0;
+}
+.bgcover.bg{
+  opacity: 0.4;
+}
+.header-wrapper {
+  position: relative;
+  .position-outer {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    right: 10*$hd;
+    bottom: 0;
+    //          z-index: 1;
+    height: 24*$hd;
+    line-height: 24*$hd;
+    padding: 0 8*$hd;
+    border-top-left-radius: 8*$hd;
+    border-top-right-radius: 8*$hd;
+    background-color: #fff;
+    //          border: 1px solid red;
+    .position {
+      display: block;
+      width: 10*$hd;
+      height: 13*$hd;
+      margin-right: 2*$hd;
+      background: url('/static/images/icon/icon_default_address.png') no-repeat center;
+      background-size: 10*$hd 13*$hd;
+    }
+    span {
+      //              border: 1px solid red;
+      display: inline-block;
+      height: 24*$hd;
+      line-height: 26*$hd;
+      vertical-align: top;
+      font-size: 13*$hd;
+      color: #494949;
+    }
+  }
+}

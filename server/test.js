@@ -164,12 +164,12 @@ function encodebody(data) {
 //_finalizeQueryString
 function plugin(request) {
   console.log(request)
+  request._data = encodebody(request._data)
+  request.header = assign(request.header, encodeqs(request.qs))
   request.qs = {
     version: '1.0.0',
     platform: 'H5'
   }
-  request._data = encodebody(request._data)
-  request.header = assign(request.header, encodeqs(request.qs))
   return request
 }
 

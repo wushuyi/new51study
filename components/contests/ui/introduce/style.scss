@@ -1,0 +1,41 @@
+@import 'libs/hotcss/px2rem';
+
+.ui-introduce-warp {
+  background: #FFFFFF;
+  padding: 15*$hd 10*$hd;
+  box-shadow: inset 0 -1*$hd 1*$hd -1*$hd #d6d6d6;
+  .ui-title {
+    line-height: 30*$hd;
+    width: 100%;
+    font-size: 26*$hd;
+    color: #494949;
+    font-weight: 500;
+    text-align: justify;
+  }
+
+  .ui-content {
+    text-align: justify;
+    color: #9E9E9E;
+    font-size: 0;
+    line-height: 20*$hd;
+    margin-top: 10*$hd;
+    position: relative;
+  }
+
+  .ui-intro {
+    vertical-align: top;
+    font-size: 14*$hd;
+  }
+
+  .look-detail {
+    display: inline-block;
+    vertical-align: top;
+    font-size: 12*$hd;
+    color: #FFFFFF;
+    background: #FF6628;
+    border-radius: 3*$hd;
+    padding: 0 8*$hd;
+    margin-left: 4*$hd;
+  }
+}
+

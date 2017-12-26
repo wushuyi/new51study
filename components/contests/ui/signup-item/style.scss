@@ -1,0 +1,91 @@
+@import 'libs/hotcss/px2rem';
+
+.signup-item-warp {
+  display: flex;
+  width: 100%;
+  position: relative;
+  height: 62*$hd;
+  margin-bottom: 1*$hd;
+  .signup-item-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: #fff;
+    padding-left: 12*$hd;
+  }
+  .ui-time {
+    display: flex;
+    align-items: center;
+    height: 18*$hd;
+    .ui-label {
+      display: block;
+      font-size: 16*$hd;
+      color: #FF6628;
+      max-width: 135*$hd;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .ui-icon {
+      display: inline-block;
+      width: 26*$hd;
+      height: 14*$hd;
+      background: url("/static/images/match/icon_default_match_time_tag.png") no-repeat center;
+      background-size: contain;
+    }
+    .ui-date {
+      display: block;
+      font-size: 16*$hd;
+      color: #585858;
+      margin-left: 5*$hd;
+    }
+  }
+  .banner {
+    margin: 8*$hd 0 0;
+    font-size: 12*$hd;
+    color: #B9B9B9;
+    span:last-child {
+      margin-left: 60*$hd;
+    }
+  }
+  .singup-btn {
+    width: 72*$hd;
+    height: 62*$hd;
+    background-repeat: no-repeat;
+    background-size: cover;
+    &.expire-time {
+      background-image: url("/static/images/match/icon-expire-time.png");
+    }
+    &.success-advanced {
+      background-image: url("/static/images/match/icon-success-advanced.png");
+    }
+    &.sign-up-no {
+      background-image: url("/static/images/match/icon-sign-up-no.png");
+    }
+    &.take-yes {
+      background-image: url("/static/images/match/icon_default_match_take_yes.png");
+    }
+    &.take-will {
+      background-image: url("/static/images/match/icon_default_match_take_will.png");
+    }
+    &.sign-up-sure {
+      background-image: url("/static/images/match/icon-sign-up-sure.png");
+    }
+    &.begin-will {
+      background-image: url("/static/images/match/icon-begin_will.png");
+    }
+  }
+  .signup-link {
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: block;
+    height: 100%;
+    width: 100%;
+    color: transparent;
+  }
+  & + .signup-item {
+    margin-top: 1*$hd;
+  }
+}

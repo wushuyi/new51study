@@ -1,0 +1,44 @@
+@import 'libs/hotcss/px2rem';
+
+.title-banner-warp {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 20*$hd;
+  color: #323232;
+  font-size: 16*$hd;
+  background-color: #FFFFFF;
+  .title-icon {
+    width: 20*$hd;
+    height: 20*$hd;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+  }
+  //  border: 1px solid red;
+  & > div {
+    display: flex;
+    align-items: center;
+  }
+  & > div:nth-of-type(2) {
+    font-size: 12*$hd;
+    color: #B9B9B9;
+  }
+  .union-recommand-tag {
+    height: 20*$hd;
+    line-height: 22*$hd;
+    margin-left: 3*$hd;
+  }
+  .union-recommand-count {
+    height: 20*$hd;
+    line-height: 20*$hd;
+    margin-right: 3*$hd;
+    //      border: 1px solid red;
+  }
+  .icon-right {
+    width: 8*$hd;
+    height: 14*$hd;
+    background: url('/static/images/match/icon_default_tag_right.png') no-repeat center;
+    background-size: contain;
+  }
+}

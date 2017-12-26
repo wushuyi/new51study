@@ -95,7 +95,7 @@ function CoverBox(props) {
       {/*language=SCSS*/}
       <style jsx>{`
               .cover-outer{
-                background: url("${url + '?imageView2/1/w/297/h/420/100'}") center no-repeat;
+                background: url("${url + '?imageView2/1/w/198/h/280/100'}") center no-repeat;
                 background-size: cover;
               }
           `}</style>

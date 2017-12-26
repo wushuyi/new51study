@@ -1,0 +1,12 @@
+@import 'libs/hotcss/px2rem';
+
+.wyx-contest-detail {
+  width: 414*$hd;
+  overflow: hidden;
+  img {
+    display: block;
+  }
+  margin-top: 1*$hd;
+  background-color: #fff;
+  font-size: 16*$hd;
+}

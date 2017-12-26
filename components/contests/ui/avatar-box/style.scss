@@ -1,0 +1,21 @@
+@import 'libs/hotcss/px2rem';
+
+.title-avaters-warp {
+  background: #FFFFFF;
+  margin-top: 10*$hd;
+}
+
+.title-banner-outer {
+  padding: 12*$hd;
+}
+
+.avaters-nav {
+  padding: 10*$hd;
+  margin: 0;
+  background-color: #FFFFFF;
+  .item {
+    float: left;
+    list-style: none;
+    margin-right: 10*$hd;
+  }
+}

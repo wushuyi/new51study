@@ -1,0 +1,43 @@
+@import 'libs/hotcss/px2rem';
+
+.ui-work-tiem-warp {
+  width: 192*$hd;
+  .ui-banner-warp {
+    display: flex;
+    margin: 5*$hd 0;
+  }
+  .avatar-item {
+    width: 40%;
+  }
+  .discuss-item {
+    width: 33%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #6088B8;
+  }
+  .praise-item {
+    width: 27%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #FF6121;
+  }
+  .item-count {
+    margin-left: 5*$hd;
+    font-size: 12*$hd;
+  }
+  .discuss-icon, .praise-icon {
+    width: 12*$hd;
+    height: 12*$hd;
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+  .discuss-icon {
+    background-image: url('/static/images/match/icon_blue_discuss.png');
+  }
+  .praise-icon {
+    background-image: url('/static/images/match/icon_default_praise.png');
+  }
+}
