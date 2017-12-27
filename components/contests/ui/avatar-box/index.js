@@ -57,9 +57,9 @@ export default class AvatarBox extends React.PureComponent {
             <TitleBanner {...bannerProps}/>
           </div>
           <ul className='avaters-nav is-clearfix'>
-            {ALData.map(function (avatarProps) {
+            {ALData.map(function (avatarProps, index) {
               return (
-                <li className='item' key={avatarProps.userId}>
+                <li className='item' key={avatarProps.userId || index}>
                   <Avatar {...avatarProps}/>
                 </li>
               )

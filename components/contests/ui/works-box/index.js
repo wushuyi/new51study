@@ -38,7 +38,7 @@ export default class WorksBox extends React.PureComponent {
   static defaultProps = {
     dataList: tList,
     maxItem: 4,
-    count: 10,
+    count: 10+'条',
     titIconUrl: titIconUrl,
     titleName: '作品动态'
   }

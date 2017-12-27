@@ -1,0 +1,14 @@
+@import 'libs/hotcss/px2rem';
+
+.news-box-warp {
+  margin-top: 10*$hd;
+  padding: 12*$hd;
+  background-color: #FFFFFF;
+}
+
+.news-list {
+  margin-top: 10*$hd;
+  .news-item {
+    margin-bottom: 1*$hd;
+  }
+}

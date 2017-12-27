@@ -4,11 +4,11 @@ import Layout from 'components/layout/default'
 import BannerCover from 'components/contests/ui/banner-cover'
 import Introduce from 'components/contests/ui/introduce'
 import SignupItem from 'components/contests/ui/signup-item'
-// import Avatar from 'components/ui/avatar'
+import SignupBox from 'components/contests/ui/signup-box'
 import AvatarBox from 'components/contests/ui/avatar-box'
 import Style from './style.scss'
 import PagePullToRefresh from 'components/ui/page-pull-to-refresh'
-import NewsItem from 'components/contests/ui/news-item'
+import NewsBox from 'components/contests/ui/news-box'
 import WorksBox from 'components/contests/ui/works-box'
 
 let dataSignupItem = {
@@ -47,13 +47,13 @@ export default class a extends React.PureComponent {
         <PagePullToRefresh onRefresh={this.onRefresh}>
           <BannerCover/>
           <Introduce/>
-          <SignupItem {...dataSignupItem}/>
-
+          {/*<SignupItem {...dataSignupItem}/>*/}
+          <SignupBox/>
           {/*<Avatar/>*/}
           <AvatarBox {...dataAvatarBox}/>
           {/*<WorkItem/>*/}
           <WorksBox/>
-          <NewsItem/>
+          <NewsBox/>
           <div className='wyx-contest-detail'>
             <img width="100%"
                  src="http://7xpx8n.com1.z0.glb.clouddn.com/pic_album_ad_21_2016123016375494372_wh720x2425.jpg" alt=""/>

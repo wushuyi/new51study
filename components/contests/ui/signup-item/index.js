@@ -23,7 +23,7 @@ function getSignupState(props) {
     //已结束
     return '已结束'
   }
-  if (props.SignUpGroupType) {
+  if (props.signUpGroupType) {
     if (props.isWillBeginLately) {
       return '等待开始'
     }
@@ -84,14 +84,17 @@ function singupIcon(signupState) {
 
 export default class SignupItem extends React.PureComponent {
   static propTypes = {
-    SignUpGroupType: PropTypes.any,
-    beginA: PropTypes.any,
     beginAt: PropTypes.any,
     endAt: PropTypes.any,
+    ifNomination: PropTypes.any,
+    ifSignUp: PropTypes.any,
     ifSignupLimit: PropTypes.any,
+    ifWinner: PropTypes.any,
+    index: PropTypes.any,
     isShowSingUpNumber: PropTypes.any,
     isWillBeginLately: PropTypes.any,
     label: PropTypes.any,
+    signUpGroupType: PropTypes.any,
     signupEndAt: PropTypes.any,
     singUpNumber: PropTypes.any
   }
@@ -103,7 +106,7 @@ export default class SignupItem extends React.PureComponent {
     signupEndAt: 1495295700000,
     ifSignUp: 'LIVE',
 
-    SignUpGroupType: false,
+    signUpGroupType: false,
     evaluateId: 43,
     evaluateApplyId: null,
     ifNomination: false,
@@ -114,7 +117,6 @@ export default class SignupItem extends React.PureComponent {
     isWillBeginLately: false,
     detail: false,
     isShowSingUpNumber: false,
-    onGroupItem: () => {}
   }
 
   constructor(props) {
@@ -135,7 +137,7 @@ export default class SignupItem extends React.PureComponent {
     const {signupState} = this.state
 
     //比赛组 beginAt 不在当前时间前不显示
-    if (props.SignUpGroupType && (isFuture(props.beginA) || props.isWillBeginLately)) {
+    if (props.signUpGroupType && (isFuture(props.beginAt) || props.isWillBeginLately)) {
       return null
     }
 

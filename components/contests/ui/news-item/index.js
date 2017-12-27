@@ -4,6 +4,8 @@ import Style from './style.scss'
 import classnames from 'classnames'
 import bgCover from '/static/images/bg/bg_no_pic_default.jpg'
 
+const BgCoverQuery = `?imageView2/1/w/${120 * 2}/h/${80 * 2}/100`
+
 const tData = {
   isTop: true,
   'title': '2017第二届小画家梦国际少儿书画大赛获奖名单',
@@ -11,6 +13,15 @@ const tData = {
   'createdAt': '03-09',
   'content': '<img width="100%" src="http://7xpx8n.com1.z0.glb.clouddn.com/pic_album_ad_21_2017030917541591868_wh720x1872.jpg" alt="">',
   'blogId': null
+}
+
+const TypeKv = {
+  'PICWALL': '照片墙',
+  'NEW': '新闻'
+}
+
+function getType(type) {
+  return TypeKv[type] || TypeKv.NEW
 }
 
 export default class NewsItem extends React.PureComponent {
@@ -28,6 +39,7 @@ export default class NewsItem extends React.PureComponent {
     title: 'title',
     bgCover: bgCover,
     createdAt: '新闻时间',
+    type: 'NEW'
   }
 
   render() {
@@ -35,7 +47,7 @@ export default class NewsItem extends React.PureComponent {
 
     const isTopCls = classnames('is-top', !isTop && 'is-hidden')
     const bgCoverStyle = {
-      backgroundImage: `url('${bgCover}')`
+      backgroundImage: `url('${bgCover + BgCoverQuery}')`
     }
     return (
       <Fragment>
@@ -44,7 +56,7 @@ export default class NewsItem extends React.PureComponent {
             <div className="news-detail">{title}</div>
             <div className="news-banner">
               <span className={isTopCls}>置顶</span>
-              <span className="news-tag">{type === 'PICWALL' ? '照片墙' : '新闻'}</span>
+              <span className="news-tag">{getType(type)}</span>
               <span className="news-time">{createdAt}</span>
             </div>
           </div>
