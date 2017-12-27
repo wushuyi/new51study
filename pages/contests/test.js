@@ -10,6 +10,7 @@ import Style from './style.scss'
 import PagePullToRefresh from 'components/ui/page-pull-to-refresh'
 import NewsBox from 'components/contests/ui/news-box'
 import WorksBox from 'components/contests/ui/works-box'
+import AgencyItem from 'components/contests/ui/agency-item'
 
 let dataSignupItem = {
   'beginAt': 1509093600000,
@@ -47,6 +48,7 @@ export default class a extends React.PureComponent {
         <PagePullToRefresh onRefresh={this.onRefresh}>
           <BannerCover/>
           <Introduce/>
+          <AgencyItem/>
           {/*<SignupItem {...dataSignupItem}/>*/}
           <SignupBox/>
           {/*<Avatar/>*/}
