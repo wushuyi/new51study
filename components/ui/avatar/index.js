@@ -33,10 +33,11 @@ export default class Avatar extends React.PureComponent {
     size: 55,
   }
 
-  constructor() {
+  constructor(props) {
     super()
+    let {userId} = props
     this.state = {
-      imgUrl: headFemaleUrl,
+      imgUrl: getAvatarUrl(userId),
     }
     this.isMount = true
   }
@@ -65,9 +66,12 @@ export default class Avatar extends React.PureComponent {
   render() {
     const {title, size} = this.props
     const {imgUrl} = this.state
+    const style = {
+      backgroundImage: `url('${imgUrl}')`
+    }
     return (
       <Fragment>
-        <img className='ui-avaters' src={imgUrl} title={title}/>
+        <div className='ui-avaters' style={style} title={title}/>
         {/*language=SCSS*/}
         <style jsx>{`
           .ui-avaters {
@@ -75,6 +79,7 @@ export default class Avatar extends React.PureComponent {
             width: ${px2rem(size)};
             border-radius: 50%;
             display: block;
+            background-size: cover;
           }
         `}</style>
       </Fragment>

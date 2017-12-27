@@ -2,7 +2,7 @@ import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import Style from './style.scss'
 import TitleBanner from 'components/contests/ui/title-banner'
-import defaultIcon from '/static/images/match/icon_tag002.png'
+import defaultIcon from '/static/images/match/icon_default_match_internet_star008.png'
 import Avatar from 'components/ui/avatar'
 
 let tData = [

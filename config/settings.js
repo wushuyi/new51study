@@ -44,4 +44,7 @@ module.exports = {
       url_state: 'wyx_wx',
     }
   },
+  consts: {
+    vedioSufFixStr: '?vframe/jpg/offset/0'
+  }
 }

@@ -4,13 +4,14 @@ import Layout from 'components/layout/default'
 import BannerCover from 'components/contests/ui/banner-cover'
 import Introduce from 'components/contests/ui/introduce'
 import SignupItem from 'components/contests/ui/signup-item'
-import Avatar from 'components/ui/avatar'
+// import Avatar from 'components/ui/avatar'
 import AvatarBox from 'components/contests/ui/avatar-box'
 import Style from './style.scss'
 import PagePullToRefresh from 'components/ui/page-pull-to-refresh'
-import WorkItem from 'components/contests/ui/work-item'
+import NewsItem from 'components/contests/ui/news-item'
+import WorksBox from 'components/contests/ui/works-box'
 
-let data = {
+let dataSignupItem = {
   'beginAt': 1509093600000,
   'endAt': 1514623200000,
   'ifSignupLimit': false,
@@ -30,7 +31,6 @@ let data = {
 }
 
 let dataAvatarBox = {
-  avater: 'http://192.168.0.100:3000/assets/images/match/icon_default_match_internet_star008.png',
   count: 4,
   titleName: '比赛评委',
 
@@ -47,11 +47,13 @@ export default class a extends React.PureComponent {
         <PagePullToRefresh onRefresh={this.onRefresh}>
           <BannerCover/>
           <Introduce/>
-          <SignupItem {...data}/>
+          <SignupItem {...dataSignupItem}/>
 
           {/*<Avatar/>*/}
           <AvatarBox {...dataAvatarBox}/>
-          <WorkItem/>
+          {/*<WorkItem/>*/}
+          <WorksBox/>
+          <NewsItem/>
           <div className='wyx-contest-detail'>
             <img width="100%"
                  src="http://7xpx8n.com1.z0.glb.clouddn.com/pic_album_ad_21_2016123016375494372_wh720x2425.jpg" alt=""/>

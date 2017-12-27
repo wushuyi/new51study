@@ -30,7 +30,7 @@ export default class BannerCover extends React.PureComponent {
   }
 
   static defaultProps = {
-    bgcover: bgurl+'?wh400x400',
+    bgcover: bgurl + '?wh400x400',
     area: '全国',
     onMapDetail: () => {}
   }
@@ -42,7 +42,24 @@ export default class BannerCover extends React.PureComponent {
     this.state = {
       height: size ? px2rem(Math.min(size.height / (size.width / 414), bgMaxH)) : px2rem(150),
       isMeasure: !!size,
-      isVertical: size.height > size.width
+      isVertical: size.height > size.width,
+    }
+    this.isMount = true
+  }
+
+  componentWillUnmount() {
+    this.isMount = false
+  }
+
+  async componentDidMount() {
+    const {isMeasure} = this.state
+    if (!isMeasure) {
+      let size = await this.needMeasure()
+      this.isMount && this.setState({
+        height: px2rem(Math.min(size.height, bgMaxH)),
+        isMeasure: true,
+        isVertical: size.height > size.width
+      })
     }
   }
 
@@ -50,33 +67,16 @@ export default class BannerCover extends React.PureComponent {
   needMeasure = () => {
     const def = deferred()
     const {bgcover} = this.props
-    loadImage(
-      bgcover + bgQuery,
-      (img) => {
-        if (img.type === 'error') {
-          def.reject('Error loading image ' + imageUrl)
-        } else {
-          const {height, width} = img
-          def.resolve({height, width})
-        }
-      },
-      {
-        maxWidth: 414,
-      }
-    )
-    return def.promise
-  }
-
-  async componentDidMount() {
-    const {isMeasure} = this.state
-    if (!isMeasure) {
-      let size = await this.needMeasure()
-      this.setState({
-        height: px2rem(Math.min(size.height, bgMaxH)),
-        isMeasure: true,
-        isVertical: size.height > size.width
-      })
+    let img = new Image()
+    img.onerror = () => {
+      def.reject('Error loading image ' + img.src)
     }
+    img.onload = () => {
+      const {height, width} = img
+      def.resolve({height, width})
+    }
+    img.src = bgcover + bgQuery
+    return def.promise
   }
 
   render() {

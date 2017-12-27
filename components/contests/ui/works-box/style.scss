@@ -1,0 +1,23 @@
+@import 'libs/hotcss/px2rem';
+
+.contest-works-warp {
+  margin-top: 10*$hd;
+  padding: 12*$hd;
+  background-color: #fff;
+}
+
+.contest-works {
+  margin-top: 10*$hd;
+  padding: 0;
+  .item {
+    list-style: none;
+    display: block;
+    &:nth-of-type(odd) {
+      float: left;
+    }
+    &:nth-of-type(even) {
+      float: right;
+    }
+  }
+}
+
