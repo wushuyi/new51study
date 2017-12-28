@@ -11,6 +11,7 @@ import PagePullToRefresh from 'components/ui/page-pull-to-refresh'
 import NewsBox from 'components/contests/ui/news-box'
 import WorksBox from 'components/contests/ui/works-box'
 import AgencyItem from 'components/contests/ui/agency-item'
+import CommodityBox from 'components/contests/ui/commodity-box'
 
 let dataSignupItem = {
   'beginAt': 1509093600000,
@@ -54,6 +55,7 @@ export default class a extends React.PureComponent {
           {/*<Avatar/>*/}
           <AvatarBox {...dataAvatarBox}/>
           {/*<WorkItem/>*/}
+          <CommodityBox/>
           <WorksBox/>
           <NewsBox/>
           <div className='wyx-contest-detail'>

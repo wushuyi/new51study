@@ -1,0 +1,10 @@
+@import 'libs/hotcss/px2rem';
+
+.commodity-box-warp {
+  margin-top: 10*$hd;
+  padding: 10*$hd 10*$hd 0;
+  background-color: #FFFFFF;
+  .item + .item {
+    border-top: 1*$hd solid #f1f1f1;
+  }
+}
