@@ -68,7 +68,7 @@ export default KeaContext => {
       getList: function * (action) {
         const {actions} = this
         const gradelist = yield this.get('gradelist')
-        isDev && console.log(gradelist)
+        isDev && console.log('gradelist:',gradelist)
         const {token, page, def} = action.payload
         let res
         if (page === 'next') {

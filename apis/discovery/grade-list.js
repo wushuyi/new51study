@@ -1,5 +1,6 @@
 import { APIService, APIVersion } from 'config/settings'
 import request from 'superagent'
+import xhrCrypto from 'utils/xhrCrypto'
 import { baseChcek, needAuthError } from 'apis/utils/error'
 
 /**
@@ -24,6 +25,7 @@ export async function getKaojiList(page, size, token) {
         size,
         page,
       })
+      .use(xhrCrypto)
     return baseChcek(res)
   } catch (err) {
     return err

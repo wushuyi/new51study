@@ -1,4 +1,5 @@
 import request from 'superagent'
+import xhrCrypto from 'utils/xhrCrypto'
 import qs from 'query-string'
 import { APIService, APIVersion, auth } from 'config/settings'
 import { baseChcek, argsError } from './utils/error'
@@ -28,6 +29,7 @@ export async function getCode(phone, type) {
       .send({
         phone: phone
       })
+      .use(xhrCrypto)
     return baseChcek(res)
   } catch (err) {
     return err
@@ -53,6 +55,7 @@ export async function codeLogin(phone, code) {
         code,
         qudao: 'H5:wyx'
       })
+      .use(xhrCrypto)
     return baseChcek(res)
   } catch (err) {
     return err
@@ -78,6 +81,7 @@ export async function passwordLogin(phone, password) {
         phone,
         password
       })
+      .use(xhrCrypto)
     return baseChcek(res)
   } catch (err) {
     return err
@@ -106,6 +110,7 @@ export async function register(phone, password, code, yjCode = '') {
         code,
         yjCode,
       })
+      .use(xhrCrypto)
     return baseChcek(res)
   } catch (err) {
     return err
@@ -132,6 +137,7 @@ export async function forgetPasswd(phone, password, code) {
         password,
         code,
       })
+      .use(xhrCrypto)
     return baseChcek(res)
   } catch (err) {
     return err
@@ -152,6 +158,7 @@ export async function otherLogin(loginData) {
     res = await request.post(requestURL)
       .query(APIVersion)
       .send(loginData)
+      .use(xhrCrypto)
     return baseChcek(res)
   } catch (err) {
     return err

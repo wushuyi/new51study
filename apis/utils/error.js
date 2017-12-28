@@ -34,7 +34,7 @@ export function matchXhrError(err) {
       res = errMsg.needAuthError
       break
     default :
-      res = xhrError
+      res = err.message
   }
   return res
 }
@@ -57,7 +57,7 @@ export function baseChcek(res) {
 }
 
 export function * baseXhrError(res) {
-  // isDev && console.log(res.message)
+  isDev && console.error(res)
   // isServer && console.log(res.message)
   if (isBrowser) {
     const Toast = yield import('antd-mobile/lib/toast')
