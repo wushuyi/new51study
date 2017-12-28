@@ -1,17 +1,19 @@
 @import 'libs/hotcss/px2rem';
-.bgcover {
+
+.bg-cover {
   position: relative;
-  min-height: 150*$hd;
+  min-height: 100*$hd;
   width: 100%;
+  &.fg {
+    background-size: contain;
+    position: absolute;
+    top: 0;
+  }
+  &.bg {
+    opacity: 0.4;
+  }
 }
-.bgcover.fg{
-  background-size: contain;
-  position: absolute;
-  top: 0;
-}
-.bgcover.bg{
-  opacity: 0.4;
-}
+
 .header-wrapper {
   position: relative;
   .position-outer {

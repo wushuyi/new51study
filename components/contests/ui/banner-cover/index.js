@@ -3,9 +3,13 @@ import PropTypes from 'prop-types'
 import Link from 'next/link'
 import Style from './style.scss'
 import bgurl from 'static/images/bg/bg_no_pic_default.jpg'
-import loadImage from 'blueimp-load-image'
 import { px2rem } from 'utils/hotcss'
 import { deferred } from 'redux-saga/utils'
+
+const tData = {
+  'bgCover': 'http://7xszyu.com1.z0.glb.clouddn.com/pic_album_ad_22_201709301055021992_wh980x260.jpg',
+  'area': '垦丁'
+}
 
 function guessUrlSize(str) {
   let rex = /wh(\d+)x(\d+)/
@@ -25,22 +29,23 @@ const bgQuery = `?imageView2/2/w/414/h/${bgMaxH}/100`
 export default class BannerCover extends React.PureComponent {
   static propTypes = {
     area: PropTypes.any,
-    bgcover: PropTypes.any,
+    bgCover: PropTypes.any,
     onMapDetail: PropTypes.any
   }
 
   static defaultProps = {
-    bgcover: bgurl + '?wh400x400',
-    area: '全国',
+    bgCover: bgurl + '?wh400x400',
+    // bgCover: 'http://7xszyu.com1.z0.glb.clouddn.com/pic_album_ad_22_201709301055021992_wh980x260.jpg',
+    area: '垦丁',
     onMapDetail: () => {}
   }
 
   constructor(props) {
     super()
-    const {bgcover} = props
-    let size = guessUrlSize(bgcover)
+    const {bgCover} = props
+    let size = guessUrlSize(bgCover)
     this.state = {
-      height: size ? px2rem(Math.min(size.height / (size.width / 414), bgMaxH)) : px2rem(150),
+      height: size ? Math.min(size.height * (414 / size.width), bgMaxH) : 150,
       isMeasure: !!size,
       isVertical: size.height > size.width,
     }
@@ -56,7 +61,7 @@ export default class BannerCover extends React.PureComponent {
     if (!isMeasure) {
       let size = await this.needMeasure()
       this.isMount && this.setState({
-        height: px2rem(Math.min(size.height, bgMaxH)),
+        height: Math.min(size.height, bgMaxH),
         isMeasure: true,
         isVertical: size.height > size.width
       })
@@ -66,7 +71,7 @@ export default class BannerCover extends React.PureComponent {
   // 计算图片 宽高
   needMeasure = () => {
     const def = deferred()
-    const {bgcover} = this.props
+    const {bgCover} = this.props
     let img = new Image()
     img.onerror = () => {
       def.reject('Error loading image ' + img.src)
@@ -75,12 +80,12 @@ export default class BannerCover extends React.PureComponent {
       const {height, width} = img
       def.resolve({height, width})
     }
-    img.src = bgcover + bgQuery
+    img.src = bgCover + bgQuery
     return def.promise
   }
 
   render() {
-    const {bgcover, area, onMapDetail} = this.props
+    const {bgCover, area, onMapDetail} = this.props
     const {height, isVertical, isMeasure} = this.state
     return (
       <Fragment>
@@ -88,11 +93,11 @@ export default class BannerCover extends React.PureComponent {
 
           {isVertical ? (
             <Fragment>
-              <div className='bgcover bg' title="比赛封面"/>
-              <div className='bgcover fg' title='比赛封面'/>
+              <div className='bg-cover bg' title="比赛封面"/>
+              <div className='bg-cover fg' title='比赛封面'/>
             </Fragment>
           ) : (
-            <div className='bgcover' title="比赛封面"/>
+            <div className='bg-cover' title="比赛封面"/>
           )}
           <Link href="./">
             <a className="position-outer" onClick={onMapDetail}>
@@ -104,9 +109,9 @@ export default class BannerCover extends React.PureComponent {
         <style jsx>{Style}</style>
         {/*language=SCSS*/}
         <style jsx>{`
-          .bgcover {
-            height: ${height}
-            background: url('${isMeasure ? bgcover + bgQuery : bgurl}') no-repeat center;
+          .bg-cover {
+            height: ${px2rem(height)}
+            background: url('${isMeasure ? bgCover + bgQuery : bgurl}') no-repeat center;
             background-size: cover;
           }
         `}</style>
