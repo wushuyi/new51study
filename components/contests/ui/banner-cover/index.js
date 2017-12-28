@@ -34,8 +34,8 @@ export default class BannerCover extends React.PureComponent {
   }
 
   static defaultProps = {
-    bgCover: bgurl + '?wh400x400',
-    // bgCover: 'http://7xszyu.com1.z0.glb.clouddn.com/pic_album_ad_22_201709301055021992_wh980x260.jpg',
+    // bgCover: bgurl + '?wh400x400',
+    bgCover: 'http://7xszyu.com1.z0.glb.clouddn.com/pic_album_ad_22_201709301055021992_wh980x260.jpg',
     area: '垦丁',
     onMapDetail: () => {}
   }
@@ -57,9 +57,21 @@ export default class BannerCover extends React.PureComponent {
   }
 
   async componentDidMount() {
+    const {bgCover} = this.props
     const {isMeasure} = this.state
     if (!isMeasure) {
-      let size = await this.needMeasure()
+      let size = await this.needMeasure(bgCover)
+      this.isMount && this.setState({
+        height: Math.min(size.height, bgMaxH),
+        isMeasure: true,
+        isVertical: size.height > size.width
+      })
+    }
+  }
+
+  async componentWillReceiveProps(nextProps) {
+    if (nextProps.bgCover !== this.props.bgCover) {
+      let size = await this.needMeasure(nextProps.bgCover)
       this.isMount && this.setState({
         height: Math.min(size.height, bgMaxH),
         isMeasure: true,
@@ -69,9 +81,8 @@ export default class BannerCover extends React.PureComponent {
   }
 
   // 计算图片 宽高
-  needMeasure = () => {
+  needMeasure = (bgCover) => {
     const def = deferred()
-    const {bgCover} = this.props
     let img = new Image()
     img.onerror = () => {
       def.reject('Error loading image ' + img.src)
