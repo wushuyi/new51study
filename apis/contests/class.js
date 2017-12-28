@@ -1,5 +1,6 @@
 import { APIService, APIVersion } from 'config/settings'
 import request from 'superagent'
+import xhrCrypto from 'utils/xhrCrypto'
 import { baseChcek, needAuthError } from 'apis/utils/error'
 
 /**
@@ -20,6 +21,7 @@ export async function getEvaluateFramework(evaluateId, token) {
       .query({
         token
       })
+      .use(xhrCrypto)
     return baseChcek(res)
   } catch (err) {
     return err
@@ -38,6 +40,7 @@ export async function getEvaluateFrameworkShare(evaluateId) {
   try {
     const res = await request.get(requestURL)
       .query(APIVersion)
+      .use(xhrCrypto)
     return baseChcek(res)
   } catch (err) {
     return err
@@ -62,6 +65,7 @@ export async function getEvaluatesOne(evaluateId, token) {
       .query({
         token
       })
+      .use(xhrCrypto)
     return baseChcek(res)
   } catch (err) {
     return err
@@ -79,6 +83,7 @@ export async function getEvaluatesOneShare(evaluateId) {
   try {
     const res = await request.get(requestURL)
       .query(APIVersion)
+      .use(xhrCrypto)
     return baseChcek(res)
   } catch (err) {
     return err
@@ -103,6 +108,7 @@ export async function getEvaluatesTwo(evaluateId, token) {
       .query({
         token
       })
+      .use(xhrCrypto)
     return baseChcek(res)
   } catch (err) {
     return err
@@ -120,6 +126,7 @@ export async function getEvaluatesTwoShare(evaluateId) {
   try {
     const res = await request.get(requestURL)
       .query(APIVersion)
+      .use(xhrCrypto)
     return baseChcek(res)
   } catch (err) {
     return err
@@ -142,6 +149,7 @@ export async function getAd(positionId, position) {
         position,
         positionId,
       })
+      .use(xhrCrypto)
     return baseChcek(res)
   } catch (err) {
     return err
@@ -163,6 +171,7 @@ export async function postAd(adId, token) {
       .query({
         token,
       })
+      .use(xhrCrypto)
     return baseChcek(res)
   } catch (err) {
     return err
@@ -189,6 +198,7 @@ export async function getNews(evaluateId, page = 0, size = 2) {
         page,
         size
       })
+      .use(xhrCrypto)
     return baseChcek(res)
   } catch (err) {
     return err
@@ -215,6 +225,7 @@ export async function getWorks(evaluateId, page = 0, size = 4) {
         page,
         size
       })
+      .use(xhrCrypto)
     return baseChcek(res)
   } catch (err) {
     return err

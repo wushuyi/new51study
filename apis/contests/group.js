@@ -1,6 +1,7 @@
 import { APIService, APIVersion } from 'config/settings'
 import request from 'superagent'
 import { baseChcek, needAuthError } from 'apis/utils/error'
+import xhrCrypto from '../../utils/xhrCrypto'
 
 /**
  * API: /evaluategroups/${groupId}/framework
@@ -20,6 +21,7 @@ export async function getEvaluateGroupInfo(contestGroupId, token) {
       .query({
         token
       })
+      .use(xhrCrypto)
     return baseChcek(res)
   } catch (err) {
     return err
@@ -32,11 +34,12 @@ export async function getEvaluateGroupInfo(contestGroupId, token) {
  * @returns {Promise<*>}
  */
 export async function getEvaluateGroupInfoShare(contestGroupId) {
-  const api = `/evaluategroups/${contestGroupId}/framework`
+  const api = `/evaluategroups/${contestGroupId}/framework/forShare`
   const requestURL = `${APIService}${api}`
   try {
     const res = await request.get(requestURL)
       .query(APIVersion)
+      .use(xhrCrypto)
     return baseChcek(res)
   } catch (err) {
     return err
@@ -63,6 +66,7 @@ export async function getJurys(groupId, page = 0, size = 6) {
         page,
         size
       })
+      .use(xhrCrypto)
     return baseChcek(res)
   } catch (err) {
     return err
@@ -89,6 +93,7 @@ export async function getNews(groupId, page = 0, size = 2) {
         page,
         size
       })
+      .use(xhrCrypto)
     return baseChcek(res)
   } catch (err) {
     return err

@@ -218,7 +218,7 @@ class Page extends React.PureComponent {
   }
 }
 
-export default withRedux(Page, function (KeaContext) {
+export default withRedux(Page, function (KeaContext, ctx) {
   const {connect} = KeaContext
   const mainLogic = createLogic(KeaContext)
   const logic = connect({

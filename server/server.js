@@ -44,6 +44,10 @@ app.prepare()
       return app.render(req, res, req.route.path, req.query)
     })
 
+    server.get('/contests/contest-group/:groupid', (req, res) => {
+      return app.render(req, res, '/contests/contest-group', req.params)
+    })
+
     server.get('/authok', (req, res) => {
       console.log(req.cookies)
       return handler(req, res)
