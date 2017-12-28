@@ -9,11 +9,11 @@ import { baseChcek, needAuthError } from 'apis/utils/error'
  * @returns {Promise<*>}
  */
 export async function getKaojiList(page, size, token) {
-  const api = `/blogpools/kaoji`
-  const requestURL = `${APIService}${api}`
   if (!token) {
     return new needAuthError(`can't read token`)
   }
+  const api = `/blogpools/kaoji`
+  const requestURL = `${APIService}${api}`
   try {
     const res = await request.get(requestURL)
       .query(APIVersion)
