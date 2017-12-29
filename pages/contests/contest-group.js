@@ -71,6 +71,7 @@ class Page extends React.PureComponent {
       avatarBoxProps,
       commodityBoxProps,
       worksBoxProps,
+      selfWorksBoxProps,
       newsBoxProps,
       detailProps,
     } = this.props
@@ -99,7 +100,7 @@ class Page extends React.PureComponent {
 
           {worksBoxProps && <WorksBox {...worksBoxProps}/>}
 
-          <SelfWorksBox/>
+          {selfWorksBoxProps && <SelfWorksBox {...selfWorksBoxProps}/>}
 
           {newsBoxProps && <NewsBox {...newsBoxProps}/>}
 
@@ -131,6 +132,7 @@ export default withRedux(Page, function (KeaContext, ctx) {
         'worksBoxProps',
         'newsBoxProps',
         'detailProps',
+        'selfWorksBoxProps',
       ]
     ]
   })

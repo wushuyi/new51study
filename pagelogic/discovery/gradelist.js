@@ -40,7 +40,7 @@ export default KeaContext => {
     }),
 
     reducers: ({actions}) => ({
-      framework: [false, PropTypes.any, {
+      gradelist: [false, PropTypes.any, {
         [actions.syncData]: (state, payload) => Immutable(payload.data),
       }],
     }),

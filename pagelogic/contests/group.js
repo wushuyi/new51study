@@ -237,6 +237,24 @@ export default (KeaContext) => {
         },
         PropTypes.any
       ],
+      selfWorksBoxProps: [
+        () => [selectors.currFramework],
+        (framework) => {
+          if (!get(framework, 'eawInfoSize')) {
+            return false
+          }
+          const {eawInfoSize: count, id, eawInfos: content} = framework
+          let dataList = content.map((o, index) => {
+            let data = pick(o, ['label', 'url', 'type', 'ifFinal'])
+            return data
+          })
+          return Immutable({
+            count: count + '条',
+            dataList,
+          })
+        },
+        PropTypes.any
+      ],
       newsBoxProps: [
         () => [selectors.currNews],
         (news) => {
