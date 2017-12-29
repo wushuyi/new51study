@@ -111,6 +111,22 @@ export default (KeaContext) => {
         (currId, news) => news[currId],
         PropTypes.any
       ],
+      groupId: [
+        () => [selectors.currId],
+        (currId) => currId,
+        PropTypes.any
+      ],
+      evaluateId: [
+        () => [selectors.currFramework],
+        (framework) => {
+          const evaluateId = get(framework, 'currentEvaluate.id')
+          if (!evaluateId) {
+            return false
+          }
+          return evaluateId
+        },
+        PropTypes.any
+      ],
       bannerCoverProps: [
         () => [selectors.currFramework],
         (framework) => {

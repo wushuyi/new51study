@@ -64,6 +64,8 @@ class Page extends React.PureComponent {
   render() {
     const {err, actions} = this.props
     const {
+      groupId,
+      evaluateId,
       bannerCoverProps,
       introduceProps,
       agencyItemProps,
@@ -96,15 +98,35 @@ class Page extends React.PureComponent {
 
           {signupBoxProps && <SignupBox {...signupBoxProps}/>}
 
-          {avatarBoxProps && <AvatarBox {...avatarBoxProps}/>}
+          {avatarBoxProps && (
+            <a href={`/contests/teacher-list/${groupId}/true`}>
+              <AvatarBox {...avatarBoxProps}/>
+            </a>
+          )}
 
-          {commodityBoxProps && <CommodityBox {...commodityBoxProps}/>}
+          {commodityBoxProps && (
+            <a href={`/contests/goods-list/${evaluateId}`}>
+              <CommodityBox {...commodityBoxProps}/>
+            </a>
+          )}
 
-          {worksBoxProps && <WorksBox {...worksBoxProps}/>}
+          {worksBoxProps && (
+            <a href={`/newmatch/work/${evaluateId}/true`}>
+              <WorksBox {...worksBoxProps}/>
+            </a>
+          )}
 
-          {selfWorksBoxProps && <SelfWorksBox {...selfWorksBoxProps}/>}
+          {selfWorksBoxProps && (
+            <a href={`/newmatch/mywork/${groupId}`}>
+              <SelfWorksBox {...selfWorksBoxProps}/>
+            </a>
+          )}
 
-          {newsBoxProps && <NewsBox {...newsBoxProps}/>}
+          {newsBoxProps && (
+            <a href={`/contests/news-list/${groupId}/true`}>
+              <NewsBox {...newsBoxProps}/>
+            </a>
+          )}
 
           <ContestDetail {...detailProps}/>
 
@@ -125,6 +147,8 @@ export default withRedux(Page, function (KeaContext, ctx) {
     ],
     props: [
       mainLogic, [
+        'groupId',
+        'evaluateId',
         'bannerCoverProps',
         'introduceProps',
         'agencyItemProps',
