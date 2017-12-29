@@ -53,11 +53,15 @@ class Page extends React.PureComponent {
   }
 
   onRefresh = () => {
-    console.log('onRefresh')
+    const {actions} = this.props
+    const def = deferred()
+    let token = getToken()
+    actions.initPage(Router.query.groupid, def, token)
+    return def.promise
   }
 
   render() {
-    const {gradelist, err, actions} = this.props
+    const {err, actions} = this.props
     const {
       bannerCoverProps,
       introduceProps,
@@ -68,6 +72,7 @@ class Page extends React.PureComponent {
       worksBoxProps,
       newsBoxProps,
       detailProps,
+      getTime
     } = this.props
 
     isBrowser && console.log(this.props)
@@ -78,13 +83,11 @@ class Page extends React.PureComponent {
         </Layout>
       )
     }
-    let porps = {
-      data: gradelist,
-      actions
-    }
+
     return (
       <Layout>
         <PagePullToRefresh onRefresh={this.onRefresh}>
+          <div>{getTime}</div>
           <BannerCover {...bannerCoverProps}/>
           <Introduce {...introduceProps}/>
           {agencyItemProps && <AgencyItem {...agencyItemProps}/>}
@@ -126,7 +129,8 @@ export default withRedux(Page, function (KeaContext, ctx) {
         'commodityBoxProps',
         'worksBoxProps',
         'newsBoxProps',
-        'detailProps'
+        'detailProps',
+        'getTime'
       ]
     ]
   })
