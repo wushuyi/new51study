@@ -57,6 +57,14 @@ body {
   top: 0;
 }
 
+.is-hidden {
+  display: none;
+}
+
+.is-show {
+  display: block;
+}
+
 body {
   user-select: none;
 }

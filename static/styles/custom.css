@@ -46,6 +46,12 @@ body {
   right: 0;
   top: 0; }
 
+.is-hidden {
+  display: none; }
+
+.is-show {
+  display: block; }
+
 body {
   -webkit-user-select: none;
      -moz-user-select: none;

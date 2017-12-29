@@ -1,0 +1,53 @@
+@import 'libs/hotcss/px2rem';
+
+.notice-item-warp  {
+  padding: 10*$hd 10*$hd;
+  border-bottom: 0.03865rem solid #f1f1f1;
+  background: #FFFFFF;
+  font-size: 16*$hd;
+  color: #323232;
+  .notice-title {
+    width: 45*$hd;
+    height: 20*$hd;
+    line-height: 21*$hd;
+    margin: 0 auto;
+    text-align: center;
+    color: #fff;
+    font-size: 14*$hd;
+    background: #FF7233;
+    border-radius: 3*$hd;
+  }
+  .notice-content {
+    margin-top: 10*$hd;
+    text-indent: 30*$hd;
+    text-align: justify;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+
+  }
+  .notice-banner {
+    margin-top: 10*$hd;
+    font-size: 12*$hd;
+    display: flex;
+    justify-content: space-between;
+    .is-top {
+      color: #fff;
+      background: #6B90E1;
+      padding: 0 4*$hd;
+      border-radius: 3*$hd;
+    }
+    .notice-time {
+      font-size: 14*$hd;
+      color: #B9B9B9;
+      margin-left: 10*$hd;
+    }
+    .look-detail {
+      font-size: 14*$hd;
+      color: #7FAFF6;
+      margin-left: 18*$hd;
+    }
+  }
+}
