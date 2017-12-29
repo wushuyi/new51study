@@ -72,7 +72,6 @@ class Page extends React.PureComponent {
       worksBoxProps,
       newsBoxProps,
       detailProps,
-      getTime
     } = this.props
 
     isBrowser && console.log(this.props)
@@ -87,7 +86,6 @@ class Page extends React.PureComponent {
     return (
       <Layout>
         <PagePullToRefresh onRefresh={this.onRefresh}>
-          <div>{getTime}</div>
           <BannerCover {...bannerCoverProps}/>
           <Introduce {...introduceProps}/>
           {agencyItemProps && <AgencyItem {...agencyItemProps}/>}
@@ -130,7 +128,6 @@ export default withRedux(Page, function (KeaContext, ctx) {
         'worksBoxProps',
         'newsBoxProps',
         'detailProps',
-        'getTime'
       ]
     ]
   })

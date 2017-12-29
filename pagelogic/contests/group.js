@@ -50,8 +50,7 @@ export default (KeaContext) => {
       }],
       framework: [Immutable({}), PropTypes.any, {
         [actions.syncFramework]: (state, payload) => {
-          let newState = Immutable.set(state, payload.groupId, payload.data)
-          return newState
+          return Immutable.set(state, payload.groupId, payload.data)
         },
       }],
       one: [Immutable({}), PropTypes.any, {
