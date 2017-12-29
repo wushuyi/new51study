@@ -3,7 +3,7 @@
 .bg-cover {
   overflow: hidden;
   height: 115*$hd;
-  width: 100%;
+  width: 191*$hd;
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
@@ -14,7 +14,7 @@
   width: 59*$hd;
   border-radius: 50%;
   display: block;
-  margin-left: 35.5%;
+  margin-left: 66*$hd;
   margin-top: 28*$hd;
   background: url('/static/images/icon/icon_default_play.png') no-repeat center;
   background-size: contain;

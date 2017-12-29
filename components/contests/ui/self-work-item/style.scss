@@ -1,0 +1,51 @@
+@import 'libs/hotcss/px2rem';
+
+.bg-cover {
+  overflow: hidden;
+  height: 84*$hd;
+  width: 124*$hd;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+
+.bg-cover-icon {
+  height: 36*$hd;
+  width: 36*$hd;
+  border-radius: 50%;
+  display: block;
+  margin-left: 44*$hd;
+  margin-top: 24*$hd;
+  background: url('/static/images/icon/icon_default_play.png') no-repeat center;
+  background-size: contain;
+}
+
+.self-work-item {
+  position: relative;
+  display: inline-block;
+}
+
+.self-work-name, .self-work-last {
+  font-size: 12*$hd;
+  color: #fff;
+  padding: 0 10*$hd;
+  height: 20*$hd;
+  line-height: 20*$hd;
+  position: absolute;
+  right: 0;
+}
+
+.self-work-last {
+  top: 0;
+  background-color: #000000;
+  opacity: 0.6;
+  border-bottom-left-radius: 12*$hd;
+  display: inline-block;
+}
+
+.self-work-name {
+  bottom: 0;
+  background: #FF6121;
+  border-top-left-radius: 12*$hd;
+  display: inline-block;
+}

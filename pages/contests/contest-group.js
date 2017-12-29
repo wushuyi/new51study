@@ -15,6 +15,7 @@ import WorksBox from 'components/contests/ui/works-box'
 import AgencyItem from 'components/contests/ui/agency-item'
 import CommodityBox from 'components/contests/ui/commodity-box'
 import ContestDetail from 'components/contests/ui/contest-detail'
+import SelfWorksBox from 'components/contests/ui/self-work-box'
 import { isBrowser } from 'utils/runEnv'
 
 class Page extends React.PureComponent {
@@ -97,6 +98,8 @@ class Page extends React.PureComponent {
           {commodityBoxProps && <CommodityBox {...commodityBoxProps}/>}
 
           {worksBoxProps && <WorksBox {...worksBoxProps}/>}
+
+          <SelfWorksBox/>
 
           {newsBoxProps && <NewsBox {...newsBoxProps}/>}
 

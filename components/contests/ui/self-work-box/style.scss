@@ -1,0 +1,22 @@
+@import 'libs/hotcss/px2rem';
+
+.contest-self-works-warp {
+  margin-top: 10*$hd;
+  background-color: #fff;
+  .banner-warp {
+    padding: 12*$hd;
+  }
+}
+
+.contest-self-works {
+  padding: 10*$hd 13*$hd;
+  overflow: hidden;
+}
+
+.item {
+  float: left;
+  margin-right: 6*$hd;
+  &:last-child {
+    margin-right: 0;
+  }
+}
