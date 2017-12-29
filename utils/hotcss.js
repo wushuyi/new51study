@@ -2,5 +2,6 @@
 export const $hd = 0.038647343
 
 export const px2rem = function (px) {
-  return (parseInt(px, 10) * $hd).toFixed(8) + 'rem'
+  let num = parseInt(px, 10)
+  return num === 0 ? 0 : (num * $hd).toFixed(8) + 'rem'
 }

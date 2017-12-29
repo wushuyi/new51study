@@ -28,11 +28,11 @@ function getType(type) {
 export default class NewsItem extends React.PureComponent {
 
   static propTypes = {
+    bgCover: PropTypes.any,
     createdAt: PropTypes.any,
     isTop: PropTypes.any,
-    bgCover: PropTypes.any,
     title: PropTypes.any,
-    type: PropTypes.any
+    type: PropTypes.any,
   }
 
   static defaultProps = {
@@ -44,7 +44,7 @@ export default class NewsItem extends React.PureComponent {
   }
 
   render() {
-    const {isTop, bgCover, title, type, createdAt} = tData || this.props
+    const {isTop, bgCover, title, type, createdAt} = this.props
 
     const isTopCls = classnames('is-top', !isTop && 'is-hidden')
     const bgCoverStyle = {

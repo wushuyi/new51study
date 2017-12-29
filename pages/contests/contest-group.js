@@ -14,7 +14,7 @@ import NewsBox from 'components/contests/ui/news-box'
 import WorksBox from 'components/contests/ui/works-box'
 import AgencyItem from 'components/contests/ui/agency-item'
 import CommodityBox from 'components/contests/ui/commodity-box'
-import Style from './style.scss'
+import ContestDetail from 'components/contests/ui/contest-detail'
 import { isBrowser } from 'utils/runEnv'
 
 class Page extends React.PureComponent {
@@ -67,6 +67,7 @@ class Page extends React.PureComponent {
       commodityBoxProps,
       worksBoxProps,
       newsBoxProps,
+      detailProps,
     } = this.props
 
     isBrowser && console.log(this.props)
@@ -98,13 +99,8 @@ class Page extends React.PureComponent {
 
           {newsBoxProps && <NewsBox {...newsBoxProps}/>}
 
-          <div className='wyx-contest-detail' id="contest-detail">
-            <img width="100%"
-                 src="http://7xpx8n.com1.z0.glb.clouddn.com/pic_album_ad_21_2016123016375494372_wh720x2425.jpg"
-                 alt=""/>
-          </div>
+          <ContestDetail {...detailProps}/>
 
-          <style jsx>{Style}</style>
         </PagePullToRefresh>
       </Layout>
     )
@@ -130,6 +126,7 @@ export default withRedux(Page, function (KeaContext, ctx) {
         'commodityBoxProps',
         'worksBoxProps',
         'newsBoxProps',
+        'detailProps'
       ]
     ]
   })

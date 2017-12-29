@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import Style from './style.scss'
 import TitleBanner from 'components/contests/ui/title-banner'
 import NewsItem from 'components/contests/ui/news-item'
+import NoticeItem from 'components/contests/ui/notice-item'
 import titIconUrl from '/static/images/match/icon_default_match_internet_star006.png'
 import format from 'date-fns/format'
 
@@ -24,6 +25,7 @@ const tList = [{
 
 export default class NewsBox extends React.PureComponent {
   static defaultProps = {
+    isGroup: true,
     dataList: tList,
     maxItem: 4,
     count: 10 + '条',
@@ -32,7 +34,7 @@ export default class NewsBox extends React.PureComponent {
   }
 
   getWorksData = () => {
-    const {dataList, maxItem} = this.props
+    const {dataList, maxItem, isGroup} = this.props
     let len = Math.min(dataList.length, maxItem)
     let list = []
     for (let i = 0; i < len; i++) {
@@ -42,6 +44,7 @@ export default class NewsBox extends React.PureComponent {
         isTop: IsTop(item),
         title: item.title,
         bgCover: item.pic,
+        content: item.content,
         createdAt: format(item.createdAt, 'MM-DD'),
         type: item.type
       }
@@ -49,8 +52,11 @@ export default class NewsBox extends React.PureComponent {
     }
     return list
 
+    /**
+     * @return {boolean}
+     */
     function IsTop(data) {
-      return (data.isGroup && data.isGroupTop) || !!data.isTop
+      return (isGroup && data.isGroupTop) || !!data.isTop
     }
   }
 
@@ -69,12 +75,22 @@ export default class NewsBox extends React.PureComponent {
           <TitleBanner {...titleBannerProps}/>
           <div className="news-list">
             <ul className='contest-works is-clearfix'>
-              {NLData.map(function (newsProps, index) {
-                return (
-                  <li className='item' key={newsProps.key || index}>
-                    <NewsItem {...newsProps}/>
-                  </li>
-                )
+              {NLData.map(function (o, index) {
+                const {key, ...newsProps} = o
+                switch (newsProps.type) {
+                  case 'NOTICE':
+                    return (
+                      <li className='item' key={key || index}>
+                        <NoticeItem {...newsProps}/>
+                      </li>
+                    )
+                  default:
+                    return (
+                      <li className='item' key={key || index}>
+                        <NewsItem {...newsProps}/>
+                      </li>
+                    )
+                }
               })}
             </ul>
           </div>

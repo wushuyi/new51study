@@ -10,6 +10,7 @@ import { getToken, setToken } from '../../utils/auth'
 import { static as Immutable } from 'seamless-immutable'
 import get from 'lodash/get'
 import pick from 'lodash/pick'
+import { px2rem } from 'utils/hotcss'
 
 import { isBrowser } from 'utils/runEnv'
 
@@ -39,7 +40,7 @@ export default (KeaContext) => {
       getWorks: (evaluateId, page, size, def) => ({evaluateId, page, size, def}),
       syncWorks: (groupId, data) => ({groupId, data}),
 
-      getNews: (evaluateId, page, size, def) => ({evaluateId, page, size, def}),
+      getNews: (groupId, page, size, def) => ({groupId, page, size, def}),
       syncNews: (groupId, data) => ({groupId, data}),
     }),
 
@@ -255,6 +256,28 @@ export default (KeaContext) => {
         },
         PropTypes.any
       ],
+      detailProps: [
+        () => [selectors.currFramework],
+        (framework) => {
+
+          if (!get(framework, 'detail')) {
+            return false
+          }
+          let data = {
+            detail: processContent(framework.detail)
+          }
+          return Immutable(data)
+
+          function processContent(content) {
+            return content.replace(/<.+? (style=['|"].+?['|"]).*?>/g, function (match, offset, str) {
+              return match.replace(/(-?\d+)px/g, function (match, p1, offset, str) {
+                return px2rem(p1)
+              })
+            })
+          }
+        },
+        PropTypes.any
+      ]
     }),
 
     takeEvery: ({actions, workers}) => ({
@@ -308,7 +331,7 @@ export default (KeaContext) => {
         })
         const newsData = yield * workers.getNews({
           payload: {
-            evaluateId,
+            groupId,
           }
         })
         // console.log(frameworkData.currentEvaluate.id)
@@ -409,8 +432,8 @@ export default (KeaContext) => {
       },
       getNews: function * (action) {
         const {actions} = this
-        const {evaluateId, page, size, def} = action.payload
-        let res = yield call(classApi.getNews, evaluateId, page || 0, size || 2)
+        const {groupId, page, size, def} = action.payload
+        let res = yield call(groupApi.getNews, groupId, page || 0, size || 2)
         if (isError(res)) {
           yield call(baseXhrError, res)
           def && def.reject(res)
@@ -418,7 +441,6 @@ export default (KeaContext) => {
         }
 
         const data = res.body.data
-        let groupId = yield this.get('currId')
         yield put(actions.syncNews(groupId, data))
         def && def.resolve(res)
         return data
