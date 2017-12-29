@@ -42,11 +42,11 @@ export default class BannerCover extends React.PureComponent {
   constructor(props) {
     super()
     const {bgCover} = props
-    let size = guessUrlSize(bgCover)
+    let size = bgCover && guessUrlSize(bgCover)
     this.state = {
       height: size ? Math.min(size.height * (414 / size.width), bgMaxH) : 150,
       isMeasure: !!size,
-      isVertical: size.height > size.width,
+      isVertical: size && size.height > size.width,
     }
     this.isMount = true
   }
@@ -82,9 +82,13 @@ export default class BannerCover extends React.PureComponent {
   // 计算图片 宽高
   needMeasure = (bgCover) => {
     const def = deferred()
+    if (!bgCover) {
+      def.reject('Error loading image ' + bgCover + bgQuery)
+      return def.promise
+    }
     let img = new Image()
     img.onerror = () => {
-      def.reject('Error loading image ' + img.src)
+      def.reject('Error loading image ' + bgCover + bgQuery)
     }
     img.onload = () => {
       const {height, width} = img
