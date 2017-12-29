@@ -1,3 +1,69 @@
+.am-modal-popup-slide-up {
+  bottom: 0; }
+
+.am-slide-up-enter,
+.am-slide-up-appear {
+  -webkit-transform: translate(100%, 0);
+      -ms-transform: translate(100%, 0);
+          transform: translate(100%, 0); }
+
+.am-slide-up-enter,
+.am-slide-up-appear,
+.am-slide-up-leave {
+  -webkit-animation-duration: .2s;
+          animation-duration: .2s;
+  -webkit-animation-fill-mode: both;
+          animation-fill-mode: both;
+  -webkit-animation-timing-function: cubic-bezier(0.55, 0, 0.55, 0.2);
+          animation-timing-function: cubic-bezier(0.55, 0, 0.55, 0.2);
+  -webkit-animation-play-state: paused;
+          animation-play-state: paused; }
+
+.am-slide-up-enter.am-slide-up-enter-active,
+.am-slide-up-appear.am-slide-up-appear-active {
+  -webkit-animation-name: amSlideLeftIn;
+          animation-name: amSlideLeftIn;
+  -webkit-animation-play-state: running;
+          animation-play-state: running; }
+
+.am-slide-up-leave.am-slide-up-leave-active {
+  -webkit-animation-name: amSlideLeftOut;
+          animation-name: amSlideLeftOut;
+  -webkit-animation-play-state: running;
+          animation-play-state: running; }
+
+@-webkit-keyframes amSlideLeftIn {
+  0% {
+    -webkit-transform: translate(100%, 0);
+            transform: translate(100%, 0); }
+  100% {
+    -webkit-transform: translate(0, 0);
+            transform: translate(0, 0); } }
+
+@keyframes amSlideLeftIn {
+  0% {
+    -webkit-transform: translate(100%, 0);
+            transform: translate(100%, 0); }
+  100% {
+    -webkit-transform: translate(0, 0);
+            transform: translate(0, 0); } }
+
+@-webkit-keyframes amSlideLeftOut {
+  0% {
+    -webkit-transform: translate(0, 0);
+            transform: translate(0, 0); }
+  100% {
+    -webkit-transform: translate(100%, 0);
+            transform: translate(100%, 0); } }
+
+@keyframes amSlideLeftOut {
+  0% {
+    -webkit-transform: translate(0, 0);
+            transform: translate(0, 0); }
+  100% {
+    -webkit-transform: translate(100%, 0);
+            transform: translate(100%, 0); } }
+
 body,
 button,
 input,

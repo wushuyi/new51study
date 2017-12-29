@@ -1,0 +1,53 @@
+$am: am;
+@mixin effect {
+  animation-duration: .2s;
+  animation-fill-mode: both;
+  animation-timing-function: cubic-bezier(.55, 0, .55, .2);
+}
+
+.#{$am}-modal-popup-slide-up {
+  bottom: 0;
+}
+
+.#{$am}-slide-up-enter,
+.#{$am}-slide-up-appear {
+  transform: translate(100%, 0);
+}
+
+.#{$am}-slide-up-enter,
+.#{$am}-slide-up-appear,
+.#{$am}-slide-up-leave {
+  @include effect;
+  animation-play-state: paused;
+}
+
+.#{$am}-slide-up-enter.#{$am}-slide-up-enter-active,
+.#{$am}-slide-up-appear.#{$am}-slide-up-appear-active {
+  animation-name: amSlideLeftIn;
+  animation-play-state: running;
+}
+
+.#{$am}-slide-up-leave.#{$am}-slide-up-leave-active {
+  animation-name: amSlideLeftOut;
+  animation-play-state: running;
+}
+
+@keyframes amSlideLeftIn {
+  0% {
+    transform: translate(100%, 0);
+  }
+
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+@keyframes amSlideLeftOut {
+  0% {
+    transform: translate(0, 0);
+  }
+
+  100% {
+    transform: translate(100%, 0);
+  }
+}
