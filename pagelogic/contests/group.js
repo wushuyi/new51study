@@ -388,7 +388,7 @@ export default (KeaContext) => {
         if (isError(res)) {
           yield call(baseXhrError, res)
           def && def.reject(res)
-          return false
+          return res
         }
 
         const data = res.body.data
@@ -408,7 +408,7 @@ export default (KeaContext) => {
         if (isError(res)) {
           yield call(baseXhrError, res)
           def && def.reject(res)
-          return false
+          return res
         }
 
         const data = res.body.data
@@ -429,7 +429,7 @@ export default (KeaContext) => {
         if (isError(res)) {
           yield call(baseXhrError, res)
           def && def.reject(res)
-          return false
+          return res
         }
 
         const data = res.body.data
@@ -445,7 +445,7 @@ export default (KeaContext) => {
         if (isError(res)) {
           yield call(baseXhrError, res)
           def && def.reject(res)
-          return false
+          return res
         }
 
         const data = res.body.data
@@ -460,7 +460,7 @@ export default (KeaContext) => {
         if (isError(res)) {
           yield call(baseXhrError, res)
           def && def.reject(res)
-          return false
+          return res
         }
 
         const data = res.body.data
@@ -476,7 +476,7 @@ export default (KeaContext) => {
         if (isError(res)) {
           yield call(baseXhrError, res)
           def && def.reject(res)
-          return false
+          return res
         }
 
         const data = res.body.data
