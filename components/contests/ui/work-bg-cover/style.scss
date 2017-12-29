@@ -1,6 +1,6 @@
 @import 'libs/hotcss/px2rem';
 
-.bgcover {
+.bg-cover {
   overflow: hidden;
   height: 115*$hd;
   width: 100%;
@@ -9,7 +9,7 @@
   background-size: contain;
 }
 
-.bgcover-icon {
+.bg-cover-icon {
   height: 59*$hd;
   width: 59*$hd;
   border-radius: 50%;
