@@ -10,7 +10,8 @@ import { contestStatus } from 'utils/wyx_const'
 
 function getDeadDays(time) {
   const now = new Date()
-  return differenceInDays(time, now)
+  const diffDay = differenceInDays(time, now)
+  return diffDay > 0 ? diffDay : 0
 }
 
 function dateFormat(time) {
