@@ -30,12 +30,20 @@ function isTopicType(type) {
   return includes(TopicType, type)
 }
 
-function getMatchLink(props) {
+function getMatchLinkProps(props) {
   switch (props.type) {
     case adminType.AdminEvaluateGroup:
-      return `/contests/contest-group/${props.itemId}`
+      return {
+        href: {pathname: '/contests/contest-group', query: {groupid: props.itemId}},
+        as: {pathname: `/contests/contest-group/${props.itemId}`},
+        prefetch: true
+      }
     case adminType.AdminEvaluate:
-      return `/contests/contest-group/${props.itemId}`
+      return {
+        href: {pathname: '/contests/contest-class', query: {groupid: props.itemId}},
+        as: {pathname: `/contests/contest-class/${props.itemId}`},
+        prefetch: true
+      }
   }
 }
 
@@ -100,9 +108,9 @@ export default class Demo extends React.PureComponent {
   renderRow = (rowData) => {
     if (isMatchType(rowData.type)) {
       const props = pick(rowData, 'url,beginAt,endAt,title,area,orgName,charge'.split(','))
-      const link = getMatchLink(rowData)
+      const linkProps = getMatchLinkProps(rowData)
       return (
-        <Link href={link} as={link} prefetch>
+        <Link {...linkProps}>
           <a>
             <MatchItem {...props}/>
           </a>

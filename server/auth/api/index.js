@@ -2,6 +2,7 @@ import qs from 'query-string'
 import request from 'superagent'
 import { auth as privateAuth } from 'config/privateSettings'
 import { auth, APIVersion, APIService } from 'config/settings'
+import xhrCrypto from 'server/xhrCrypto'
 
 /**
  * API: /account/otherLogin
@@ -17,6 +18,7 @@ export async function otherLogin(loginData) {
     res = await request.post(requestURL)
       .query(APIVersion)
       .send(loginData)
+      .use(xhrCrypto)
   } catch (err) {
     throw err
   }

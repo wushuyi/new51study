@@ -6,7 +6,7 @@ import isError from 'lodash/isError'
 import { baseXhrError } from 'apis/utils/error'
 import { isDev } from '../../config/settings'
 import { getToken, setToken } from '../../utils/auth'
-import { static as Immutable } from 'seamless-immutable'
+import { from, static as Immutable } from 'seamless-immutable'
 import map from 'lodash/map'
 import forEach from 'lodash/forEach'
 import indexOf from 'lodash/indexOf'
@@ -19,9 +19,9 @@ function update(source, newSource) {
   forEach(newSource, function (o, i, s) {
     let updateKey = indexOf(ids, o.id)
     if (updateKey > -1) {
-      data = data.set(updateKey, o)
+      data = Immutable.set(data, updateKey, o)
     } else {
-      data = data.set(data.length, o)
+      data = Immutable.set(data, data.length, o)
     }
   })
   return data
@@ -42,6 +42,7 @@ export default KeaContext => {
     reducers: ({actions}) => ({
       gradelist: [false, PropTypes.any, {
         [actions.syncData]: (state, payload) => Immutable(payload.data),
+        [actions.appendData]: (state, payload) => update(state, payload.data)
       }],
     }),
 
@@ -67,7 +68,7 @@ export default KeaContext => {
       getList: function * (action) {
         const {actions} = this
         const gradelist = yield this.get('gradelist')
-        isDev && console.log('gradelist:',gradelist)
+        isDev && console.log('gradelist:', gradelist)
         const {token, page, def} = action.payload
         let res
         if (page === 'next') {
