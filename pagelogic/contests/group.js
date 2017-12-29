@@ -8,8 +8,11 @@ import isError from 'lodash/isError'
 import { baseXhrError, msgError } from 'apis/utils/error'
 import { isDev } from '../../config/settings'
 import { getToken, setToken } from '../../utils/auth'
-import { from } from 'seamless-immutable'
+import { static as Immutable } from 'seamless-immutable'
 import get from 'lodash/get'
+import has from 'lodash/has'
+import pick from 'lodash/pick'
+import map from 'lodash/map'
 
 export default (KeaContext) => {
   const {kea} = KeaContext
@@ -22,57 +25,77 @@ export default (KeaContext) => {
       syncFramework: (groupId, data) => ({groupId, data}),
 
       getOne: (evaluateId, def, token) => ({token: token || getToken(), evaluateId, def}),
-      syncOne: (evaluateId, data) => ({evaluateId, data}),
+      syncOne: (groupId, data) => ({groupId, data}),
 
       getTwo: (evaluateId, def, token) => ({token: token || getToken(), evaluateId, def}),
-      syncTwo: (evaluateId, data) => ({evaluateId, data}),
+      syncTwo: (groupId, data) => ({groupId, data}),
+
+      getJurys: (groupId, page, size, def) => ({groupId, page, size, def}),
+      syncJurys: (groupId, data) => ({groupId, data}),
 
       getWorks: (evaluateId, page, size, def) => ({evaluateId, page, size, def}),
-      syncWorks: (evaluateId, data) => ({evaluateId, data}),
+      syncWorks: (groupId, data) => ({groupId, data}),
     }),
 
     reducers: ({actions}) => ({
       currId: [false, PropTypes.any, {
         [actions.setCurrId]: (state, payload) => parseInt(payload.currId),
       }],
-      framework: [from({}), PropTypes.any, {
+      framework: [Immutable({}), PropTypes.any, {
         [actions.syncFramework]: (state, payload) => {
-          let newState = state.set(payload.groupId, from(payload.data))
+          let newState = Immutable.set(state ,payload.groupId, Immutable(payload.data))
           return newState
         },
       }],
-      one: [from({}), PropTypes.any, {
+      one: [Immutable({}), PropTypes.any, {
         [actions.syncOne]: (state, payload) => {
-          let newState = state.set(payload.evaluateId, from(payload.data))
-          return newState
+          return Immutable.set(state ,payload.groupId, Immutable(payload.data))
         },
       }],
-      two: [from({}), PropTypes.any, {
+      two: [Immutable({}), PropTypes.any, {
         [actions.syncTwo]: (state, payload) => {
-          let newState = state.set(payload.evaluateId, from(payload.data))
-          return newState
+          return Immutable.set(state ,payload.groupId, Immutable(payload.data))
         },
       }],
-      works: [from({}), PropTypes.any, {
+      jurys: [Immutable({}), PropTypes.any, {
+        [actions.syncJurys]: (state, payload) => {
+          return Immutable.set(state ,payload.groupId, Immutable(payload.data))
+        },
+      }],
+      works: [Immutable({}), PropTypes.any, {
         [actions.syncWorks]: (state, payload) => {
-          let newState = state.set(payload.evaluateId, from(payload.data))
-          return newState
+          return Immutable.set(state ,payload.groupId, Immutable(payload.data))
         },
       }],
     }),
 
     selectors: ({selectors}) => ({
-      cuurFramework: [
+      currFramework: [
         () => [selectors.currId, selectors.framework],
         (currId, frameworks) => frameworks[currId],
         PropTypes.any
       ],
+      currJurys: [
+        () => [selectors.currId, selectors.jurys],
+        (currId, jurys) => jurys[currId],
+        PropTypes.any
+      ],
+      currOne: [
+        () => [selectors.currId, selectors.one],
+        (currId, ones) => ones[currId],
+        PropTypes.any
+      ],
+      currTwo: [
+        () => [selectors.currId, selectors.two],
+        (currId, tows) => tows[currId],
+        PropTypes.any
+      ],
       bannerCoverProps: [
-        () => [selectors.cuurFramework],
+        () => [selectors.currFramework],
         (framework) => {
           const {area: destName, lng, lat} = framework.currentEvaluate
           const {bannerUrl: bgCover, area} = framework
-          return from({
+          return Immutable({
             linkData: {
               destName,
               lng,
@@ -83,19 +106,104 @@ export default (KeaContext) => {
           })
         },
         PropTypes.any
-      ]
+      ],
+      introduceProps: [
+        () => [selectors.currFramework],
+        (framework) => {
+          const {description: intro} = framework.currentEvaluate
+          const {title} = framework
+          return Immutable({
+            intro,
+            title
+          })
+        },
+        PropTypes.any
+      ],
+      agencyItemProps: [
+        () => [selectors.currId, selectors.currFramework],
+        (currId, framework) => {
+          if (!has(framework, 'currentEvaluate.ifHasOrg')) {
+            return false
+          }
+          const {orgPic: bgCover, orgName: title} = framework.currentEvaluate
+          const {orgUserNumber} = framework
+          return Immutable({
+            evaluate_group: currId,
+            evaluate_id: false,
+            orgUserNumber,
+            orgUrl: false,
+            bgCover,
+            title,
+            chatPeopleName: '总群',
+          })
+        },
+        PropTypes.any
+      ],
+      signupBoxProps: [
+        () => [selectors.currFramework],
+        (framework) => {
+          if (!has(framework, 'eaInfos.length')) {
+            return false
+          }
+          let dataList = map(framework.eaInfos, (o, index) => {
+            return pick(o, [
+              'beginAt', 'endAt', 'ifSignupLimit',
+              'signupEndAt', 'ifSignUp', 'evaluateId',
+              'evaluateApplyId', 'ifNomination', 'singUpNumber',
+              'label', 'ifWinner', 'detail'
+            ])
+          })
+          return Immutable({
+            dataList,
+            maxItem: 100
+          })
+        },
+        PropTypes.any
+      ],
+      avatarBoxProps: [
+        () => [selectors.currJurys],
+        (jurys) => {
+          if (!has(jurys, 'content.length')) {
+            return false
+          }
+          const {totalElements: count} = jurys
+          let dataList = map(jurys.content, (o, index) => {
+            return pick(o, [
+              'gender', 'number', 'name',
+            ])
+          })
+          return Immutable({
+            count,
+            dataList,
+          })
+        },
+        PropTypes.any
+      ],
+      commodityBoxProps: [
+        () => [selectors.currTwo],
+        (two) => {
+          if (!has(two, 'evaluateCommoditys.totalElements')) {
+            return false
+          }
+          const {totalElements: count, content} = get(two, 'evaluateCommoditys')
+          let dataList = map(content, (o, index) => {
+            return pick(o, ['id', 'pic', 'price', 'title'])
+          })
+          return Immutable({
+            count,
+            dataList,
+          })
+        },
+        PropTypes.any
+      ],
     }),
-
-    // start: function * () {
-    //   // yield call(delay, 6000);
-    //   console.log('ok')
-    // },
 
     takeEvery: ({actions, workers}) => ({
       [actions.initPage]: workers.initPage,
       [actions.getFramework]: workers.getFramework,
       [actions.getOne]: workers.getOne,
       [actions.getTwo]: workers.getTwo,
+      [actions.getJurys]: workers.getJurys,
       [actions.getWorks]: workers.getWorks,
     }),
 
@@ -126,6 +234,11 @@ export default (KeaContext) => {
           payload: {
             token,
             evaluateId,
+          }
+        })
+        const JurysData = yield * workers.getJurys({
+          payload: {
+            groupId,
           }
         })
         const worksData = yield * workers.getWorks({
@@ -172,8 +285,10 @@ export default (KeaContext) => {
         }
 
         const data = res.body.data
-        yield put(actions.syncOne(evaluateId, data))
+        let groupId = yield this.get('currId')
+        yield put(actions.syncOne(groupId, data))
         def && def.resolve(res)
+        return data
       },
       getTwo: function * (action) {
         const {actions} = this
@@ -191,8 +306,25 @@ export default (KeaContext) => {
         }
 
         const data = res.body.data
-        yield put(actions.syncTwo(evaluateId, data))
+        let groupId = yield this.get('currId')
+        yield put(actions.syncTwo(groupId, data))
         def && def.resolve(res)
+        return data
+      },
+      getJurys: function * (action) {
+        const {actions} = this
+        const {groupId, page, size, def} = action.payload
+        let res = yield call(groupApi.getJurys, groupId, page || 0, size || 6)
+        if (isError(res)) {
+          yield call(baseXhrError, res)
+          def && def.reject(res)
+          return false
+        }
+
+        const data = res.body.data
+        yield put(actions.syncJurys(groupId, data))
+        def && def.resolve(res)
+        return data
       },
       getWorks: function * (action) {
         const {actions} = this
@@ -205,8 +337,10 @@ export default (KeaContext) => {
         }
 
         const data = res.body.data
-        yield put(actions.syncWorks(evaluateId, data))
+        let groupId = yield this.get('currId')
+        yield put(actions.syncWorks(groupId, data))
         def && def.resolve(res)
+        return data
       },
     }
   })

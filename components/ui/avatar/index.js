@@ -6,12 +6,13 @@ import headMaleUrl from 'static/images/icon/icon_default_head_male.png'
 import headFemaleUrl from 'static/images/icon/icon_default_head_female.png'
 import { deferred } from 'redux-saga/utils'
 import { px2rem } from 'utils/hotcss'
+import { QINIU } from 'config/settings'
 
 const AvatarQuery = '?imageView2/1/w/100/h/100/100'
 
 function getAvatarUrl(user_id) {
 
-  return `http://7xpx8n.com1.z0.glb.clouddn.com/pic_avatar_${user_id}.jpg${AvatarQuery}&cache=${getPicRandom()}`
+  return `${QINIU.url}/pic_avatar_${user_id}.jpg${AvatarQuery}&cache=${getPicRandom()}`
 
   function getPicRandom() {
     return format(new Date(), 'YYYYMMDDHHm')

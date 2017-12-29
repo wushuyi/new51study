@@ -15,7 +15,7 @@ import WorksBox from 'components/contests/ui/works-box'
 import AgencyItem from 'components/contests/ui/agency-item'
 import CommodityBox from 'components/contests/ui/commodity-box'
 import Style from './style.scss'
-import {isBrowser} from 'utils/runEnv'
+import { isBrowser } from 'utils/runEnv'
 
 class Page extends React.PureComponent {
   static async getInitialProps(ctx) {
@@ -58,7 +58,15 @@ class Page extends React.PureComponent {
 
   render() {
     const {gradelist, err, actions} = this.props
-    const {bannerCoverProps} = this.props
+    const {
+      bannerCoverProps,
+      introduceProps,
+      agencyItemProps,
+      signupBoxProps,
+      avatarBoxProps,
+      commodityBoxProps,
+    } = this.props
+
     isBrowser && console.log(this.props)
     if (err) {
       return (
@@ -75,20 +83,26 @@ class Page extends React.PureComponent {
       <Layout>
         <PagePullToRefresh onRefresh={this.onRefresh}>
           <BannerCover {...bannerCoverProps}/>
-          <Introduce/>
-          <AgencyItem/>
+          <Introduce {...introduceProps}/>
+          {agencyItemProps && <AgencyItem {...agencyItemProps}/>}
+
           {/*<SignupItem {...dataSignupItem}/>*/}
-          <SignupBox/>
+          {signupBoxProps && <SignupBox {...signupBoxProps}/>}
           {/*<Avatar/>*/}
-          <AvatarBox/>
+          {avatarBoxProps && <AvatarBox {...avatarBoxProps}/>}
+
           {/*<WorkItem/>*/}
-          <CommodityBox/>
+          {commodityBoxProps &&  <CommodityBox {...commodityBoxProps}/>}
+
           <WorksBox/>
           <NewsBox/>
-          <div className='wyx-contest-detail'>
+
+          <div className='wyx-contest-detail' id="contest-detail">
             <img width="100%"
-                 src="http://7xpx8n.com1.z0.glb.clouddn.com/pic_album_ad_21_2016123016375494372_wh720x2425.jpg" alt=""/>
+                 src="http://7xpx8n.com1.z0.glb.clouddn.com/pic_album_ad_21_2016123016375494372_wh720x2425.jpg"
+                 alt=""/>
           </div>
+
           <style jsx>{Style}</style>
         </PagePullToRefresh>
       </Layout>
@@ -108,6 +122,11 @@ export default withRedux(Page, function (KeaContext, ctx) {
     props: [
       mainLogic, [
         'bannerCoverProps',
+        'introduceProps',
+        'agencyItemProps',
+        'signupBoxProps',
+        'avatarBoxProps',
+        'commodityBoxProps'
       ]
     ]
   })

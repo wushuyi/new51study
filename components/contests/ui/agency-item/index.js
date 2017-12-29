@@ -30,7 +30,6 @@ export default class AgencyItem extends React.PureComponent {
     orgUrl: false,
     bgCover: defBgCover,
     title: '机构name',
-    time: '发布时间',
     chatPeopleName: '群聊',
   }
 

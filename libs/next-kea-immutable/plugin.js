@@ -1,4 +1,4 @@
-import { from } from 'seamless-immutable'
+import { static as Immutable } from 'seamless-immutable'
 import mapValues from 'lodash/mapValues'
 import includes from 'lodash/includes'
 
@@ -14,7 +14,7 @@ export default {
     if (preloadedState) {
       const res = mapValues(preloadedState, (value, key) => {
         if (includes(paths, key)) {
-          return from(value)
+          return Immutable(value)
         }
         return value
       })

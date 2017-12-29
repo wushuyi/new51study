@@ -6,7 +6,7 @@ import isError from 'lodash/isError'
 import { baseXhrError } from 'apis/utils/error'
 import { isDev } from '../../config/settings'
 import { getToken, setToken } from '../../utils/auth'
-import { from } from 'seamless-immutable'
+import { static as Immutable } from 'seamless-immutable'
 import map from 'lodash/map'
 import forEach from 'lodash/forEach'
 import indexOf from 'lodash/indexOf'
@@ -41,7 +41,7 @@ export default KeaContext => {
 
     reducers: ({actions}) => ({
       framework: [false, PropTypes.any, {
-        [actions.syncData]: (state, payload) => from(payload.data),
+        [actions.syncData]: (state, payload) => Immutable(payload.data),
       }],
     }),
 
