@@ -133,6 +133,52 @@ export default class SignupItem extends React.PureComponent {
     })
   }
 
+  getSingUpLinkProps = () => {
+    let props = this.props
+    if (props.isWillBeginLately) {
+
+    } else {
+      let link
+      let userData = {}
+      if (userData && userData.type !== 'STUDY') {
+        console.log('您不是学生不能报名')
+        return false
+      } else if (isFuture(props.beginAt)) {
+        console.log('未开始')
+        return false
+      } else if (isPast(props.endAt)) {
+        console.log('已结束')
+        return false
+      } else if (isPast(props.signupEndAt)) {
+        console.log('报名时间截止')
+        return false
+      } else if (props.ifSignupLimit && !props.ifNomination) {
+        console.log('比赛晋级用户可报名')
+        return false
+      } else {
+        if (contestStatus[props.ifSignUp] === 1) {
+          link = `/signup/information/${props.evaluateId}`
+        } else if (contestStatus[props.ifSignUp] === 0) {
+          link = `/signup/SignUpOk/${props.evaluateId}`
+        } else {
+          link = `/signup/checkstatus/${props.evaluateId}`
+        }
+        console.log(link)
+      }
+    }
+  }
+
+  getContestLinkProps = () => {
+    let props = this.props
+    if (props.isWillBeginLately) {
+
+    } else {
+      const {evaluateId} = props
+      let link = `/contests/contest-class/${evaluateId}`
+      console.log(link)
+    }
+  }
+
   render() {
     const props = this.props
     const {signupState} = this.state

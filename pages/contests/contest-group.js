@@ -88,8 +88,10 @@ class Page extends React.PureComponent {
     return (
       <Layout>
         <PagePullToRefresh onRefresh={this.onRefresh}>
-          <BannerCover {...bannerCoverProps}/>
-          <Introduce {...introduceProps}/>
+          {bannerCoverProps && <BannerCover {...bannerCoverProps}/>}
+
+          {introduceProps && <Introduce {...introduceProps}/>}
+
           {agencyItemProps && <AgencyItem {...agencyItemProps}/>}
 
           {signupBoxProps && <SignupBox {...signupBoxProps}/>}

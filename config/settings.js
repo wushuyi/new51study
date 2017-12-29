@@ -45,6 +45,7 @@ module.exports = {
     }
   },
   consts: {
-    vedioSufFixStr: '?vframe/jpg/offset/0'
+    vedioSufFixStr: '?vframe/jpg/offset/0',
+    goOpenOrDownAppUrl: `http://a.app.qq.com/o/simple.jsp?pkgname=com.sh.iwantstudy`,
   }
 }

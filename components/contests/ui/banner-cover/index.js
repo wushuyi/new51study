@@ -30,14 +30,13 @@ export default class BannerCover extends React.PureComponent {
   static propTypes = {
     area: PropTypes.any,
     bgCover: PropTypes.any,
-    onMapDetail: PropTypes.any
   }
 
   static defaultProps = {
     // bgCover: bgurl + '?wh400x400',
     bgCover: 'http://7xszyu.com1.z0.glb.clouddn.com/pic_album_ad_22_201709301055021992_wh980x260.jpg',
     area: '垦丁',
-    onMapDetail: () => {}
+    linkData: {destName: '11', lng: null, lat: null}
   }
 
   constructor(props) {
@@ -95,9 +94,20 @@ export default class BannerCover extends React.PureComponent {
     return def.promise
   }
 
+  getLinkProps = (linkData) => {
+    const {lng, lat, destName} = linkData
+    if (!lng || !lat) {
+      return false
+    }
+    return {
+      href: `/map/mapdetail?lat=${lat}&lng=${lng}&destName=${destName}`
+    }
+  }
+
   render() {
-    const {bgCover, area, onMapDetail} = this.props
+    const {bgCover, area, linkData} = this.props
     const {height, isVertical, isMeasure} = this.state
+    const linkProps = this.getLinkProps(linkData)
     return (
       <Fragment>
         <div className="header-wrapper">
@@ -110,12 +120,10 @@ export default class BannerCover extends React.PureComponent {
           ) : (
             <div className='bg-cover' title="比赛封面"/>
           )}
-          <Link href="./">
-            <a className="position-outer" onClick={onMapDetail}>
-              <div className="position"/>
-              <span>{area}</span>
-            </a>
-          </Link>
+          <a className="position-outer" {...linkProps}>
+            <div className="position"/>
+            <span>{area}</span>
+          </a>
         </div>
         <style jsx>{Style}</style>
         {/*language=SCSS*/}

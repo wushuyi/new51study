@@ -114,6 +114,9 @@ export default (KeaContext) => {
       bannerCoverProps: [
         () => [selectors.currFramework],
         (framework) => {
+          if (!get(framework, 'currentEvaluate')) {
+            return false
+          }
           const {area: destName, lng, lat} = framework.currentEvaluate
           const {bannerUrl: bgCover, area} = framework
           return Immutable({
@@ -131,6 +134,9 @@ export default (KeaContext) => {
       introduceProps: [
         () => [selectors.currFramework],
         (framework) => {
+          if (!get(framework, 'currentEvaluate')) {
+            return false
+          }
           const {description: intro} = framework.currentEvaluate
           const {title} = framework
           return Immutable({

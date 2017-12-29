@@ -2,6 +2,7 @@ import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import Style from './style.scss'
 import defBgCover from '/static/images/icon/icon_default_head_female.png'
+import { consts } from 'config/settings'
 
 const tData = {
   'chatPeopleName': '总群',
@@ -46,14 +47,18 @@ export default class AgencyItem extends React.PureComponent {
           <div className="agency-content">
             {title}
           </div>
-          <div className="chat-people">
-            <div className="icon-chat"/>
-            <div>{chatPeopleName}</div>
-          </div>
-          <div className="chat-someone">
-            <div className="icon-chat"/>
-            <div>客服</div>
-          </div>
+          <a href={consts.goOpenOrDownAppUrl} target="_blank">
+            <div className="chat-people">
+              <div className="icon-chat"/>
+              <div>{chatPeopleName}</div>
+            </div>
+          </a>
+          <a href={consts.goOpenOrDownAppUrl} target="_blank">
+            <div className="chat-someone">
+              <div className="icon-chat"/>
+              <div>客服</div>
+            </div>
+          </a>
         </div>
         {/*language=CSS*/}
         <style jsx>{Style}</style>
