@@ -3,11 +3,6 @@ import { put, race, take, call } from 'redux-saga/effects'
 import { delay } from 'redux-saga'
 import request from 'superagent'
 import { static as Immutable } from 'seamless-immutable'
-import { isBrowser } from 'utils/runEnv'
-
-if (isBrowser) {
-  window.Immutable = Immutable
-}
 
 export default KeaContext => {
   const {kea} = KeaContext

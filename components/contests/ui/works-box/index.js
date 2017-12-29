@@ -7,27 +7,44 @@ import titIconUrl from '/static/images/match/icon_default_match_internet_star004
 import at from 'lodash/at'
 import get from 'lodash/get'
 
-const tList = [{
-  'medias': [{
-    'type': 'PIC',
-    'url': 'http://7xpx8n.com1.z0.glb.clouddn.com/media_blog_75809900_2017_02_20_08_57_27_365_4980_wh2068x2668.jpg'
-  }], 'user': {'name': '186xxxxx823', 'number': 75809900, 'gender': '女'}, 'id': 12474
-}, {
-  'medias': [{
-    'type': 'PIC',
-    'url': 'http://7xpx8n.com1.z0.glb.clouddn.com/media_blog_41153496_2017_02_20_20_19_16_209_5303_wh960x1280.jpg'
-  }], 'user': {'name': '139xxxxx154', 'number': 41153496, 'gender': null}, 'id': 12469
-}, {
-  'medias': [{
-    'type': 'PIC',
-    'url': 'http://7xpx8n.com1.z0.glb.clouddn.com/media_blog_12507303_2017_02_20_20_16_29_115_2211_wh1800x1350.jpg'
-  }], 'user': {'name': '彩E坊艺术', 'number': 12507303, 'gender': '男'}, 'id': 12468
-}, {
-  'medias': [{
-    'type': 'PIC',
-    'url': 'http://7xpx8n.com1.z0.glb.clouddn.com/media_blog_55225918_2017_02_20_19:43:12.479_6530_wh960x1280.jpg'
-  }], 'user': {'name': '林芸冰', 'number': 55225918, 'gender': '女'}, 'id': 12467
-}]
+let tList
+// tList = [{
+//   'id': 16536,
+//   'medias': [{
+//     'type': 'PIC',
+//     'url': 'http://7xszyu.com1.z0.glb.clouddn.com/media_blog_23749508_2017_12_29_14_12_19_956_8735_wh880x880.jpg'
+//   }],
+//   'user': {'gender': null, 'number': 23749508, 'name': '小鸡鸡'},
+//   'commentCount': 0,
+//   'likeCount': 0
+// }, {
+//   'id': 16534,
+//   'medias': [{
+//     'type': 'PIC',
+//     'url': 'http://7xszyu.com1.z0.glb.clouddn.com/media_blog_76079192_2017_12_29_11_45_59_401_4658_wh750x1334.jpg'
+//   }],
+//   'user': {'gender': '男', 'number': 76079192, 'name': '俊俊'},
+//   'commentCount': 3,
+//   'likeCount': 1
+// }, {
+//   'id': 16531,
+//   'medias': [{
+//     'type': 'PIC',
+//     'url': 'http://7xszyu.com1.z0.glb.clouddn.com/media_blog_2D0218B4-F429-42A3-921C-CA3A3F73BB96_2524_2017_12_29_11_25_52_349_wh3264x2448.jpeg'
+//   }],
+//   'user': {'gender': '男', 'number': 44618706, 'name': '喵喵'},
+//   'commentCount': 0,
+//   'likeCount': 0
+// }, {
+//   'id': 16530,
+//   'medias': [{
+//     'type': 'PIC',
+//     'url': 'http://7xszyu.com1.z0.glb.clouddn.com/media_blog_1514443668403_9933_2017_12_29_11_25_49_912_wh2496x776.jpg'
+//   }],
+//   'user': {'gender': '男', 'number': 25436191, 'name': '卢本伟'},
+//   'commentCount': 0,
+//   'likeCount': 0
+// }]
 
 export default class WorksBox extends React.PureComponent {
   static propTypes = {
@@ -36,9 +53,9 @@ export default class WorksBox extends React.PureComponent {
   }
 
   static defaultProps = {
-    dataList: tList,
+    dataList: tList || [],
     maxItem: 4,
-    count: 10+'条',
+    count: 10 + '条',
     titIconUrl: titIconUrl,
     titleName: '作品动态'
   }

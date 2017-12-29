@@ -65,6 +65,8 @@ class Page extends React.PureComponent {
       signupBoxProps,
       avatarBoxProps,
       commodityBoxProps,
+      worksBoxProps,
+      newsBoxProps,
     } = this.props
 
     isBrowser && console.log(this.props)
@@ -86,16 +88,15 @@ class Page extends React.PureComponent {
           <Introduce {...introduceProps}/>
           {agencyItemProps && <AgencyItem {...agencyItemProps}/>}
 
-          {/*<SignupItem {...dataSignupItem}/>*/}
           {signupBoxProps && <SignupBox {...signupBoxProps}/>}
-          {/*<Avatar/>*/}
+
           {avatarBoxProps && <AvatarBox {...avatarBoxProps}/>}
 
-          {/*<WorkItem/>*/}
-          {commodityBoxProps &&  <CommodityBox {...commodityBoxProps}/>}
+          {commodityBoxProps && <CommodityBox {...commodityBoxProps}/>}
 
-          <WorksBox/>
-          <NewsBox/>
+          {worksBoxProps && <WorksBox {...worksBoxProps}/>}
+
+          {newsBoxProps && <NewsBox {...newsBoxProps}/>}
 
           <div className='wyx-contest-detail' id="contest-detail">
             <img width="100%"
@@ -126,7 +127,9 @@ export default withRedux(Page, function (KeaContext, ctx) {
         'agencyItemProps',
         'signupBoxProps',
         'avatarBoxProps',
-        'commodityBoxProps'
+        'commodityBoxProps',
+        'worksBoxProps',
+        'newsBoxProps',
       ]
     ]
   })

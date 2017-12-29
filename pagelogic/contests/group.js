@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types'
-import { delay } from 'redux-saga'
 import { deferred } from 'redux-saga/lib/utils'
 import { call, put } from 'redux-saga/effects'
 import * as groupApi from 'apis/contests/group'
@@ -10,9 +9,13 @@ import { isDev } from '../../config/settings'
 import { getToken, setToken } from '../../utils/auth'
 import { static as Immutable } from 'seamless-immutable'
 import get from 'lodash/get'
-import has from 'lodash/has'
 import pick from 'lodash/pick'
-import map from 'lodash/map'
+
+import { isBrowser } from 'utils/runEnv'
+
+if (isBrowser && isDev) {
+  window.Immutable = Immutable
+}
 
 export default (KeaContext) => {
   const {kea} = KeaContext
@@ -35,6 +38,9 @@ export default (KeaContext) => {
 
       getWorks: (evaluateId, page, size, def) => ({evaluateId, page, size, def}),
       syncWorks: (groupId, data) => ({groupId, data}),
+
+      getNews: (evaluateId, page, size, def) => ({evaluateId, page, size, def}),
+      syncNews: (groupId, data) => ({groupId, data}),
     }),
 
     reducers: ({actions}) => ({
@@ -43,28 +49,33 @@ export default (KeaContext) => {
       }],
       framework: [Immutable({}), PropTypes.any, {
         [actions.syncFramework]: (state, payload) => {
-          let newState = Immutable.set(state ,payload.groupId, Immutable(payload.data))
+          let newState = Immutable.set(state, payload.groupId, payload.data)
           return newState
         },
       }],
       one: [Immutable({}), PropTypes.any, {
         [actions.syncOne]: (state, payload) => {
-          return Immutable.set(state ,payload.groupId, Immutable(payload.data))
+          return Immutable.set(state, payload.groupId, payload.data)
         },
       }],
       two: [Immutable({}), PropTypes.any, {
         [actions.syncTwo]: (state, payload) => {
-          return Immutable.set(state ,payload.groupId, Immutable(payload.data))
+          return Immutable.set(state, payload.groupId, payload.data)
         },
       }],
       jurys: [Immutable({}), PropTypes.any, {
         [actions.syncJurys]: (state, payload) => {
-          return Immutable.set(state ,payload.groupId, Immutable(payload.data))
+          return Immutable.set(state, payload.groupId, payload.data)
         },
       }],
       works: [Immutable({}), PropTypes.any, {
         [actions.syncWorks]: (state, payload) => {
-          return Immutable.set(state ,payload.groupId, Immutable(payload.data))
+          return Immutable.set(state, payload.groupId, payload.data)
+        },
+      }],
+      news: [Immutable({}), PropTypes.any, {
+        [actions.syncNews]: (state, payload) => {
+          return Immutable.set(state, payload.groupId, payload.data)
         },
       }],
     }),
@@ -75,11 +86,6 @@ export default (KeaContext) => {
         (currId, frameworks) => frameworks[currId],
         PropTypes.any
       ],
-      currJurys: [
-        () => [selectors.currId, selectors.jurys],
-        (currId, jurys) => jurys[currId],
-        PropTypes.any
-      ],
       currOne: [
         () => [selectors.currId, selectors.one],
         (currId, ones) => ones[currId],
@@ -88,6 +94,21 @@ export default (KeaContext) => {
       currTwo: [
         () => [selectors.currId, selectors.two],
         (currId, tows) => tows[currId],
+        PropTypes.any
+      ],
+      currJury: [
+        () => [selectors.currId, selectors.jurys],
+        (currId, jurys) => jurys[currId],
+        PropTypes.any
+      ],
+      currWork: [
+        () => [selectors.currId, selectors.works],
+        (currId, tows) => tows[currId],
+        PropTypes.any
+      ],
+      currNews: [
+        () => [selectors.currId, selectors.news],
+        (currId, news) => news[currId],
         PropTypes.any
       ],
       bannerCoverProps: [
@@ -122,7 +143,7 @@ export default (KeaContext) => {
       agencyItemProps: [
         () => [selectors.currId, selectors.currFramework],
         (currId, framework) => {
-          if (!has(framework, 'currentEvaluate.ifHasOrg')) {
+          if (!get(framework, 'currentEvaluate.ifHasOrg')) {
             return false
           }
           const {orgPic: bgCover, orgName: title} = framework.currentEvaluate
@@ -142,10 +163,10 @@ export default (KeaContext) => {
       signupBoxProps: [
         () => [selectors.currFramework],
         (framework) => {
-          if (!has(framework, 'eaInfos.length')) {
+          if (!get(framework, 'eaInfos.length')) {
             return false
           }
-          let dataList = map(framework.eaInfos, (o, index) => {
+          let dataList = framework.eaInfos.map((o, index) => {
             return pick(o, [
               'beginAt', 'endAt', 'ifSignupLimit',
               'signupEndAt', 'ifSignUp', 'evaluateId',
@@ -161,13 +182,13 @@ export default (KeaContext) => {
         PropTypes.any
       ],
       avatarBoxProps: [
-        () => [selectors.currJurys],
+        () => [selectors.currJury],
         (jurys) => {
-          if (!has(jurys, 'content.length')) {
+          if (!get(jurys, 'content.length')) {
             return false
           }
           const {totalElements: count} = jurys
-          let dataList = map(jurys.content, (o, index) => {
+          let dataList = jurys.content.map((o, index) => {
             return pick(o, [
               'gender', 'number', 'name',
             ])
@@ -182,15 +203,53 @@ export default (KeaContext) => {
       commodityBoxProps: [
         () => [selectors.currTwo],
         (two) => {
-          if (!has(two, 'evaluateCommoditys.totalElements')) {
+          if (!get(two, 'evaluateCommoditys.totalElements')) {
             return false
           }
           const {totalElements: count, content} = get(two, 'evaluateCommoditys')
-          let dataList = map(content, (o, index) => {
+          let dataList = content.map((o, index) => {
             return pick(o, ['id', 'pic', 'price', 'title'])
           })
           return Immutable({
-            count,
+            count: count + '个',
+            dataList,
+          })
+        },
+        PropTypes.any
+      ],
+      worksBoxProps: [
+        () => [selectors.currWork],
+        (work) => {
+          if (!get(work, 'totalElements')) {
+            return false
+          }
+          const {totalElements: count, content} = work
+          let dataList = content.map((o, index) => {
+            let data = pick(o, ['id', 'medias[0]', 'user', 'commentCount', 'likeCount'])
+            data.user = pick(data.user, ['gender', 'number', 'name'])
+            data.medias[0] = pick(data.medias[0], ['type', 'url'])
+            return data
+          })
+          return Immutable({
+            count: count + '条',
+            dataList,
+          })
+        },
+        PropTypes.any
+      ],
+      newsBoxProps: [
+        () => [selectors.currNews],
+        (news) => {
+          if (!get(news, 'totalElements')) {
+            return false
+          }
+          const {totalElements: count, content} = news
+          let dataList = content.map((o, index) => {
+            return pick(o, ['id', 'title', 'content', 'pic', 'createdAt', 'type',
+              'isGroup', 'isGroupTop', 'isTop'])
+          })
+          return Immutable({
+            count: count + '条',
             dataList,
           })
         },
@@ -205,6 +264,7 @@ export default (KeaContext) => {
       [actions.getTwo]: workers.getTwo,
       [actions.getJurys]: workers.getJurys,
       [actions.getWorks]: workers.getWorks,
+      [actions.getNews]: workers.getNews,
     }),
 
     workers: {
@@ -242,6 +302,11 @@ export default (KeaContext) => {
           }
         })
         const worksData = yield * workers.getWorks({
+          payload: {
+            evaluateId,
+          }
+        })
+        const newsData = yield * workers.getNews({
           payload: {
             evaluateId,
           }
@@ -342,6 +407,23 @@ export default (KeaContext) => {
         def && def.resolve(res)
         return data
       },
+      getNews: function * (action) {
+        const {actions} = this
+        const {evaluateId, page, size, def} = action.payload
+        let res = yield call(classApi.getNews, evaluateId, page || 0, size || 2)
+        if (isError(res)) {
+          yield call(baseXhrError, res)
+          def && def.reject(res)
+          return false
+        }
+
+        const data = res.body.data
+        let groupId = yield this.get('currId')
+        yield put(actions.syncNews(groupId, data))
+        def && def.resolve(res)
+        return data
+      },
+
     }
   })
   return logic
