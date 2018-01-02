@@ -4,9 +4,10 @@ import { call, put } from 'redux-saga/effects'
 import * as groupApi from 'apis/contests/group'
 import * as classApi from 'apis/contests/class'
 import isError from 'lodash/isError'
-import { baseXhrError } from '../../apis/utils/error'
-import { getToken } from '../../utils/auth'
+import { baseXhrError } from 'apis/utils/error'
+import { getToken } from 'utils/auth'
 import { static as Immutable } from 'seamless-immutable'
+import get from 'lodash/get'
 
 export default KeaContext => {
   const {kea} = KeaContext
@@ -15,20 +16,20 @@ export default KeaContext => {
     actions: () => ({
       initPage: (classId, def, token) => ({token: token || getToken(), classId, def}),
       setCurrId: (currId) => ({currId}),
-      getFramework: (groupId, def, token) => ({token: token || getToken(), classId, def}),
-      syncFramework: (groupId, data) => ({classId, data}),
+      getFramework: (classId, def, token) => ({token: token || getToken(), classId, def}),
+      syncFramework: (classId, data) => ({classId, data}),
 
       getOne: (evaluateId, def, token) => ({token: token || getToken(), evaluateId, def}),
-      syncOne: (groupId, data) => ({classId, data}),
+      syncOne: (classId, data) => ({classId, data}),
 
       getTwo: (evaluateId, def, token) => ({token: token || getToken(), evaluateId, def}),
-      syncTwo: (groupId, data) => ({classId, data}),
+      syncTwo: (classId, data) => ({classId, data}),
 
       getWorks: (evaluateId, page, size, def) => ({evaluateId, page, size, def}),
-      syncWorks: (groupId, data) => ({classId, data}),
+      syncWorks: (classId, data) => ({classId, data}),
 
-      getNews: (groupId, page, size, def) => ({classId, page, size, def}),
-      syncNews: (groupId, data) => ({classId, data}),
+      getNews: (classId, page, size, def) => ({classId, page, size, def}),
+      syncNews: (classId, data) => ({classId, data}),
     }),
 
     reducers: ({actions}) => ({
@@ -37,38 +38,90 @@ export default KeaContext => {
       }],
       framework: [Immutable({}), PropTypes.any, {
         [actions.syncFramework]: (state, payload) => {
-          return Immutable.set(state, payload.groupId, payload.data)
+          return Immutable.set(state, payload.classId, payload.data)
         },
       }],
       one: [Immutable({}), PropTypes.any, {
         [actions.syncOne]: (state, payload) => {
-          return Immutable.set(state, payload.groupId, payload.data)
+          return Immutable.set(state, payload.classId, payload.data)
         },
       }],
       two: [Immutable({}), PropTypes.any, {
         [actions.syncTwo]: (state, payload) => {
-          return Immutable.set(state, payload.groupId, payload.data)
+          return Immutable.set(state, payload.classId, payload.data)
         },
       }],
       works: [Immutable({}), PropTypes.any, {
         [actions.syncWorks]: (state, payload) => {
-          return Immutable.set(state, payload.groupId, payload.data)
+          return Immutable.set(state, payload.classId, payload.data)
         },
       }],
       news: [Immutable({}), PropTypes.any, {
         [actions.syncNews]: (state, payload) => {
-          return Immutable.set(state, payload.groupId, payload.data)
+          return Immutable.set(state, payload.classId, payload.data)
         },
       }],
     }),
 
-    // selectors: ({selectors}) => ({
-    //   doubleCounter: [
-    //     () => [selectors.counter],
-    //     (counter) => counter * 2,
-    //     PropTypes.number
-    //   ]
-    // }),
+    selectors: ({selectors}) => ({
+      classId: [
+        () => [selectors.currId],
+        (currId) => currId,
+        PropTypes.any
+      ],
+      currFramework: [
+        () => [selectors.currId, selectors.framework],
+        (currId, frameworks) => frameworks[currId],
+        PropTypes.any
+      ],
+      bannerCoverProps: [
+        () => [selectors.currFramework],
+        (framework) => {
+          const {bannerUrl: bgCover, area, lng, lat} = framework
+          return Immutable({
+            linkData: {
+              destName: area,
+              lng,
+              lat,
+            },
+            bgCover,
+            area,
+          })
+        },
+        PropTypes.any
+      ],
+      introduceProps: [
+        () => [selectors.currFramework],
+        (framework) => {
+          const {description: intro} = framework
+          const {title} = framework
+          return Immutable({
+            intro,
+            title
+          })
+        },
+        PropTypes.any
+      ],
+      agencyItemProps: [
+        () => [selectors.currId, selectors.currFramework],
+        (currId, framework) => {
+          if (!get(framework, 'ifHasOrg')) {
+            return false
+          }
+          const {orgUserNumber, orgPic: bgCover, orgName: title} = framework
+          return Immutable({
+            evaluate_group: false,
+            evaluate_id: currId,
+            orgUserNumber,
+            orgUrl: false,
+            bgCover,
+            title,
+            chatPeopleName: '总群',
+          })
+        },
+        PropTypes.any
+      ],
+    }),
 
     takeEvery: ({actions, workers}) => ({
       [actions.initPage]: workers.initPage,
@@ -80,7 +133,7 @@ export default KeaContext => {
     }),
 
     workers: {
-      initPage: function * () {
+      initPage: function * (action) {
         const {workers, actions} = this
         const {token, classId, def} = action.payload
         yield put(actions.setCurrId(classId))
@@ -117,6 +170,8 @@ export default KeaContext => {
           def && def.reject(twoData)
           return false
         }
+
+        def && def.resolve('ok')
       },
       getFramework: function * (action) {
         const {actions} = this
@@ -189,8 +244,8 @@ export default KeaContext => {
         }
 
         const data = res.body.data
-        let groupId = yield this.get('currId')
-        yield put(actions.syncWorks(groupId, data))
+        let classId = yield this.get('currId')
+        yield put(actions.syncWorks(classId, data))
         def && def.resolve(res)
         return data
       },

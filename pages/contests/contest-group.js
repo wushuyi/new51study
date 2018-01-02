@@ -59,7 +59,7 @@ class Page extends React.PureComponent {
     const {actions} = this.props
     const def = deferred()
     let token = getToken()
-    actions.initPage(Router.query.groupid, def, token)
+    actions.initPage(Router.query.groupId, def, token)
     return def.promise
   }
 

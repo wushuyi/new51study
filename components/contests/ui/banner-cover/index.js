@@ -6,11 +6,6 @@ import bgurl from 'static/images/bg/bg_no_pic_default.jpg'
 import { px2rem } from 'utils/hotcss'
 import { deferred } from 'redux-saga/utils'
 
-const tData = {
-  'bgCover': 'http://7xszyu.com1.z0.glb.clouddn.com/pic_album_ad_22_201709301055021992_wh980x260.jpg',
-  'area': '垦丁'
-}
-
 function guessUrlSize(str) {
   let rex = /wh(\d+)x(\d+)/
   let res = str.match(rex)
