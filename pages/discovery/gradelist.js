@@ -5,7 +5,7 @@ import createLogic from 'pagelogic/discovery/gradelist'
 import { deferred } from 'redux-saga/utils'
 import { getToken } from 'utils/auth'
 import Demo from 'components/discovery/gradelist'
-import { checkToken, authDidMount } from 'utils/pageAuth'
+import { checkToken, authDidMount, ComponentPageError } from 'utils/pageAuth'
 
 class Page extends React.PureComponent {
   static async getInitialProps(ctx) {
@@ -16,7 +16,7 @@ class Page extends React.PureComponent {
     const {actions} = logics[0]
 
     //验证token, 并获取 用户信息
-    const {err, needSave, authData} = await checkToken(token)
+    const {err, needSave, authData} = await checkToken(token, true)
     if (!err) {
       initProps.auth = {
         needSave,
@@ -59,9 +59,7 @@ class Page extends React.PureComponent {
 
     if (err) {
       return (
-        <Layout>
-          <h1 className='is-hidden'>出错啦!</h1>
-        </Layout>
+        <ComponentPageError/>
       )
     }
     let porps = {

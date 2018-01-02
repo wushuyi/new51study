@@ -1,5 +1,5 @@
 import { postTokenUserInfo } from 'apis/auth'
-import { baseXhrError, xhrError } from 'apis/utils/error'
+import { baseXhrError, needAuthError } from 'apis/utils/error'
 import isError from 'lodash/isError'
 import { getAuthData, setAuthData } from 'utils/auth'
 import { isBrowser } from 'utils/runEnv'
@@ -7,8 +7,21 @@ import { defaultAuthPage } from 'config/settings'
 import Router from 'next/router'
 import Modal from 'antd-mobile/lib/modal/index'
 import Toast from 'antd-mobile/lib/toast/index'
+import React, { Fragment } from 'react'
+import Layout from 'components/layout/default'
 
-export async function checkToken(token) {
+export async function checkToken(token, need = false) {
+  if (!token && need) {
+    return {
+      err: new needAuthError('需要登录!')
+    }
+  }
+  if (!token) {
+    return {
+      needSave: false,
+      authData: {}
+    }
+  }
   let authData = getAuthData()
   try {
     if (authData && authData.token === token) {
@@ -65,5 +78,15 @@ export function authDidMount(props) {
         }),
       }
     ])
+  }
+}
+
+export class ComponentPageError extends React.PureComponent {
+  render() {
+    return (
+      <Layout>
+        <h1 className='is-hidden'>出错啦!</h1>
+      </Layout>
+    )
   }
 }

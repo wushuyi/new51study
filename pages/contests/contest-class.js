@@ -5,10 +5,7 @@ import Layout from 'components/layout/default'
 import createLogic from 'pagelogic/contests/class'
 import { getToken } from 'utils/auth'
 import { deferred } from 'redux-saga/utils'
-import Modal from 'antd-mobile/lib/modal/index'
-import { isBrowser } from '../../utils/runEnv'
-import Toast from 'antd-mobile/lib/toast/index'
-
+import { isBrowser } from 'utils/runEnv'
 import BannerCover from 'components/contests/ui/banner-cover'
 import Introduce from 'components/contests/ui/introduce'
 import SignupBox from 'components/contests/ui/signup-box'
@@ -19,15 +16,33 @@ import WorksBox from 'components/contests/ui/works-box'
 import AgencyItem from 'components/contests/ui/agency-item'
 import CommodityBox from 'components/contests/ui/commodity-box'
 import ContestDetail from 'components/contests/ui/contest-detail'
-import SelfWorksBox from 'components/contests/ui/self-work-box'
+
 import GoContestHome from 'components/contests/ui/go-contest-home'
+import { checkToken, authDidMount, ComponentPageError } from 'utils/pageAuth'
 
 class Page extends React.PureComponent {
   static async getInitialProps(ctx) {
     const {logics, KeaContext, isServer, store, req, query} = ctx
+    let initProps = {}
     let token = getToken(req)
 
     const {actions} = logics[0]
+
+    //验证token, 并获取 用户信息
+    const {err, needSave, authData} = await checkToken(token)
+    if (!err) {
+      initProps.auth = {
+        needSave,
+        authData
+      }
+    } else {
+      return {
+        err: {
+          name: err.name,
+          message: err.message
+        }
+      }
+    }
 
     try {
       const def = deferred()
@@ -42,7 +57,11 @@ class Page extends React.PureComponent {
       }
     }
 
-    return {}
+    return initProps
+  }
+
+  componentDidMount() {
+    authDidMount(this.props)
   }
 
   onRefresh = () => {
@@ -55,6 +74,12 @@ class Page extends React.PureComponent {
 
   render() {
     const {err, actions} = this.props
+    if (err) {
+      return (
+        <ComponentPageError/>
+      )
+    }
+
     const {
       classId,
       // evaluateId,
@@ -73,22 +98,6 @@ class Page extends React.PureComponent {
     } = this.props
 
     isBrowser && console.log(this.props)
-    isBrowser && err && Modal.alert(err.name, err.message, [
-      {
-        text: '确认',
-        onPress: () => new Promise((resolve) => {
-          Toast.info('即将调转到首页!', 1)
-          resolve()
-        }),
-      }
-    ])
-    if (err) {
-      return (
-        <Layout>
-          <h1>出错啦!</h1>
-        </Layout>
-      )
-    }
 
     return (
       <Layout>
