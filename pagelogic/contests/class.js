@@ -92,6 +92,11 @@ export default KeaContext => {
         (currId, works) => works[currId],
         PropTypes.any
       ],
+      currNews: [
+        () => [selectors.currId, selectors.news],
+        (currId, news) => news[currId],
+        PropTypes.any
+      ],
       bannerCoverProps: [
         () => [selectors.currFramework],
         (framework) => {
@@ -271,6 +276,39 @@ export default KeaContext => {
         },
         PropTypes.any
       ],
+      newsBoxProps: [
+        () => [selectors.currNews],
+        (news) => {
+          if (!get(news, 'totalElements')) {
+            return false
+          }
+          const {totalElements: count, content} = news
+          let dataList = content.map((o, index) => {
+            return pick(o, ['id', 'title', 'content', 'pic', 'createdAt', 'type',
+              'isGroup', 'isGroupTop', 'isTop'])
+          })
+          return Immutable({
+            isGroup: false,
+            count: count + '条',
+            dataList,
+          })
+        },
+        PropTypes.any
+      ],
+      detailProps: [
+        () => [selectors.currFramework],
+        (framework) => {
+
+          if (!get(framework, 'detail')) {
+            return false
+          }
+          let data = {
+            detail: framework.detail
+          }
+          return Immutable(data)
+        },
+        PropTypes.any
+      ]
     }),
 
     takeEvery: ({actions, workers}) => ({
@@ -329,6 +367,16 @@ export default KeaContext => {
         })
         if (isError(worksData)) {
           def && def.reject(worksData)
+          return false
+        }
+
+        const newsData = yield * workers.getNews({
+          payload: {
+            evaluateId: classId,
+          }
+        })
+        if (isError(newsData)) {
+          def && def.reject(newsData)
           return false
         }
 

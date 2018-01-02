@@ -68,9 +68,8 @@ class Page extends React.PureComponent {
       signUpAvatarBoxProps,
       commodityBoxProps,
       worksBoxProps,
-      // selfWorksBoxProps,
-      // newsBoxProps,
-      // detailProps,
+      newsBoxProps,
+      detailProps,
     } = this.props
 
     isBrowser && console.log(this.props)
@@ -134,6 +133,13 @@ class Page extends React.PureComponent {
             </a>
           )}
 
+          {newsBoxProps && (
+            <a href={`/contests/news-list/${classId}/true`}>
+              <NewsBox {...newsBoxProps}/>
+            </a>
+          )}
+
+          {detailProps && <ContestDetail {...detailProps}/>}
         </PagePullToRefresh>
       </Layout>
     )
@@ -162,6 +168,8 @@ export default withRedux(Page, function (KeaContext, ctx) {
         'commodityBoxProps',
         'signUpAvatarBoxProps',
         'worksBoxProps',
+        'newsBoxProps',
+        'detailProps',
       ]
     ]
   })
