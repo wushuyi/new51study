@@ -11,6 +11,14 @@ if (isBrowser) {
   Cookies = require('js-cookie')
 }
 
+export function setAuthData(data) {
+  return ldb && ldb.set('auth-data', data)
+}
+
+export function getAuthData() {
+  return isBrowser && ldb && ldb.get('auth-data')
+}
+
 export function getToken(req) {
   if (isServer && req && req.cookies[tokenKey]) {
     return req.cookies[tokenKey]

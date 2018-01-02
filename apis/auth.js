@@ -165,6 +165,29 @@ export async function otherLogin(loginData) {
   }
 }
 
+/**
+ * API: /account/tokenUserInfo
+ * @param loginData
+ * @returns {Promise<*>}
+ */
+export async function postTokenUserInfo(token) {
+  let res
+  const api = '/account/tokenUserInfo'
+  const requestURL = `${APIService}${api}`
+
+  try {
+    res = await request.post(requestURL)
+      .query(APIVersion)
+      .send({
+        token
+      })
+      .use(xhrCrypto)
+  } catch (err) {
+    throw err
+  }
+  return res
+}
+
 export function getQQAuthLink(origin) {
   const query = {
     response_type: 'code',

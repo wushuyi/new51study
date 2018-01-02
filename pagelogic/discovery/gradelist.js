@@ -2,6 +2,7 @@ import PropTypes from 'prop-types'
 import { delay } from 'redux-saga'
 import { call, put } from 'redux-saga/effects'
 import { getKaojiList } from 'apis/discovery/grade-list'
+import { postTokenUserInfo } from 'apis/auth'
 import isError from 'lodash/isError'
 import { baseXhrError } from 'apis/utils/error'
 import { isDev } from '../../config/settings'
@@ -34,6 +35,7 @@ export default KeaContext => {
   const logic = kea({
     path: (key) => ['scenes', 'pages', 'discovery', 'gradelist'],
     actions: () => ({
+      checkToken: (token, def,) => ({token: token || getToken(), def}),
       getList: (page, def, token) => ({token: token || getToken(), page, def}),
       syncData: (data) => ({data}),
       appendData: (data) => ({data})
@@ -61,10 +63,23 @@ export default KeaContext => {
 
     takeEvery: ({actions, workers}) => ({
       [actions.noop]: workers.noop,
+      [actions.checkToken]: workers.checkToken,
       [actions.getList]: workers.getList,
     }),
 
     workers: {
+      checkToken: function * (action) {
+        const {token, def} = action.payload
+        let res = yield call(postTokenUserInfo, token)
+        if (isError(res)) {
+          yield call(baseXhrError, res)
+          def && def.reject(res)
+          return res
+        }
+        const data = res.body.data
+        def && def.resolve(data)
+        return data
+      },
       getList: function * (action) {
         const {actions} = this
         const gradelist = yield this.get('gradelist')
@@ -80,8 +95,8 @@ export default KeaContext => {
 
         if (isError(res)) {
           yield call(baseXhrError, res)
-          def.reject(res)
-          return false
+          def && def.reject(res)
+          return res
         }
         const data = res.body.data
         // isDev && console.log(data)
@@ -91,7 +106,8 @@ export default KeaContext => {
           yield put(actions.appendData(data))
         }
 
-        def.resolve(res)
+        def && def.resolve(res)
+        return res
       },
       noop: function * () {
       }

@@ -53,7 +53,6 @@ app.prepare()
     })
 
     server.get('/authok', (req, res) => {
-      console.log(req.cookies)
       return handler(req, res)
     })
 
