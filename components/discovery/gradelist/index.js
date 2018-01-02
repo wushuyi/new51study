@@ -34,13 +34,13 @@ function getMatchLinkProps(props) {
   switch (props.type) {
     case adminType.AdminEvaluateGroup:
       return {
-        href: {pathname: '/contests/contest-group', query: {groupid: props.itemId}},
+        href: {pathname: '/contests/contest-group', query: {groupId: props.itemId}},
         as: {pathname: `/contests/contest-group/${props.itemId}`},
         prefetch: true
       }
     case adminType.AdminEvaluate:
       return {
-        href: {pathname: '/contests/contest-class', query: {groupid: props.itemId}},
+        href: {pathname: '/contests/contest-class', query: {classId: props.itemId}},
         as: {pathname: `/contests/contest-class/${props.itemId}`},
         prefetch: true
       }

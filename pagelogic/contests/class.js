@@ -8,6 +8,7 @@ import { baseXhrError } from 'apis/utils/error'
 import { getToken } from 'utils/auth'
 import { static as Immutable } from 'seamless-immutable'
 import get from 'lodash/get'
+import pick from 'lodash/pick'
 
 export default KeaContext => {
   const {kea} = KeaContext
@@ -121,6 +122,35 @@ export default KeaContext => {
         },
         PropTypes.any
       ],
+      signupBoxProps: [
+        () => [selectors.currFramework],
+        (framework) => {
+          let dataList = [pick(framework, [
+            'beginAt', 'endAt', 'ifSignupLimit',
+            'signupEndAt', 'ifSignUp', 'evaluateId',
+            'evaluateApplyId', 'ifNomination', 'singUpNumber',
+            'label', 'ifWinner', 'detail'
+          ])]
+          return Immutable({
+            dataList,
+            maxItem: 100
+          })
+        },
+        PropTypes.any
+      ],
+      goContestHomeProps: [
+        () => [selectors.currFramework],
+        (framework) => {
+          if (!get(framework, 'ifInGroup')) {
+            return false
+          }
+          const {groupId} = framework
+          return Immutable({
+            groupId
+          })
+        },
+        PropTypes.any
+      ]
     }),
 
     takeEvery: ({actions, workers}) => ({

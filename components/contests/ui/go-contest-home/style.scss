@@ -1,0 +1,18 @@
+@import 'libs/hotcss/px2rem';
+
+.go-contest-home {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 33*$hd;
+  font-size: 16*$hd;
+  color: #585858;
+  background: #FCF6F6;
+}
+
+.go-contest-tag{
+  width: 3*$hd;
+  height: 16*$hd;
+  background: #FF6121;
+  margin: 0 7*$hd 0 12*$hd;
+}

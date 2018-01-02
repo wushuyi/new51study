@@ -139,8 +139,7 @@ class Page extends React.PureComponent {
             </a>
           )}
 
-          <ContestDetail {...detailProps}/>
-
+          {detailProps && <ContestDetail {...detailProps}/>}
         </PagePullToRefresh>
       </Layout>
     )
