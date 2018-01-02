@@ -17,6 +17,8 @@ import CommodityBox from 'components/contests/ui/commodity-box'
 import ContestDetail from 'components/contests/ui/contest-detail'
 import SelfWorksBox from 'components/contests/ui/self-work-box'
 import { isBrowser } from 'utils/runEnv'
+import Modal from 'antd-mobile/lib/modal'
+import Toast from 'antd-mobile/lib/toast'
 
 class Page extends React.PureComponent {
   static async getInitialProps(ctx) {
@@ -27,7 +29,7 @@ class Page extends React.PureComponent {
 
     try {
       const def = deferred()
-      store.dispatch(actions.initPage(query.groupid, def, token))
+      store.dispatch(actions.initPage(query.groupId, def, token))
       await def.promise
     } catch (err) {
       return {
@@ -79,10 +81,19 @@ class Page extends React.PureComponent {
     } = this.props
 
     isBrowser && console.log(this.props)
+    isBrowser && err && Modal.alert(err.name, err.message, [
+      {
+        text: '确认',
+        onPress: () => new Promise((resolve) => {
+          Toast.info('即将调转到首页!', 1)
+          resolve()
+        }),
+      }
+    ])
     if (err) {
       return (
         <Layout>
-          <pre>{JSON.stringify(err, null, 2)}</pre>
+          <h1>出错啦!</h1>
         </Layout>
       )
     }

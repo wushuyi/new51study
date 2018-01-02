@@ -331,39 +331,65 @@ export default (KeaContext) => {
             groupId
           }
         })
+        if (isError(frameworkData)) {
+          def && def.reject(frameworkData)
+          return false
+        }
         const evaluateId = get(frameworkData, 'currentEvaluate.id')
         if (!evaluateId) {
           const err = new msgError('没有 frameworkData.currentEvaluate.id')
           def && def.reject(err)
           return false
         }
+
         const oneData = yield * workers.getOne({
           payload: {
             token,
             evaluateId,
           }
         })
+        if (isError(oneData)) {
+          def && def.reject(oneData)
+          return false
+        }
         const twoData = yield * workers.getTwo({
           payload: {
             token,
             evaluateId,
           }
         })
+        if (isError(twoData)) {
+          def && def.reject(twoData)
+          return false
+        }
+
         const JurysData = yield * workers.getJurys({
           payload: {
             groupId,
           }
         })
+        if (isError(JurysData)) {
+          def && def.reject(JurysData)
+          return false
+        }
         const worksData = yield * workers.getWorks({
           payload: {
             evaluateId,
           }
         })
+        if (isError(worksData)) {
+          def && def.reject(worksData)
+          return false
+        }
         const newsData = yield * workers.getNews({
           payload: {
             groupId,
           }
         })
+        if (isError(newsData)) {
+          def && def.reject(newsData)
+          return false
+        }
         // console.log(frameworkData.currentEvaluate.id)
         def && def.resolve('ok')
       },

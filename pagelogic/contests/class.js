@@ -13,22 +13,22 @@ export default KeaContext => {
   const logic = kea({
     path: (key) => ['scenes', 'pages', 'contests', 'class'],
     actions: () => ({
-      initPage: (groupId, def, token) => ({token: token || getToken(), groupId, def}),
+      initPage: (classId, def, token) => ({token: token || getToken(), classId, def}),
       setCurrId: (currId) => ({currId}),
-      getFramework: (groupId, def, token) => ({token: token || getToken(), groupId, def}),
-      syncFramework: (groupId, data) => ({groupId, data}),
+      getFramework: (groupId, def, token) => ({token: token || getToken(), classId, def}),
+      syncFramework: (groupId, data) => ({classId, data}),
 
       getOne: (evaluateId, def, token) => ({token: token || getToken(), evaluateId, def}),
-      syncOne: (groupId, data) => ({groupId, data}),
+      syncOne: (groupId, data) => ({classId, data}),
 
       getTwo: (evaluateId, def, token) => ({token: token || getToken(), evaluateId, def}),
-      syncTwo: (groupId, data) => ({groupId, data}),
+      syncTwo: (groupId, data) => ({classId, data}),
 
       getWorks: (evaluateId, page, size, def) => ({evaluateId, page, size, def}),
-      syncWorks: (groupId, data) => ({groupId, data}),
+      syncWorks: (groupId, data) => ({classId, data}),
 
-      getNews: (groupId, page, size, def) => ({groupId, page, size, def}),
-      syncNews: (groupId, data) => ({groupId, data}),
+      getNews: (groupId, page, size, def) => ({classId, page, size, def}),
+      syncNews: (groupId, data) => ({classId, data}),
     }),
 
     reducers: ({actions}) => ({
@@ -80,6 +80,44 @@ export default KeaContext => {
     }),
 
     workers: {
+      initPage: function * () {
+        const {workers, actions} = this
+        const {token, classId, def} = action.payload
+        yield put(actions.setCurrId(classId))
+
+        const frameworkData = yield * workers.getFramework({
+          payload: {
+            token,
+            evaluateId: classId
+          }
+        })
+        if (isError(frameworkData)) {
+          def && def.reject(frameworkData)
+          return false
+        }
+
+        const oneData = yield * workers.getOne({
+          payload: {
+            token,
+            evaluateId: classId
+          }
+        })
+        if (isError(oneData)) {
+          def && def.reject(oneData)
+          return false
+        }
+
+        const twoData = yield * workers.getTwo({
+          payload: {
+            token,
+            evaluateId: classId
+          }
+        })
+        if (isError(twoData)) {
+          def && def.reject(twoData)
+          return false
+        }
+      },
       getFramework: function * (action) {
         const {actions} = this
         const {token, evaluateId, def} = action.payload
