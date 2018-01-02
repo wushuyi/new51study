@@ -170,6 +170,7 @@ export default withRedux(Page, function (KeaContext, ctx) {
         'worksBoxProps',
         'newsBoxProps',
         'detailProps',
+        'currFramework'
       ]
     ]
   })

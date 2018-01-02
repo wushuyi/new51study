@@ -10,4 +10,7 @@
   -webkit-overflow-scrolling: touch;
   background-color: #fff;
   font-size: 16*$hd;
+  :global(img) {
+    display: block;
+  }
 }
