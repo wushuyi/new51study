@@ -4,18 +4,12 @@ import favicon from 'serve-favicon'
 import compression from 'compression'
 import path from 'path'
 import next from 'next'
-import routes from './routes'
-import { loginQQ, checkIsQQ } from 'server/auth/qq'
-import { loginSina, checkIsSina } from 'server/auth/sina'
-import { loginWX, checkIsWx } from 'server/auth/weixin'
-import startsWith from 'lodash/startsWith'
-import { addHrefToken } from 'server/utils'
 import { auth } from 'server/auth'
 
 const port = parseInt(process.env.PORT, 10) || 2000
 const dev = process.env.NODE_ENV !== 'production'
 const app = next({dev})
-const handler = routes.getRequestHandler(app)
+const handle = app.getRequestHandler()
 
 const server = express()
 server.use(cookieParser())
@@ -52,12 +46,8 @@ app.prepare()
       return app.render(req, res, '/contests/contest-class', req.params)
     })
 
-    server.get('/authok', (req, res) => {
-      return handler(req, res)
-    })
-
     server.get('*', (req, res) => {
-      return handler(req, res)
+      return handle(req, res)
     })
 
     server.listen(port, (err) => {
