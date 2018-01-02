@@ -1,15 +1,15 @@
-.am-modal-popup-slide-up {
+.am-modal-popup-slide-left {
   bottom: 0; }
 
-.am-slide-up-enter,
-.am-slide-up-appear {
+.am-slide-left-enter,
+.am-slide-left-appear {
   -webkit-transform: translate(100%, 0);
       -ms-transform: translate(100%, 0);
           transform: translate(100%, 0); }
 
-.am-slide-up-enter,
-.am-slide-up-appear,
-.am-slide-up-leave {
+.am-slide-left-enter,
+.am-slide-left-appear,
+.am-slide-left-leave {
   -webkit-animation-duration: .2s;
           animation-duration: .2s;
   -webkit-animation-fill-mode: both;
@@ -19,14 +19,14 @@
   -webkit-animation-play-state: paused;
           animation-play-state: paused; }
 
-.am-slide-up-enter.am-slide-up-enter-active,
-.am-slide-up-appear.am-slide-up-appear-active {
+.am-slide-left-enter.am-slide-left-enter-active,
+.am-slide-left-appear.am-slide-left-appear-active {
   -webkit-animation-name: amSlideLeftIn;
           animation-name: amSlideLeftIn;
   -webkit-animation-play-state: running;
           animation-play-state: running; }
 
-.am-slide-up-leave.am-slide-up-leave-active {
+.am-slide-left-leave.am-slide-left-leave-active {
   -webkit-animation-name: amSlideLeftOut;
           animation-name: amSlideLeftOut;
   -webkit-animation-play-state: running;
@@ -53,16 +53,16 @@
     -webkit-transform: translate(0, 0);
             transform: translate(0, 0); }
   100% {
-    -webkit-transform: translate(100%, 0);
-            transform: translate(100%, 0); } }
+    -webkit-transform: translate(-100%, 0);
+            transform: translate(-100%, 0); } }
 
 @keyframes amSlideLeftOut {
   0% {
     -webkit-transform: translate(0, 0);
             transform: translate(0, 0); }
   100% {
-    -webkit-transform: translate(100%, 0);
-            transform: translate(100%, 0); } }
+    -webkit-transform: translate(-100%, 0);
+            transform: translate(-100%, 0); } }
 
 body,
 button,
@@ -70,6 +70,12 @@ input,
 select,
 textarea {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", "Helvetica", "Arial", sans-serif; }
+
+hr {
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-top: solid #dfdfdf 0.03865rem; }
 
 html {
   -webkit-box-sizing: border-box;

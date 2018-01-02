@@ -2,6 +2,7 @@ import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import Style from './style.scss'
 import { Element } from 'react-scroll'
+import processContent from 'utils/processHtmlContent'
 
 const scoped = (
   <scope>
@@ -27,7 +28,7 @@ export default class ContestDetail extends React.PureComponent {
       <Fragment>
         <Element className={`contest-detail ${jsxName}`}
                  name='contest-detail'
-                 dangerouslySetInnerHTML={{__html: detail || ''}}/>
+                 dangerouslySetInnerHTML={{__html: processContent(detail) || ''}}/>
         {/*language=CSS*/}
         {/*<style jsx>{Style}</style>*/}
         {scoped.props.children}

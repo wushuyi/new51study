@@ -5,29 +5,29 @@ $am: am;
   animation-timing-function: cubic-bezier(.55, 0, .55, .2);
 }
 
-.#{$am}-modal-popup-slide-up {
+.#{$am}-modal-popup-slide-left {
   bottom: 0;
 }
 
-.#{$am}-slide-up-enter,
-.#{$am}-slide-up-appear {
+.#{$am}-slide-left-enter,
+.#{$am}-slide-left-appear {
   transform: translate(100%, 0);
 }
 
-.#{$am}-slide-up-enter,
-.#{$am}-slide-up-appear,
-.#{$am}-slide-up-leave {
+.#{$am}-slide-left-enter,
+.#{$am}-slide-left-appear,
+.#{$am}-slide-left-leave {
   @include effect;
   animation-play-state: paused;
 }
 
-.#{$am}-slide-up-enter.#{$am}-slide-up-enter-active,
-.#{$am}-slide-up-appear.#{$am}-slide-up-appear-active {
+.#{$am}-slide-left-enter.#{$am}-slide-left-enter-active,
+.#{$am}-slide-left-appear.#{$am}-slide-left-appear-active {
   animation-name: amSlideLeftIn;
   animation-play-state: running;
 }
 
-.#{$am}-slide-up-leave.#{$am}-slide-up-leave-active {
+.#{$am}-slide-left-leave.#{$am}-slide-left-leave-active {
   animation-name: amSlideLeftOut;
   animation-play-state: running;
 }
@@ -48,6 +48,6 @@ $am: am;
   }
 
   100% {
-    transform: translate(100%, 0);
+    transform: translate(-100%, 0);
   }
 }

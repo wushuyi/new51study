@@ -10,7 +10,6 @@ import { getToken, setToken } from '../../utils/auth'
 import { static as Immutable } from 'seamless-immutable'
 import get from 'lodash/get'
 import pick from 'lodash/pick'
-import { px2rem } from 'utils/hotcss'
 
 import { isBrowser } from 'utils/runEnv'
 
@@ -303,17 +302,9 @@ export default (KeaContext) => {
             return false
           }
           let data = {
-            detail: processContent(framework.detail)
+            detail: framework.detail
           }
           return Immutable(data)
-
-          function processContent(content) {
-            return content.replace(/<.+? (style=['|"].+?['|"]).*?>/g, function (match, offset, str) {
-              return match.replace(/(-?\d+)px/g, function (match, p1, offset, str) {
-                return px2rem(p1)
-              })
-            })
-          }
         },
         PropTypes.any
       ]

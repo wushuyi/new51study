@@ -1,0 +1,13 @@
+@import 'libs/hotcss/px2rem';
+
+.rich-text {
+  width: 414*$hd;
+  position: absolute;
+  top: 47*$hd;
+  bottom: 0;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+  background-color: #fff;
+  font-size: 16*$hd;
+}

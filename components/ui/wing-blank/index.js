@@ -73,7 +73,7 @@ export default class WingBlank extends React.PureComponent {
         {/*language=SCSS*/}
         <style jsx>{`
               .ui-white-space{
-                margin: ${Utils.process(space)};
+                padding: ${Utils.process(space)};
               }
           `}</style>
       </div>

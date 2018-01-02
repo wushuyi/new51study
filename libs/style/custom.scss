@@ -9,6 +9,13 @@ textarea {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
 }
 
+hr {
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-top: solid #dfdfdf 1*$hd;
+}
+
 html {
   box-sizing: border-box;
 }
