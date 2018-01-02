@@ -9,6 +9,8 @@ import { getToken } from 'utils/auth'
 import { static as Immutable } from 'seamless-immutable'
 import get from 'lodash/get'
 import pick from 'lodash/pick'
+import JudgesIcon from '/static/images/match/icon_default_match_internet_star008.png'
+import studentIcon from '/static/images/match/icon_default_match_internet_star003.png'
 
 export default KeaContext => {
   const {kea} = KeaContext
@@ -73,6 +75,21 @@ export default KeaContext => {
       currFramework: [
         () => [selectors.currId, selectors.framework],
         (currId, frameworks) => frameworks[currId],
+        PropTypes.any
+      ],
+      currOne: [
+        () => [selectors.currId, selectors.one],
+        (currId, one) => one[currId],
+        PropTypes.any
+      ],
+      currTwo: [
+        () => [selectors.currId, selectors.two],
+        (currId, two) => two[currId],
+        PropTypes.any
+      ],
+      currWork: [
+        () => [selectors.currId, selectors.works],
+        (currId, works) => works[currId],
         PropTypes.any
       ],
       bannerCoverProps: [
@@ -150,7 +167,110 @@ export default KeaContext => {
           })
         },
         PropTypes.any
-      ]
+      ],
+      teachersProps: [
+        () => [selectors.currOne],
+        (one) => {
+          if (!get(one, 'teachers.length')) {
+            return false
+          }
+          const {teachers} = one
+          const {length: count} = teachers
+          let dataList = teachers.map((o, index) => {
+            return pick(o, [
+              'gender', 'number', 'name',
+            ])
+          })
+          return Immutable({
+            count,
+            dataList,
+            avater: JudgesIcon,
+            titleName: '比赛评委'
+          })
+        },
+        PropTypes.any
+      ],
+      recommendsProps: [
+        () => [selectors.currTwo],
+        (two) => {
+          if (!get(two, 'allRecommends.totalElements')) {
+            return false
+          }
+          const {allRecommends} = two
+          const {totalElements: count} = allRecommends
+          let dataList = allRecommends.content.map((o, index) => {
+            return pick(o, [
+              'gender', 'number', 'name',
+            ])
+          })
+          return Immutable({
+            count,
+            dataList,
+            avater: JudgesIcon,
+            titleName: '联合推荐',
+            measureType: '个'
+          })
+        },
+        PropTypes.any
+      ],
+      commodityBoxProps: [
+        () => [selectors.currTwo],
+        (two) => {
+          if (!get(two, 'evaluateCommoditys.totalElements')) {
+            return false
+          }
+          const {totalElements: count, content} = get(two, 'evaluateCommoditys')
+          let dataList = content.map((o, index) => {
+            return pick(o, ['id', 'pic', 'price', 'title'])
+          })
+          return Immutable({
+            count: count + '个',
+            dataList,
+          })
+        },
+        PropTypes.any
+      ],
+      signUpAvatarBoxProps: [
+        () => [selectors.currTwo],
+        (two) => {
+          if (!get(two, 'signUpNumber')) {
+            return false
+          }
+          const {signUpNumber: count} = two
+          let dataList = two.signUpAvatars.map((o, index) => {
+            return pick(o, [
+              'gender', 'number', 'name',
+            ])
+          })
+          return Immutable({
+            count,
+            dataList,
+            avater: studentIcon,
+            titleName: '已报名'
+          })
+        },
+        PropTypes.any
+      ],
+      worksBoxProps: [
+        () => [selectors.currWork],
+        (work) => {
+          if (!get(work, 'totalElements')) {
+            return false
+          }
+          const {totalElements: count, content} = work
+          let dataList = content.map((o, index) => {
+            let data = pick(o, ['id', 'medias[0]', 'user', 'commentCount', 'likeCount'])
+            data.user = pick(data.user, ['gender', 'number', 'name'])
+            data.medias[0] = pick(data.medias[0], ['type', 'url'])
+            return data
+          })
+          return Immutable({
+            count: count + '条',
+            dataList,
+          })
+        },
+        PropTypes.any
+      ],
     }),
 
     takeEvery: ({actions, workers}) => ({
@@ -198,6 +318,17 @@ export default KeaContext => {
         })
         if (isError(twoData)) {
           def && def.reject(twoData)
+          return false
+        }
+
+        const worksData = yield * workers.getWorks({
+          payload: {
+            token,
+            evaluateId: classId
+          }
+        })
+        if (isError(worksData)) {
+          def && def.reject(worksData)
           return false
         }
 

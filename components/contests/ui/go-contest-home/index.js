@@ -13,7 +13,8 @@ export default class GoContestHome extends React.PureComponent {
     return {
       href: {pathname: '/contests/contest-group', query: {groupId: groupId}},
       as: {pathname: `/contests/contest-group/${groupId}`},
-      prefetch: true
+      prefetch: true,
+      shallow: true
     }
   }
 

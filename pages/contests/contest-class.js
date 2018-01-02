@@ -63,9 +63,11 @@ class Page extends React.PureComponent {
       agencyItemProps,
       signupBoxProps,
       goContestHomeProps,
-      // avatarBoxProps,
-      // commodityBoxProps,
-      // worksBoxProps,
+      teachersProps,
+      recommendsProps,
+      signUpAvatarBoxProps,
+      commodityBoxProps,
+      worksBoxProps,
       // selfWorksBoxProps,
       // newsBoxProps,
       // detailProps,
@@ -98,9 +100,40 @@ class Page extends React.PureComponent {
 
           {agencyItemProps && <AgencyItem {...agencyItemProps}/>}
 
-          {signupBoxProps && <SignupBox {...signupBoxProps}/>}
+          {signupBoxProps && <SignupBox  {...signupBoxProps}/>}
 
           {goContestHomeProps && <GoContestHome {...goContestHomeProps}/>}
+
+          {teachersProps && (
+            <a href={`/contests/teacher-list/${classId}/false`}>
+              <AvatarBox {...teachersProps}/>
+            </a>
+          )}
+
+          {recommendsProps && (
+            <a href={`/contests/recommend-list/${classId}`}>
+              <AvatarBox {...recommendsProps}/>
+            </a>
+          )}
+
+          {commodityBoxProps && (
+            <a href={`/contests/goods-list/${classId}`}>
+              <CommodityBox {...commodityBoxProps}/>
+            </a>
+          )}
+
+          {signUpAvatarBoxProps && (
+            <a href={`/contests/study-list/${classId}`}>
+              <AvatarBox {...signUpAvatarBoxProps}/>
+            </a>
+          )}
+
+          {worksBoxProps && (
+            <a href={`/newmatch/work/${classId}/true`}>
+              <WorksBox {...worksBoxProps}/>
+            </a>
+          )}
+
         </PagePullToRefresh>
       </Layout>
     )
@@ -119,12 +152,16 @@ export default withRedux(Page, function (KeaContext, ctx) {
     props: [
       mainLogic, [
         'classId',
-        'currFramework',
         'bannerCoverProps',
         'introduceProps',
         'agencyItemProps',
         'signupBoxProps',
         'goContestHomeProps',
+        'teachersProps',
+        'recommendsProps',
+        'commodityBoxProps',
+        'signUpAvatarBoxProps',
+        'worksBoxProps',
       ]
     ]
   })
