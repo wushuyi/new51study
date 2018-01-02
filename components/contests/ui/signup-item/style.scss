@@ -52,6 +52,7 @@
   .singup-btn {
     width: 72*$hd;
     height: 62*$hd;
+    display: block;
     background-repeat: no-repeat;
     background-size: cover;
     &.expire-time {

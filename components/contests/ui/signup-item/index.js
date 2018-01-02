@@ -7,6 +7,9 @@ import isPast from 'date-fns/is_past'
 import differenceInDays from 'date-fns/difference_in_days'
 import format from 'date-fns/format'
 import { contestStatus } from 'utils/wyx_const'
+import RichTextPopup from 'components/contests/ui/rich-text-popup'
+import Toast from 'antd-mobile/lib/toast'
+import Link from 'next/link'
 
 function getDeadDays(time) {
   const now = new Date()
@@ -135,48 +138,63 @@ export default class SignupItem extends React.PureComponent {
 
   getSingUpLinkProps = () => {
     let props = this.props
+    let linkProps = {}
     if (props.isWillBeginLately) {
-
+      linkProps.onClick = (e) => {
+        this.RichTextPopup.setState({showModal: true})
+      }
     } else {
       let link
       let userData = {}
       if (userData && userData.type !== 'STUDY') {
-        console.log('您不是学生不能报名')
-        return false
+        linkProps.onClick = (e) => {
+          Toast.info('您不是学生不能报名', 2, null, false)
+        }
       } else if (isFuture(props.beginAt)) {
-        console.log('未开始')
-        return false
+        linkProps.onClick = (e) => {
+          Toast.info('未开始', 2, null, false)
+        }
       } else if (isPast(props.endAt)) {
-        console.log('已结束')
-        return false
+        linkProps.onClick = (e) => {
+          Toast.info('已结束', 2, null, false)
+        }
       } else if (isPast(props.signupEndAt)) {
-        console.log('报名时间截止')
-        return false
+        linkProps.onClick = (e) => {
+          Toast.info('报名时间截止', 2, null, false)
+        }
       } else if (props.ifSignupLimit && !props.ifNomination) {
-        console.log('比赛晋级用户可报名')
-        return false
+        linkProps.onClick = (e) => {
+          Toast.info('比赛晋级用户可报名', 2, null, false)
+        }
       } else {
         if (contestStatus[props.ifSignUp] === 1) {
-          link = `/signup/information/${props.evaluateId}`
+          linkProps.link = `/signup/information/${props.evaluateId}`
         } else if (contestStatus[props.ifSignUp] === 0) {
-          link = `/signup/SignUpOk/${props.evaluateId}`
+          linkProps.link = `/signup/SignUpOk/${props.evaluateId}`
         } else {
-          link = `/signup/checkstatus/${props.evaluateId}`
+          linkProps.link = `/signup/checkstatus/${props.evaluateId}`
         }
-        console.log(link)
       }
     }
+    return linkProps
   }
 
   getContestLinkProps = () => {
     let props = this.props
+    let linkProps = {}
     if (props.isWillBeginLately) {
-
+      linkProps.onClick = (e) => {
+        this.RichTextPopup.setState({showModal: true})
+      }
     } else {
       const {evaluateId} = props
-      let link = `/contests/contest-class/${evaluateId}`
-      console.log(link)
+      linkProps.linkProps = {
+        href: {pathname: '/contests/contest-class', query: {classId: evaluateId}},
+        as: {pathname: `/contests/contest-class/${evaluateId}`},
+        prefetch: true
+      }
     }
+    return linkProps
   }
 
   render() {
@@ -184,34 +202,74 @@ export default class SignupItem extends React.PureComponent {
     const {signupState} = this.state
 
     //比赛组 beginAt 不在当前时间前不显示
-    if (props.signUpGroupType && (isFuture(props.beginAt) || props.isWillBeginLately)) {
+    if (props.signUpGroupType && (isFuture(props.beginAt))) {
       return null
     }
 
     const singupBtnCls = classnames('singup-btn', singupIcon(signupState))
 
+    const contestLinkProps = this.getContestLinkProps()
+    const singUpLinkProps = this.getSingUpLinkProps()
+
+    const componentContent = (
+      <Fragment>
+
+        <div className="ui-time">
+          {props.label ? (
+            <span className="ui-label">{props.label}</span>
+          ) : (
+            <span className="ui-icon"/>
+          )}
+          <span className="ui-date">
+                {dateFormat(props.beginAt)} - {dateFormat(props.endAt)}
+                </span>
+        </div>
+        <div className="banner">
+          {props.isShowSingUpNumber ? <span>报名人数：{props.singUpNumber}</span> :
+            <span>报名限制：{props.ifSignupLimit ? '有' : '不限'}</span>}
+          <span>报名截止：{getDeadDays(props.signupEndAt)}天</span>
+        </div>
+
+        <style jsx>{Style}</style>
+      </Fragment>
+    )
+
+    const componentSingup = (
+      <Fragment>
+        <div className={singupBtnCls} href={singUpLinkProps.link} onClick={singUpLinkProps.onClick}/>
+        <style jsx>{Style}</style>
+      </Fragment>
+    )
+
     return (
       <Fragment>
         <div className="signup-item-warp">
-          <div className="signup-item-content" onClick={this.onGoContest}>
-            <div className="ui-time">
-              {props.label ? (
-                <span className="ui-label">{props.label}</span>
-              ) : (
-                <span className="ui-icon"/>
-              )}
-              <span className="ui-date">
-                {dateFormat(props.beginAt)} - {dateFormat(props.endAt)}
-                </span>
-            </div>
-            <div className="banner">
-              {props.isShowSingUpNumber ? <span>报名人数：{props.singUpNumber}</span> :
-                <span>报名限制：{props.ifSignupLimit ? '有' : '不限'}</span>}
-              <span>报名截止：{getDeadDays(props.signupEndAt)}天</span>
-            </div>
+          <div className="signup-item-content">
+            {contestLinkProps.linkProps ? (
+              <Link {...contestLinkProps.linkProps}>
+                <a>
+                  {componentContent}
+                </a>
+              </Link>) : (
+              <a href={contestLinkProps.link} onClick={contestLinkProps.onClick}>
+                {componentContent}
+              </a>
+            )}
           </div>
-          <div className={singupBtnCls} onClick={this.onSignUp}/>
-          {/*<Img src={this.imgKV[this.state.SignupState]} alt="我要报名" onClick={this.onSignUp}/>*/}
+
+          {singUpLinkProps.linkProps ? (
+            <Link {...singUpLinkProps.linkProps}>
+              <a>
+                {componentSingup}
+              </a>
+            </Link>) : (
+            <a href={singUpLinkProps.link} onClick={singUpLinkProps.onClick}>
+              {componentSingup}
+            </a>
+          )}
+
+          {props.isWillBeginLately && (
+            <RichTextPopup ref={(node) => {this.RichTextPopup = node}} detail={props.detail}/>)}
         </div>
         <style jsx>{Style}</style>
       </Fragment>
