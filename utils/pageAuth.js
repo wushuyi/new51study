@@ -1,7 +1,7 @@
 import { postTokenUserInfo } from 'apis/auth'
 import { baseXhrError, needAuthError, baseChcek } from 'apis/utils/error'
 import isError from 'lodash/isError'
-import { getAuthData, setAuthData, clearAuthData, clearToken } from 'utils/auth'
+import { getAuthData, setAuthData, clearAuthData, clearToken, goAuth } from 'utils/auth'
 import { isBrowser } from 'utils/runEnv'
 import { defaultAuthPage } from 'config/settings'
 import Router from 'next/router'
@@ -19,7 +19,7 @@ export async function checkToken(token, need = false) {
   if (!token) {
     return {
       needSave: false,
-      authData: {}
+      authData: false
     }
   }
   let authData = getAuthData()
@@ -71,7 +71,7 @@ export class ComponentPageError extends React.PureComponent {
             text: '确认',
             onPress: () => new Promise((resolve) => {
               Toast.info('即将调转到登录页面!', 1, () => {
-                Router.replace(`${defaultAuthPage}?redirect_uri=${Router.pathname}`)
+                goAuth()
               })
               resolve()
             }),

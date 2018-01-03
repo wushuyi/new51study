@@ -18,6 +18,7 @@ export default KeaContext => {
     path: (key) => ['scenes', 'pages', 'contests', 'class'],
     actions: () => ({
       initPage: (classId, def, token) => ({token: token || getToken(), classId, def}),
+      syncAuthData: (authData) => ({authData}),
       setCurrId: (currId) => ({currId}),
       getFramework: (classId, def, token) => ({token: token || getToken(), classId, def}),
       syncFramework: (classId, data) => ({classId, data}),
@@ -36,6 +37,9 @@ export default KeaContext => {
     }),
 
     reducers: ({actions}) => ({
+      user: [false, PropTypes.any, {
+        [actions.syncAuthData]: (state, payload) => Immutable(payload.authData),
+      }],
       currId: [false, PropTypes.any, {
         [actions.setCurrId]: (state, payload) => parseInt(payload.currId),
       }],
@@ -145,14 +149,17 @@ export default KeaContext => {
         PropTypes.any
       ],
       signupBoxProps: [
-        () => [selectors.currFramework],
-        (framework) => {
-          let dataList = [pick(framework, [
+        () => [selectors.currFramework, selectors.user],
+        (framework, user) => {
+          let data = pick(framework, [
             'beginAt', 'endAt', 'ifSignupLimit',
             'signupEndAt', 'ifSignUp', 'evaluateId',
             'evaluateApplyId', 'ifNomination', 'singUpNumber',
             'label', 'ifWinner', 'detail'
-          ])]
+          ])
+          user && (data.userType = user.type)
+
+          let dataList = [data]
           return Immutable({
             dataList,
             maxItem: 100

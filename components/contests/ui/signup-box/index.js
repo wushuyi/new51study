@@ -97,6 +97,7 @@ export default class SignupBox extends React.PureComponent {
         signUpGroupType: true,
         signupEndAt: item.signupEndAt,
         singUpNumber: item.singUpNumber,
+        userType: item.userType,
         isClass: isClass
       }
       isOutDateFlag = isPast(item.endAt)

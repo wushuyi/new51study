@@ -40,7 +40,7 @@ class Page extends React.PureComponent {
         needClear: true,
       }
     }
-
+    authData && store.dispatch(actions.syncAuthData(authData))
     try {
       const def = deferred()
       store.dispatch(actions.initPage(query.groupId, def, token))
@@ -149,6 +149,7 @@ export default withRedux(Page, function (KeaContext, ctx) {
   const logic = connect({
     actions: [
       mainLogic, [
+        'syncAuthData',
         'initPage',
       ]
     ],

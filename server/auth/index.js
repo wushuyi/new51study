@@ -16,7 +16,8 @@ function loginOk(data, res, req, authUrl, defautlRedirect) {
         let href = addHrefToken(redirect_uri, data.token)
         res.redirect(href)
       } else {
-        res.redirect(redirect_uri)
+        let {path, asPath} = JSON.parse(redirect_uri)
+        res.redirect(asPath)
       }
     } else {
       res.redirect(defautlRedirect)

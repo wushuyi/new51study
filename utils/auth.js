@@ -4,6 +4,7 @@ import { tokenKey, } from 'config/settings'
 import startsWith from 'lodash/startsWith'
 import urlParse from 'url-parse'
 import { defaultAuthOkPage } from 'config/settings'
+import { defaultAuthPage } from '../config/settings'
 
 let ldb, Cookies
 if (isBrowser) {
@@ -76,11 +77,22 @@ export function runRedirect() {
       let href = addHrefToken(redirect_uri, token)
       window.location.href = href
     } else {
-      let href = redirect_uri
-      Router.replace(href, href, {shallow: true})
+      let {path, asPath} = JSON.parse(redirect_uri)
+      Router.replace(path, asPath, {shallow: true})
     }
   } else {
     let href = defaultAuthOkPage
     Router.replace(href, href, {shallow: true})
   }
+}
+
+export function goAuth() {
+  let data = {
+    asPath: Router.asPath,
+    path: {
+      pathname: Router.pathname,
+      query: Router.query
+    }
+  }
+  Router.push(`${defaultAuthPage}?redirect_uri=${JSON.stringify(data)}`)
 }

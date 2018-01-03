@@ -9,7 +9,11 @@ import format from 'date-fns/format'
 import { contestStatus } from 'utils/wyx_const'
 import RichTextPopup from 'components/contests/ui/rich-text-popup'
 import Toast from 'antd-mobile/lib/toast'
+import Modal from 'antd-mobile/lib/modal'
 import Link from 'next/link'
+import Router from 'next/router'
+import { defaultAuthPage } from 'config/settings'
+import { goAuth } from 'utils/auth'
 
 function getDeadDays(time) {
   const now = new Date()
@@ -123,7 +127,8 @@ export default class SignupItem extends React.PureComponent {
     isWillBeginLately: false,
     detail: false,
     isShowSingUpNumber: false,
-    isClass: false
+    isClass: false,
+    userType: false,
   }
 
   constructor(props) {
@@ -147,9 +152,7 @@ export default class SignupItem extends React.PureComponent {
         this.RichTextPopup.setState({showModal: true})
       }
     } else {
-      let link
-      let userData = false
-      if (userData && userData.type !== 'STUDY') {
+      if (props.userType && props.userType !== 'STUDY') {
         linkProps.onClick = (e) => {
           Toast.info('您不是学生不能报名', 2, null, false)
         }
@@ -168,6 +171,17 @@ export default class SignupItem extends React.PureComponent {
       } else if (props.ifSignupLimit && !props.ifNomination) {
         linkProps.onClick = (e) => {
           Toast.info('比赛晋级用户可报名', 2, null, false)
+        }
+      } else if (!props.userType) {
+        linkProps.onClick = (e) => {
+          Modal.alert('前往登录', '报名需要登录', [
+            {text: '稍后', onPress: () => {}},
+            {
+              text: '登录', onPress: () => {
+                goAuth()
+              }
+            },
+          ])
         }
       } else {
         if (contestStatus[props.ifSignUp] === 1) {
@@ -239,7 +253,7 @@ export default class SignupItem extends React.PureComponent {
 
     const componentSingup = (
       <Fragment>
-        <div className={singupBtnCls} href={singUpLinkProps.link} onClick={singUpLinkProps.onClick}/>
+        <div className={singupBtnCls}/>
         <style jsx>{Style}</style>
       </Fragment>
     )

@@ -23,6 +23,7 @@ export default (KeaContext) => {
     path: (key) => ['scenes', 'pages', 'contests', 'group'],
     actions: () => ({
       initPage: (groupId, def, token) => ({token: token, groupId, def}),
+      syncAuthData: (authData) => ({authData}),
       setCurrId: (currId) => ({currId}),
       getFramework: (groupId, def, token) => ({token: token, groupId, def}),
       syncFramework: (groupId, data) => ({groupId, data}),
@@ -44,6 +45,9 @@ export default (KeaContext) => {
     }),
 
     reducers: ({actions}) => ({
+      user: [false, PropTypes.any, {
+        [actions.syncAuthData]: (state, payload) => Immutable(payload.authData),
+      }],
       currId: [false, PropTypes.any, {
         [actions.setCurrId]: (state, payload) => parseInt(payload.currId),
       }],
@@ -182,18 +186,20 @@ export default (KeaContext) => {
         PropTypes.any
       ],
       signupBoxProps: [
-        () => [selectors.currFramework],
-        (framework) => {
+        () => [selectors.currFramework, selectors.user],
+        (framework, user) => {
           if (!get(framework, 'eaInfos.length')) {
             return false
           }
           let dataList = framework.eaInfos.map((o, index) => {
-            return pick(o, [
+            let data = pick(o, [
               'beginAt', 'endAt', 'ifSignupLimit',
               'signupEndAt', 'ifSignUp', 'evaluateId',
               'evaluateApplyId', 'ifNomination', 'singUpNumber',
               'label', 'ifWinner', 'detail'
             ])
+            user && (data.userType = user.type)
+            return data
           })
           return Immutable({
             dataList,
