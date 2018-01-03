@@ -1,0 +1,29 @@
+@import 'libs/hotcss/px2rem';
+
+.goback-or-openapp-warp {
+  display: flex;
+  width: 123*$hd;
+  height: 39*$hd;
+  background: url('/static/images/bg/bg_back_or_open.png') no-repeat center;
+  background-size: 123*$hd 39*$hd;
+  position: fixed;
+  bottom: 60*$hd;
+  left: 35%;
+  z-index: 99999;
+  transform: translate3d(0, 100*$hd, 0);
+  transition: transform 0.6s;
+  &.show {
+    transform: translate3d(0, 0, 0);
+  }
+  .goback {
+    margin-left: -10.0*$hd;
+    margin-top: -7.0*$hd;
+    width: 50.0*$hd;
+    height: 50.0*$hd;
+  }
+  .openapp {
+    width: 83*$hd;
+    height: 50.0*$hd;
+    margin-top: -7.0*$hd;
+  }
+}

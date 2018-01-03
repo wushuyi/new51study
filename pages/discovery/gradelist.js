@@ -6,6 +6,7 @@ import { deferred } from 'redux-saga/utils'
 import { getToken } from 'utils/auth'
 import Demo from 'components/discovery/gradelist'
 import { checkToken, authDidMount, ComponentPageError } from 'utils/pageAuth'
+import GoBackOrOpenApp from 'components/ui/goback-or-openapp'
 
 class Page extends React.PureComponent {
   static async getInitialProps(ctx) {
@@ -69,6 +70,7 @@ class Page extends React.PureComponent {
     return (
       <Layout>
         <Demo {...porps} />
+        <GoBackOrOpenApp/>
       </Layout>
     )
   }
