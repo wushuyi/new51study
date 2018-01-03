@@ -89,18 +89,20 @@ function singupIcon(signupState) {
 export default class SignupItem extends React.PureComponent {
   static propTypes = {
     beginAt: PropTypes.any,
+    detail: PropTypes.any,
     endAt: PropTypes.any,
+    evaluateId: PropTypes.any,
     ifNomination: PropTypes.any,
     ifSignUp: PropTypes.any,
     ifSignupLimit: PropTypes.any,
-    ifWinner: PropTypes.any,
-    index: PropTypes.any,
     isShowSingUpNumber: PropTypes.any,
     isWillBeginLately: PropTypes.any,
     label: PropTypes.any,
     signUpGroupType: PropTypes.any,
     signupEndAt: PropTypes.any,
-    singUpNumber: PropTypes.any
+    singUpNumber: PropTypes.any,
+    ifWinner: PropTypes.any,
+    index: PropTypes.any
   }
 
   static defaultProps = {
@@ -121,6 +123,7 @@ export default class SignupItem extends React.PureComponent {
     isWillBeginLately: false,
     detail: false,
     isShowSingUpNumber: false,
+    isClass: false
   }
 
   constructor(props) {
@@ -145,7 +148,7 @@ export default class SignupItem extends React.PureComponent {
       }
     } else {
       let link
-      let userData = {}
+      let userData = false
       if (userData && userData.type !== 'STUDY') {
         linkProps.onClick = (e) => {
           Toast.info('您不是学生不能报名', 2, null, false)
@@ -245,7 +248,7 @@ export default class SignupItem extends React.PureComponent {
       <Fragment>
         <div className="signup-item-warp">
           <div className="signup-item-content">
-            {contestLinkProps.linkProps ? (
+            {props.isClass ? componentContent : (contestLinkProps.linkProps ? (
               <Link {...contestLinkProps.linkProps}>
                 <a>
                   {componentContent}
@@ -254,7 +257,7 @@ export default class SignupItem extends React.PureComponent {
               <a href={contestLinkProps.link} onClick={contestLinkProps.onClick}>
                 {componentContent}
               </a>
-            )}
+            ))}
           </div>
 
           {singUpLinkProps.linkProps ? (

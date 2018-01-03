@@ -107,7 +107,7 @@ class Page extends React.PureComponent {
 
           {agencyItemProps && <AgencyItem {...agencyItemProps}/>}
 
-          {signupBoxProps && <SignupBox  {...signupBoxProps}/>}
+          {signupBoxProps && <SignupBox isClass={true} {...signupBoxProps}/>}
 
           {goContestHomeProps && <GoContestHome {...goContestHomeProps}/>}
 

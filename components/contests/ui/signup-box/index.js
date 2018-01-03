@@ -61,16 +61,18 @@ export default class SignupBox extends React.PureComponent {
 
   static propTypes = {
     dataList: PropTypes.any,
+    isClass: PropTypes.any,
     maxItem: PropTypes.any
   }
 
   static defaultProps = {
     dataList: tData || [],
-    maxItem: 100
+    maxItem: 100,
+    isClass: false
   }
 
   getSignupsData = () => {
-    const {dataList, maxItem} = this.props
+    const {dataList, maxItem, isClass} = this.props
     let len = Math.min(dataList.length, maxItem)
     let list = []
     let isWillBeginFlag = false
@@ -95,6 +97,7 @@ export default class SignupBox extends React.PureComponent {
         signUpGroupType: true,
         signupEndAt: item.signupEndAt,
         singUpNumber: item.singUpNumber,
+        isClass: isClass
       }
       isOutDateFlag = isPast(item.endAt)
 
