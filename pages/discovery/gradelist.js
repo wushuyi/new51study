@@ -82,7 +82,6 @@ export default withRedux(Page, function (KeaContext, ctx) {
   const logic = connect({
     actions: [
       mainLogic, [
-        'checkToken',
         'getList',
       ]
     ],

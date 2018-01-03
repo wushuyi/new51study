@@ -58,14 +58,14 @@ export function clearToken() {
   ldb && ldb.remove(tokenKey)
 }
 
-export function setRedirect(uri) {
-  Cookies && Cookies.set('redirect_uri', uri, {expires: 30})
-}
-
 export function addHrefToken(url, token) {
   let uri = urlParse(url)
   uri.query ? uri.query.token = token : uri.query = {token}
   return uri.toString()
+}
+
+export function setRedirect(uri) {
+  Cookies && Cookies.set('redirect_uri', uri, {expires: 30})
 }
 
 export function runRedirect() {
