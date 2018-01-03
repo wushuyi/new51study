@@ -5,8 +5,10 @@ import Head from 'next/head'
 import Router from 'next/router'
 import startsWith from 'lodash/startsWith'
 import { isBrowser } from 'utils/runEnv'
+// import { isDev } from 'config/settings'
 import { Auth } from 'utils'
-import processContent from '../../../utils/processHtmlContent'
+
+let isDev = false
 
 if (isBrowser) {
   window.Router = require('next/router').default
@@ -27,7 +29,13 @@ Router.onRouteChangeStart = (url) => {
   }
 }
 Router.onRouteChangeComplete = (...args) => {
+  if (!isDev) {
+    let pathname = window.location.pathname
+    _hmt.push(['_trackPageview', pathname])
+    _czc.push(['_trackPageview', pathname])
+  }
   RouterDone()
+
 }
 Router.onRouteChangeError = () => {
   RouterDone()
@@ -60,9 +68,10 @@ class Layout extends React.Component {
           <link rel='stylesheet' type='text/css' href='/static/styles/custom.css'/>
           <script src="/static/libs/fastclick/1.0.6/fastclick.js" type='text/javascript'/>
           <script src="/static/libs/nprogress/0.2.0/nprogress.js" type='text/javascript'/>
-
-          <script dangerouslySetInnerHTML={{
-            __html: `
+          {!isDev && (
+            <Fragment>
+              <script dangerouslySetInnerHTML={{
+                __html: `
             var _hmt = _hmt || [];
             _hmt.push(['_setAutoPageview', false]);
             (function () {
@@ -72,9 +81,9 @@ class Layout extends React.Component {
             s.parentNode.insertBefore(hm, s);
           })();
           `
-          }}/>
-          <script dangerouslySetInnerHTML={{
-            __html: `
+              }}/>
+              <script dangerouslySetInnerHTML={{
+                __html: `
              var _czc = _czc || [];
             _czc.push(['_setAutoPageview', false]);
             (function () {
@@ -84,11 +93,21 @@ class Layout extends React.Component {
             s.parentNode.insertBefore(hm, s);
           })();
           `
-          }}/>
+              }}/>
+              <script dangerouslySetInnerHTML={{
+                __html: `
+     _hmt.push(['_trackEvent', 'newApp', 'initApp']);
+     _czc.push(['_trackEvent', 'newApp', 'initApp']);
+    let pathname = window.location.pathname
+    _hmt.push(['_trackPageview', pathname])
+    _czc.push(['_trackPageview', pathname])
+          `
+              }}/>
+            </Fragment>
+          )}
           <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"/>
         </Head>
         {children}
-        {/*<script>hotcss.mresize();</script>*/}
         <script src="/static/scripts/outrun/default-layout.js" type='text/javascript'/>
       </Fragment>
     )
