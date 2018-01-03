@@ -59,7 +59,7 @@ export function setRedirect(uri) {
 
 export function addHrefToken(url, token) {
   let uri = urlParse(url)
-  uri.query.token = token
+  uri.query ? uri.query.token = token : uri.query = {token}
   return uri.toString()
 }
 
@@ -68,7 +68,8 @@ export function runRedirect() {
   if (redirect_uri) {
     Cookies.remove('redirect_uri')
     if (startsWith(redirect_uri, 'http')) {
-      let href = addHrefToken(redirect_uri, data.token)
+      let token = getToken()
+      let href = addHrefToken(redirect_uri, token)
       window.location.href = href
     } else {
       let href = redirect_uri

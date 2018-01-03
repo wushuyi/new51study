@@ -5,7 +5,7 @@ import { call, put } from 'redux-saga/effects'
 import isError from 'lodash/isError'
 import { codeLogin } from 'apis/auth'
 import { baseXhrError } from 'apis/utils/error'
-import { setToken } from 'utils/auth'
+import { setToken, setAuthData } from 'utils/auth'
 
 export default KeaContext => {
   const {kea} = KeaContext
@@ -44,6 +44,7 @@ export default KeaContext => {
         }
         const data = res.body.data
         isDev && console.log(data)
+        setAuthData(data)
         setToken(data.token)
         yield put(actions.btnUnlock())
         def.resolve(res)
