@@ -1,7 +1,7 @@
 import { postTokenUserInfo } from 'apis/auth'
-import { baseXhrError, needAuthError } from 'apis/utils/error'
+import { baseXhrError, needAuthError, baseChcek } from 'apis/utils/error'
 import isError from 'lodash/isError'
-import { getAuthData, setAuthData } from 'utils/auth'
+import { getAuthData, setAuthData, clearAuthData, clearToken } from 'utils/auth'
 import { isBrowser } from 'utils/runEnv'
 import { defaultAuthPage } from 'config/settings'
 import Router from 'next/router'
@@ -31,6 +31,7 @@ export async function checkToken(token, need = false) {
       }
     } else {
       let res = await postTokenUserInfo(token)
+      res = baseChcek(res)
       if (isError(res)) {
         await baseXhrError(res)
         return {
@@ -49,39 +50,56 @@ export async function checkToken(token, need = false) {
   }
 }
 
+//保存或者 清空过期用户信息
 export function authDidMount(props) {
-  const {err, auth} = props
+  const {auth} = props
   if (auth && auth.needSave) {
     setAuthData(auth.authData)
-  }
-  if (err && err.name === 'needAuthError') {
-    isBrowser && err && Modal.alert('需要登录', '您需要登录后才能继续操作!', [
-      {
-        text: '确认',
-        onPress: () => new Promise((resolve) => {
-          Toast.info('即将调转到登录页面!', 1, () => {
-            Router.replace(`${defaultAuthPage}?redirect_uri=${Router.pathname}`)
-          })
-          resolve()
-        }),
-      }
-    ])
-  } else {
-    isBrowser && err && Modal.alert(err.name, err.message, [
-      {
-        text: '确认',
-        onPress: () => new Promise((resolve) => {
-          Toast.info('即将调转到首页!', 1, () => {
-            Router.replace(`/discovery/gradelist`)
-          })
-          resolve()
-        }),
-      }
-    ])
+  } else if (auth && auth.needClear) {
+    clearAuthData()
+    clearToken()
   }
 }
 
 export class ComponentPageError extends React.PureComponent {
+  componentDidMount() {
+    const {err} = this.props
+    if (err && err.name === 'needAuthError') {
+      if (isBrowser && err) {
+        this.alert = Modal.alert('需要登录', '您需要登录后才能继续操作!', [
+          {
+            text: '确认',
+            onPress: () => new Promise((resolve) => {
+              Toast.info('即将调转到登录页面!', 1, () => {
+                Router.replace(`${defaultAuthPage}?redirect_uri=${Router.pathname}`)
+              })
+              resolve()
+            }),
+          }
+        ])
+      }
+    } else {
+      if (isBrowser && err) {
+        this.alert = Modal.alert(err.name, err.message, [
+          {
+            text: '确认',
+            onPress: () => new Promise((resolve) => {
+              Toast.info('即将调转到首页!', 1, () => {
+                Router.replace(`/discovery/gradelist`)
+              })
+              resolve()
+            }),
+          }
+        ])
+      }
+    }
+  }
+
+  componentWillUnmount() {
+    this.alert && this.alert.close()
+    this.alert = false
+  }
+
   render() {
     return (
       <Layout>

@@ -6,6 +6,7 @@ import Router from 'next/router'
 import startsWith from 'lodash/startsWith'
 import { isBrowser } from 'utils/runEnv'
 import { Auth } from 'utils'
+import processContent from '../../../utils/processHtmlContent'
 
 if (isBrowser) {
   window.Router = require('next/router').default
@@ -59,6 +60,32 @@ class Layout extends React.Component {
           <link rel='stylesheet' type='text/css' href='/static/styles/custom.css'/>
           <script src="/static/libs/fastclick/1.0.6/fastclick.js" type='text/javascript'/>
           <script src="/static/libs/nprogress/0.2.0/nprogress.js" type='text/javascript'/>
+
+          <script dangerouslySetInnerHTML={{
+            __html: `
+            var _hmt = _hmt || [];
+            _hmt.push(['_setAutoPageview', false]);
+            (function () {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?146a3be2b21d8e42b562c8ea95c8d304";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+          })();
+          `
+          }}/>
+          <script dangerouslySetInnerHTML={{
+            __html: `
+             var _czc = _czc || [];
+            _czc.push(['_setAutoPageview', false]);
+            (function () {
+            var hm = document.createElement('script');
+            hm.src = 'https://s95.cnzz.com/z_stat.php?id=1261853001&web_id=1261853001';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(hm, s);
+          })();
+          `
+          }}/>
+          <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"/>
         </Head>
         {children}
         {/*<script>hotcss.mresize();</script>*/}

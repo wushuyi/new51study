@@ -5,8 +5,8 @@ import createLogic from 'pagelogic/discovery/gradelist'
 import { deferred } from 'redux-saga/utils'
 import { getToken } from 'utils/auth'
 import Demo from 'components/discovery/gradelist'
-import { checkToken, authDidMount, ComponentPageError } from 'utils/pageAuth'
 import GoBackOrOpenApp from 'components/ui/goback-or-openapp'
+import { checkToken, authDidMount, ComponentPageError } from 'utils/pageAuth'
 
 class Page extends React.PureComponent {
   static async getInitialProps(ctx) {
@@ -47,12 +47,12 @@ class Page extends React.PureComponent {
     return initProps
   }
 
-  constructor(props) {
-    super()
-  }
-
   componentDidMount() {
     authDidMount(this.props)
+  }
+
+  constructor(props) {
+    super()
   }
 
   render() {
@@ -60,7 +60,7 @@ class Page extends React.PureComponent {
 
     if (err) {
       return (
-        <ComponentPageError/>
+        <ComponentPageError {...this.props}/>
       )
     }
     let porps = {

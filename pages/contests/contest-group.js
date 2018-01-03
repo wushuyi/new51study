@@ -15,6 +15,7 @@ import AgencyItem from 'components/contests/ui/agency-item'
 import CommodityBox from 'components/contests/ui/commodity-box'
 import ContestDetail from 'components/contests/ui/contest-detail'
 import SelfWorksBox from 'components/contests/ui/self-work-box'
+import GoBackOrOpenApp from 'components/ui/goback-or-openapp'
 import { isBrowser } from 'utils/runEnv'
 import { checkToken, authDidMount, ComponentPageError } from 'utils/pageAuth'
 
@@ -34,11 +35,9 @@ class Page extends React.PureComponent {
         authData
       }
     } else {
-      return {
-        err: {
-          name: err.name,
-          message: err.message
-        }
+      token = ''
+      initProps.auth = {
+        needClear: true,
       }
     }
 
@@ -74,7 +73,7 @@ class Page extends React.PureComponent {
     const {err, actions} = this.props
     if (err) {
       return (
-        <ComponentPageError/>
+        <ComponentPageError {...this.props}/>
       )
     }
 
@@ -138,6 +137,7 @@ class Page extends React.PureComponent {
 
           {detailProps && <ContestDetail {...detailProps}/>}
         </PagePullToRefresh>
+        <GoBackOrOpenApp/>
       </Layout>
     )
   }

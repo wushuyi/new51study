@@ -19,6 +19,10 @@ export function getAuthData() {
   return isBrowser && ldb && ldb.get('auth-data')
 }
 
+export function clearAuthData() {
+  return isBrowser && ldb && ldb.remove('auth-data')
+}
+
 export function getToken(req) {
   if (isServer && req && req.cookies[tokenKey]) {
     return req.cookies[tokenKey]

@@ -22,15 +22,15 @@ export default (KeaContext) => {
   const logic = kea({
     path: (key) => ['scenes', 'pages', 'contests', 'group'],
     actions: () => ({
-      initPage: (groupId, def, token) => ({token: token || getToken(), groupId, def}),
+      initPage: (groupId, def, token) => ({token: token, groupId, def}),
       setCurrId: (currId) => ({currId}),
-      getFramework: (groupId, def, token) => ({token: token || getToken(), groupId, def}),
+      getFramework: (groupId, def, token) => ({token: token, groupId, def}),
       syncFramework: (groupId, data) => ({groupId, data}),
 
-      getOne: (evaluateId, def, token) => ({token: token || getToken(), evaluateId, def}),
+      getOne: (evaluateId, def, token) => ({token: token, evaluateId, def}),
       syncOne: (groupId, data) => ({groupId, data}),
 
-      getTwo: (evaluateId, def, token) => ({token: token || getToken(), evaluateId, def}),
+      getTwo: (evaluateId, def, token) => ({token: token, evaluateId, def}),
       syncTwo: (groupId, data) => ({groupId, data}),
 
       getJurys: (groupId, page, size, def) => ({groupId, page, size, def}),
