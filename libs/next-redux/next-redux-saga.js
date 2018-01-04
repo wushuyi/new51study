@@ -14,14 +14,16 @@ function withReduxSaga(BaseComponent) {
           props = await BaseComponent.getInitialProps(ctx)
         }
 
-        const {getCache} = KeaContext
+        const {getCache, setCache} = KeaContext
         const mainSaga = getKeaSaga(getCache)
 
         mainSaga.endSaga()
         store.dispatch(END)
-        await store.sagaTask.done
+        let sagaTask = getCache('sagaTask', 'sagaTask')
+        await sagaTask.done
         if (!isServer) {
-          store.sagaTask = store._sagaMiddleware.run(mainSaga.keaSaga)
+          sagaTask = store._sagaMiddleware.run(mainSaga.keaSaga)
+          setCache('sagaTask', {sagaTask})
           let RunSagas = getCache('global', 'RunSagas')
           forEach(RunSagas, function (value, key) {
             if (value) {

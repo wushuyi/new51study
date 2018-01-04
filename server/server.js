@@ -13,7 +13,7 @@ const handle = app.getRequestHandler()
 
 const server = express()
 server.use(cookieParser())
-server.use(compression())
+dev && server.use(compression())
 server.use(favicon(path.join(__dirname, '../static/images', 'favicon.ico')))
 
 // server.listen(port, (err) => {

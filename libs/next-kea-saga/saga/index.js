@@ -26,7 +26,8 @@ export default {
       mainSaga = createSagas(cache)
       setCache('global', {mainSaga})
     }
-    store.sagaTask = options._sagaMiddleware.run(mainSaga.keaSaga)
+    const sagaTask = options._sagaMiddleware.run(mainSaga.keaSaga)
+    setCache('sagaTask', {sagaTask})
     store._sagaMiddleware = options._sagaMiddleware
   },
 
