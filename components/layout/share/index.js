@@ -4,13 +4,6 @@ import Style from './style.scss'
 import Head from 'next/head'
 import { common } from 'config/shareMsg'
 import includes from 'lodash/includes'
-import * as wxshare from 'utils/wxshare'
-import { getWXSignature } from 'apis/share/weixin'
-import isError from 'lodash/isError'
-import { baseXhrError } from 'apis/utils/error'
-import { isDev } from 'config/settings'
-
-let wxIsConfig = false
 
 export default class Share extends React.PureComponent {
 
@@ -27,13 +20,19 @@ export default class Share extends React.PureComponent {
   }
 
   async componentDidMount() {
-    const {title, description, imgUrl} = this.props
-    await wxShare({title, description, imgUrl})
+    await this.checkWx()
   }
 
   async componentDidUpdate() {
+    await this.checkWx()
+  }
+
+  checkWx = async () => {
     const {title, description, imgUrl} = this.props
-    await wxShare({title, description, imgUrl})
+    if (includes(window.navigator.userAgent, 'MicroMessenger')) {
+      const {wxShare} = await import('utils/wxshare')
+      await wxShare({title, description, imgUrl})
+    }
   }
 
   render() {
@@ -52,59 +51,5 @@ export default class Share extends React.PureComponent {
         <style jsx>{Style}</style>
       </Fragment>
     )
-  }
-}
-
-function wxConfig(config) {
-  if (!wx) {
-    console.error('setWx need wx.js')
-    return false
-  }
-  wx.config({
-    appId: config.appid,
-    timestamp: config.timestamp,
-    nonceStr: config.noncestr,
-    signature: config.signature,
-    jsApiList: ['onMenuShareAppMessage', 'onMenuShareTimeline', 'onMenuShareQQ', 'onMenuShareWeibo', 'onMenuShareQZone', 'chooseImage', 'getLocalImgData']
-  })
-}
-
-function wxSetShare(data) {
-  if (!wx) {
-    console.error('setWx need wx.js')
-    return false
-  }
-
-  console.log(data)
-  let shareTitle = data.title || common.title,
-    descContent = data.description || common.description,
-    lineLink = window.location.href,
-    imgUrl = data.imgUrl || common.imgUrl
-
-  wx.ready(() => {
-    wxshare.wxshareWeibo(shareTitle, descContent, lineLink, imgUrl)
-    wxshare.wxshareQZone(shareTitle, descContent, lineLink, imgUrl)
-    wxshare.wxshareQQ(shareTitle, descContent, lineLink, imgUrl)
-    wxshare.wxshareFriend(shareTitle, descContent, lineLink, imgUrl)
-    wxshare.wxshareTimeline(shareTitle, lineLink, imgUrl)
-  })
-}
-
-async function wxShare(shareSet) {
-  if (includes(navigator.userAgent, 'MicroMessenger')) {
-    isDev && console.log('MicroMessenger')
-    const loadJS = await import('load-js')
-    await loadJS('https://res.wx.qq.com/open/js/jweixin-1.2.0.js')
-    if (!wxIsConfig) {
-      const res = await getWXSignature(window.location.href)
-      if (isError(res)) {
-        await baseXhrError(res)
-        return false
-      }
-      const wXconfig = res.body.data
-      wxConfig(wXconfig)
-      wxIsConfig = true
-    }
-    wxSetShare(shareSet)
   }
 }

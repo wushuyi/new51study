@@ -1,4 +1,4 @@
-import { postTokenUserInfo } from 'apis/auth'
+import { postTokenUserInfo } from 'apis/auth/token'
 import { baseXhrError, needAuthError, baseChcek } from 'apis/utils/error'
 import isError from 'lodash/isError'
 import { getAuthData, setAuthData, clearAuthData, clearToken, goAuth } from 'utils/auth'

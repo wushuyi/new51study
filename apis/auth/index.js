@@ -2,7 +2,7 @@ import request from 'superagent'
 import xhrCrypto from 'utils/xhrCrypto'
 import qs from 'query-string'
 import { APIService, APIVersion, auth } from 'config/settings'
-import { baseChcek, argsError } from './utils/error'
+import { baseChcek, argsError } from 'apis/utils/error'
 
 /**
  * API: /users/${type}_code
@@ -162,29 +162,6 @@ export async function otherLogin(loginData) {
     return baseChcek(res)
   } catch (err) {
     return err
-  }
-}
-
-/**
- * API: /account/tokenUserInfo
- * @param loginData
- * @returns {Promise<*>}
- */
-export async function postTokenUserInfo(token) {
-  let res
-  const api = '/account/tokenUserInfo'
-  const requestURL = `${APIService}${api}`
-
-  try {
-    res = await request.post(requestURL)
-      .query(APIVersion)
-      .send({
-        token
-      })
-      .use(xhrCrypto)
-    return baseChcek(res)
-  } catch (err) {
-    throw err
   }
 }
 

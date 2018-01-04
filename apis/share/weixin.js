@@ -5,8 +5,7 @@ import xhrCrypto from 'utils/xhrCrypto'
 
 /**
  * API: http://api.5151study.com/weixin/signature?url=${url}
- * @param positionId ('BISAIH5_LIST'|'BISAIH5')
- * @param position
+ * @param url
  * @returns {Promise<*>}
  */
 export async function getWXSignature(url) {
