@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
-// import Link from 'next/link';
+import Link from 'next/link';
 import Head from 'next/head'
 import Router from 'next/router'
 import startsWith from 'lodash/startsWith'
@@ -23,7 +23,7 @@ function RouterDone() {
 }
 
 Router.onRouteChangeStart = (url) => {
-  if (!startsWith(url, Router.pathname)) {
+  if (!startsWith(url, Router.pathname) && !window.onRouter) {
     window.onRouter = true
     window.NProgress.start()
   }

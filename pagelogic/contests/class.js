@@ -105,6 +105,9 @@ export default KeaContext => {
       bannerCoverProps: [
         () => [selectors.currFramework],
         (framework) => {
+          if (!framework) {
+            return false
+          }
           const {bannerUrl: bgCover, area, lng, lat} = framework
           return Immutable({
             linkData: {
@@ -121,6 +124,9 @@ export default KeaContext => {
       introduceProps: [
         () => [selectors.currFramework],
         (framework) => {
+          if (!framework) {
+            return false
+          }
           const {description: intro} = framework
           const {title} = framework
           return Immutable({
@@ -152,6 +158,9 @@ export default KeaContext => {
       signupBoxProps: [
         () => [selectors.currFramework, selectors.user],
         (framework, user) => {
+          if (!framework) {
+            return false
+          }
           let data = pick(framework, [
             'beginAt', 'endAt', 'ifSignupLimit',
             'signupEndAt', 'ifSignUp', 'evaluateId',

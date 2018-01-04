@@ -123,6 +123,9 @@ export default (KeaContext) => {
       evaluateId: [
         () => [selectors.currFramework],
         (framework) => {
+          if (!framework) {
+            return false
+          }
           const evaluateId = get(framework, 'currentEvaluate.id')
           if (!evaluateId) {
             return false
@@ -224,6 +227,7 @@ export default (KeaContext) => {
           return Immutable({
             count,
             dataList,
+            titleName: '比赛评委'
           })
         },
         PropTypes.any

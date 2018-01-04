@@ -4,6 +4,8 @@ import Style from './style.scss'
 import classnames from 'classnames'
 import { consts } from 'config/settings'
 
+const ShowTime = 3500
+
 export default class GoBackOrOpenApp extends React.PureComponent {
   constructor() {
     super()
@@ -24,13 +26,13 @@ export default class GoBackOrOpenApp extends React.PureComponent {
     }
     let touchend = (e) => {
       // console.log('startY, endY', startY, endY)
-      if (ismove && ((startY - endY) > 60)) {
+      if (ismove && ((startY - endY) > 25 * (window.devicePixelRatio || 1))) {
         if (!this.state.show) {
           this.timer = setTimeout(() => {
             this.setState({
               show: false
             })
-          }, 3000)
+          }, ShowTime)
           this.setState({
             show: true
           })
@@ -40,7 +42,7 @@ export default class GoBackOrOpenApp extends React.PureComponent {
             this.setState({
               show: false
             })
-          }, 3000)
+          }, ShowTime)
         }
       }
       startY = endY = 0

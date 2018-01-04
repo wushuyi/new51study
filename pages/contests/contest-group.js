@@ -110,7 +110,7 @@ class Page extends React.PureComponent {
 
           {avatarBoxProps && (
             <a href={`/contests/teacher-list/${groupId}/true`}>
-              <AvatarBox {...avatarBoxProps}/>
+              <AvatarBox  {...avatarBoxProps}/>
             </a>
           )}
 
