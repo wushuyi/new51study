@@ -8,6 +8,7 @@ import * as wxshare from 'utils/wxshare'
 import { getWXSignature } from 'apis/share/weixin'
 import isError from 'lodash/isError'
 import { baseXhrError } from 'apis/utils/error'
+import { isDev } from 'config/settings'
 
 let wxIsConfig = false
 
@@ -26,13 +27,11 @@ export default class Share extends React.PureComponent {
   }
 
   async componentDidMount() {
-    console.log('componentDidMount', this.props)
     const {title, description, imgUrl} = this.props
     await wxShare({title, description, imgUrl})
   }
 
   async componentDidUpdate() {
-    console.log('componentDidUpdate', this.props)
     const {title, description, imgUrl} = this.props
     await wxShare({title, description, imgUrl})
   }
@@ -93,7 +92,7 @@ function wxSetShare(data) {
 
 async function wxShare(shareSet) {
   if (includes(navigator.userAgent, 'MicroMessenger')) {
-    console.log('MicroMessenger')
+    isDev && console.log('MicroMessenger')
     const loadJS = await import('load-js')
     await loadJS('https://res.wx.qq.com/open/js/jweixin-1.2.0.js')
     if (!wxIsConfig) {

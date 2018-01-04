@@ -324,8 +324,8 @@ export default (KeaContext) => {
           const {title, description, bannerUrl} = framework
           let data = contest(title, description)
           if (bannerUrl) {
-            const bgQuery = `?imageView2/2/w/414/h/356/100`
-            data.imgUrl = bannerUrl+bgQuery
+            const bgQuery = `?imageView2/2/w/256/h/256/100`
+            data.imgUrl = bannerUrl + bgQuery
           }
           return Immutable(data)
         },

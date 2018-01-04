@@ -11,6 +11,7 @@ import get from 'lodash/get'
 import pick from 'lodash/pick'
 import JudgesIcon from '/static/images/match/icon_default_match_internet_star008.png'
 import studentIcon from '/static/images/match/icon_default_match_internet_star003.png'
+import { contest } from 'config/shareMsg'
 
 export default KeaContext => {
   const {kea} = KeaContext
@@ -315,7 +316,23 @@ export default KeaContext => {
           return Immutable(data)
         },
         PropTypes.any
-      ]
+      ],
+      shareProps: [
+        () => [selectors.currFramework],
+        (framework) => {
+          if (!framework) {
+            return false
+          }
+          const {title, description, bannerUrl} = framework
+          let data = contest(title, description)
+          if (bannerUrl) {
+            const bgQuery = `?imageView2/2/w/256/h/256/100`
+            data.imgUrl = bannerUrl + bgQuery
+          }
+          return Immutable(data)
+        },
+        PropTypes.any
+      ],
     }),
 
     takeEvery: ({actions, workers}) => ({
