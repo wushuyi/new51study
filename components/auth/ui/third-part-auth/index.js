@@ -1,18 +1,38 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import Flex from 'antd-mobile/lib/flex'
-// import WingBlank from 'components/ui/wing-blank'
 import WhiteSpace from 'components/ui/white-space'
 import Style from './style.scss'
 import { getQQAuthLink, getSinaAuthLink, getWXAuthLink } from 'apis/auth'
 import { getLocationOrigin } from 'utils'
+import includes from 'lodash/includes'
+import classnames from 'classnames'
 
 const PlaceHolder = ({className = '', ...restProps}) => (
   <div className={`${className} placeholder`} {...restProps}>Block</div>
 )
 
 export default class ThirdPartAuth extends React.PureComponent {
+  constructor() {
+    super()
+    this.state = {
+      isWeiXin: false
+    }
+  }
+
+  componentDidMount() {
+    if (includes(window.navigator.userAgent, 'MicroMessenger')) {
+      this.setState({
+        isWeiXin: true
+      })
+    }
+  }
+
   render() {
+    const {isWeiXin} = this.state
+    const WxCls = classnames('thirdsign', 'weixin', {
+      'is-hidden': !isWeiXin
+    })
     return (
       <Fragment>
         <div className="split-title">
@@ -30,7 +50,7 @@ export default class ThirdPartAuth extends React.PureComponent {
                  let origin = getLocationOrigin()
                  window.location.href = getSinaAuthLink(origin)
                }}/>
-          <div className="thirdsign weixin"
+          <div className={WxCls}
                onClick={() => {
                  let origin = getLocationOrigin()
                  window.location.href = getWXAuthLink(origin)
