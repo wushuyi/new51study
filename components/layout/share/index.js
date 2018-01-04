@@ -42,7 +42,6 @@ export default class Share extends React.PureComponent {
         <Head>
           <title>{title}</title>
           <meta name="description" content={description}/>
-          {/*<script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"/>*/}
         </Head>
         <div className='share-img'>
           <img src={imgUrl} width='700'/>
