@@ -10,6 +10,7 @@ import { getToken } from '../../utils/auth'
 import { static as Immutable } from 'seamless-immutable'
 import get from 'lodash/get'
 import pick from 'lodash/pick'
+import { contest } from 'config/shareMsg'
 
 import { isBrowser } from 'utils/runEnv'
 
@@ -313,7 +314,23 @@ export default (KeaContext) => {
           return Immutable(data)
         },
         PropTypes.any
-      ]
+      ],
+      shareProps: [
+        () => [selectors.currFramework],
+        (framework) => {
+          if (!framework) {
+            return false
+          }
+          const {title, description, bannerUrl} = framework
+          let data = contest(title, description)
+          if (bannerUrl) {
+            const bgQuery = `?imageView2/2/w/414/h/356/100`
+            data.imgUrl = bannerUrl+bgQuery
+          }
+          return Immutable(data)
+        },
+        PropTypes.any
+      ],
     }),
 
     takeEvery: ({actions, workers}) => ({

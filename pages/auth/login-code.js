@@ -6,6 +6,7 @@ import createLogic from 'pagelogic/auth/login-code'
 import Router from 'next/router'
 import { isBrowser } from 'utils/runEnv'
 import { setRedirect } from 'utils/auth'
+import Share from 'components/layout/share'
 
 class Page extends React.PureComponent {
 
@@ -30,6 +31,7 @@ class Page extends React.PureComponent {
   render() {
     return (
       <Layout>
+        <Share/>
         <LoginCode/>
       </Layout>
     )

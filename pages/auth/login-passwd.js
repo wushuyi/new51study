@@ -6,6 +6,7 @@ import { withRedux } from 'store'
 import { setRedirect } from 'utils/auth'
 import Router from 'next/router'
 import { isBrowser } from 'utils/runEnv'
+import Share from 'components/layout/share'
 
 class Page extends React.Component {
 
@@ -30,6 +31,7 @@ class Page extends React.Component {
   render() {
     return (
       <Layout>
+        <Share/>
         <LoginPasswd/>
       </Layout>
     )

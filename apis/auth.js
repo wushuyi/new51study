@@ -182,10 +182,10 @@ export async function postTokenUserInfo(token) {
         token
       })
       .use(xhrCrypto)
+    return baseChcek(res)
   } catch (err) {
     throw err
   }
-  return res
 }
 
 export function getQQAuthLink(origin) {

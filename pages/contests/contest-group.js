@@ -59,7 +59,6 @@ class Page extends React.PureComponent {
   }
 
   componentDidMount() {
-    console.log(wx)
     authDidMount(this.props)
   }
 
@@ -92,13 +91,14 @@ class Page extends React.PureComponent {
       selfWorksBoxProps,
       newsBoxProps,
       detailProps,
+      shareProps,
     } = this.props
 
     isBrowser && console.log(this.props)
 
     return (
       <Layout>
-        <Share/>
+        <Share {...shareProps}/>
         <PagePullToRefresh onRefresh={this.onRefresh}>
           {bannerCoverProps && <BannerCover {...bannerCoverProps}/>}
 
@@ -170,6 +170,7 @@ export default withRedux(Page, function (KeaContext, ctx) {
         'newsBoxProps',
         'detailProps',
         'selfWorksBoxProps',
+        'shareProps',
       ]
     ]
   })

@@ -105,7 +105,6 @@ class Layout extends React.Component {
               }}/>
             </Fragment>
           )}
-          <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"/>
         </Head>
         {children}
         <script src="/static/scripts/outrun/default-layout.js" type='text/javascript'/>

@@ -1,11 +1,9 @@
 import React, { Fragment } from 'react'
 import Layout from 'components/layout/default'
-
 import { withRedux } from 'store'
 import createLogic from 'pagelogic/noop'
 import Router from 'next/router'
-import { isBrowser } from 'utils/runEnv'
-import { clearToken } from 'utils/auth'
+import { clearToken, clearAuthData } from 'utils/auth'
 import { defaultAuthPage } from 'config/settings'
 
 class Page extends React.PureComponent {
@@ -17,6 +15,7 @@ class Page extends React.PureComponent {
 
   componentDidMount() {
     clearToken()
+    clearAuthData()
     setTimeout(function () {
       let href = defaultAuthPage
       Router.replace(href, href, {shallow: true})

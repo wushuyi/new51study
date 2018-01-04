@@ -3,11 +3,13 @@ import Layout from 'components/layout/default'
 import LoginRegister from 'components/auth/register'
 import createLogic from 'pagelogic/auth/register'
 import { withRedux } from 'store'
+import Share from 'components/layout/share'
 
 class Page extends React.Component {
   render() {
     return (
       <Layout>
+        <Share/>
         <LoginRegister/>
       </Layout>
     )

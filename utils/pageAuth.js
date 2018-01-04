@@ -31,7 +31,6 @@ export async function checkToken(token, need = false) {
       }
     } else {
       let res = await postTokenUserInfo(token)
-      res = baseChcek(res)
       if (isError(res)) {
         await baseXhrError(res)
         return {

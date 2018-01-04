@@ -7,6 +7,7 @@ import { getToken } from 'utils/auth'
 import Demo from 'components/discovery/gradelist'
 import GoBackOrOpenApp from 'components/ui/goback-or-openapp'
 import { checkToken, authDidMount, ComponentPageError } from 'utils/pageAuth'
+import Share from 'components/layout/share'
 
 class Page extends React.PureComponent {
   static async getInitialProps(ctx) {
@@ -69,6 +70,7 @@ class Page extends React.PureComponent {
     }
     return (
       <Layout>
+        <Share/>
         <Demo {...porps} />
         <GoBackOrOpenApp/>
       </Layout>
