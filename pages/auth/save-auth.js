@@ -28,8 +28,8 @@ export default class SaveAuth extends React.PureComponent {
       runRedirect()
     } else {
       alert('登录失败请重试!')
-      // let href = defaultAuthPage
-      // Router.replace(href, href, {shallow: true})
+      let href = defaultAuthPage
+      Router.replace(href, href, {shallow: true})
     }
   }
 
