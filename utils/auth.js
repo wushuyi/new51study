@@ -64,9 +64,6 @@ export function addHrefToken(url, token) {
   return uri.toString()
 }
 
-export function setRedirect(uri) {
-  Cookies && Cookies.set('redirect_uri', uri, {expires: 30})
-}
 
 export function runRedirect() {
   let redirect_uri = Cookies && Cookies.get('redirect_uri')
@@ -86,6 +83,10 @@ export function runRedirect() {
   }
 }
 
+export function setRedirect(uri) {
+  Cookies && Cookies.set('redirect_uri', decodeURIComponent(uri), {expires: 30})
+}
+
 export function goAuth() {
   let data = {
     asPath: Router.asPath,
@@ -94,5 +95,5 @@ export function goAuth() {
       query: Router.query
     }
   }
-  Router.push(`${defaultAuthPage}?redirect_uri=${JSON.stringify(data)}`)
+  Router.push(`${defaultAuthPage}?redirect_uri=${encodeURIComponent(JSON.stringify(data))}`)
 }

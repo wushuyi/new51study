@@ -163,10 +163,12 @@ export default KeaContext => {
           }
           let data = pick(framework, [
             'beginAt', 'endAt', 'ifSignupLimit',
-            'signupEndAt', 'ifSignUp', 'evaluateId',
+            'signupEndAt', 'ifSignUp', 'id',
             'evaluateApplyId', 'ifNomination', 'singUpNumber',
             'label', 'ifWinner', 'detail'
           ])
+          data.evaluateId = data.id
+          delete data.id
           user && (data.userType = user.type)
 
           let dataList = [data]

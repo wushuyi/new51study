@@ -1,5 +1,6 @@
 import urlParse from 'url-parse'
 import qs from 'query-string'
+import url from 'url'
 
  function addHrefToken(url, token) {
   let uri = urlParse(url)
