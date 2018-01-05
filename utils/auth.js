@@ -69,11 +69,11 @@ export function addHrefToken(url, token) {
 export function runRedirect() {
   let redirect_uri = Cookies && Cookies.get('redirect_uri')
   if (redirect_uri) {
-    // Cookies.remove('redirect_uri')
+    Cookies.remove('redirect_uri')
     if (startsWith(redirect_uri, 'http')) {
       let token = getToken()
       let href = addHrefToken(redirect_uri, token)
-      window.location.href = href
+      window.location.replace(href)
     } else {
       let {path, asPath} = JSON.parse(redirect_uri)
       Router.replace(path, asPath, {shallow: true})
