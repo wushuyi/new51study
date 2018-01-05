@@ -3,6 +3,7 @@ import { checkIsWx, loginWX } from './weixin'
 import { checkIsQQ, loginQQ } from './qq'
 import { checkIsSina, loginSina } from './sina'
 import startsWith from 'lodash/startsWith'
+import includes from 'lodash/includes'
 import { tokenKey, defaultAuthOkPage, defaultAuthPage } from 'config/settings'
 
 function loginOk(data, res, req, authUrl, defautlRedirect) {
@@ -11,13 +12,18 @@ function loginOk(data, res, req, authUrl, defautlRedirect) {
 
     const redirect_uri = req.cookies && req.cookies.redirect_uri
     if (redirect_uri) {
-      res.clearCookie('redirect_uri')
-      if (startsWith(redirect_uri, 'http')) {
-        let href = addHrefToken(redirect_uri, data.token)
+      if (includes(redirect_uri, '//h5.5151study.com/')) {
+        let href = addHrefToken('/auth/save-auth', data.token)
         res.redirect(href)
       } else {
-        let {path, asPath} = JSON.parse(redirect_uri)
-        res.redirect(asPath)
+        res.clearCookie('redirect_uri')
+        if (startsWith(redirect_uri, 'http')) {
+          let href = addHrefToken(redirect_uri, data.token)
+          res.redirect(href)
+        } else {
+          let {path, asPath} = JSON.parse(redirect_uri)
+          res.redirect(asPath)
+        }
       }
     } else {
       res.redirect(defautlRedirect)

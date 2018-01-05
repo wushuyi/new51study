@@ -3,6 +3,7 @@ import { isBrowser, isServer } from 'utils/runEnv'
 import { tokenKey, } from 'config/settings'
 import startsWith from 'lodash/startsWith'
 import urlParse from 'url-parse'
+import qs from 'query-string'
 import { defaultAuthOkPage } from 'config/settings'
 import { defaultAuthPage } from '../config/settings'
 
@@ -60,15 +61,15 @@ export function clearToken() {
 
 export function addHrefToken(url, token) {
   let uri = urlParse(url)
-  uri.query ? uri.query.token = token : uri.query = {token}
+  uri.query = qs.parse(uri.query)
+  uri.query.token = token
   return uri.toString()
 }
-
 
 export function runRedirect() {
   let redirect_uri = Cookies && Cookies.get('redirect_uri')
   if (redirect_uri) {
-    Cookies.remove('redirect_uri')
+    // Cookies.remove('redirect_uri')
     if (startsWith(redirect_uri, 'http')) {
       let token = getToken()
       let href = addHrefToken(redirect_uri, token)
