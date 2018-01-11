@@ -18,8 +18,9 @@ function guessUrlSize(str) {
   } || false
 }
 
-const bgMaxH = 356
-const bgQuery = `?imageView2/2/w/414/h/${bgMaxH}/100`
+const bgMaxH = 356 * 3
+const bgMaxW = 414 * 3
+const bgQuery = `?imageView2/2/w/${bgMaxW}/h/${bgMaxH}/100`
 
 export default class BannerCover extends React.PureComponent {
   static propTypes = {

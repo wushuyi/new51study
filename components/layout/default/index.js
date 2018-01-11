@@ -1,14 +1,12 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
-import Link from 'next/link';
+import Link from 'next/link'
 import Head from 'next/head'
 import Router from 'next/router'
 import startsWith from 'lodash/startsWith'
 import { isBrowser } from 'utils/runEnv'
-// import { isDev } from 'config/settings'
+import { isDev } from 'config/settings'
 import { Auth } from 'utils'
-
-let isDev = false
 
 if (isBrowser) {
   window.Router = require('next/router').default
@@ -63,9 +61,12 @@ class Layout extends React.Component {
         <Head>
           <title>{title}</title>
           <meta charSet='utf-8'/>
-          <link rel='stylesheet' type='text/css' href='/static/styles/antd-mobile.css'/>
+          <meta name="hotcss" content="max-width=0, design-width=414"/>
+          <script src="/static/hotcss/hotcss414.js"/>
+          <link rel='stylesheet' type='text/css' href={`/static/styles/antd-mobile${!isDev && '.min' || ''}.css`}/>
           <link rel='stylesheet' type='text/css' href='/static/styles/nprogress.css'/>
           <link rel='stylesheet' type='text/css' href='/static/styles/custom.css'/>
+          {/*<link rel='stylesheet' type='text/css' href='https://gw.alipayobjects.com/os/site-cdn/bedb2cb6-ec56-4977-b1aa-d4b6b01dc7a0/site-cdn/2.1.3/kitchen-sink.css'/>*/}
           <script src="/static/libs/fastclick/1.0.6/fastclick.js" type='text/javascript'/>
           <script src="/static/libs/nprogress/0.2.0/nprogress.js" type='text/javascript'/>
           {!isDev && (

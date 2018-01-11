@@ -16,10 +16,6 @@ export default class MyDocument extends Document {
 
         {/*<!--忽略自动识别邮箱账号：-->*/}
         <meta content="email=no" name="format-detection"/>
-
-        <meta name='viewport' content='width=device-width'/>
-        <meta name="hotcss" content="max-width=0, design-width=414"/>
-        <script src="/static/hotcss/hotcss414.js"/>
       </Head>
       <body>
       <Main/>
