@@ -63,7 +63,7 @@ export default class InputRadio extends React.PureComponent {
   constructor (props, context) {
     super(props, context)
     this.state = {
-      prveIndex: -2,
+      prveIndex: null,
       index: null,
       touched: false,
     }
@@ -135,7 +135,7 @@ export default class InputRadio extends React.PureComponent {
             labelNumber={7}
             clear
             placeholder={placeholder || `请选择${labelName || field.name}`}
-            value={(this.state.prveIndex > -1 &&
+            value={(typeof this.state.prveIndex === 'number'  &&
               `第${this.state.prveIndex + 1}项`) || ''}
             {...restProps}
             {...errProps}

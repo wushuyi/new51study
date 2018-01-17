@@ -5,6 +5,10 @@
   color: #bbb;
 }
 
+@mixin input {
+  direction: rtl;
+}
+
 .am-list-item .am-input-control input::placeholder {
   @include input-placeholder
 }
@@ -13,3 +17,10 @@
   @include input-placeholder
 }
 
+.am-list-item .am-input-control input {
+  @include input
+}
+
+.am-list-item .am-textarea-control textarea {
+  @include input
+}
