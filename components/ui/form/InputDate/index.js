@@ -65,7 +65,7 @@ export default class InputDate extends React.PureComponent {
           }}
           WrapComponent={WrapFragment}
         >
-          <List.Item labelNumber={7}>{labelName}</List.Item>
+          <List.Item >{labelName}</List.Item>
         </DatePicker>
         {/*language=CSS*/}
         {/*<style jsx>{Style}</style>*/}

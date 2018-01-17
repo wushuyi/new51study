@@ -1,19 +1,15 @@
 @import 'libs/hotcss/px2rem';
 @import "components/ui/form/style";
 
-.item-cls {
+.item-cls{
 
 }
 
 .popup-content {
   max-height: 60vh;
   overflow: scroll;
-  & :global(.am-list-item.am-checkbox-item  .am-list-thumb .am-checkbox) {
+  & :global(.am-list-item.am-checkbox-item  .am-list-thumb .am-checkbox){
     height: 100%;
-  }
-
-  & :global(.am-checkbox-inner) {
-    border-radius: 0;
   }
 }
 

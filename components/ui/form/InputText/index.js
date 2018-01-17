@@ -4,7 +4,6 @@ import InputItem from 'antd-mobile/lib/input-item'
 import Style from 'components/ui/form/style.scss'
 import classnames from 'classnames'
 import Modal from 'antd-mobile/lib/modal'
-import a from 'lodash/seq'
 
 const alert = Modal.alert
 

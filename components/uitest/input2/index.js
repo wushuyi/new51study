@@ -8,6 +8,7 @@ import InputText from 'components/ui/form/InputText'
 import InputTextarea from 'components/ui/form/InputTextarea'
 import InputDate from 'components/ui/form/InputDate'
 import InputCheckbox from 'components/ui/form/InputCheckbox'
+import InputRadio from 'components/ui/form/InputRadio'
 import dateParse from 'date-fns/parse'
 import { sleep } from 'utils'
 
@@ -78,6 +79,18 @@ export default class Input2 extends React.PureComponent {
                         maxDate={dateParse('2017-12-30 00:00')}
                         mode="date"
                         forma="YYYY-MM-DD HH:mm"
+                      />
+                    )
+                  }}
+                />
+                <Field
+                  name="radio1"
+                  render={({field, form}) => {
+                    return (
+                      <InputRadio
+                        field={field}
+                        form={form}
+                        labelName="单选1"
                       />
                     )
                   }}

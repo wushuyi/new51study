@@ -8,9 +8,6 @@ import Popup from 'rmc-cascader/lib/Popup'
 import WrapFragment from 'components/ui/form/utils/WrapComponent'
 import InputItemComponent from 'components/ui/form/utils/InputItemComponent'
 import Modal from 'antd-mobile/lib/modal'
-import clone from 'lodash/clone'
-import filter from 'lodash/filter'
-
 const alert = Modal.alert
 
 const CheckboxItem = Checkbox.CheckboxItem
@@ -66,29 +63,10 @@ export default class InputRadio extends React.PureComponent {
   constructor (props, context) {
     super(props, context)
     this.state = {
-      prveIndex: [],
-      index: [],
+      prveIndex: -2,
+      index: null,
       touched: false,
     }
-  }
-
-  getValueText = () => {
-    const {prveIndex} = this.state
-    let res = prveIndex.map((boolean, index) => {
-      return boolean && `第${index + 1}项`
-    })
-    res = filter(res, (o) => {return o})
-    res = res.length ? res.join(', ') : ''
-    return res
-  }
-
-  getValue = () => {
-    const {index} = this.state
-    let res = index.map((boolean, index) => {
-      return (boolean && index)
-    })
-    res = filter(res, (o) => {return typeof o === 'number'})
-    return res
   }
 
   render () {
@@ -115,13 +93,10 @@ export default class InputRadio extends React.PureComponent {
           {sourceData.map((item, index) => {
             return (
               <CheckboxItem key={index}
-                            checked={this.state.index[index]}
+                            checked={index === this.state.index}
                             onChange={() => {
-                              let {index: stateIndex} = this.state
-                              stateIndex = clone(stateIndex)
-                              stateIndex[index] = !stateIndex[index]
                               this.setState({
-                                index: stateIndex,
+                                index: index,
                               })
                             }}>
                 <p className={`popup-item-text ${jsxName}`}>{item.label}</p>
@@ -143,14 +118,14 @@ export default class InputRadio extends React.PureComponent {
           onOk={() => {
             const {index} = this.state
             this.setState({
-              prveIndex: clone(index),
+              prveIndex: index,
             })
-            form.setFieldValue(field.name, this.getValue())
+            form.setFieldValue(field.name, index)
           }}
           onDismiss={() => {
             const {prveIndex} = this.state
             this.setState({
-              index: clone(prveIndex),
+              index: prveIndex,
             })
           }}
           content={popupContent}
@@ -160,7 +135,8 @@ export default class InputRadio extends React.PureComponent {
             labelNumber={7}
             clear
             placeholder={placeholder || `请选择${labelName || field.name}`}
-            value={this.getValueText()}
+            value={(this.state.prveIndex > -1 &&
+              `第${this.state.prveIndex + 1}项`) || ''}
             {...restProps}
             {...errProps}
           >{labelName || field.name}</InputItemComponent>
