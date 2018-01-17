@@ -1,0 +1,15 @@
+@import 'libs/hotcss/px2rem';
+
+@mixin input-placeholder {
+  direction: rtl;
+  color: #bbb;
+}
+
+.am-list-item .am-input-control input::placeholder {
+  @include input-placeholder
+}
+
+.am-list-item .am-textarea-control textarea::placeholder {
+  @include input-placeholder
+}
+

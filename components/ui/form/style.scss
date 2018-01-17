@@ -1,0 +1,22 @@
+@import 'libs/hotcss/px2rem';
+
+.am-input-item {
+  &.is-require:before {
+    content: '*';
+    color: red;
+    width: 8*$hd;
+    margin-left: -8*$hd;
+    font-size: 12*$hd;
+  }
+}
+
+.am-input-item.style-full-line {
+  padding-left: 0;
+  &.is-require:before {
+    margin-right: (-15)*$hd;
+    margin-left: (15-8)*$hd;
+  }
+  & :global(.am-list-line) {
+    padding-left: 15*$hd;
+  }
+}

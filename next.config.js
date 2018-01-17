@@ -4,11 +4,7 @@ const {BundleAnalyzerPlugin} = require('webpack-bundle-analyzer')
 const {ANALYZE} = process.env
 
 module.exports = {
-  transpileModules: [
-    /rmc-cascader/
-  ],
   webpack: function (config, {dev}) {
-
     config.module.rules.push(
       {
         test: /\.(css|s[a|c]ss)/,
@@ -41,7 +37,6 @@ module.exports = {
             },
           },
           'styled-jsx-css-loader',
-          'postcss-loader',
           {
             loader: 'sass-loader',
             options: {

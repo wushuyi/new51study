@@ -9,3 +9,4 @@ nginx.conf
 dist
 config/settings.js
 config/privateSettings.js
+pages/uitest/*

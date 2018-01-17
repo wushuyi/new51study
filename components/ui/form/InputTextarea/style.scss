@@ -1,0 +1,31 @@
+@import 'libs/hotcss/px2rem';
+
+
+.am-textarea-item {
+  border-bottom: none !important;
+  padding-right: 0 !important;
+  &.is-require {
+    padding-left: 15*$hd;
+    :global(.am-list-line) {
+      overflow: visible;
+    }
+    :global(.am-textarea-label) {
+      padding-left: 15*$hd;
+      margin-left: -15*$hd;
+      &:before {
+        content: '*';
+        color: red;
+        width: 8*$hd;
+        margin-left: -8*$hd;
+        margin-right: 1*$hd;
+        font-size: 12*$hd;
+      }
+    }
+  }
+  &.style-full-line {
+    padding-left: 0;
+    & :global(.am-list-line) {
+      padding-left: 15*$hd;
+    }
+  }
+}

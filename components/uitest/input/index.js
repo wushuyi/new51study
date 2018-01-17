@@ -13,7 +13,7 @@ import Radio from 'antd-mobile/lib/radio'
 
 const CheckboxItem = Checkbox.CheckboxItem
 const AgreeItem = Checkbox.AgreeItem
-const RadioItem = Radio.RadioItem;
+const RadioItem = Radio.RadioItem
 
 const popupProps = {
   WrapComponent: 'div',
@@ -24,8 +24,9 @@ const popupProps = {
 
 const prefixCls = 'am-picker-popup'
 
-function closest(el, selector) {
-  const matchesSelector = el.matches || el.webkitMatchesSelector || el.mozMatchesSelector || el.msMatchesSelector
+function closest (el, selector) {
+  const matchesSelector = el.matches || el.webkitMatchesSelector ||
+    el.mozMatchesSelector || el.msMatchesSelector
   while (el) {
     if (matchesSelector.call(el, selector)) {
       return el
@@ -44,6 +45,11 @@ const data = [
   {value: 6, label: 'College 6'},
   {value: 7, label: 'College 7'},
 ]
+
+const data2 = [
+  {value: 0, label: '一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十', extra: 'details'},
+  {value: 2, label: `惠学大礼包：领取惠学礼包
+  （包含价值388元的VIPKID北美外教一对一3课套装等）, 放弃领取`, extra: 'details'},]
 
 const seasons = [
   [
@@ -66,19 +72,19 @@ const seasons = [
       value: '夏',
     },
   ],
-];
+]
 
-const data2 = [
-  { value: 0, label: 'basketball', extra: 'details' },
-  { value: 1, label: 'football', extra: 'details' },
-];
+function chunkString (str, length) {
+  return str.match(new RegExp('.{1,' + length + '}', 'g'))
+}
 
 export default class Test extends React.PureComponent {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       modal1: false,
       modal2: false,
+      value2: false,
     }
   }
 
@@ -99,6 +105,12 @@ export default class Test extends React.PureComponent {
     console.log(val)
   }
 
+  onChange2 = (val) => {
+    this.setState({
+      value2: val,
+    })
+  }
+
   onWrapTouchStart = (e) => {
     // fix touch to scroll background page on iOS
     if (!/iPhone|iPod|iPad/i.test(navigator.userAgent)) {
@@ -110,7 +122,7 @@ export default class Test extends React.PureComponent {
     }
   }
 
-  render() {
+  render () {
     const props = {
       okText: 'Ok',
       dismissText: 'Dismiss',
@@ -119,24 +131,25 @@ export default class Test extends React.PureComponent {
       onDismiss: () => { },
     }
 
-    const popupContent = (
-      <div style={{maxHeight: '50vh', overflowY:"scroll"}}>
-        <List>
-          {data2.map(i => (
-            <RadioItem key={i.value}>
-              {i.label}<List.Item.Brief>{i.extra}</List.Item.Brief>
-            </RadioItem>
-          ))}
-        </List>
+    const {value2} = this.state
 
-        <List >
-          {data.map(i => (
-            <CheckboxItem key={i.value} onChange={() => this.onChange(i.value)}>
-              {i.label}
-              <br/>
-              {i.label}
-            </CheckboxItem>
-          ))}
+    const popupContent = (
+      <div style={{maxHeight: '60vh', overflowY: 'scroll'}}>
+        <List style={{minHeight: '40vh'}}>
+          {data2.map(i => {
+            const label = chunkString(i.label, 20)
+            console.log(label)
+            return (
+              <CheckboxItem key={i.value}
+                            checked={value2 === i.value}
+                            onChange={() => this.onChange2(i.value)}>
+                {/*{label.map((item, index) => (*/}
+                  {/*<p key={index}>{item}</p>*/}
+                {/*))}*/}
+                <p style={{whiteSpace: 'pre-wrap'}}>{i.label}</p>
+              </CheckboxItem>
+            )
+          })}
         </List>
       </div>
     )
@@ -148,6 +161,8 @@ export default class Test extends React.PureComponent {
           transitionName="am-slide-up"
           maskTransitionName="am-fade"
           title="请选择"
+          dismissText="取消"
+          okText="确认"
           content={popupContent}
         >
           <Button> run popup</Button>
@@ -182,7 +197,11 @@ export default class Test extends React.PureComponent {
           </div>
         </Modal>*/}
         {/*language=CSS*/}
-        {/*<style jsx>{Style}</style>*/}
+        <style global jsx>{`
+          .multiple .am-checkbox-inner {
+            border-radius: 0;
+          }
+        `}</style>
       </Fragment>
     )
   }

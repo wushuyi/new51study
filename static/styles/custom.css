@@ -77,11 +77,12 @@ hr {
   border: none;
   border-top: solid #dfdfdf 0.03865rem; }
 
+
 html {
   -webkit-box-sizing: border-box;
           box-sizing: border-box; }
 
-ul, menu, dir {
+ul, menu, dir, p {
   padding: 0;
   margin: 0; }
 
