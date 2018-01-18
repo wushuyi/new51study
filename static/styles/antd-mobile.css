@@ -1539,8 +1539,8 @@ a {
 }
 .am-button-primary {
   color: #fff;
-  background-color: #108ee9;
-  border: 0.03864734rem solid #108ee9;
+  background-color: #FF6121;
+  border: 0.03864734rem solid #FF6121;
   border-radius: 0.19323671rem;
 }
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 2dppx) {
@@ -1555,7 +1555,7 @@ a {
     top: 0;
     width: 200%;
     height: 200%;
-    border: 0.03864734rem solid #108ee9;
+    border: 0.03864734rem solid #FF6121;
     border-radius: 0.38647343rem;
     -webkit-transform-origin: 0 0;
         -ms-transform-origin: 0 0;
@@ -1570,7 +1570,7 @@ a {
 }
 .am-button-primary.am-button-active {
   color: rgba(255, 255, 255, 0.3);
-  background-color: #0e80d2;
+  background-color: #ff5b05;
 }
 .am-button-primary.am-button-disabled {
   color: rgba(255, 255, 255, 0.6);
@@ -2316,6 +2316,7 @@ a {
   color: #fff;
   font-size: 0.69565217rem;
   background: #108ee9;
+  background: #FF6121;
 }
 .am-calendar .confirm-panel .button-disable {
   color: #bbb;

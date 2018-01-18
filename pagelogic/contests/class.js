@@ -394,6 +394,26 @@ export default KeaContext => {
         },
         PropTypes.any,
       ],
+      operateItemProps: [
+        () => [selectors.currFramework, selectors.user],
+        (framework, user) => {
+          if (!framework) {
+            return false
+          }
+          let data = pick(framework, [
+            'beginAt', 'endAt', 'ifSignupLimit',
+            'signupEndAt', 'ifSignUp', 'id',
+            'evaluateApplyId', 'ifNomination', 'singUpNumber',
+            'label', 'ifWinner', 'ifUploadWork',
+          ])
+          data.evaluateId = data.id
+          delete data.id
+          user && (data.userType = user.type)
+          data.iconShow = false
+          return Immutable(data)
+        },
+        PropTypes.any,
+      ],
       bisaiAdProps: [
         () => [selectors.currAds],
         (ads) => {

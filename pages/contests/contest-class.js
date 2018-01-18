@@ -18,6 +18,7 @@ import CommodityBox from 'components/contests/ui/commodity-box'
 import ContestDetail from 'components/contests/ui/contest-detail'
 import AdBanner from 'components/contests/ui/ad-banner'
 import AdList from 'components/contests/ui/ad-list'
+import OperateItem from 'components/contests/ui/operate-item'
 
 import GoContestHome from 'components/contests/ui/go-contest-home'
 import GoBackOrOpenApp from 'components/ui/goback-or-openapp'
@@ -101,6 +102,7 @@ class Page extends React.PureComponent {
       shareProps,
       bisaiAdListProps,
       bisaiAdProps,
+      operateItemProps,
     } = this.props
 
     isBrowser && console.log(this.props)
@@ -161,6 +163,8 @@ class Page extends React.PureComponent {
 
           {detailProps && <ContestDetail {...detailProps}/>}
         </PagePullToRefresh>
+        {operateItemProps &&  <OperateItem {...operateItemProps}/>}
+
         <GoBackOrOpenApp/>
       </Layout>
     )
@@ -196,6 +200,7 @@ export default withRedux(Page, function (KeaContext, ctx) {
         'shareProps',
         'bisaiAdListProps',
         'bisaiAdProps',
+        'operateItemProps',
       ]
     ]
   })

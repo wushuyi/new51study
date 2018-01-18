@@ -16,7 +16,7 @@
   color: #323232;
   position: relative;
   &.is-active {
-    color: #FF4F00;
+    color: #FF6121;
     &:after {
       position: absolute;
       bottom: -4*$hd;
@@ -27,7 +27,7 @@
       width: 4*$hd;
       height: 4*$hd;
       border-radius: 4*$hd;
-      background: #FF4F00;
+      background: #FF6121;
     }
   }
 }
