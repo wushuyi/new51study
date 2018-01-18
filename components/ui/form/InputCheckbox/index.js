@@ -58,7 +58,7 @@ const testData = [
   },
 ]
 
-export default class InputRadio extends React.PureComponent {
+export default class InputCheckbox extends React.PureComponent {
   static defaultProps = {
     sourceData: testData,
   }

@@ -12,12 +12,15 @@ import InputRadio from 'components/ui/form/InputRadio'
 import dateParse from 'date-fns/parse'
 import { sleep } from 'utils'
 
+import Test from 'dist/exportForm.dist'
+
 export default class Input2 extends React.PureComponent {
   handleClick = () => {
     this.customFocusInst.focus()
   }
 
   render () {
+    // console.log(Test)
     return (
       <Fragment>
 
@@ -99,7 +102,7 @@ export default class Input2 extends React.PureComponent {
                   name="checkbox1"
                   render={({field, form}) => {
                     return (
-                      <InputCheckbox
+                      <Test.InputCheckbox
                         field={field}
                         form={form}
                         labelName="多选1"
@@ -132,7 +135,7 @@ export default class Input2 extends React.PureComponent {
           )}
         />
         {/*language=CSS*/}
-        <style global jsx>{Style}</style>
+        {/*<style global jsx>{Style}</style>*/}
       </Fragment>
     )
   }

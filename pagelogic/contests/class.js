@@ -18,89 +18,137 @@ export default KeaContext => {
   const logic = kea({
     path: (key) => ['scenes', 'pages', 'contests', 'class'],
     actions: () => ({
-      initPage: (classId, def, token) => ({token: token || getToken(), classId, def}),
+      initPage: (classId, def, token) => ({
+        token: token || getToken(),
+        classId,
+        def,
+      }),
       syncAuthData: (authData) => ({authData}),
       setCurrId: (currId) => ({currId}),
-      getFramework: (classId, def, token) => ({token: token || getToken(), classId, def}),
+      getFramework: (classId, def, token) => ({
+        token: token || getToken(),
+        classId,
+        def,
+      }),
       syncFramework: (classId, data) => ({classId, data}),
 
-      getOne: (evaluateId, def, token) => ({token: token || getToken(), evaluateId, def}),
+      getOne: (evaluateId, def, token) => ({
+        token: token || getToken(),
+        evaluateId,
+        def,
+      }),
       syncOne: (classId, data) => ({classId, data}),
 
-      getTwo: (evaluateId, def, token) => ({token: token || getToken(), evaluateId, def}),
+      getTwo: (evaluateId, def, token) => ({
+        token: token || getToken(),
+        evaluateId,
+        def,
+      }),
       syncTwo: (classId, data) => ({classId, data}),
 
-      getWorks: (evaluateId, page, size, def) => ({evaluateId, page, size, def}),
+      getWorks: (evaluateId, page, size, def) => ({
+        evaluateId,
+        page,
+        size,
+        def,
+      }),
       syncWorks: (classId, data) => ({classId, data}),
 
       getNews: (classId, page, size, def) => ({classId, page, size, def}),
       syncNews: (classId, data) => ({classId, data}),
+
+      getAd: (classId, position, def) => ({classId, position, def}),
+      syncAd: (classId, data, type) => ({classId, data, type}),
+      postAd: (adId, def, token) => ({adId, token: token || getToken(), def}),
     }),
 
     reducers: ({actions}) => ({
-      user: [false, PropTypes.any, {
-        [actions.syncAuthData]: (state, payload) => Immutable(payload.authData),
-      }],
-      currId: [false, PropTypes.any, {
-        [actions.setCurrId]: (state, payload) => parseInt(payload.currId),
-      }],
-      framework: [Immutable({}), PropTypes.any, {
-        [actions.syncFramework]: (state, payload) => {
-          return Immutable.set(state, payload.classId, payload.data)
-        },
-      }],
-      one: [Immutable({}), PropTypes.any, {
-        [actions.syncOne]: (state, payload) => {
-          return Immutable.set(state, payload.classId, payload.data)
-        },
-      }],
-      two: [Immutable({}), PropTypes.any, {
-        [actions.syncTwo]: (state, payload) => {
-          return Immutable.set(state, payload.classId, payload.data)
-        },
-      }],
-      works: [Immutable({}), PropTypes.any, {
-        [actions.syncWorks]: (state, payload) => {
-          return Immutable.set(state, payload.classId, payload.data)
-        },
-      }],
-      news: [Immutable({}), PropTypes.any, {
-        [actions.syncNews]: (state, payload) => {
-          return Immutable.set(state, payload.classId, payload.data)
-        },
-      }],
+      user: [
+        false, PropTypes.any, {
+          [actions.syncAuthData]: (state, payload) => Immutable(
+            payload.authData),
+        }],
+      currId: [
+        false, PropTypes.any, {
+          [actions.setCurrId]: (state, payload) => parseInt(payload.currId),
+        }],
+      framework: [
+        Immutable({}), PropTypes.any, {
+          [actions.syncFramework]: (state, payload) => {
+            return Immutable.set(state, payload.classId, payload.data)
+          },
+        }],
+      one: [
+        Immutable({}), PropTypes.any, {
+          [actions.syncOne]: (state, payload) => {
+            return Immutable.set(state, payload.classId, payload.data)
+          },
+        }],
+      two: [
+        Immutable({}), PropTypes.any, {
+          [actions.syncTwo]: (state, payload) => {
+            return Immutable.set(state, payload.classId, payload.data)
+          },
+        }],
+      works: [
+        Immutable({}), PropTypes.any, {
+          [actions.syncWorks]: (state, payload) => {
+            return Immutable.set(state, payload.classId, payload.data)
+          },
+        }],
+      news: [
+        Immutable({}), PropTypes.any, {
+          [actions.syncNews]: (state, payload) => {
+            return Immutable.set(state, payload.classId, payload.data)
+          },
+        }],
+      ads: [
+        Immutable({}), PropTypes.any, {
+          [actions.syncAd]: (state, payload) => {
+            const {data, classId, type} = payload
+            if (!state[classId]) {
+              state = Immutable.set(state, payload.classId, {})
+            }
+            return Immutable.setIn(state, [classId, type], data)
+          },
+        }],
     }),
 
     selectors: ({selectors}) => ({
       classId: [
         () => [selectors.currId],
         (currId) => currId,
-        PropTypes.any
+        PropTypes.any,
       ],
       currFramework: [
         () => [selectors.currId, selectors.framework],
         (currId, frameworks) => frameworks[currId],
-        PropTypes.any
+        PropTypes.any,
       ],
       currOne: [
         () => [selectors.currId, selectors.one],
         (currId, one) => one[currId],
-        PropTypes.any
+        PropTypes.any,
       ],
       currTwo: [
         () => [selectors.currId, selectors.two],
         (currId, two) => two[currId],
-        PropTypes.any
+        PropTypes.any,
       ],
       currWork: [
         () => [selectors.currId, selectors.works],
         (currId, works) => works[currId],
-        PropTypes.any
+        PropTypes.any,
       ],
       currNews: [
         () => [selectors.currId, selectors.news],
         (currId, news) => news[currId],
-        PropTypes.any
+        PropTypes.any,
+      ],
+      currAds: [
+        () => [selectors.currId, selectors.ads],
+        (currId, ads) => ads[currId],
+        PropTypes.any,
       ],
       bannerCoverProps: [
         () => [selectors.currFramework],
@@ -119,7 +167,7 @@ export default KeaContext => {
             area,
           })
         },
-        PropTypes.any
+        PropTypes.any,
       ],
       introduceProps: [
         () => [selectors.currFramework],
@@ -131,10 +179,10 @@ export default KeaContext => {
           const {title} = framework
           return Immutable({
             intro,
-            title
+            title,
           })
         },
-        PropTypes.any
+        PropTypes.any,
       ],
       agencyItemProps: [
         () => [selectors.currId, selectors.currFramework],
@@ -153,7 +201,7 @@ export default KeaContext => {
             chatPeopleName: '总群',
           })
         },
-        PropTypes.any
+        PropTypes.any,
       ],
       signupBoxProps: [
         () => [selectors.currFramework, selectors.user],
@@ -165,7 +213,7 @@ export default KeaContext => {
             'beginAt', 'endAt', 'ifSignupLimit',
             'signupEndAt', 'ifSignUp', 'id',
             'evaluateApplyId', 'ifNomination', 'singUpNumber',
-            'label', 'ifWinner', 'detail'
+            'label', 'ifWinner', 'detail',
           ])
           data.evaluateId = data.id
           delete data.id
@@ -174,10 +222,10 @@ export default KeaContext => {
           let dataList = [data]
           return Immutable({
             dataList,
-            maxItem: 100
+            maxItem: 100,
           })
         },
-        PropTypes.any
+        PropTypes.any,
       ],
       goContestHomeProps: [
         () => [selectors.currFramework],
@@ -187,10 +235,10 @@ export default KeaContext => {
           }
           const {groupId} = framework
           return Immutable({
-            groupId
+            groupId,
           })
         },
-        PropTypes.any
+        PropTypes.any,
       ],
       teachersProps: [
         () => [selectors.currOne],
@@ -209,10 +257,10 @@ export default KeaContext => {
             count,
             dataList,
             avater: JudgesIcon,
-            titleName: '比赛评委'
+            titleName: '比赛评委',
           })
         },
-        PropTypes.any
+        PropTypes.any,
       ],
       recommendsProps: [
         () => [selectors.currTwo],
@@ -232,10 +280,10 @@ export default KeaContext => {
             dataList,
             avater: JudgesIcon,
             titleName: '联合推荐',
-            measureType: '个'
+            measureType: '个',
           })
         },
-        PropTypes.any
+        PropTypes.any,
       ],
       commodityBoxProps: [
         () => [selectors.currTwo],
@@ -252,7 +300,7 @@ export default KeaContext => {
             dataList,
           })
         },
-        PropTypes.any
+        PropTypes.any,
       ],
       signUpAvatarBoxProps: [
         () => [selectors.currTwo],
@@ -270,10 +318,10 @@ export default KeaContext => {
             count,
             dataList,
             avater: studentIcon,
-            titleName: '已报名'
+            titleName: '已报名',
           })
         },
-        PropTypes.any
+        PropTypes.any,
       ],
       worksBoxProps: [
         () => [selectors.currWork],
@@ -283,7 +331,8 @@ export default KeaContext => {
           }
           const {totalElements: count, content} = work
           let dataList = content.map((o, index) => {
-            let data = pick(o, ['id', 'medias[0]', 'user', 'commentCount', 'likeCount'])
+            let data = pick(o,
+              ['id', 'medias[0]', 'user', 'commentCount', 'likeCount'])
             data.user = pick(data.user, ['gender', 'number', 'name'])
             data.medias[0] = pick(data.medias[0], ['type', 'url'])
             return data
@@ -293,7 +342,7 @@ export default KeaContext => {
             dataList,
           })
         },
-        PropTypes.any
+        PropTypes.any,
       ],
       newsBoxProps: [
         () => [selectors.currNews],
@@ -303,7 +352,8 @@ export default KeaContext => {
           }
           const {totalElements: count, content} = news
           let dataList = content.map((o, index) => {
-            return pick(o, ['id', 'title', 'content', 'pic', 'createdAt', 'type',
+            return pick(o, [
+              'id', 'title', 'content', 'pic', 'createdAt', 'type',
               'isGroup', 'isGroupTop', 'isTop'])
           })
           return Immutable({
@@ -312,7 +362,7 @@ export default KeaContext => {
             dataList,
           })
         },
-        PropTypes.any
+        PropTypes.any,
       ],
       detailProps: [
         () => [selectors.currFramework],
@@ -322,11 +372,11 @@ export default KeaContext => {
             return false
           }
           let data = {
-            detail: framework.detail
+            detail: framework.detail,
           }
           return Immutable(data)
         },
-        PropTypes.any
+        PropTypes.any,
       ],
       shareProps: [
         () => [selectors.currFramework],
@@ -342,7 +392,33 @@ export default KeaContext => {
           }
           return Immutable(data)
         },
-        PropTypes.any
+        PropTypes.any,
+      ],
+      bisaiAdProps: [
+        () => [selectors.currAds],
+        (ads) => {
+          const data = get(ads, 'BISAIH5')
+          if (!data) {
+            return false
+          }
+          return Immutable({
+            sourceData: data,
+          })
+        },
+        PropTypes.any,
+      ],
+      bisaiAdListProps: [
+        () => [selectors.currAds],
+        (ads) => {
+          const data = get(ads, 'BISAIH5_LIST')
+          if (!data) {
+            return false
+          }
+          return Immutable({
+            sourceData: data,
+          })
+        },
+        PropTypes.any,
       ],
     }),
 
@@ -353,6 +429,8 @@ export default KeaContext => {
       [actions.getTwo]: workers.getTwo,
       [actions.getWorks]: workers.getWorks,
       [actions.getNews]: workers.getNews,
+      [actions.getAd]: workers.getAd,
+      [actions.postAd]: workers.postAd,
     }),
 
     workers: {
@@ -364,8 +442,8 @@ export default KeaContext => {
         const frameworkData = yield * workers.getFramework({
           payload: {
             token,
-            evaluateId: classId
-          }
+            evaluateId: classId,
+          },
         })
         if (isError(frameworkData)) {
           def && def.reject(frameworkData)
@@ -375,8 +453,8 @@ export default KeaContext => {
         const oneData = yield * workers.getOne({
           payload: {
             token,
-            evaluateId: classId
-          }
+            evaluateId: classId,
+          },
         })
         if (isError(oneData)) {
           def && def.reject(oneData)
@@ -386,8 +464,8 @@ export default KeaContext => {
         const twoData = yield * workers.getTwo({
           payload: {
             token,
-            evaluateId: classId
-          }
+            evaluateId: classId,
+          },
         })
         if (isError(twoData)) {
           def && def.reject(twoData)
@@ -397,8 +475,8 @@ export default KeaContext => {
         const worksData = yield * workers.getWorks({
           payload: {
             token,
-            evaluateId: classId
-          }
+            evaluateId: classId,
+          },
         })
         if (isError(worksData)) {
           def && def.reject(worksData)
@@ -408,10 +486,32 @@ export default KeaContext => {
         const newsData = yield * workers.getNews({
           payload: {
             evaluateId: classId,
-          }
+          },
         })
         if (isError(newsData)) {
           def && def.reject(newsData)
+          return false
+        }
+
+        const adsData1 = yield * workers.getAd({
+          payload: {
+            classId: classId,
+            position: 'BISAIH5',
+          },
+        })
+        if (isError(adsData1)) {
+          def && def.reject(adsData1)
+          return false
+        }
+
+        const adsData2 = yield * workers.getAd({
+          payload: {
+            classId: classId,
+            position: 'BISAIH5_LIST',
+          },
+        })
+        if (isError(adsData2)) {
+          def && def.reject(adsData2)
           return false
         }
 
@@ -480,7 +580,8 @@ export default KeaContext => {
       getWorks: function * (action) {
         const {actions} = this
         const {evaluateId, page, size, def} = action.payload
-        let res = yield call(classApi.getWorks, evaluateId, page || 0, size || 4)
+        let res = yield call(classApi.getWorks, evaluateId, page || 0, size ||
+          4)
         if (isError(res)) {
           yield call(baseXhrError, res)
           def && def.reject(res)
@@ -510,8 +611,8 @@ export default KeaContext => {
       },
       getAd: function * (action) {
         const {actions} = this
-        const {evaluateId: position, positionId, def} = action.payload
-        let res = yield call(classApi.getAd, positionId || 'BISAIH5_LIST', position)
+        const {classId, position, def} = action.payload
+        let res = yield call(classApi.getAd, classId, position)
         if (isError(res)) {
           yield call(baseXhrError, res)
           def && def.reject(res)
@@ -519,7 +620,7 @@ export default KeaContext => {
         }
 
         const data = res.body.data
-        yield put(actions.syncAd(evaluateId, data))
+        yield put(actions.syncAd(classId, data, position))
         def && def.resolve(res)
         return data
       },
@@ -527,17 +628,17 @@ export default KeaContext => {
         const {actions} = this
         const {adId, token, def} = action.payload
         let res = yield call(classApi.postAd, adId, token)
-        if (isError(res)) {
-          yield call(baseXhrError, res)
-          def && def.reject(res)
-          return res
-        }
-
-        const data = res.body.data
-        def && def.resolve(res)
-        return data
+        // if (isError(res)) {
+        //   yield call(baseXhrError, res)
+        //   def && def.reject(res)
+        //   return res
+        // }
+        //
+        // const data = res.body.data
+        // def && def.resolve(res)
+        // return data
       },
-    }
+    },
   })
   return logic
 }

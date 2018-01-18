@@ -16,6 +16,8 @@ import WorksBox from 'components/contests/ui/works-box'
 import AgencyItem from 'components/contests/ui/agency-item'
 import CommodityBox from 'components/contests/ui/commodity-box'
 import ContestDetail from 'components/contests/ui/contest-detail'
+import AdBanner from 'components/contests/ui/ad-banner'
+import AdList from 'components/contests/ui/ad-list'
 
 import GoContestHome from 'components/contests/ui/go-contest-home'
 import GoBackOrOpenApp from 'components/ui/goback-or-openapp'
@@ -97,6 +99,8 @@ class Page extends React.PureComponent {
       newsBoxProps,
       detailProps,
       shareProps,
+      bisaiAdListProps,
+      bisaiAdProps,
     } = this.props
 
     isBrowser && console.log(this.props)
@@ -113,7 +117,11 @@ class Page extends React.PureComponent {
 
           {signupBoxProps && <SignupBox isClass={true} {...signupBoxProps}/>}
 
+          {bisaiAdListProps && <AdList onAd={(AdId) => {actions.postAd(AdId)}} {...bisaiAdListProps}/>}
+
           {goContestHomeProps && <GoContestHome {...goContestHomeProps}/>}
+
+          {bisaiAdProps && <AdBanner onAd={(AdId) => {actions.postAd(AdId)}} {...bisaiAdProps}/>}
 
           {teachersProps && (
             <a href={`/contests/teacher-list/${classId}/false`}>
@@ -167,6 +175,7 @@ export default withRedux(Page, function (KeaContext, ctx) {
       mainLogic, [
         'syncAuthData',
         'initPage',
+        'postAd',
       ]
     ],
     props: [
@@ -185,6 +194,8 @@ export default withRedux(Page, function (KeaContext, ctx) {
         'newsBoxProps',
         'detailProps',
         'shareProps',
+        'bisaiAdListProps',
+        'bisaiAdProps',
       ]
     ]
   })

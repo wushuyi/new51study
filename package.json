@@ -26,6 +26,7 @@
     "react-hammerjs": "^1.0.1",
     "react-redux": "^5.0.6",
     "react-scroll": "^1.7.5",
+    "react-slick": "^0.16.0",
     "react-transition-group": "^1.2.0",
     "redux": "^3.7.2",
     "redux-saga": "^0.16.0",
@@ -44,6 +45,9 @@
     "babel-plugin-transform-assets-import-to-string": "^1.0.1",
     "babel-plugin-transform-decorators-legacy": "^1.3.4",
     "babel-plugin-wrap-in-js": "^1.1.1",
+    "babel-preset-es2017": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
     "babel-register": "^6.26.0",
     "body-parser": "^1.18.2",
     "compression": "^1.7.1",
@@ -66,7 +70,8 @@
     "sass-loader": "^6.0.6",
     "serve-favicon": "^2.4.5",
     "styled-jsx-css-loader": "^0.3.0",
-    "webpack-bundle-analyzer": "^2.9.2"
+    "webpack-bundle-analyzer": "^2.9.2",
+    "webpack-node-externals": "^1.6.0"
   },
   "main": "index.js",
   "scripts": {
@@ -77,6 +82,7 @@
     "analyze": "cross-env ANALYZE=1 NODE_ENV=production next build",
     "start": " NODE_ENV=production node dist/server.js",
     "style": "cross-env BUILD_STYLE=1 webpack --config ./style.config.js",
+    "exportlib": "cross-env webpack --config ./export.config.js",
     "tar": "tar -cjvf build.tar.bz2 .next/ dist/ static/ config/ ecosystem.config.js package.json package-lock.json"
   },
   "keywords": [],

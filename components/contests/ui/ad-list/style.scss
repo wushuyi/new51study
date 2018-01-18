@@ -1,0 +1,10 @@
+@import 'libs/hotcss/px2rem';
+
+.ad-list-warp, .ad-list-item {
+  width: 414*$hd;
+}
+
+img {
+  display: block;
+  width: 100%;
+}

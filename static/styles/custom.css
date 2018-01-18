@@ -120,10 +120,10 @@ body {
   top: 0; }
 
 .is-hidden {
-  display: none; }
+  display: none !important; }
 
 .is-show {
-  display: block; }
+  display: block !important; }
 
 body {
   -webkit-user-select: none;

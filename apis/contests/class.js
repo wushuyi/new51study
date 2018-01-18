@@ -135,11 +135,11 @@ export async function getEvaluatesTwoShare(evaluateId) {
 
 /**
  * API: /advert/position
- * @param positionId ('BISAIH5_LIST'|'BISAIH5')
- * @param position
+ * @param positionId
+ * @param position ('BISAIH5_LIST'|'BISAIH5')
  * @returns {Promise<*>}
  */
-export async function getAd(positionId, position) {
+export async function getAd(positionId, position = 'BISAIH5_LIST') {
   const api = `/advert/position`
   const requestURL = `${APIService}${api}`
   try {
@@ -166,7 +166,7 @@ export async function postAd(adId, token) {
   const api = `/Ad/${adId}/save`
   const requestURL = `${APIService}${api}`
   try {
-    const res = await request.get(requestURL)
+    const res = await request.post(requestURL)
       .query(APIVersion)
       .query({
         token,

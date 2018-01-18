@@ -1,0 +1,35 @@
+@import 'libs/hotcss/px2rem';
+
+$dotsSize: 6*$hd;
+
+.ad-warp {
+  width: 414*$hd;
+  height: 64 * $hd + $dotsSize;
+  overflow: hidden;
+  margin-bottom: -$dotsSize;
+  :global(.slick-dots) {
+    bottom: -$dotsSize;
+    :global(li) {
+      width: $dotsSize;
+      height: $dotsSize;
+      margin: 0 $dotsSize*0.8;
+      :global(button) {
+        width: $dotsSize;
+        height: $dotsSize;
+      }
+      :global(button:before) {
+        width: $dotsSize;
+        height: $dotsSize;
+        font-size: $dotsSize;
+        line-height: $dotsSize;
+      }
+    }
+  }
+}
+
+.ad-img {
+  width: 414*$hd;
+  height: 64 * $hd;
+  background: no-repeat center;
+  background-size: cover;
+}

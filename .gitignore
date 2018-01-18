@@ -10,3 +10,5 @@ dist
 config/settings.js
 config/privateSettings.js
 pages/uitest/*
+.exportrc
+build.tar.bz2

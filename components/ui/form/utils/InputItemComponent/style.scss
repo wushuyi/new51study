@@ -1,9 +1,34 @@
 @import 'libs/hotcss/px2rem';
 
-.input-item-component {
-  & :global(.am-input-control input:disabled){
+@mixin input-placeholder {
+  direction: rtl;
+  color: #bbb;
+}
+
+@mixin input {
+  direction: rtl;
+}
+
+.am-input-item {
+  :global(.am-input-control input:disabled) {
     color: #000;
     background-color: transparent;
     opacity: 1;
+  }
+
+  :global(.am-input-control input::placeholder) {
+    @include input-placeholder
+  }
+
+  :global(.am-textarea-control textarea::placeholder) {
+    @include input-placeholder
+  }
+
+  :global(.am-input-control input) {
+    @include input
+  }
+
+  :global(.am-textarea-control textarea) {
+    @include input
   }
 }
