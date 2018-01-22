@@ -29,39 +29,39 @@ const scoped = resolveScopedStyles((
   </scope>
 ))
 
-const testData = [
-  {
-    value: 0,
-    label: '如果你看到此项必然是数据出问题了!',
-  },
-  {
-    value: 1,
-    label: `惠学大礼包：领取惠学礼包
-  （包含价值388元的VIPKID北美外教一对一3课套装等）, 放弃领取`,
-  },
-  {
-    value: 2,
-    label: '一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十',
-  },
-  {
-    value: 3,
-    label: `惠学大礼包：领取惠学礼包
-  （包含价值388元的VIPKID北美外教一对一3课套装等）, 放弃领取`,
-  },
-  {
-    value: 4,
-    label: '一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十',
-  },
-  {
-    value: 5,
-    label: `惠学大礼包：领取惠学礼包
-  （包含价值388元的VIPKID北美外教一对一3课套装等）, 放弃领取`,
-  },
-]
+/*const testData = [
+  // {
+  //   value: 0,
+  //   label: '如果你看到此项必然是数据出问题了!',
+  // },
+  // {
+  //   value: 1,
+  //   label: `惠学大礼包：领取惠学礼包
+  // （包含价值388元的VIPKID北美外教一对一3课套装等）, 放弃领取`,
+  // },
+  // {
+  //   value: 2,
+  //   label: '一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十',
+  // },
+  // {
+  //   value: 3,
+  //   label: `惠学大礼包：领取惠学礼包
+  // （包含价值388元的VIPKID北美外教一对一3课套装等）, 放弃领取`,
+  // },
+  // {
+  //   value: 4,
+  //   label: '一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十',
+  // },
+  // {
+  //   value: 5,
+  //   label: `惠学大礼包：领取惠学礼包
+  // （包含价值388元的VIPKID北美外教一对一3课套装等）, 放弃领取`,
+  // },
+]*/
 
 export default class InputCheckbox extends React.PureComponent {
   static defaultProps = {
-    sourceData: testData,
+    sourceData: false,
     defaultValue: false,
   }
 

@@ -93,6 +93,7 @@ export default class Input2 extends React.PureComponent {
                       <InputRadio
                         field={field}
                         form={form}
+                        defaultValue={1}
                         labelName="单选1"
                       />
                     )
@@ -102,9 +103,10 @@ export default class Input2 extends React.PureComponent {
                   name="checkbox1"
                   render={({field, form}) => {
                     return (
-                      <Test.InputCheckbox
+                      <InputCheckbox
                         field={field}
                         form={form}
+                        defaultValue={[0,3]}
                         labelName="多选1"
                       />
                     )
