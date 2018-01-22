@@ -2,16 +2,31 @@
 
 @mixin input-placeholder {
   direction: rtl;
-  color: #bbb;
+  color: #aaa;
+  -webkit-text-fill-color: #aaa;
+  //font-size: 15.45*$hd;
 }
 
 @mixin input {
   direction: rtl;
+  color: #363636 !important;
+  -webkit-text-fill-color: #363636;
+  font-size: 15.45*$hd;
+}
+
+.am-list-item.am-input-item {
+  padding-left: 0;
 }
 
 .am-input-item {
+  :global(.am-list-line){
+    padding-right: 10*$hd;
+  }
+  :global(.am-input-label) {
+    color: #43484B;
+    font-size: 15.45*$hd;
+  }
   :global(.am-input-control input:disabled) {
-    color: #000;
     background-color: transparent;
     opacity: 1;
   }

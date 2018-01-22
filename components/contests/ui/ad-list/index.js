@@ -18,24 +18,24 @@ function getItems (sourceData) {
 export default class AdList extends React.PureComponent {
   static defaultProps = {
     sourceData: [
-      {
-        'id': 1005,
-        'createdAt': 1516244911000,
-        'modifiedAt': 1516245080000,
-        'position': 'BISAIH5',
-        'positionId': 164,
-        'squen': 1,
-        'mediaUrl': 'http://7xpx8n.com1.z0.glb.clouddn.com/pic_album_ad_21_201801181107431273_wh1125x171.jpg',
-        'title': '「袁莎艺术私享汇」直播',
-        'target': 'WEBVIEW',
-        'targetType': null,
-        'targetKide': null,
-        'targetId': null,
-        'targetUrl': 'http://html.renrenjiang.cn/pc/videopageor/videopageor.html?activityId=593270',
-        'circle': null,
-        'state': 'LIVE',
-        'showType': null,
-      },
+      // {
+      //   'id': 1005,
+      //   'createdAt': 1516244911000,
+      //   'modifiedAt': 1516245080000,
+      //   'position': 'BISAIH5',
+      //   'positionId': 164,
+      //   'squen': 1,
+      //   'mediaUrl': 'http://7xpx8n.com1.z0.glb.clouddn.com/pic_album_ad_21_201801181107431273_wh1125x171.jpg',
+      //   'title': '「袁莎艺术私享汇」直播',
+      //   'target': 'WEBVIEW',
+      //   'targetType': null,
+      //   'targetKide': null,
+      //   'targetId': null,
+      //   'targetUrl': 'http://html.renrenjiang.cn/pc/videopageor/videopageor.html?activityId=593270',
+      //   'circle': null,
+      //   'state': 'LIVE',
+      //   'showType': null,
+      // },
     ],
 
     onAd: (adId) => {

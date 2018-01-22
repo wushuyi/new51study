@@ -8,6 +8,7 @@ import Popup from 'rmc-cascader/lib/Popup'
 import WrapFragment from 'components/ui/form/utils/WrapComponent'
 import InputItemComponent from 'components/ui/form/utils/InputItemComponent'
 import Modal from 'antd-mobile/lib/modal'
+
 const alert = Modal.alert
 
 const CheckboxItem = Checkbox.CheckboxItem
@@ -58,14 +59,35 @@ const testData = [
 export default class InputRadio extends React.PureComponent {
   static defaultProps = {
     sourceData: testData,
+    defaultValue: false,
+  }
+
+  static value2index = function (value) {
+    return parseInt(value)
   }
 
   constructor (props, context) {
     super(props, context)
+    const {defaultValue} = props
+    let val
+    if (typeof defaultValue === 'number') {
+      val = InputRadio.value2index(defaultValue)
+    }
     this.state = {
-      prveIndex: null,
-      index: null,
-      touched: false,
+      prveIndex: val || null,
+      index: val || null,
+    }
+  }
+
+  componentWillReceiveProps (nextProps) {
+    const {defaultValue: currVal} = this.props
+    const {defaultValue: nextVal} = nextProps
+    if (currVal !== nextVal && typeof nextVal === 'number') {
+      let val = InputRadio.value2index(nextVal)
+      this.setState({
+        prveIndex: val,
+        index: val,
+      })
     }
   }
 
@@ -73,7 +95,7 @@ export default class InputRadio extends React.PureComponent {
     const {field, form, ...props} = this.props
     const {value} = this.state
 
-    const {sourceData, labelName, placeholder, styleFullLine, isRequire, ...restProps} = props
+    const {sourceData, labelName, placeholder,defaultValue, styleFullLine, isRequire, ...restProps} = props
     const jsxName = scoped.className
     const cls = classnames(jsxName, {
       'style-full-line': styleFullLine,
@@ -135,7 +157,7 @@ export default class InputRadio extends React.PureComponent {
             labelNumber={7}
             clear
             placeholder={placeholder || `请选择${labelName || field.name}`}
-            value={(typeof this.state.prveIndex === 'number'  &&
+            value={(typeof this.state.prveIndex === 'number' &&
               `第${this.state.prveIndex + 1}项`) || ''}
             {...restProps}
             {...errProps}

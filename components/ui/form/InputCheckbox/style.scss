@@ -1,32 +1,9 @@
 @import 'libs/hotcss/px2rem';
 @import "components/ui/form/style";
-
-.item-cls {
-
-}
+@import "components/ui/form/InputRadio/style";
 
 .popup-content {
-  max-height: 60vh;
-  overflow: scroll;
-  & :global(.am-list-item.am-checkbox-item  .am-list-thumb .am-checkbox) {
-    height: 100%;
-  }
-
   & :global(.am-checkbox-inner) {
     border-radius: 0;
   }
-}
-
-.popup-scroll {
-  min-height: 40vh;
-}
-
-.popup-item-text {
-  white-space: pre-wrap;
-  margin: 0;
-  padding: 0;
-}
-
-.am-list .am-list-item.am-checkbox-item {
-
 }

@@ -8,6 +8,10 @@
     margin-left: -8*$hd;
     font-size: 12*$hd;
   }
+  :global(.am-input-label){
+    font-size: 15.45*$hd;
+    color: #43484B;
+  }
 }
 
 .am-input-item.style-full-line {

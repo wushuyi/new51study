@@ -41,7 +41,7 @@ export default class AgencyItem extends React.PureComponent {
 
   getLinkProps = () => {
     const {orgUserNumber, orgUrl} = this.props
-    let orgLinkProps
+    let orgLinkProps = {}
     if (orgUserNumber) {
       orgLinkProps = {
         link: `/user/home-org/${orgUserNumber}`,

@@ -10,6 +10,7 @@ import InputItemComponent from 'components/ui/form/utils/InputItemComponent'
 import Modal from 'antd-mobile/lib/modal'
 import clone from 'lodash/clone'
 import filter from 'lodash/filter'
+import isArray from 'lodash/isArray'
 
 const alert = Modal.alert
 
@@ -61,14 +62,42 @@ const testData = [
 export default class InputCheckbox extends React.PureComponent {
   static defaultProps = {
     sourceData: testData,
+    defaultValue: false,
+  }
+
+  static values2arr = function (values) {
+    let arr = []
+    values.forEach((item, index) => {
+      arr[item] = true
+    })
+    return arr
   }
 
   constructor (props, context) {
     super(props, context)
+    const {defaultValue} = props
+    let val
+    if (defaultValue) {
+      val = InputCheckbox.values2arr(defaultValue)
+    }
     this.state = {
-      prveIndex: [],
-      index: [],
+      prveIndex: val || [],
+      index: val || [],
       touched: false,
+    }
+  }
+
+  componentWillReceiveProps (nextProps) {
+    const {defaultValue: currVal} = this.props
+    const {defaultValue: nextVal} = nextProps
+    if(isArray(nextVal)){
+      if(!currVal || isArray(currVal) && currVal.join(',') !== nextVal.join(',')){
+        let val = InputCheckbox.values2arr(nextVal)
+        this.setState({
+          prveIndex: val,
+          index: val,
+        })
+      }
     }
   }
 
@@ -95,7 +124,7 @@ export default class InputCheckbox extends React.PureComponent {
     const {field, form, ...props} = this.props
     const {value} = this.state
 
-    const {sourceData, labelName, placeholder, styleFullLine, isRequire, ...restProps} = props
+    const {sourceData, labelName, placeholder, defaultValue, styleFullLine, isRequire, ...restProps} = props
     const jsxName = scoped.className
     const cls = classnames(jsxName, {
       'style-full-line': styleFullLine,
