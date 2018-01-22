@@ -15,6 +15,10 @@ let tData
 // }
 const BgCoverQuery = `?imageView2/1/w/${55 * 2}/h/${55 * 2}/100`
 
+function is_webAddress (str) {
+  return /[a-zA-z]+:\/[^\s]*/i.test(str)
+}
+
 export default class AgencyItem extends React.PureComponent {
 
   static propTypes = {
@@ -22,7 +26,7 @@ export default class AgencyItem extends React.PureComponent {
     chatPeopleName: PropTypes.any,
     onChat: PropTypes.any,
     onHome: PropTypes.any,
-    title: PropTypes.any
+    title: PropTypes.any,
   }
 
   static defaultProps = {
@@ -35,16 +39,51 @@ export default class AgencyItem extends React.PureComponent {
     chatPeopleName: '群聊',
   }
 
-  render() {
+  getLinkProps = () => {
+    const {orgUserNumber, orgUrl} = this.props
+    let orgLinkProps
+    if (orgUserNumber) {
+      orgLinkProps = {
+        link: `/user/home-org/${orgUserNumber}`,
+      }
+    } else if (is_webAddress(orgUrl)) {
+      orgLinkProps = {
+        link: orgUrl,
+      }
+    }
+
+    return orgLinkProps
+  }
+
+  render () {
     const {onChat, onHome, bgCover, title, chatPeopleName} = tData || this.props
     const bgCoverStyle = {
-      backgroundImage: `url('${bgCover + BgCoverQuery}')`
+      backgroundImage: `url('${bgCover + BgCoverQuery}')`,
     }
+
+    let orgLinkProps = this.getLinkProps()
+
+    const cover = (
+      <Fragment>
+        <div className='bg-cover' style={bgCoverStyle}/>
+        {/*language=CSS*/}
+        <style jsx>{Style}</style>
+      </Fragment>
+    )
 
     return (
       <Fragment>
         <div className="agency-warp">
-          <div className='bg-cover' style={bgCoverStyle}/>
+          {orgLinkProps.linkProps ? (
+            <Link {...orgLinkProps.linkProps}>
+              <a>
+                {cover}
+              </a>
+            </Link>) : (
+            <a href={orgLinkProps.link} target="_blank">
+              {cover}
+            </a>
+          )}
           <div className="agency-content">
             {title}
           </div>
