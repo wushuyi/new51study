@@ -36,7 +36,8 @@
     "shallowequal": "^1.0.2",
     "store": "^2.0.12",
     "superagent": "^3.8.1",
-    "url-parse": "^1.2.0"
+    "url-parse": "^1.2.0",
+    "video.js": "^6.6.0"
   },
   "devDependencies": {
     "autoprefixer": "^7.2.4",

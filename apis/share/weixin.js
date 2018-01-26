@@ -8,13 +8,13 @@ import xhrCrypto from 'utils/xhrCrypto'
  * @param url
  * @returns {Promise<*>}
  */
-export async function getWXSignature(url) {
-  url = url.replace('&', '%26')
-  const requestURL = `http://api.5151study.com/weixin/signature?url=${url}`
+export async function getWXSignature (url) {
+  const requestURL = `http://api.5151study.com/weixin/signature`
   try {
-    const res = await request.get(requestURL)
-      .query(APIVersion)
-      .use(xhrCrypto)
+    const res = await request.post(requestURL).
+      query(APIVersion).
+      send({url: url}).
+      use(xhrCrypto)
     return baseChcek(res)
   } catch (err) {
     return err

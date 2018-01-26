@@ -150,7 +150,7 @@ class Page extends React.PureComponent {
           )}
 
           {worksBoxProps && (
-            <a href={`/newmatch/work/${classId}/true`}>
+            <a href={`/newmatch/work/${classId}/false`}>
               <WorksBox {...worksBoxProps}/>
             </a>
           )}
