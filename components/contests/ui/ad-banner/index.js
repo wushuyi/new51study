@@ -3,9 +3,9 @@ import PropTypes from 'prop-types'
 import classnames from 'classnames'
 import Slider from 'react-slick'
 import Style from './style.scss'
-import StyleSlick from 'libs/slick-carousel/slick.css'
-import StyleSlickTheme from 'libs/slick-carousel/slick-theme.css'
-import { alert } from 'antd-mobile/lib/modal'
+import Head from 'next/head'
+// import StyleSlick from '/static/libs/slick-carousel/slick.css'
+// import StyleSlickTheme from '/static/libs/slick-carousel/slick-theme.css'
 import { getLinkProps } from './utils'
 import Link from 'next/link'
 import startsWith from 'lodash/startsWith'
@@ -85,6 +85,12 @@ export default class AdBanner extends React.PureComponent {
 
     return (
       <Fragment>
+        {/*@formatter:off*/}
+        <Head>
+          <link rel='stylesheet' type='text/css' href={`/static/libs/slick-carousel/slick.css`}/>
+          <link rel='stylesheet' type='text/css' href={`/static/libs/slick-carousel/slick-theme.css`}/>
+        </Head>
+        {/*@formatter:on*/}
         <div className="ad-warp">
           <Slider {...settings}>
             {
@@ -121,8 +127,8 @@ export default class AdBanner extends React.PureComponent {
             }
           </Slider>
         </div>
-        <style global jsx>{StyleSlick}</style>
-        <style global jsx>{StyleSlickTheme}</style>
+        {/*<style global jsx>{StyleSlick}</style>*/}
+        {/*<style global jsx>{StyleSlickTheme}</style>*/}
         {/*language=CSS*/}
         <style jsx>{Style}</style>
       </Fragment>
