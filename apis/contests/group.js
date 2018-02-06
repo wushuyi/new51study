@@ -1,7 +1,7 @@
 import { APIService, APIVersion } from 'config/settings'
 import request from 'superagent'
 import { baseChcek, needAuthError } from 'apis/utils/error'
-import xhrCrypto from '../../utils/xhrCrypto'
+import xhrCrypto from 'utils/xhrCrypto'
 
 /**
  * API: /evaluategroups/${groupId}/framework
