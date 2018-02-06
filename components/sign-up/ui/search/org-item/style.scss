@@ -1,0 +1,37 @@
+@import 'libs/hotcss/px2rem';
+
+.orgitem {
+  text-align: left;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 87*$hd;
+  padding: 0 0 0 11*$hd;
+  .avater {
+    img {
+      display: block;
+      width: 55*$hd;
+      height: 55*$hd;
+    }
+  }
+  .data {
+    width: 320*$hd;
+    margin-left: 16*$hd;
+    font-size: 16.55*$hd;
+    color: #333333;
+    & > div {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .address {
+      font-size: 13.24*$hd;
+      color: #FFB32D;
+    }
+  }
+  .follow {
+    width: 66*$hd;
+    height: 33*$hd;
+    margin-top: 28*$hd;
+  }
+}

@@ -1,0 +1,29 @@
+@import 'libs/hotcss/px2rem';
+
+.selectitem-warp {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 53*$hd;
+  padding: 0 12*$hd;
+  font-size: 15*$hd;
+  color: #43484B;
+  background: #FFFFFF;
+  .selectitem {
+    flex: 1;
+    height: 25*$hd;
+    margin: 0 10*$hd;
+    text-align: right;
+    border: 0;
+    box-shadow: none;
+    appearance: none;
+    &.placeholder {
+      color: #B7B7B7;
+    }
+  }
+  img {
+    display: block;
+    width: 8*$hd;
+  }
+}

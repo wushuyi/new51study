@@ -1,0 +1,72 @@
+@import 'libs/hotcss/px2rem';
+
+.teaitem-wrapper {
+  text-align: left;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 87*$hd;
+  padding: 0 0 0 11*$hd;
+  position: relative;
+  .avater {
+    img {
+      width: 55*$hd;
+      height: 55*$hd;
+    }
+  }
+  .data {
+    width: 320*$hd;
+    margin-left: 16*$hd;
+    font-size: 16.55*$hd;
+    color: #333333;
+    .person {
+      display: flex;
+      align-items: center;
+      .name {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 230*$hd;
+      }
+      .sex {
+        width: 15*$hd;
+        height: 15*$hd;
+        margin: 0 2*$hd;
+      }
+      .age {
+        background: #FBA69D;
+        border-radius: 5.51*$hd;
+        font-size: 8.83*$hd;
+        color: #FFFFFF;
+        padding: 0 4*$hd;
+        &.boy {
+          background: #96D2EF;
+        }
+      }
+    }
+    .content {
+      font-size: 14.35*$hd;
+      color: #999999;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .tags {
+      font-size: 13.24*$hd;
+      color: #FFB32D;
+    }
+  }
+  .address {
+    position: absolute;
+    right: 8*$hd;
+    top: 0;
+    height: 12*$hd;
+    line-height: 12*$hd;
+    margin-top: 24*$hd;
+    font-size: 12.14*$hd;
+    color: #B3B3B3;
+    background: url(/static/images/icon/icon_nmatch_address.png) no-repeat center left;
+    background-size: 10*$hd 12*$hd;
+    text-indent: 12*$hd;
+  }
+}

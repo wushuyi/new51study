@@ -1,0 +1,20 @@
+@import 'libs/hotcss/px2rem';
+
+.information-wrapper {
+  width: 100%;
+  font-size: 15*$hd;
+  color: #9F9F9F;
+}
+
+.title {
+  height: 38*$hd;
+  display: flex;
+  align-items: center;
+  padding-left: 11*$hd;
+  img {
+    display: block;
+    width: 15*$hd;
+    height: 18*$hd;
+    margin-right: 4*$hd;
+  }
+}

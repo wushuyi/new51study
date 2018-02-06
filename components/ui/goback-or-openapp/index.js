@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import Style from './style.scss'
 import classnames from 'classnames'
 import { consts } from 'config/settings'
+import router from 'next/router'
 
 const ShowTime = 3500
 
@@ -75,7 +76,7 @@ export default class GoBackOrOpenApp extends React.PureComponent {
         <div className={cls}>
           <div className="goback"
                onClick={() => {
-                 window.history.back()
+                 router.back()
                }}/>
           <a href={consts.goOpenOrDownAppUrl} target="_blank">
             <div className="openapp"/>
