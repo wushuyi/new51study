@@ -1,0 +1,54 @@
+@import 'libs/hotcss/px2rem';
+
+@mixin oneline(){
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+$go-back-size: 22;
+
+.top-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 44*$hd;
+  background: #FFFFFF;
+  z-index: 1;
+  .go-back {
+    display: block;
+    width: 44*$hd;
+    height: 44*$hd;
+    position: absolute;
+    top: 0;
+    left: 0;
+    color: transparent;
+    overflow: hidden;
+    line-height: 999px;
+    &:before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: $go-back-size*$hd;
+      height: $go-back-size*$hd;
+      margin: -($go-back-size / 2)*$hd 0 0 -($go-back-size / 2)*$hd;
+      display: block;
+      background: url(/static/images/icon/icon_default_back.png) no-repeat;
+      background-size: contain;
+    }
+  }
+  .title {
+    @include oneline;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 44*$hd;
+    padding: 0 50*$hd;
+    text-align: center;
+    font-size: 23*$hd;
+    line-height: 44*$hd;
+  }
+}
