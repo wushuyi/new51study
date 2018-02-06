@@ -1,0 +1,96 @@
+@import 'libs/hotcss/px2rem';
+
+.current-match-item{
+  display: flex;
+  align-items: center;
+  height:68*$hd;
+  padding: 0 0 0 16*$hd;
+  .name{
+    max-width:300*$hd;
+  }
+  .match-tag-name{
+    font-size: 13*$hd;
+    color: #FD4D4D;
+  }
+  .name{
+    font-size:20*$hd;
+    color: #7E7E7E;
+  }
+}
+.go-homegroup {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height:33*$hd;
+  font-size: 16*$hd;
+  color: #585858;
+  background: #FCF6F6;
+  .tag{
+    width: 3*$hd;
+    height: 16*$hd;
+    background: #FF6121;
+    margin: 0 7*$hd 0 12*$hd;
+  }
+}
+
+.put-up-wrapper{
+  width: 100%;
+  height: 27*$hd;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #fff;
+  font-size: 13*$hd;
+  color: #FD4D4D;
+  .icon{
+    width: 20*$hd;
+    height:12*$hd;
+    margin-left: 10*$hd;
+    background: url("/static/images/icon/icon_arrow_up.png") no-repeat center;
+    background-size: 20*$hd 12*$hd;
+  }
+}
+a{
+  display: block;
+}
+
+.match-tag-name{
+  width: 40*$hd;
+  font-size: 10*$hd;
+  color: #575757;
+}
+.match-tag-icon{
+  height: 68*$hd;
+  width: 16*$hd;
+  position: relative;
+  margin: 0  10*$hd;
+  .line{
+    height: 100%;
+    width: 2*$hd;
+    margin: 0 auto;
+    background: #FF9193;
+  }
+}
+.match-tag-icon.current::before{
+  content: ' ';
+  width: 16*$hd;
+  height: 16*$hd;
+  background:#ff7878 ;
+  border-radius: 50%;
+  border:3*$hd solid #FF9595;
+  position: absolute;
+  left:0;
+  top:26*$hd;
+}
+.match-tag-icon.current.bottom .line{
+  height: 50%;
+  width: 2*$hd;
+  margin:34*$hd auto 0;
+  background: #FF9193;
+}
+.match-tag-icon.current.top .line{
+  height: 50%;
+  width: 20*$hd;
+  margin: 0 auto;
+  background: #FF9193;
+}

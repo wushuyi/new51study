@@ -1,0 +1,77 @@
+@import 'libs/hotcss/px2rem';
+
+@mixin oneline(){
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.item{
+  height: 68*$hd;
+  display: flex;
+  align-items: center;
+  justify-content:space-between;
+  background: #FFFFFF;
+  padding: 10*$hd 7*$hd 14*$hd 13*$hd;
+  margin-top:1*$hd;
+  .left{
+    width: 180*$hd;
+    height:48*$hd;
+    position: relative;
+    .title{
+      font-size: 16*$hd;
+      color: #585858;
+      max-width: 180*$hd;
+      @include oneline;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+    .name{
+      font-size: 14*$hd;
+      color: #8E8E8E;
+      max-width: 180*$hd;
+      @include oneline;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+    }
+  }
+  .center{
+    width: 130*$hd;
+    height:48*$hd;
+    position: relative;
+    text-align: right;
+     .time{
+       font-size: 12*$hd;
+       color: #585858;
+       max-width: 120*$hd;
+       @include oneline;
+       position: absolute;
+       top: 3*$hd;
+       right: 10*$hd;
+     }
+    .area{
+      font-size: 10*$hd;
+      color: #FF7C42;
+      border: 1px solid #FF6121;
+      border-radius: 7*$hd;
+      padding: 0 8*$hd;
+      position: absolute;
+      right: 10*$hd;
+      bottom: 0;
+      max-width: 120*$hd;
+      @include oneline;
+    }
+  }
+
+  .right{
+    width: 70*$hd;
+    height: 30*$hd;
+    line-height: 30*$hd;
+    font-size: 14*$hd;
+    color: #FF7C42;
+    text-align: center;
+    border: 1*$hd solid #FF5A14;
+    border-radius: 4*$hd;
+  }
+}

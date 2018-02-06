@@ -1,0 +1,17 @@
+@import 'libs/hotcss/px2rem';
+
+@mixin oneline(){
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.item{
+  background: #FFFFFF;
+  padding: 6*$hd 0 6*$hd 12*$hd;
+  .title{
+    height: 22*$hd;
+    text-indent: 7*$hd;
+    border-left: 3*$hd solid #FF6121;
+  }
+}

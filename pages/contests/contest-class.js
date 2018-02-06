@@ -19,7 +19,11 @@ import ContestDetail from 'components/contests/ui/contest-detail'
 import AdBanner from 'components/contests/ui/ad-banner'
 import AdList from 'components/contests/ui/ad-list'
 import OperateItem from 'components/contests/ui/operate-item'
-
+import MatchList from 'components/contests/ui/match-list'
+import TopbarBack from 'components/common/ui/topbar-back'
+import ListSignUpTopTitle from 'components/contests/ui/list-signup-toptitle'
+import ListSignUpTitle from 'components/contests/ui/list-signup-title'
+import ListSignUpItem from 'components/contests/ui/list-signup-item'
 import GoContestHome from 'components/contests/ui/go-contest-home'
 import GoBackOrOpenApp from 'components/ui/goback-or-openapp'
 import { checkToken, authDidMount, ComponentPageError } from 'utils/pageAuth'
@@ -112,7 +116,10 @@ class Page extends React.PureComponent {
         <Share {...shareProps}/>
         <PagePullToRefresh onRefresh={this.onRefresh}>
           {bannerCoverProps && <BannerCover {...bannerCoverProps}/>}
-
+          {/*{<TopbarBack title={"比赛报名"}/>}
+          {<ListSignUpTopTitle/>}
+          {<ListSignUpTitle/>}
+          {<ListSignUpItem />}*/}
           {introduceProps && <Introduce {...introduceProps}/>}
 
           {agencyItemProps && <AgencyItem {...agencyItemProps}/>}
@@ -120,7 +127,7 @@ class Page extends React.PureComponent {
           {signupBoxProps && <SignupBox isClass={true} {...signupBoxProps}/>}
 
           {bisaiAdListProps && <AdList onAd={(AdId) => {actions.postAd(AdId)}} {...bisaiAdListProps}/>}
-
+          {/*{<MatchList />}*/}
           {goContestHomeProps && <GoContestHome {...goContestHomeProps}/>}
 
           {bisaiAdProps && <AdBanner onAd={(AdId) => {actions.postAd(AdId)}} {...bisaiAdProps}/>}
