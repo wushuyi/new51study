@@ -1,9 +1,22 @@
 @import 'libs/hotcss/px2rem';
-
+@import "components/ui/form/config";
 
 .am-textarea-item {
   border-bottom: none !important;
   padding-right: 0 !important;
+
+  :global(.am-textarea-label) {
+    @include input-item
+  }
+
+  :global(.am-textarea-control textarea) {
+    @include input
+  }
+
+  :global(.am-textarea-control textarea::placeholder) {
+    @include input-placeholder
+  }
+
   &.is-require {
     padding-left: 15*$hd;
     :global(.am-list-line) {

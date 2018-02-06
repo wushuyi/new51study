@@ -1,5 +1,21 @@
 @import 'libs/hotcss/px2rem';
 
+.test{
+  color: green;
+}
+
+:global([data-dpr="3"]) .test{
+  font-size: 9*3px;
+}
+
+:global([data-dpr="2"]) .test{
+  font-size: 9*2px;
+}
+
+:global([data-dpr="1"]) .test{
+  font-size: 9*1px;
+}
+
 //@mixin input-placeholder {
 //  direction: rtl;
 //  color: #bbb;

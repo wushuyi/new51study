@@ -29,39 +29,39 @@ const scoped = resolveScopedStyles((
   </scope>
 ))
 
-/*const testData = [
-  // {
-  //   value: 0,
-  //   label: '如果你看到此项必然是数据出问题了!',
-  // },
-  // {
-  //   value: 1,
-  //   label: `惠学大礼包：领取惠学礼包
-  // （包含价值388元的VIPKID北美外教一对一3课套装等）, 放弃领取`,
-  // },
-  // {
-  //   value: 2,
-  //   label: '一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十',
-  // },
-  // {
-  //   value: 3,
-  //   label: `惠学大礼包：领取惠学礼包
-  // （包含价值388元的VIPKID北美外教一对一3课套装等）, 放弃领取`,
-  // },
-  // {
-  //   value: 4,
-  //   label: '一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十',
-  // },
-  // {
-  //   value: 5,
-  //   label: `惠学大礼包：领取惠学礼包
-  // （包含价值388元的VIPKID北美外教一对一3课套装等）, 放弃领取`,
-  // },
-]*/
+const testData = [
+  {
+    value: 0,
+    label: '一二三',
+  },
+  {
+    value: 1,
+    label: `惠学大礼包：领取惠学礼包
+  （包含价值388元的VIPKID北美外教一对一3课套装等）, 放弃领取`,
+  },
+  {
+    value: 2,
+    label: '一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十',
+  },
+  {
+    value: 3,
+    label: `惠学大礼包：领取惠学礼包
+  （包含价值388元的VIPKID北美外教一对一3课套装等）, 放弃领取`,
+  },
+  {
+    value: 4,
+    label: '一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十',
+  },
+  {
+    value: 5,
+    label: `惠学大礼包：领取惠学礼包
+  （包含价值388元的VIPKID北美外教一对一3课套装等）, 放弃领取`,
+  },
+]
 
-export default class InputCheckbox extends React.PureComponent {
+export default class InputCheckbox extends React.Component {
   static defaultProps = {
-    sourceData: false,
+    sourceData: testData,
     defaultValue: false,
   }
 
@@ -90,8 +90,9 @@ export default class InputCheckbox extends React.PureComponent {
   componentWillReceiveProps (nextProps) {
     const {defaultValue: currVal} = this.props
     const {defaultValue: nextVal} = nextProps
-    if(isArray(nextVal)){
-      if(!currVal || isArray(currVal) && currVal.join(',') !== nextVal.join(',')){
+    if (isArray(nextVal)) {
+      if (!currVal ||
+        isArray(currVal) && currVal.join(',') !== nextVal.join(',')) {
         let val = InputCheckbox.values2arr(nextVal)
         this.setState({
           prveIndex: val,
@@ -102,12 +103,21 @@ export default class InputCheckbox extends React.PureComponent {
   }
 
   getValueText = () => {
+    const {sourceData} = this.props
     const {prveIndex} = this.state
     let res = prveIndex.map((boolean, index) => {
-      return boolean && `第${index + 1}项`
+      // return boolean && `第${index + 1}项`
+      return boolean && `${index + 1}. ${(sourceData[index].label.length > 3
+        ? sourceData[index].label.slice(0,
+        3) + '...'
+        : sourceData[index].label)}`
+
     })
     res = filter(res, (o) => {return o})
     res = res.length ? res.join(', ') : ''
+    // if (res.length > 25) {
+    //   res = res.slice(0, 24) + '...'
+    // }
     return res
   }
 

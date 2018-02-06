@@ -26,39 +26,39 @@ const scoped = resolveScopedStyles((
   </scope>
 ))
 
-/*const testData = [
-  // {
-  //   value: 0,
-  //   label: '如果你看到此项必然是数据出问题了!',
-  // },
-  // {
-  //   value: 1,
-  //   label: `惠学大礼包：领取惠学礼包
-  // （包含价值388元的VIPKID北美外教一对一3课套装等）, 放弃领取`,
-  // },
-  // {
-  //   value: 2,
-  //   label: '一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十',
-  // },
-  // {
-  //   value: 3,
-  //   label: `惠学大礼包：领取惠学礼包
-  // （包含价值388元的VIPKID北美外教一对一3课套装等）, 放弃领取`,
-  // },
-  // {
-  //   value: 4,
-  //   label: '一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十',
-  // },
-  // {
-  //   value: 5,
-  //   label: `惠学大礼包：领取惠学礼包
-  // （包含价值388元的VIPKID北美外教一对一3课套装等）, 放弃领取`,
-  // },
-]*/
+const testData = [
+  {
+    value: 0,
+    label: '一二三!',
+  },
+  {
+    value: 1,
+    label: `惠学大礼包：领取惠学礼包
+  （包含价值388元的VIPKID北美外教一对一3课套装等）, 放弃领取`,
+  },
+  {
+    value: 2,
+    label: '一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十',
+  },
+  {
+    value: 3,
+    label: `惠学大礼包：领取惠学礼包
+  （包含价值388元的VIPKID北美外教一对一3课套装等）, 放弃领取`,
+  },
+  {
+    value: 4,
+    label: '一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十一二三四五六七八九十',
+  },
+  {
+    value: 5,
+    label: `惠学大礼包：领取惠学礼包
+  （包含价值388元的VIPKID北美外教一对一3课套装等）, 放弃领取`,
+  },
+]
 
-export default class InputRadio extends React.PureComponent {
+export default class InputRadio extends React.Component {
   static defaultProps = {
-    sourceData: false,
+    sourceData: testData,
     defaultValue: false,
   }
 
@@ -93,9 +93,9 @@ export default class InputRadio extends React.PureComponent {
 
   render () {
     const {field, form, ...props} = this.props
-    const {value} = this.state
+    const {value, prveIndex} = this.state
 
-    const {sourceData, labelName, placeholder,defaultValue, styleFullLine, isRequire, ...restProps} = props
+    const {sourceData, labelName, placeholder, defaultValue, styleFullLine, isRequire, ...restProps} = props
     const jsxName = scoped.className
     const cls = classnames(jsxName, {
       'style-full-line': styleFullLine,
@@ -157,8 +157,11 @@ export default class InputRadio extends React.PureComponent {
             labelNumber={7}
             clear
             placeholder={placeholder || `请选择${labelName || field.name}`}
-            value={(typeof this.state.prveIndex === 'number' &&
-              `第${this.state.prveIndex + 1}项`) || ''}
+            value={(typeof prveIndex === 'number' &&
+              `${prveIndex + 1}. ${(sourceData[prveIndex].label.length > 10
+                ? sourceData[prveIndex].label.slice(0,
+                10) + '...'
+                : sourceData[prveIndex].label)}`) || ''}
             {...restProps}
             {...errProps}
           >{labelName || field.name}</InputItemComponent>

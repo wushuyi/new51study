@@ -50,7 +50,6 @@ export default class InputText extends React.Component {
         <InputItem
           className={cls}
           labelNumber={7}
-          clear
           placeholder={placeholder || `请输入${labelName || field.name}`}
           {...restProps}
           {...errProps}

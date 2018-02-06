@@ -1,14 +1,28 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import Style from './style.scss'
+import classnames from 'classnames'
 import DatePicker from 'antd-mobile/lib/date-picker'
 import List from 'antd-mobile/lib/list'
 import dateParse from 'date-fns/parse'
 import WrapFragment from 'components/ui/form/utils/WrapComponent'
+import InputItemComponent from 'components/ui/form/utils/InputItemComponent'
+import DateParse from 'date-fns/parse'
 
-const now = dateParse('2018-01-01 00:00')
+function resolveScopedStyles (scope) {
+  return {
+    className: scope.props.className,
+    styles: scope.props.children,
+  }
+}
 
-export default class InputDate extends React.PureComponent {
+const scoped = resolveScopedStyles((
+  <scope>
+    <style jsx>{Style}</style>
+  </scope>
+))
+
+export default class InputDate extends React.Component {
 
   static propTypes = {
     field: PropTypes.any.isRequired,
@@ -17,7 +31,7 @@ export default class InputDate extends React.PureComponent {
     initDate: PropTypes.any,
     labelName: PropTypes.string,
     mode: PropTypes.string,
-    placeholder: PropTypes.any
+    placeholder: PropTypes.any,
   }
 
   static defaultProps = {
@@ -33,6 +47,16 @@ export default class InputDate extends React.PureComponent {
     const {labelName, placeholder, field} = props
     this.state = {
       date: null,
+    }
+  }
+
+  componentWillReceiveProps (nextProps) {
+    const {field} = this.props
+    const {field: nextField} = nextProps
+    if (field.value !== nextField.value) {
+      this.setState({
+        date: DateParse(nextField.value),
+      })
     }
   }
 
@@ -52,21 +76,32 @@ export default class InputDate extends React.PureComponent {
   render () {
     const {field, form, labelName, placeholder, initDate, ...props} = this.props
     const {date} = this.state
+    const cls = classnames(scoped.className, {
+      'placeholder': !date,
+    })
     const extra = placeholder || `请选择${labelName || field.name}`
+    let errProps = {}
+    if (form.errors && form.touched[field.name] && form.errors[field.name]) {
+      errProps.error = true
+      errProps.onErrorClick = () => {
+        alert(form.errors[field.name])
+      }
+    }
     return (
       <Fragment>
         <DatePicker
           {...props}
+          className={cls}
           extra={extra}
-          value={this.state.date}
+          value={date}
           onChange={date => {
-            this.setState({date})
             form.setFieldValue(field.name, date)
           }}
           WrapComponent={WrapFragment}
         >
-          <List.Item >{labelName}</List.Item>
+          <List.Item className={cls}>{labelName}</List.Item>
         </DatePicker>
+        {scoped.styles}
         {/*language=CSS*/}
         {/*<style jsx>{Style}</style>*/}
       </Fragment>

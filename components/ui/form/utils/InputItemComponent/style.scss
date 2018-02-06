@@ -1,31 +1,19 @@
 @import 'libs/hotcss/px2rem';
+@import "components/ui/form/config";
 
-@mixin input-placeholder {
-  direction: rtl;
-  color: #aaa;
-  -webkit-text-fill-color: #aaa;
-  //font-size: 15.45*$hd;
-}
-
-@mixin input {
-  direction: rtl;
-  color: #363636 !important;
-  -webkit-text-fill-color: #363636;
-  font-size: 15.45*$hd;
-}
-
-.am-list-item.am-input-item {
-  padding-left: 0;
-}
+//.am-list-item.am-input-item {
+//  padding-left: 0;
+//}
 
 .am-input-item {
-  :global(.am-list-line){
+  :global(.am-list-line) {
     padding-right: 10*$hd;
   }
   :global(.am-input-label) {
-    color: #43484B;
-    font-size: 15.45*$hd;
+    color: $item-color;
+    font-size: $item-font-size;
   }
+
   :global(.am-input-control input:disabled) {
     background-color: transparent;
     opacity: 1;
@@ -35,15 +23,7 @@
     @include input-placeholder
   }
 
-  :global(.am-textarea-control textarea::placeholder) {
-    @include input-placeholder
-  }
-
   :global(.am-input-control input) {
-    @include input
-  }
-
-  :global(.am-textarea-control textarea) {
     @include input
   }
 }

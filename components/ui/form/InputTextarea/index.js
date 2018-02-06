@@ -16,7 +16,7 @@ const scoped = resolveScopedStyles((
   </scope>
 ))
 
-export default class InputTextarea extends React.PureComponent {
+export default class InputTextarea extends React.Component {
   static propTypes = {
     field: PropTypes.any,
     form: PropTypes.any,
@@ -38,10 +38,7 @@ export default class InputTextarea extends React.PureComponent {
         <TextareaItem
           className={cls}
           labelNumber={7}
-          clear
-          rows={2}
           autoHeight
-          count={100}
           placeholder={placeholder || `请输入${labelName || field.name}`}
           {...restProps}
           onChange={(val) => {

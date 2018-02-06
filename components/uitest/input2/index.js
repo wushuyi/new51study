@@ -9,8 +9,12 @@ import InputTextarea from 'components/ui/form/InputTextarea'
 import InputDate from 'components/ui/form/InputDate'
 import InputCheckbox from 'components/ui/form/InputCheckbox'
 import InputRadio from 'components/ui/form/InputRadio'
+import InputImage from 'components/ui/form/InputImage'
+import memoize from 'lodash/memoize'
 import dateParse from 'date-fns/parse'
 import { sleep } from 'utils'
+
+const memoizeDateParse = memoize(dateParse)
 
 import Test from 'dist/exportForm.dist'
 
@@ -23,6 +27,8 @@ export default class Input2 extends React.PureComponent {
     // console.log(Test)
     return (
       <Fragment>
+
+        {/*<h1 className='test'>这是一段测试</h1>*/}
 
         <Formik
           validateOnChange={false}
@@ -56,8 +62,8 @@ export default class Input2 extends React.PureComponent {
               <List>
                 <Field
                   name="email3"
-                  component={InputTextarea}
-                  labelName='指导老师姓名'
+                  component={InputText}
+                  labelName='指导老师text'
                   // styleFullLine
                   // isRequire
                   // error
@@ -78,10 +84,22 @@ export default class Input2 extends React.PureComponent {
                         field={field}
                         form={form}
                         labelName="时间1"
-                        minDate={dateParse('2017-01-01 00:00')}
-                        maxDate={dateParse('2017-12-30 00:00')}
-                        mode="date"
+                        minDate={memoizeDateParse('2017-01-01 00:00')}
+                        maxDate={memoizeDateParse('2018-12-30 00:00')}
+                        mode="datetime"
                         forma="YYYY-MM-DD HH:mm"
+                      />
+                    )
+                  }}
+                />
+                <Field
+                  name="update1"
+                  render={({field, form}) => {
+                    return (
+                      <InputImage
+                        field={field}
+                        form={form}
+                        labelName="上传图片"
                       />
                     )
                   }}
@@ -106,7 +124,7 @@ export default class Input2 extends React.PureComponent {
                       <InputCheckbox
                         field={field}
                         form={form}
-                        defaultValue={[0,3]}
+                        defaultValue={[0, 3]}
                         labelName="多选1"
                       />
                     )
@@ -137,7 +155,7 @@ export default class Input2 extends React.PureComponent {
           )}
         />
         {/*language=CSS*/}
-        {/*<style global jsx>{Style}</style>*/}
+        <style jsx>{Style}</style>
       </Fragment>
     )
   }

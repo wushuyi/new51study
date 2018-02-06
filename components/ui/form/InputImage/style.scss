@@ -1,0 +1,97 @@
+@import 'libs/hotcss/px2rem';
+@import "components/ui/form/config";
+
+.am-list-item {
+  :global(.am-list-content) {
+    @include input-item
+  }
+  :global(.am-list-extra) {
+    @include input
+  }
+  .placeholder {
+    text-align: end;
+    color: $placeholder-color;
+    -webkit-text-fill-color: $placeholder-color;
+    font-size: $placeholder-font-size;
+    padding-top: 7*$hd;
+    padding-bottom: 7*$hd;
+  }
+
+  :global(.am-list-extra) {
+    position: relative;
+    padding: 0;
+    .progress {
+      width: 100%;
+    }
+    .percent {
+      width: 100%;
+      font-size: 12*$hd;
+      text-align: center;
+    }
+    :global(input) {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      opacity: 0;
+    }
+    :global(.img) {
+      height: auto;
+      width: auto;
+      max-height: 100%;
+      max-width: 100%;
+    }
+  }
+
+}
+
+.img-control {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background: #7F7F7F;
+  overflow: hidden;
+}
+
+.control-box {
+  display: flex;
+  justify-content: space-between;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  :global(.am-button) {
+    width: 100%;
+  }
+}
+
+.control-view {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform-origin: 50% 50%;
+  transition: max-width 0.5s ease, max-height 0.5s ease, transform 0.5s ease;
+  &.direction-0 {
+    transform: translateX(-50%) translateY(-50%) scale(1) rotate(0deg);
+  }
+  &.direction-90 {
+    transform: translateX(-50%) translateY(-50%) scale(1) rotate(90deg);
+  }
+  &.direction-180 {
+    transform: translateX(-50%) translateY(-50%) scale(1) rotate(180deg);
+  }
+  &.direction-270 {
+    transform: translateX(-50%) translateY(-50%) scale(1) rotate(270deg);
+  }
+  &.v {
+    max-width: 100vw;
+    max-height: 100vh;
+  }
+  &.h {
+    max-width: 100vh;
+    max-height: 100vw;
+  }
+}

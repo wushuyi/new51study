@@ -16,7 +16,7 @@ export const msgError = createError('msgError')
 export const argsError = createError('argsError')
 export const needAuthError = createError('needAuthError')
 
-export function matchXhrError(err) {
+export function matchXhrError (err) {
   let res
   switch (err.name) {
     case 'xhrError':
@@ -39,7 +39,7 @@ export function matchXhrError(err) {
   return res
 }
 
-export function baseChcek(res) {
+export function baseChcek (res) {
   if (res.status !== 200) {
     return new xhrError()
   }
@@ -56,11 +56,11 @@ export function baseChcek(res) {
   }
 }
 
-export function * baseXhrError(res) {
+export async function baseXhrError (res) {
   isDev && console.error(res)
   // isServer && console.log(res.message)
   if (isBrowser) {
-    const Toast = yield import('antd-mobile/lib/toast')
+    const Toast = await import('antd-mobile/lib/toast')
     Toast.fail(matchXhrError(res), 1)
   }
 }

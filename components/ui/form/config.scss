@@ -1,0 +1,29 @@
+@import 'libs/hotcss/px2rem';
+
+$item-color: #43484B;
+$item-font-size: 16*$hd;
+
+$input-color: #363636;
+$input-font-size: 16*$hd;
+
+$placeholder-color: #aaa;
+$placeholder-font-size: 16*$hd;
+
+@mixin input-item{
+  color: $item-color;
+  font-size: $item-font-size;
+}
+
+@mixin input-placeholder {
+  //text-align: end;
+  color: $placeholder-color;
+  -webkit-text-fill-color: $placeholder-color;
+  font-size: $placeholder-font-size;
+}
+
+@mixin input {
+  text-align: end;
+  color: $input-color;
+  -webkit-text-fill-color: $input-color;
+  font-size: $input-font-size;
+}
