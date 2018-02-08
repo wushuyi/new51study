@@ -4,13 +4,13 @@ import Style from './style.scss'
 export default class currMatchItem extends React.PureComponent {
 
   static defaultProps = {
-    classId: false,
-    title:'title',
+    tagType:'',
   }
 
   render() {
     let {
       title,
+      tagType
     } =this.props;
     return (
       <Fragment>
@@ -19,7 +19,7 @@ export default class currMatchItem extends React.PureComponent {
             <div>当前</div>
             <div>比赛</div>
           </div>
-          <div className="match-tag-icon current">
+          <div className={`match-tag-icon current ${tagType}`}>
             <div className="line"></div>
           </div>
           <div className="name oneLine">{title}</div>

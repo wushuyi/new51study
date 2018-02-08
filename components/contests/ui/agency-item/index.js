@@ -2,6 +2,7 @@ import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import Style from './style.scss'
 import defBgCover from '/static/images/icon/icon_default_head_female.png'
+import Avatar from 'components/ui/avatar'
 import { consts } from 'config/settings'
 
 let tData
@@ -22,7 +23,6 @@ function is_webAddress (str) {
 export default class AgencyItem extends React.PureComponent {
 
   static propTypes = {
-    bgCover: PropTypes.any,
     chatPeopleName: PropTypes.any,
     onChat: PropTypes.any,
     onHome: PropTypes.any,
@@ -34,7 +34,6 @@ export default class AgencyItem extends React.PureComponent {
     evaluate_id: false,
     orgUserNumber: false,
     orgUrl: false,
-    bgCover: defBgCover,
     title: '机构name',
     chatPeopleName: '群聊',
   }
@@ -56,20 +55,9 @@ export default class AgencyItem extends React.PureComponent {
   }
 
   render () {
-    const {onChat, onHome, bgCover, title, chatPeopleName} = tData || this.props
-    const bgCoverStyle = {
-      backgroundImage: `url('${bgCover + BgCoverQuery}')`,
-    }
+    const {onChat, onHome, orgUserNumber, title, chatPeopleName} = tData || this.props
 
     let orgLinkProps = this.getLinkProps()
-
-    const cover = (
-      <Fragment>
-        <div className='bg-cover' style={bgCoverStyle}/>
-        {/*language=CSS*/}
-        <style jsx>{Style}</style>
-      </Fragment>
-    )
 
     return (
       <Fragment>
@@ -77,11 +65,11 @@ export default class AgencyItem extends React.PureComponent {
           {orgLinkProps.linkProps ? (
             <Link {...orgLinkProps.linkProps}>
               <a>
-                {cover}
+                <Avatar userId={orgUserNumber}/>
               </a>
             </Link>) : (
             <a href={orgLinkProps.link} target="_blank">
-              {cover}
+              <Avatar userId={orgUserNumber}/>
             </a>
           )}
           <div className="agency-content">

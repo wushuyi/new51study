@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types'
 import { delay } from 'redux-saga'
 import { call, put } from 'redux-saga/effects'
-import * as groupApi from 'apis/contests/group'
 import * as classApi from 'apis/contests/class'
 import isError from 'lodash/isError'
 import { baseXhrError } from 'apis/utils/error'
@@ -226,21 +225,25 @@ export default KeaContext => {
         },
         PropTypes.any,
       ],
-      matchListProps: [
+      matchNavProps: [
         () => [selectors.currFramework],
         (framework) => {
-          if (!get(framework, 'prevEvaluates') && !get(framework, 'nextEvaluates')) {
-            return false
-          }
-          const {title,id,prevEvaluates,nextEvaluates} = framework
+          const {id} = framework
           return Immutable({
-            title,
-            id,
-            prevEvaluates,
-            nextEvaluates
+            id
           })
         },
-        PropTypes.any
+        PropTypes.any,
+      ],
+      goContestHomeProps: [
+        () => [selectors.currFramework],
+        (framework) => {
+          const {id} = framework
+          return Immutable({
+            id
+          })
+        },
+        PropTypes.any,
       ],
       teachersProps: [
         () => [selectors.currOne],

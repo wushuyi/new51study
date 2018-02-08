@@ -1,17 +1,18 @@
 import React, { Fragment } from 'react'
+import PropTypes from 'prop-types'
 import Style from './style.scss'
 import Link from 'next/link'
 
-export default class GoContestHome extends React.PureComponent {
+export default class goSpecialArea extends React.PureComponent {
   static defaultProps = {
-    id: false
+    classId: false
   }
 
   getLinkProps = () => {
-    const {id} = this.props
+    const {classId} = this.props
     return {
-      href: {pathname: '/contests/contest-class', query: {classId: id}},
-      as: {pathname: `/contests/contest-class/${id}`},
+      href: {pathname: '/contests/special-area', query: {classId: classId}},
+      as: {pathname: `/contests/special-area/${classId}`},
       prefetch: true,
       shallow: true
     }
@@ -25,7 +26,7 @@ export default class GoContestHome extends React.PureComponent {
           <a>
             <div className="go-contest-home">
               <div className="go-contest-tag"/>
-              <div>进入大赛页面</div>
+              <div>回到大赛专区</div>
             </div>
           </a>
         </Link>

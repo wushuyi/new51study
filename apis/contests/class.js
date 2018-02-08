@@ -13,12 +13,13 @@ export async function getEvaluateFramework(evaluateId, token) {
   if (!token) {
     return new needAuthError(`can't read token`)
   }
-  const api = `/evaluates/${evaluateId}/framework`
+  const api= `/evaluate/findById`
   const requestURL = `${APIService}${api}`
   try {
     const res = await request.get(requestURL)
       .query(APIVersion)
       .query({
+        evaluateId,
         token
       })
       .use(xhrCrypto)
@@ -35,7 +36,7 @@ export async function getEvaluateFramework(evaluateId, token) {
  * @returns {Promise<*>}
  */
 export async function getEvaluateFrameworkShare(evaluateId) {
-  const api = `/evaluates/${evaluateId}/framework/forShare`
+  const api= `/evaluate/findById`
   const requestURL = `${APIService}${api}`
   try {
     const res = await request.get(requestURL)

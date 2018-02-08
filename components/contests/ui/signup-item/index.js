@@ -39,7 +39,7 @@ function getSignupState(props) {
     if (!props.ifSignupLimit) {
       if (props.ifWinner) {
         return '已晋级'
-      } else if (contestStatus[props.ifSignUp] !== 1) {
+      } else if (contestStatus[props.applyState] !== 1) {
         return '已报名'
       } else {
         if (props.index === 0) {
@@ -53,7 +53,7 @@ function getSignupState(props) {
         if (props.ifWinner) {
           return '已晋级'
 
-        } else if (contestStatus[props.ifSignUp] !== 1) {
+        } else if (contestStatus[props.applyState] !== 1) {
           return '已报名'
         } else {
           if (props.index === 0) {
@@ -67,7 +67,7 @@ function getSignupState(props) {
       }
     }
   } else {
-    if (contestStatus[props.ifSignUp] === 0) {
+    if (contestStatus[props.applyState] === 0) {
       //已报名
       return '已报名'
     } else {
@@ -98,7 +98,7 @@ export default class SignupItem extends React.PureComponent {
     endAt: PropTypes.any,
     evaluateId: PropTypes.any,
     ifNomination: PropTypes.any,
-    ifSignUp: PropTypes.any,
+    applyState: PropTypes.any,
     ifSignupLimit: PropTypes.any,
     isShowSingUpNumber: PropTypes.any,
     isWillBeginLately: PropTypes.any,
@@ -115,7 +115,7 @@ export default class SignupItem extends React.PureComponent {
     endAt: 1495295700000,
     ifSignupLimit: false,
     signupEndAt: 1495295700000,
-    ifSignUp: 'LIVE',
+    applyState: 'LIVE',
 
     signUpGroupType: false,
     evaluateId: 43,

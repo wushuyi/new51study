@@ -2,7 +2,7 @@ import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { withRedux } from 'store'
 import Layout from 'components/layout/default'
-import createLogic from 'pagelogic/contests/class'
+import createLogic from 'pagelogic/contests/area'
 import { getToken } from 'utils/auth'
 import { deferred } from 'redux-saga/utils'
 import { isBrowser } from 'utils/runEnv'
@@ -16,16 +16,12 @@ import WorksBox from 'components/contests/ui/works-box'
 import AgencyItem from 'components/contests/ui/agency-item'
 import CommodityBox from 'components/contests/ui/commodity-box'
 import ContestDetail from 'components/contests/ui/contest-detail'
+import GoContestHome from 'components/contests/ui/go-contest-home'
 import AdBanner from 'components/contests/ui/ad-banner'
 import AdList from 'components/contests/ui/ad-list'
 import OperateItem from 'components/contests/ui/operate-item'
-import MatchList from 'components/contests/ui/match-list'
-import TopbarBack from 'components/common/ui/topbar-back'
-import ListSignUpTopTitle from 'components/contests/ui/list-signup-toptitle'
-import ListSignUpTitle from 'components/contests/ui/list-signup-title'
-import ListSignUpItem from 'components/contests/ui/list-signup-item'
-import GoContestHome from 'components/contests/ui/go-contest-home'
 import GoBackOrOpenApp from 'components/ui/goback-or-openapp'
+import MatchNavItem from 'components/contests/ui/match-nav-item';
 import { checkToken, authDidMount, ComponentPageError } from 'utils/pageAuth'
 import Share from 'components/layout/share'
 
@@ -90,12 +86,11 @@ class Page extends React.PureComponent {
 
     const {
       classId,
-      // evaluateId,
       bannerCoverProps,
       introduceProps,
       agencyItemProps,
       signupBoxProps,
-      matchListProps,
+      goContestHomeProps,
       teachersProps,
       recommendsProps,
       signUpAvatarBoxProps,
@@ -115,10 +110,6 @@ class Page extends React.PureComponent {
         <Share {...shareProps}/>
         <PagePullToRefresh onRefresh={this.onRefresh}>
           {bannerCoverProps && <BannerCover {...bannerCoverProps}/>}
-          {/*{<TopbarBack title={"比赛报名"}/>}
-          {<ListSignUpTopTitle/>}
-          {<ListSignUpTitle/>}
-          {<ListSignUpItem />}*/}
           {introduceProps && <Introduce {...introduceProps}/>}
 
           {agencyItemProps && <AgencyItem {...agencyItemProps}/>}
@@ -126,8 +117,8 @@ class Page extends React.PureComponent {
           {signupBoxProps && <SignupBox isClass={true} {...signupBoxProps}/>}
 
           {bisaiAdListProps && <AdList onAd={(AdId) => {actions.postAd(AdId)}} {...bisaiAdListProps}/>}
-
-          {matchListProps && <MatchList {...matchListProps}/>}
+          {<MatchNavItem/>}
+          {goContestHomeProps && <GoContestHome {...goContestHomeProps}/>}
 
           {bisaiAdProps && <AdBanner onAd={(AdId) => {actions.postAd(AdId)}} {...bisaiAdProps}/>}
 
@@ -195,7 +186,7 @@ export default withRedux(Page, function (KeaContext, ctx) {
         'introduceProps',
         'agencyItemProps',
         'signupBoxProps',
-        'matchListProps',
+        'goContestHomeProps',
         'teachersProps',
         'recommendsProps',
         'commodityBoxProps',

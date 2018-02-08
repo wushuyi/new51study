@@ -8,9 +8,9 @@ import isPast from 'date-fns/is_past'
 import { contestStatus } from 'utils/wyx_const'
 
 function getButtonText (props) {
-  let name = contestStatus[props.ifSignUp] === 1
+  let name = contestStatus[props.applyState] === 1
     ? '我要报名'
-    : contestStatus[props.ifSignUp] === 0
+    : contestStatus[props.applyState] === 0
       ? '上传作品'
       : '查看报名结果'
   return name
@@ -32,7 +32,7 @@ export default class OperateItem extends React.PureComponent {
     'endAt': 1517414340000,
     'ifSignupLimit': false,
     'signupEndAt': 1517414340000,
-    'ifSignUp': 'DIE',
+    'applyState': 'DIE',
     'evaluateApplyId': null,
     'ifNomination': false,
     'ifUploadWork': true,

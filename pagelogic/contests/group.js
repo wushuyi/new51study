@@ -202,6 +202,7 @@ export default (KeaContext) => {
               'evaluateApplyId', 'ifNomination', 'singUpNumber',
               'label', 'ifWinner', 'detail'
             ])
+            data.applyState=o.ifSignUp
             user && (data.userType = user.type)
             return data
           })

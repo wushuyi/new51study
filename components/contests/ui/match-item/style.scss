@@ -1,5 +1,11 @@
 @import 'libs/hotcss/px2rem';
 
+@mixin oneline(){
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .match-item{
   display: flex;
   align-items: center;
@@ -24,15 +30,16 @@
     }
     .left{
       width: 100*$hd;
-      //border:1px solid red;
       .match-name{
         font-size: 11*$hd;
         color: #585858;
+        @include oneline();
       }
       .org-name{
         font-size: 9*$hd;
         color: #8E8E8E;
         margin-top: 8*$hd;
+        @include oneline();
       }
     }
     .center{
@@ -41,6 +48,7 @@
       .time{
         font-size: 9*$hd;
         color: #585858;
+        @include oneline();
       }
       .address{
         display: inline-block;
@@ -53,6 +61,7 @@
         border-radius: 5*$hd;
         margin-top: 8*$hd;
         float: right;
+        @include oneline();
       }
     }
     .right{

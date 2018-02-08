@@ -45,7 +45,9 @@ app.prepare()
     server.get('/contests/contest-class/:classId', (req, res) => {
       return app.render(req, res, '/contests/contest-class', req.params)
     })
-
+    server.get('/contests/special-area/:classId', (req, res) => {
+      return app.render(req, res, '/contests/special-area', req.params)
+    })
     server.get('*', (req, res) => {
       return handle(req, res)
     })

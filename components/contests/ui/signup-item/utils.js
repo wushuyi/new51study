@@ -44,9 +44,9 @@ export function getSingUpLinkProps (props) {
         ])
       }
     } else {
-      if (contestStatus[props.ifSignUp] === 1) {
+      if (contestStatus[props.applyState] === 1) {
         linkProps.link = `/signup/information/${props.evaluateId}`
-      } else if (contestStatus[props.ifSignUp] === 0) {
+      } else if (contestStatus[props.applyState] === 0) {
         linkProps.link = `/signup/SignUpOk/${props.evaluateId}`
       } else {
         linkProps.link = `/signup/checkstatus/${props.evaluateId}`
