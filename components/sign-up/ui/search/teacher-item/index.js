@@ -4,7 +4,7 @@ import Style from './style.scss'
 import getYear from 'date-fns/get_year'
 import Avatar from 'components/ui/avatar'
 import femaleIcon from '/static/images/icon/icon_default_sex_female.png'
-import maleIcon from '/static/assets/images/icon/icon_default_sex_male.png'
+import maleIcon from '/static/images/icon/icon_default_sex_male.png'
 import teacherTagIcon from '/static/images/icon/icon_tag_isteacher.png'
 
 function getAge (birthYear) {
@@ -38,6 +38,16 @@ export default class TeacherItem extends React.PureComponent {
     number: 62866277,
     onSelect: () => {},
     teachingTagDtos: null,
+  }
+
+
+  onSelect = () => {
+    const {onSelect, name, number} = this.props
+    let data = {
+      name,
+      number,
+    }
+    onSelect(data)
   }
 
   render () {

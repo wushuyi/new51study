@@ -4,7 +4,7 @@ import Style from './style.scss'
 import getYear from 'date-fns/get_year'
 import Avatar from 'components/ui/avatar'
 import femaleIcon from '/static/images/icon/icon_default_sex_female.png'
-import maleIcon from '/static/assets/images/icon/icon_default_sex_male.png'
+import maleIcon from '/static/images/icon/icon_default_sex_male.png'
 
 function getAge (birthYear) {
   let year = birthYear && parseInt(birthYear)
