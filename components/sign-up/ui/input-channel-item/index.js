@@ -70,7 +70,7 @@ export default class InputChannelItem extends React.PureComponent {
   render () {
     const {modal, text} = this.state
     const itemProps = {
-      onSelect: this.onSelect
+      onSelect: this.onSelect,
     }
     return (
       <Fragment>
@@ -84,10 +84,9 @@ export default class InputChannelItem extends React.PureComponent {
                  onTouchStart: this.onWrapTouchStart,
                }}>
           <SearchItem onClose={this.closeModal}
-            // onSearch={this.closeModal}
                       onSelect={this.onSelect}
                       placeholder="可查推荐您参赛的老师或机构"/>
-          <div className="scroll" onTouchStart={this.onWrapTouchStart}>
+          <div className="scroll">
             <WYXItem {...itemProps}/>
             <TeacherItem {...itemProps}/>
             <StudyItem {...itemProps}/>
