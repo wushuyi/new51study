@@ -5,6 +5,7 @@ import InformationTitleItem from 'components/sign-up/ui/information-title-item'
 import InputText from 'components/ui/form/InputText'
 import { Formik, Field, Form } from 'formik'
 import List from 'antd-mobile/lib/list'
+import InputRadio from 'components/ui/form/InputRadio'
 
 export default class StudyBox extends React.Component {
   render () {
@@ -13,18 +14,18 @@ export default class StudyBox extends React.Component {
         <InformationTitleItem title="学生"/>
         <List>
           <Field
-            name="name"
+            name="fullName"
             render={(ctx) => {
               return (
                 <InputText
                   {...ctx}
                   labelName='姓名'
                   placeholder='请输入真实姓名'
+                  isRequire
                 />
               )
             }}
             // styleFullLine
-            // isRequire
             // error
           />
           <Field
@@ -36,6 +37,21 @@ export default class StudyBox extends React.Component {
                   type='phone'
                   labelName='手机'
                   placeholder='请输入手机号码'
+                />
+              )
+            }}
+            // styleFullLine
+            // isRequire
+            // error
+          />
+          <Field
+            name="groupName1"
+            render={(ctx) => {
+              return (
+                <InputRadio
+                  {...ctx}
+                  labelName='分组'
+                  placeholder='请选择组别'
                 />
               )
             }}

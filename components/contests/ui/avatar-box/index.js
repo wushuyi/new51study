@@ -69,7 +69,7 @@ export default class AvatarBox extends React.PureComponent {
           <ul className='avaters-nav is-clearfix'>
             {ALData.map(function (avatarProps, index) {
               return (
-                <li className='item' key={avatarProps.userId || index}>
+                <li className='item' key={index}>
                   <Avatar {...avatarProps}/>
                 </li>
               )

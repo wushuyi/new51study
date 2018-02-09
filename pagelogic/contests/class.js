@@ -12,6 +12,17 @@ import pick from 'lodash/pick'
 import JudgesIcon from '/static/images/match/icon_default_match_internet_star008.png'
 import studentIcon from '/static/images/match/icon_default_match_internet_star003.png'
 import { contest } from 'config/shareMsg'
+import { contestStatus } from 'utils/wyx_const'
+import isPast from "date-fns/is_past"
+
+function getButtonText (props) {
+  let name = contestStatus[props.applyState] === 1
+    ? '我要报名'
+    : contestStatus[props.applyState] === 0
+      ? '上传作品'
+      : '查看报名结果'
+  return name
+}
 
 export default KeaContext => {
   const {kea} = KeaContext
@@ -212,9 +223,11 @@ export default KeaContext => {
             'beginAt', 'endAt', 'ifSignupLimit',
             'signupEndAt', 'applyState', 'id',
             'evaluateApplyId', 'ifNomination', 'singUpNumber',
-            'label', 'ifWinner', 'detail',
+            'label', 'ifWinner', 'description',
           ])
           data.evaluateId = data.id
+          data.detail = data.description
+          delete data.description
           delete data.id
           user && (data.userType = user.type)
 
@@ -232,7 +245,7 @@ export default KeaContext => {
           if (!get(framework, 'prevEvaluates') && !get(framework, 'nextEvaluates')) {
             return false
           }
-          const {title,id,prevEvaluates,nextEvaluates} = framework
+          const {title, id, prevEvaluates, nextEvaluates} = framework
           return Immutable({
             title,
             id,
@@ -412,6 +425,18 @@ export default KeaContext => {
           delete data.id
           user && (data.userType = user.type)
           data.iconShow = false
+
+          // 活动已经结束
+          if (isPast(data.endAt)) {
+            return false
+          }
+          const name = getButtonText(data)
+          // 不能上传作品
+          if (name === '上传作品' && !data.ifUploadWork) {
+            return false
+          }
+          data.name = name
+
           return Immutable(data)
         },
         PropTypes.any,

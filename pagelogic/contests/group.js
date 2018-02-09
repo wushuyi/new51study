@@ -200,9 +200,11 @@ export default (KeaContext) => {
               'beginAt', 'endAt', 'ifSignupLimit',
               'signupEndAt', 'ifSignUp', 'evaluateId',
               'evaluateApplyId', 'ifNomination', 'singUpNumber',
-              'label', 'ifWinner', 'detail'
+              'label', 'ifWinner', 'description'
             ])
             data.applyState=o.ifSignUp
+            data.detail = data.description
+            delete data.description
             user && (data.userType = user.type)
             return data
           })
@@ -310,11 +312,11 @@ export default (KeaContext) => {
         () => [selectors.currFramework],
         (framework) => {
 
-          if (!get(framework, 'detail')) {
+          if (!get(framework, 'description')) {
             return false
           }
           let data = {
-            detail: framework.detail
+            detail: framework.description
           }
           return Immutable(data)
         },

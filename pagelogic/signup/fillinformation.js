@@ -80,6 +80,119 @@ export default KeaContext => {
         },
         PropTypes.any,
       ],
+      studyBox: [
+        () => [selectors.currSingupDetail],
+        (singupDetail) => {
+          let data = [], labels, defData
+          const {ifApplyGroup, applyGroupStr, fullName, phone, groupName} = singupDetail
+          if (singupDetail.labels) {
+            labels = JSON.parse(singupDetail.labels)
+          }
+          if (singupDetail.text) {
+            defData = JSON.parse(singupDetail.text)
+          }
+          data.push({
+            name: 'phone',
+            isRequired: true,
+            component: 'InputText',
+            itemProps: {
+              labelName: '手机',
+              placeholder: '请输入手机号码',
+              type: 'phone',
+              defaultVal: phone || '',
+            },
+          })
+          data.push({
+            name: 'fullName',
+            isRequired: true,
+            component: 'InputText',
+            itemProps: {
+              labelName: '姓名',
+              placeholder: '请输入真实姓名',
+              defaultVal: fullName || '',
+            },
+          })
+          // 选择分组
+          if (ifApplyGroup && applyGroupStr) {
+            let sourceData = applyGroupStr.split(',').map((item, index) => {
+              return {
+                value: index,
+                label: item,
+              }
+            })
+            data.push({
+              name: 'groupName',
+              isRequired: true,
+              component: 'InputRadio',
+              itemProps: {
+                labelName: '分组',
+                placeholder: '请选择组别',
+                sourceData,
+                defaultVal: groupName,
+              },
+            })
+          }
+          if (labels) {
+            for (let item in labels) {
+              let conf = {
+                name: item.name,
+                isRequired: item.isRequired,
+                itemProps: {
+                  labelName: item.desc,
+                },
+              }
+              switch (parseInt(item.type)) {
+                case 0:
+                  conf = {
+                    name: item.name,
+                    component: 'InputText',
+                    isRequired: item.isRequired,
+                    itemProps: {
+                      labelName: item.desc,
+                      defaultVal: (defData && defData[item.name]) || '',
+                    },
+                  }
+                  break
+                case 1:
+                  conf = {
+                    name: item.name,
+                    component: 'InputRadio',
+                    isRequired: item.isRequired,
+                    itemProps: {
+                      labelName: item.desc,
+                    },
+                  }
+                  break
+                case 2:
+                  conf = {
+                    name: item.name,
+                    component: 'InputCheckbox',
+                    isRequired: item.isRequired,
+                    itemProps: {
+                      labelName: item.desc,
+                    },
+                  }
+                  break
+                case 3:
+                  conf = {
+                    name: item.name,
+                    component: 'InputImage',
+                    isRequired: item.isRequired,
+                    itemProps: {
+                      labelName: item.desc,
+                    },
+                  }
+                  break
+                default:
+                  break
+              }
+            }
+          }
+
+          return Immutable(data)
+        },
+        PropTypes.any,
+      ],
     }),
 
     takeEvery: ({actions, workers}) => ({

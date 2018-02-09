@@ -19,6 +19,7 @@ import GoBackOrOpenApp from 'components/ui/goback-or-openapp'
 import { isBrowser } from 'utils/runEnv'
 import { checkToken, authDidMount, ComponentPageError } from 'utils/pageAuth'
 import Share from 'components/layout/share'
+import WhiteSpace from 'components/ui/white-space'
 
 class Page extends React.PureComponent {
   static async getInitialProps(ctx) {

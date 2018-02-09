@@ -21,23 +21,24 @@ export default class OperateItem extends React.PureComponent {
     endAt: PropTypes.any,
     iconShow: PropTypes.bool,
     ifUploadWork: PropTypes.any,
-    src: PropTypes.any
+    src: PropTypes.any,
+    name: PropTypes.any,
   }
 
   static defaultProps = {
     src: signupIcon,
     iconShow: false,
-  // 测试数据
-/*    'beginAt': 1516204800000,
-    'endAt': 1517414340000,
-    'ifSignupLimit': false,
-    'signupEndAt': 1517414340000,
-    'applyState': 'DIE',
-    'evaluateApplyId': null,
-    'ifNomination': false,
-    'ifUploadWork': true,
-    'evaluateId': 164,
-    'userType': 'STUDY',*/
+    // 测试数据
+    /*    'beginAt': 1516204800000,
+        'endAt': 1517414340000,
+        'ifSignupLimit': false,
+        'signupEndAt': 1517414340000,
+        'applyState': 'DIE',
+        'evaluateApplyId': null,
+        'ifNomination': false,
+        'ifUploadWork': true,
+        'evaluateId': 164,
+        'userType': 'STUDY',*/
   }
 
   constructor () {
@@ -46,16 +47,7 @@ export default class OperateItem extends React.PureComponent {
 
   render () {
     const props = this.props
-    const {src, iconShow, endAt} = props
-    // 活动已经结束
-    if (isPast(endAt)) {
-      return null
-    }
-    const name = getButtonText(props)
-    // 不能上传作品
-    if (name === '上传作品' && !props.ifUploadWork) {
-      return null
-    }
+    const {src, iconShow, name} = props
 
     const buttonCls = classnames('operate-button', {
       'is-hidden': !iconShow,

@@ -22,9 +22,10 @@ import MatchList from 'components/contests/ui/match-list'
 import GoBackOrOpenApp from 'components/ui/goback-or-openapp'
 import { checkToken, authDidMount, ComponentPageError } from 'utils/pageAuth'
 import Share from 'components/layout/share'
+import WhiteSpace from 'components/ui/white-space'
 
 class Page extends React.PureComponent {
-  static async getInitialProps(ctx) {
+  static async getInitialProps (ctx) {
     const {logics, KeaContext, isServer, store, req, query} = ctx
     let initProps = {}
     let token = getToken(req)
@@ -62,7 +63,7 @@ class Page extends React.PureComponent {
     return initProps
   }
 
-  componentDidMount() {
+  componentDidMount () {
     authDidMount(this.props)
   }
 
@@ -74,7 +75,7 @@ class Page extends React.PureComponent {
     return def.promise
   }
 
-  render() {
+  render () {
     const {err, actions} = this.props
     if (err) {
       return (
@@ -157,9 +158,9 @@ class Page extends React.PureComponent {
           )}
 
           {detailProps && <ContestDetail {...detailProps}/>}
+          {operateItemProps && <WhiteSpace height={75}/>}
         </PagePullToRefresh>
-        {operateItemProps &&  <OperateItem {...operateItemProps}/>}
-
+        {operateItemProps && <OperateItem {...operateItemProps}/>}
         <GoBackOrOpenApp/>
       </Layout>
     )
