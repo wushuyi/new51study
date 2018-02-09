@@ -30,7 +30,9 @@ export function getSingUpLinkProps (props) {
       }
     } else if (props.ifSignupLimit && !props.ifNomination) {
       linkProps.onClick = (e) => {
-        Toast.info('比赛晋级用户可报名', 2, null, false)
+        Toast.info('比赛晋级用户可报名', 2, null, false);
+        //去报名列表
+
       }
     } else if (!props.userType) {
       linkProps.onClick = (e) => {

@@ -201,30 +201,6 @@ export default KeaContext => {
         },
         PropTypes.any,
       ],
-      signupBoxProps: [
-        () => [selectors.currFramework, selectors.user],
-        (framework, user) => {
-          if (!framework) {
-            return false
-          }
-          let data = pick(framework, [
-            'beginAt', 'endAt', 'ifSignupLimit',
-            'signupEndAt', 'applyState', 'id',
-            'evaluateApplyId', 'ifNomination', 'singUpNumber',
-            'label', 'ifWinner', 'detail',
-          ])
-          data.evaluateId = data.id
-          delete data.id
-          user && (data.userType = user.type)
-
-          let dataList = [data]
-          return Immutable({
-            dataList,
-            maxItem: 100,
-          })
-        },
-        PropTypes.any,
-      ],
       matchNavProps: [
         () => [selectors.currFramework],
         (framework) => {
@@ -399,26 +375,6 @@ export default KeaContext => {
         },
         PropTypes.any,
       ],
-      operateItemProps: [
-        () => [selectors.currFramework, selectors.user],
-        (framework, user) => {
-          if (!framework) {
-            return false
-          }
-          let data = pick(framework, [
-            'beginAt', 'endAt', 'ifSignupLimit',
-            'signupEndAt', 'applyState', 'id',
-            'evaluateApplyId', 'ifNomination', 'singUpNumber',
-            'label', 'ifWinner', 'ifUploadWork',
-          ])
-          data.evaluateId = data.id
-          delete data.id
-          user && (data.userType = user.type)
-          data.iconShow = false
-          return Immutable(data)
-        },
-        PropTypes.any,
-      ],
       bisaiAdProps: [
         () => [selectors.currAds],
         (ads) => {
@@ -547,9 +503,9 @@ export default KeaContext => {
         const {token, evaluateId, def} = action.payload
         let res
         if (token) {
-          res = yield call(classApi.getEvaluateFramework, evaluateId, token)
+          res = yield call(classApi.getFindLastEvaluate, evaluateId, token)
         } else {
-          res = yield call(classApi.getEvaluateFrameworkShare, evaluateId)
+          res = yield call(classApi.getFindLastEvaluate, evaluateId)
         }
         if (isError(res)) {
           yield call(baseXhrError, res)

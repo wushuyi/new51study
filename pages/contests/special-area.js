@@ -1,5 +1,4 @@
 import React, { Fragment } from 'react'
-import PropTypes from 'prop-types'
 import { withRedux } from 'store'
 import Layout from 'components/layout/default'
 import createLogic from 'pagelogic/contests/area'
@@ -8,7 +7,6 @@ import { deferred } from 'redux-saga/utils'
 import { isBrowser } from 'utils/runEnv'
 import BannerCover from 'components/contests/ui/banner-cover'
 import Introduce from 'components/contests/ui/introduce'
-import SignupBox from 'components/contests/ui/signup-box'
 import AvatarBox from 'components/contests/ui/avatar-box'
 import PagePullToRefresh from 'components/ui/page-pull-to-refresh'
 import NewsBox from 'components/contests/ui/news-box'
@@ -19,7 +17,6 @@ import ContestDetail from 'components/contests/ui/contest-detail'
 import GoContestHome from 'components/contests/ui/go-contest-home'
 import AdBanner from 'components/contests/ui/ad-banner'
 import AdList from 'components/contests/ui/ad-list'
-import OperateItem from 'components/contests/ui/operate-item'
 import GoBackOrOpenApp from 'components/ui/goback-or-openapp'
 import MatchNavItem from 'components/contests/ui/match-nav-item';
 import { checkToken, authDidMount, ComponentPageError } from 'utils/pageAuth'
@@ -89,7 +86,6 @@ class Page extends React.PureComponent {
       bannerCoverProps,
       introduceProps,
       agencyItemProps,
-      signupBoxProps,
       goContestHomeProps,
       teachersProps,
       recommendsProps,
@@ -101,7 +97,6 @@ class Page extends React.PureComponent {
       shareProps,
       bisaiAdListProps,
       bisaiAdProps,
-      operateItemProps,
     } = this.props
     isBrowser && console.log(this.props)
 
@@ -114,10 +109,10 @@ class Page extends React.PureComponent {
 
           {agencyItemProps && <AgencyItem {...agencyItemProps}/>}
 
-          {signupBoxProps && <SignupBox isClass={true} {...signupBoxProps}/>}
-
           {bisaiAdListProps && <AdList onAd={(AdId) => {actions.postAd(AdId)}} {...bisaiAdListProps}/>}
-          {<MatchNavItem/>}
+          <div style={{backgroundColor:'#fff',overflow:'hidden'}}>
+            {<MatchNavItem title={'报名比赛'}/>}
+          </div>
           {goContestHomeProps && <GoContestHome {...goContestHomeProps}/>}
 
           {bisaiAdProps && <AdBanner onAd={(AdId) => {actions.postAd(AdId)}} {...bisaiAdProps}/>}
@@ -160,8 +155,6 @@ class Page extends React.PureComponent {
 
           {detailProps && <ContestDetail {...detailProps}/>}
         </PagePullToRefresh>
-        {operateItemProps &&  <OperateItem {...operateItemProps}/>}
-
         <GoBackOrOpenApp/>
       </Layout>
     )
@@ -185,7 +178,6 @@ export default withRedux(Page, function (KeaContext, ctx) {
         'bannerCoverProps',
         'introduceProps',
         'agencyItemProps',
-        'signupBoxProps',
         'goContestHomeProps',
         'teachersProps',
         'recommendsProps',
@@ -196,8 +188,7 @@ export default withRedux(Page, function (KeaContext, ctx) {
         'detailProps',
         'shareProps',
         'bisaiAdListProps',
-        'bisaiAdProps',
-        'operateItemProps',
+        'bisaiAdProps'
       ]
     ]
   })

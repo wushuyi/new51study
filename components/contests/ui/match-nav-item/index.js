@@ -1,26 +1,25 @@
 import React, { Fragment } from 'react'
 import Style from './style.scss'
+import {string,array,any} from 'prop-types'
 
 export default class MatchNavItem extends React.PureComponent {
 
-  static defaultProps = {
-
+  static propTypes = {
+    title: string
   }
 
-
+  static defaultProps = {
+    title: false
+  }
   render() {
     let {
-      title,
-      orgUserName,
-      area,
-      contestType,
-      tageType
+      title
     } =this.props;
 
     return (
       <Fragment>
         <div className="nav">
-          <div className="name">报名·晋级比赛</div>
+          <div className="name">{title}</div>
           <div className="icon"></div>
         </div>
         {/*language=CSS*/}

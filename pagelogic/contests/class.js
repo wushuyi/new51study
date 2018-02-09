@@ -544,9 +544,9 @@ export default KeaContext => {
         const {token, evaluateId, def} = action.payload
         let res
         if (token) {
-          res = yield call(classApi.getEvaluateFramework, evaluateId, token)
+          res = yield call(classApi.getEvaluateFindById, evaluateId, token)
         } else {
-          res = yield call(classApi.getEvaluateFrameworkShare, evaluateId)
+          res = yield call(classApi.getEvaluateFindById, evaluateId)
         }
         if (isError(res)) {
           yield call(baseXhrError, res)

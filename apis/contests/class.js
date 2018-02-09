@@ -4,24 +4,25 @@ import xhrCrypto from 'utils/xhrCrypto'
 import { baseChcek, needAuthError } from 'apis/utils/error'
 
 /**
- * API: /evaluates/${evaluateId}/framework
+ * API: /evaluate/findById
  * @param evaluateId
  * @param token
  * @returns {Promise<*>}
  */
-export async function getEvaluateFramework(evaluateId, token) {
-  if (!token) {
-    return new needAuthError(`can't read token`)
-  }
+export async function getEvaluateFindById(evaluateId, token) {
+
   const api= `/evaluate/findById`
   const requestURL = `${APIService}${api}`
+  let data={
+    evaluateId
+  }
+  if(token){
+    data.token=token;
+  }
   try {
     const res = await request.get(requestURL)
       .query(APIVersion)
-      .query({
-        evaluateId,
-        token
-      })
+      .query(data)
       .use(xhrCrypto)
     return baseChcek(res)
   } catch (err) {
@@ -30,17 +31,24 @@ export async function getEvaluateFramework(evaluateId, token) {
 }
 
 /**
- * API: /evaluates/${evaluateId}/framework/forShare
+ * API: /evaluate/findLastEvaluate
  * @param evaluateId
  * @param token
  * @returns {Promise<*>}
  */
-export async function getEvaluateFrameworkShare(evaluateId) {
-  const api= `/evaluate/findById`
+export async function getFindLastEvaluate(evaluateId, token) {
+  const api= `/evaluate/findLastEvaluate`
   const requestURL = `${APIService}${api}`
+  let data={
+    evaluateId
+  }
+  if(token){
+    data.token=token;
+  }
   try {
     const res = await request.get(requestURL)
       .query(APIVersion)
+      .query(data)
       .use(xhrCrypto)
     return baseChcek(res)
   } catch (err) {

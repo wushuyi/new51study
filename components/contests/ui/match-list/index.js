@@ -43,7 +43,7 @@ export default class MatchList extends React.PureComponent {
         contestType:type,
         tagType:(i==len-1)? (type==='prevEvaluates'?'down':type==='nextEvaluates'?'up':''):''
       }
-      list.push(<MatchItem {...evaluateProps}/>);
+      list.push(<MatchItem key={item.id} {...evaluateProps}/>);
     }
     return list
   }
@@ -58,7 +58,7 @@ export default class MatchList extends React.PureComponent {
     return (
       <Fragment>
         <div className="match-list">
-          <MatchNavItem/>
+          <MatchNavItem title={'报名·晋级比赛'}/>
           <div className='match-wrapper'>
             {prevEvaluates}
             <CurrMatchItem title={title} tagType={!prevEvaluates.length?'bottom':!nextEvaluates.length?'top':''}/>
