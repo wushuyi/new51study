@@ -13,6 +13,7 @@ import { checkToken, ComponentPageError, authDidMount } from 'utils/pageAuth'
 import PagePullToRefresh from 'components/ui/page-pull-to-refresh'
 import { Formik, Field, Form } from 'formik'
 import StudyBox from 'components/sign-up/information/study-box'
+import ParentBox from 'components/sign-up/information/parent-box'
 
 class Page extends React.PureComponent {
   static async getInitialProps (ctx) {
@@ -85,7 +86,10 @@ class Page extends React.PureComponent {
     const {
       classId,
       currSingupDetail,
+      parentBoxProps,
     } = this.props
+
+    console.log('parentBoxProps', parentBoxProps)
 
     return (
       <Layout>
@@ -122,7 +126,7 @@ class Page extends React.PureComponent {
             render={({errors, touched, isSubmitting}) => (
               <Form>
                 <StudyBox/>
-                <StudyBox/>
+                <ParentBox data={parentBoxProps}/>
               </Form>
             )}
           />
@@ -147,6 +151,7 @@ export default withRedux(Page, function (KeaContext, ctx) {
       mainLogic, [
         'classId',
         'currSingupDetail',
+        'parentBoxProps',
       ],
     ],
   })

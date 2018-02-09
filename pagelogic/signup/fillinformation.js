@@ -80,7 +80,7 @@ export default KeaContext => {
         },
         PropTypes.any,
       ],
-      studyBox: [
+      studyBoxProps: [
         () => [selectors.currSingupDetail],
         (singupDetail) => {
           let data = [], labels, defData
@@ -132,21 +132,17 @@ export default KeaContext => {
               },
             })
           }
+          console.log(labels)
           if (labels) {
-            for (let item in labels) {
-              let conf = {
-                name: item.name,
-                isRequired: item.isRequired,
-                itemProps: {
-                  labelName: item.desc,
-                },
-              }
+            for (let index in labels) {
+              let item = labels[index]
+              let conf
               switch (parseInt(item.type)) {
                 case 0:
                   conf = {
                     name: item.name,
-                    component: 'InputText',
                     isRequired: item.isRequired,
+                    component: 'InputText',
                     itemProps: {
                       labelName: item.desc,
                       defaultVal: (defData && defData[item.name]) || '',
@@ -154,20 +150,30 @@ export default KeaContext => {
                   }
                   break
                 case 1:
+                  let sourceDataSplit = item.item.split(',')
+                  let defaultVal = sourceDataSplit.indexOf(item.name) + 1
+                  sourceData = sourceDataSplit.map((item, index) => {
+                    return {
+                      value: index,
+                      label: item,
+                    }
+                  })
                   conf = {
                     name: item.name,
-                    component: 'InputRadio',
                     isRequired: item.isRequired,
+                    component: 'InputRadio',
                     itemProps: {
                       labelName: item.desc,
+                      sourceData,
+                      defaultVal,
                     },
                   }
                   break
                 case 2:
                   conf = {
                     name: item.name,
-                    component: 'InputCheckbox',
                     isRequired: item.isRequired,
+                    component: 'InputCheckbox',
                     itemProps: {
                       labelName: item.desc,
                     },
@@ -176,8 +182,8 @@ export default KeaContext => {
                 case 3:
                   conf = {
                     name: item.name,
-                    component: 'InputImage',
                     isRequired: item.isRequired,
+                    component: 'InputImage',
                     itemProps: {
                       labelName: item.desc,
                     },
@@ -186,6 +192,103 @@ export default KeaContext => {
                 default:
                   break
               }
+              data.push(conf)
+            }
+          }
+
+          return Immutable(data)
+        },
+        PropTypes.any,
+      ],
+      parentBoxProps: [
+        () => [selectors.currSingupDetail],
+        (singupDetail) => {
+          let data = [], labels, defData
+          const {ifApplyGroup, applyGroupStr, fullName, phone, groupName} = singupDetail
+          if (singupDetail.parentInfoLabels) {
+            labels = JSON.parse(singupDetail.parentInfoLabels)
+          }
+          if (singupDetail.parentText) {
+            defData = JSON.parse(singupDetail.parentText)
+          }
+
+          console.log(labels)
+          if (labels) {
+            for (let index in labels) {
+              let item = labels[index]
+              let conf
+              switch (parseInt(item.type)) {
+                case 0: {
+                  conf = {
+                    name: item.name,
+                    isRequired: item.isRequired || false,
+                    component: 'InputText',
+                    itemProps: {
+                      labelName: item.name,
+                      defaultVal: (defData && defData[item.name]) || '',
+                    },
+                  }
+                }
+                  break
+                case 1: {
+                  let sourceDataSplit = item.text.split(',')
+                  let find = sourceDataSplit.indexOf(item.name)
+                  let defaultVal = find > -1 ? find + 1 : false
+                  let sourceData = sourceDataSplit.map((item, index) => {
+                    return {
+                      value: index,
+                      label: item,
+                    }
+                  })
+                  conf = {
+                    name: item.name,
+                    isRequired: item.isRequired || false,
+                    component: 'InputRadio',
+                    itemProps: {
+                      labelName: item.name,
+                      sourceData,
+                      defaultVal,
+                    },
+                  }
+                }
+                  break
+                case 2: {
+                  let sourceDataSplit = item.text.split(',')
+                  let find = sourceDataSplit.indexOf(item.name)
+                  let defaultVal = find > -1 ? find + 1 : false
+                  let sourceData = sourceDataSplit.map((item, index) => {
+                    return {
+                      value: index,
+                      label: item,
+                    }
+                  })
+                  conf = {
+                    name: item.name,
+                    isRequired: item.isRequired || false,
+                    component: 'InputCheckbox',
+                    itemProps: {
+                      labelName: item.name,
+                      sourceData,
+                      defaultVal
+                    },
+                  }
+                }
+                  break
+                case 3:
+                  conf = {
+                    name: item.name,
+                    isRequired: item.isRequired || false,
+                    component: 'InputImage',
+                    itemProps: {
+                      labelName: item.name,
+                      defaultVal: (defData && defData[item.name]) || '',
+                    },
+                  }
+                  break
+                default:
+                  break
+              }
+              data.push(conf)
             }
           }
 

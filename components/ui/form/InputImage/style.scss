@@ -2,6 +2,9 @@
 @import "components/ui/form/config";
 
 .am-list-item {
+  :global(.am-list-line) {
+    padding-right: 10 * $hd;
+  }
   :global(.am-list-content) {
     @include input-item
   }
