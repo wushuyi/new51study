@@ -1,4 +1,4 @@
-import { default as baseWithRedux } from 'libs/next-redux/next-redux-wrapper'
+import baseWithRedux from 'libs/next-redux/next-redux-wrapper'
 import withReduxSaga from 'libs/next-redux/next-redux-saga'
 import { getKeaSaga } from 'libs/next-kea-saga'
 import { END } from 'redux-saga'

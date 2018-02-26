@@ -12,6 +12,11 @@ import WYXItem from 'components/sign-up/ui/search/wyx-item'
 import TeacherItem from 'components/sign-up/ui/search/teacher-item'
 import StudyItem from 'components/sign-up/ui/search/study-item'
 import OrgItem from 'components/sign-up/ui/search/org-item'
+import { getAllQudao, getQudaoSearch } from 'apis/sign-up/fill-information'
+import { getToken } from 'utils/auth'
+import isError from 'lodash/isError'
+
+const {alert} = Modal
 
 function resolveScopedStyles (scope) {
   return {
@@ -34,6 +39,16 @@ export default class InputChannelItem extends React.PureComponent {
       text: '',
       number: '',
     }
+  }
+
+  async componentDidMount () {
+    const token = getToken()
+    const res = await getAllQudao(139, 0, 30, token)
+    if (isError(res)) {
+      alert('接口错误请重试!')
+      return false
+    }
+    console.log(res.body.data)
   }
 
   onWrapTouchStart = (e) => {
@@ -88,21 +103,9 @@ export default class InputChannelItem extends React.PureComponent {
                       placeholder="可查推荐您参赛的老师或机构"/>
           <div className="scroll">
             <WYXItem {...itemProps}/>
-            <TeacherItem {...itemProps}/>
-            <StudyItem {...itemProps}/>
-            <OrgItem {...itemProps}/>
-            <WYXItem {...itemProps}/>
-            <TeacherItem {...itemProps}/>
-            <StudyItem {...itemProps}/>
-            <OrgItem {...itemProps}/>
-            <WYXItem {...itemProps}/>
-            <TeacherItem {...itemProps}/>
-            <StudyItem {...itemProps}/>
-            <OrgItem {...itemProps}/>
-            <WYXItem {...itemProps}/>
-            <TeacherItem {...itemProps}/>
-            <StudyItem {...itemProps}/>
-            <OrgItem {...itemProps}/>
+            {/*<TeacherItem {...itemProps}/>*/}
+            {/*<StudyItem {...itemProps}/>*/}
+            {/*<OrgItem {...itemProps}/>*/}
           </div>
         </Modal>
         {scoped.styles}

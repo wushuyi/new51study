@@ -4,6 +4,10 @@ import InputItem from 'antd-mobile/lib/input-item'
 import Style from 'components/ui/form/style.scss'
 import classnames from 'classnames'
 import Modal from 'antd-mobile/lib/modal'
+import shallowequal from 'shallowequal'
+import pick from 'lodash/pick'
+import get from 'lodash/get'
+import { isDev } from 'config/settings'
 
 const alert = Modal.alert
 
@@ -21,16 +25,45 @@ const scoped = resolveScopedStyles((
 ))
 
 export default class InputText extends React.Component {
-  constructor(props, context){
+  constructor (props, context) {
     super(props, context)
   }
 
-  shouldComponentUpdate(nextProps, nextState){
+  shouldComponentUpdate (nextProps, nextState) {
     const {props, state} = this
-    const {field, form} = props
-    const {field: nextField, form: nextForm} = nextProps
-    return true
+    if (!shallowequal(state, nextState)) {
+      return true
+    }
+    const {field, form, ...resProps} = props
+    const {field: nextField, form: nextForm, ...resNextProps} = nextProps
+    if (!shallowequal(resProps, resNextProps)) {
+      return true
+    }
+    const resField = ['name', 'value']
+    if (!shallowequal(pick(field, resField), pick(nextField, resField))) {
+      return true
+    }
+
+    const res1 = ['dirty', 'isSubmitting', 'isValid', 'validateOnBlur', 'validateOnChange']
+    if (!shallowequal(pick(form, res1), pick(nextForm, res1))) {
+      return true
+    }
+    const res2 = ['touched', 'values', 'errors']
+    const form1 = {
+      touched: get(form, ['touched', nextField.name]),
+      errors: get(form, ['errors', nextField.name])
+    }
+    const nextForm1 = {
+      touched: get(nextForm, ['touched', nextField.name]),
+      errors: get(nextForm, ['errors', nextField.name])
+    }
+    if (!shallowequal(form1, nextForm1)) {
+      return true
+    }
+
+    return false
   }
+
   render () {
     const {field, form, ...props} = this.props
     const {labelName, placeholder, styleFullLine, isRequire, ...restProps} = props
@@ -45,6 +78,7 @@ export default class InputText extends React.Component {
         alert(form.errors[field.name])
       }
     }
+    isDev && console.log(field)
     return (
       <Fragment>
         <InputItem

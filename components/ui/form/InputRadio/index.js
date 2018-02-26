@@ -8,6 +8,10 @@ import Popup from 'rmc-cascader/lib/Popup'
 import WrapFragment from 'components/ui/form/utils/WrapComponent'
 import InputItemComponent from 'components/ui/form/utils/InputItemComponent'
 import Modal from 'antd-mobile/lib/modal'
+import pick from 'lodash/pick'
+import shallowequal from 'shallowequal'
+import { isDev } from 'config/settings'
+import get from 'lodash/get'
 
 const alert = Modal.alert
 
@@ -79,6 +83,41 @@ export default class InputRadio extends React.Component {
     }
   }
 
+  shouldComponentUpdate (nextProps, nextState) {
+    const {props, state} = this
+    if (!shallowequal(state, nextState)) {
+      return true
+    }
+    const {field, form, ...resProps} = props
+    const {field: nextField, form: nextForm, ...resNextProps} = nextProps
+    if (!shallowequal(resProps, resNextProps)) {
+      return true
+    }
+    const resField = ['name', 'value']
+    if (!shallowequal(pick(field, resField), pick(nextField, resField))) {
+      return true
+    }
+
+    const res1 = ['dirty', 'isSubmitting', 'isValid', 'validateOnBlur', 'validateOnChange']
+    if (!shallowequal(pick(form, res1), pick(nextForm, res1))) {
+      return true
+    }
+    const res2 = ['touched', 'values', 'errors']
+    const form1 = {
+      touched: get(form, ['touched', nextField.name]),
+      errors: get(form, ['errors', nextField.name])
+    }
+    const nextForm1 = {
+      touched: get(nextForm, ['touched', nextField.name]),
+      errors: get(nextForm, ['errors', nextField.name])
+    }
+    if (!shallowequal(form1, nextForm1)) {
+      return true
+    }
+
+    return false
+  }
+
   componentWillReceiveProps (nextProps) {
     const {defaultValue: currVal} = this.props
     const {defaultValue: nextVal} = nextProps
@@ -108,7 +147,7 @@ export default class InputRadio extends React.Component {
         alert(form.errors[field.name])
       }
     }
-
+    isDev && console.log(field)
     const popupContent = (
       <div className={`popup-content ${jsxName}`}>
         <List className={`popup-scroll ${jsxName}`}>

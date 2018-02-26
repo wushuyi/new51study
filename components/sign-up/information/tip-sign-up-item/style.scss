@@ -1,0 +1,9 @@
+@import 'libs/hotcss/px2rem';
+
+.tip {
+  width: 100%;
+  text-align: center;
+  padding: 28*$hd 0 38*$hd;
+  font-size: 14*$hd;
+  color: #BDBDBD;
+}

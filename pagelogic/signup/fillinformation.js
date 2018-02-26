@@ -85,6 +85,7 @@ export default KeaContext => {
         (singupDetail) => {
           let data = [], labels, defData
           const {ifApplyGroup, applyGroupStr, fullName, phone, groupName} = singupDetail
+          const prefix = 'study-'
           if (singupDetail.labels) {
             labels = JSON.parse(singupDetail.labels)
           }
@@ -92,26 +93,27 @@ export default KeaContext => {
             defData = JSON.parse(singupDetail.text)
           }
           data.push({
-            name: 'phone',
+            name: prefix + 'fullName',
+            isRequired: true,
+            component: 'InputText',
+            itemProps: {
+              labelName: '姓名',
+              placeholder: '请输入真实姓名',
+              defaultval: fullName || '',
+            },
+          })
+          data.push({
+            name: prefix + 'phone',
             isRequired: true,
             component: 'InputText',
             itemProps: {
               labelName: '手机',
               placeholder: '请输入手机号码',
               type: 'phone',
-              defaultVal: phone || '',
+              defaultval: phone || '',
             },
           })
-          data.push({
-            name: 'fullName',
-            isRequired: true,
-            component: 'InputText',
-            itemProps: {
-              labelName: '姓名',
-              placeholder: '请输入真实姓名',
-              defaultVal: fullName || '',
-            },
-          })
+
           // 选择分组
           if (ifApplyGroup && applyGroupStr) {
             let sourceData = applyGroupStr.split(',').map((item, index) => {
@@ -121,14 +123,14 @@ export default KeaContext => {
               }
             })
             data.push({
-              name: 'groupName',
+              name: prefix + 'groupName',
               isRequired: true,
               component: 'InputRadio',
               itemProps: {
                 labelName: '分组',
                 placeholder: '请选择组别',
                 sourceData,
-                defaultVal: groupName,
+                defaultval: groupName,
               },
             })
           }
@@ -140,52 +142,52 @@ export default KeaContext => {
               switch (parseInt(item.type)) {
                 case 0:
                   conf = {
-                    name: item.name,
+                    name: prefix + item.name,
                     isRequired: item.isRequired,
                     component: 'InputText',
                     itemProps: {
-                      labelName: item.desc,
-                      defaultVal: (defData && defData[item.name]) || '',
+                      labelName: item.desc || item.name,
+                      defaultval: (defData && defData[item.name]) || '',
                     },
                   }
                   break
                 case 1:
-                  let sourceDataSplit = item.item.split(',')
-                  let defaultVal = sourceDataSplit.indexOf(item.name) + 1
-                  sourceData = sourceDataSplit.map((item, index) => {
+                  let sourceDataSplit = item.text.split(',')
+                  let defaultval = sourceDataSplit.indexOf(item.name) + 1
+                  let sourceData = sourceDataSplit.map((item, index) => {
                     return {
                       value: index,
                       label: item,
                     }
                   })
                   conf = {
-                    name: item.name,
+                    name: prefix + item.name,
                     isRequired: item.isRequired,
                     component: 'InputRadio',
                     itemProps: {
-                      labelName: item.desc,
+                      labelName: item.desc || item.name,
                       sourceData,
-                      defaultVal,
+                      defaultval,
                     },
                   }
                   break
                 case 2:
                   conf = {
-                    name: item.name,
+                    name: prefix + item.name,
                     isRequired: item.isRequired,
                     component: 'InputCheckbox',
                     itemProps: {
-                      labelName: item.desc,
+                      labelName: item.desc || item.name,
                     },
                   }
                   break
                 case 3:
                   conf = {
-                    name: item.name,
+                    name: prefix + item.name,
                     isRequired: item.isRequired,
                     component: 'InputImage',
                     itemProps: {
-                      labelName: item.desc,
+                      labelName: item.desc || item.name,
                     },
                   }
                   break
@@ -205,6 +207,7 @@ export default KeaContext => {
         (singupDetail) => {
           let data = [], labels, defData
           const {ifApplyGroup, applyGroupStr, fullName, phone, groupName} = singupDetail
+          const prefix = 'parent-'
           if (singupDetail.parentInfoLabels) {
             labels = JSON.parse(singupDetail.parentInfoLabels)
           }
@@ -220,12 +223,12 @@ export default KeaContext => {
               switch (parseInt(item.type)) {
                 case 0: {
                   conf = {
-                    name: item.name,
+                    name: prefix + item.name,
                     isRequired: item.isRequired || false,
                     component: 'InputText',
                     itemProps: {
-                      labelName: item.name,
-                      defaultVal: (defData && defData[item.name]) || '',
+                      labelName: item.desc || item.name,
+                      defaultval: (defData && defData[item.name]) || '',
                     },
                   }
                 }
@@ -233,7 +236,7 @@ export default KeaContext => {
                 case 1: {
                   let sourceDataSplit = item.text.split(',')
                   let find = sourceDataSplit.indexOf(item.name)
-                  let defaultVal = find > -1 ? find + 1 : false
+                  let defaultval = find > -1 ? find + 1 : false
                   let sourceData = sourceDataSplit.map((item, index) => {
                     return {
                       value: index,
@@ -241,13 +244,13 @@ export default KeaContext => {
                     }
                   })
                   conf = {
-                    name: item.name,
+                    name: prefix + item.name,
                     isRequired: item.isRequired || false,
                     component: 'InputRadio',
                     itemProps: {
-                      labelName: item.name,
+                      labelName: item.desc || item.name,
                       sourceData,
-                      defaultVal,
+                      defaultval,
                     },
                   }
                 }
@@ -255,7 +258,7 @@ export default KeaContext => {
                 case 2: {
                   let sourceDataSplit = item.text.split(',')
                   let find = sourceDataSplit.indexOf(item.name)
-                  let defaultVal = find > -1 ? find + 1 : false
+                  let defaultval = find > -1 ? find + 1 : false
                   let sourceData = sourceDataSplit.map((item, index) => {
                     return {
                       value: index,
@@ -263,25 +266,25 @@ export default KeaContext => {
                     }
                   })
                   conf = {
-                    name: item.name,
+                    name: prefix + item.name,
                     isRequired: item.isRequired || false,
                     component: 'InputCheckbox',
                     itemProps: {
-                      labelName: item.name,
+                      labelName: item.desc || item.name,
                       sourceData,
-                      defaultVal
+                      defaultval
                     },
                   }
                 }
                   break
                 case 3:
                   conf = {
-                    name: item.name,
+                    name: prefix + item.name,
                     isRequired: item.isRequired || false,
                     component: 'InputImage',
                     itemProps: {
-                      labelName: item.name,
-                      defaultVal: (defData && defData[item.name]) || '',
+                      labelName: item.desc || item.name,
+                      defaultval: (defData && defData[item.name]) || '',
                     },
                   }
                   break

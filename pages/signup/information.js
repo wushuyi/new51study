@@ -14,6 +14,9 @@ import PagePullToRefresh from 'components/ui/page-pull-to-refresh'
 import { Formik, Field, Form } from 'formik'
 import StudyBox from 'components/sign-up/information/study-box'
 import ParentBox from 'components/sign-up/information/parent-box'
+import WhiteSpace from 'components/ui/white-space'
+import TipSignUpItem from 'components/sign-up/information/tip-sign-up-item'
+import OperateItem from 'components/sign-up/information/operate-item'
 
 class Page extends React.PureComponent {
   static async getInitialProps (ctx) {
@@ -40,7 +43,7 @@ class Page extends React.PureComponent {
     authData && store.dispatch(actions.syncAuthData(authData))
     try {
       const def = deferred()
-      store.dispatch(actions.initPage(137, def, token))
+      store.dispatch(actions.initPage(139, def, token))
       await def.promise
     } catch (err) {
       return {
@@ -65,7 +68,7 @@ class Page extends React.PureComponent {
     const {actions} = this.props
     const def = deferred()
     let token = getToken()
-    actions.initPage(137, def, token)
+    actions.initPage(139, def, token)
     return def.promise
   }
 
@@ -87,6 +90,7 @@ class Page extends React.PureComponent {
       classId,
       currSingupDetail,
       parentBoxProps,
+      studyBoxProps,
     } = this.props
 
     console.log('parentBoxProps', parentBoxProps)
@@ -94,44 +98,47 @@ class Page extends React.PureComponent {
     return (
       <Layout>
         <Share/>
-        <PagePullToRefresh onRefresh={this.onRefresh}>
-          <TitleItem/>
-          <Formik
-            validateOnChange={false}
-            validateOnBlur={true}
-            initialValues={{}}
-            onSubmit={(values, actions) => {
-              sleep(3000).then(
-                updatedUser => {
-                  actions.setSubmitting(false)
-                },
-                error => {
-                  actions.setSubmitting(false)
-                  actions.setErrors('错误!')
-                },
-              )
-            }}
-            validate={(values, props) => {
-              console.log(this, 'this')
-              const errors = {}
-              if (!values.email) {
-                errors.email = '请输入邮箱地址'
-              } else if (
-                !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
-              ) {
-                errors.email = '请输入正确的邮箱地址'
-              }
-              return errors
-            }}
-            render={({errors, touched, isSubmitting}) => (
-              <Form>
-                <StudyBox/>
-                <ParentBox data={parentBoxProps}/>
-              </Form>
-            )}
-          />
-          <InputChannelItem/>
-        </PagePullToRefresh>
+        <TitleItem/>
+        <Formik
+          validateOnChange={false}
+          validateOnBlur={true}
+          initialValues={{}}
+          onSubmit={(values, actions) => {
+            sleep(3000).then(
+              updatedUser => {
+                actions.setSubmitting(false)
+              },
+              error => {
+                actions.setSubmitting(false)
+                actions.setErrors('错误!')
+              },
+            )
+          }}
+          validate={(values, props) => {
+            // console.log(this, 'this')
+            // const errors = {}
+            // if (!values.email) {
+            //   errors.email = '请输入邮箱地址'
+            // } else if (
+            //   !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
+            // ) {
+            //   errors.email = '请输入正确的邮箱地址'
+            // }
+            // return errors
+          }}
+          render={({errors, touched, isSubmitting}) => (
+            <Form>
+              {studyBoxProps && studyBoxProps.length && <StudyBox data={studyBoxProps}/> || null}
+
+              {parentBoxProps && parentBoxProps.length && <ParentBox data={parentBoxProps}/> || null}
+              <WhiteSpace height={9}/>
+              <InputChannelItem/>
+              <TipSignUpItem/>
+              <OperateItem/>
+            </Form>
+          )}
+        />
+
       </Layout>
     )
   }
@@ -152,6 +159,7 @@ export default withRedux(Page, function (KeaContext, ctx) {
         'classId',
         'currSingupDetail',
         'parentBoxProps',
+        'studyBoxProps',
       ],
     ],
   })

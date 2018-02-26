@@ -17,12 +17,13 @@ export default class ParentBox extends React.Component {
       <Fragment>
         <InformationTitleItem title="家长"/>
         <List>
-          {data.map((item) => {
-            console.log(item)
+          {data.map((item, index) => {
+            // console.log(item)
             switch (item.component) {
               case 'InputText':
                 return (
                   <Field
+                    key={index}
                     name={item.name}
                     render={(ctx) => {
                       return (
@@ -37,6 +38,7 @@ export default class ParentBox extends React.Component {
               case 'InputCheckbox':
                 return (
                   <Field
+                    key={index}
                     name={item.name}
                     render={(ctx) => {
                       return (
@@ -51,6 +53,7 @@ export default class ParentBox extends React.Component {
               case 'InputRadio':
                 return (
                   <Field
+                    key={index}
                     name={item.name}
                     render={(ctx) => {
                       return (
@@ -65,6 +68,7 @@ export default class ParentBox extends React.Component {
               case 'InputImage':
                 return (
                   <Field
+                    key={index}
                     name={item.name}
                     render={(ctx) => {
                       return (

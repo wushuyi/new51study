@@ -1,0 +1,29 @@
+@import 'libs/hotcss/px2rem';
+
+.operate-outer {
+  width: 100%;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  background: #fff;
+  .operate-item {
+    margin: 10*$hd 20*$hd;
+    height: 51*$hd;
+    font-size: 18*$hd;
+    text-align: center;
+    color: #FFFFFF;
+    background: #FB6831;
+    border-radius: 5*$hd;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .operate-icon {
+    width: 18*$hd;
+    height: 22*$hd;
+    background-repeat: no-repeat;
+    background-size: contain;
+    margin-right: 7*$hd;
+  }
+}
+

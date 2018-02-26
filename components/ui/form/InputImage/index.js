@@ -25,6 +25,10 @@ import { closest } from 'utils'
 
 import { tween } from 'popmotion'
 import { MotionValue } from 'popmotion-react'
+import pick from 'lodash/pick'
+import shallowequal from 'shallowequal'
+import { isDev } from 'config/settings'
+import get from 'lodash/get'
 
 if (isBrowser) {
   const toBlob = require('blueimp-canvas-to-blob')
@@ -89,6 +93,41 @@ export default class InputImage extends React.Component {
     }
   }
 
+  shouldComponentUpdate (nextProps, nextState) {
+    const {props, state} = this
+    if (!shallowequal(state, nextState)) {
+      return true
+    }
+    const {field, form, ...resProps} = props
+    const {field: nextField, form: nextForm, ...resNextProps} = nextProps
+    if (!shallowequal(resProps, resNextProps)) {
+      return true
+    }
+    const resField = ['name', 'value']
+    if (!shallowequal(pick(field, resField), pick(nextField, resField))) {
+      return true
+    }
+
+    const res1 = ['dirty', 'isSubmitting', 'isValid', 'validateOnBlur', 'validateOnChange']
+    if (!shallowequal(pick(form, res1), pick(nextForm, res1))) {
+      return true
+    }
+    const res2 = ['touched', 'values', 'errors']
+    const form1 = {
+      touched: get(form, ['touched', nextField.name]),
+      errors: get(form, ['errors', nextField.name])
+    }
+    const nextForm1 = {
+      touched: get(nextForm, ['touched', nextField.name]),
+      errors: get(nextForm, ['errors', nextField.name])
+    }
+    if (!shallowequal(form1, nextForm1)) {
+      return true
+    }
+
+    return false
+  }
+
   componentWillReceiveProps (nextProps) {
     const {field} = this.props
     const {field: nextField} = nextProps
@@ -116,6 +155,7 @@ export default class InputImage extends React.Component {
   }
 
   uploadFile = (blob, fileKey) => {
+    const {field, form, ...props} = this.props
     let self = this
     let url = URL.createObjectURL(blob)
     self.setState({
@@ -123,9 +163,9 @@ export default class InputImage extends React.Component {
       uploading: true,
     })
 
-    const form = new FormData()
-    form.append('key', fileKey)
-    form.append('file', blob)
+    const formData = new FormData()
+    formData.append('key', fileKey)
+    formData.append('file', blob)
 
     getUploadToken(getToken()).then(function (res) {
       if (isError(res)) {
@@ -150,36 +190,35 @@ export default class InputImage extends React.Component {
         return false
       }
       const data = res.body.data
-      form.append('token', data)
+      formData.append('token', data)
       console.log('file', blob)
-      console.log('form', form)
+      console.log('form', formData)
 
-      request.post('http://upload.qiniup.com/').
-        send(form).
-        on('progress', event => {
-          self.setState({
-            percent: parseInt(event.percent),
-          })
-          console.log(event)
-        }).
-        then(function (res) {
-          console.log(res)
-          let imgSrc = `${config.QINIU.url}${res.body.key}`
-          self.setState({
-            imgSrc: imgSrc,
-          })
-          console.log(imgSrc)
+      request.post('http://upload.qiniup.com/').send(formData).on('progress', event => {
+        self.setState({
+          percent: parseInt(event.percent),
         })
+        console.log(event)
+      }).then(function (res) {
+        console.log(res)
+        let imgSrc = `${config.QINIU.url}${res.body.key}`
+        self.setState({
+          imgSrc: imgSrc,
+        })
+        form.setFieldValue(field.name, imgSrc)
+        console.log(imgSrc)
+      })
     })
   }
 
   onChange = (evt) => {
+    const {field, form, ...props} = this.props
     let self = this
     const {type} = this.props
     const {direction} = this.state
     let file = evt.target.files[0]
     evt.target.value = ''
-
+    form.setFieldTouched(field.name, true)
     loadImage(
       file,
       function (img) {
@@ -189,7 +228,7 @@ export default class InputImage extends React.Component {
         if (type === 'raw') {
           const preName = file.name.split('.')
           //@formatter:off
-          const fileKey = `media_blog_${preName[0]}_${(Math.random()).toString().slice(-4)}_${DateFormat(new Date(), 'YYYY_MM_DD_HH_m_ss_SSS')}_wh${imgW}x${imgH}.${preName[preName.length - 1]}`;
+          const fileKey = `media_blog_${preName[0]}_${(Math.random()).toString().slice(-4)}_${DateFormat(new Date(), 'YYYY_MM_DD_HH_m_ss_SSS')}_wh${imgW}x${imgH}.${preName[preName.length - 1]}`
           //@formatter:on
           self.uploadFile(file, fileKey)
           self.setState({
@@ -254,8 +293,8 @@ export default class InputImage extends React.Component {
         canvas.toBlob(function (blob) {
             const preName = file.name.split('.')
             //@formatter:off
-                const fileKey = `media_blog_${preName[0]}_${(Math.random()).toString().slice(-4)}_${DateFormat(new Date(), 'YYYY_MM_DD_HH_m_ss_SSS')}_wh${imgW}x${imgH}.${preName[preName.length - 1]}`;
-                //@formatter:on
+            const fileKey = `media_blog_${preName[0]}_${(Math.random()).toString().slice(-4)}_${DateFormat(new Date(), 'YYYY_MM_DD_HH_m_ss_SSS')}_wh${imgW}x${imgH}.${preName[preName.length - 1]}`
+            //@formatter:on
             self.uploadFile(blob, fileKey)
           },
           'image/jpeg')
@@ -331,7 +370,7 @@ export default class InputImage extends React.Component {
       'v': isV,
       'h': !isV,
     })
-
+    isDev && console.log(field)
     const extra = (
       <Fragment>
         <input type="file" onChange={this.onChange}/>
@@ -362,7 +401,7 @@ export default class InputImage extends React.Component {
         <List.Item
           className={cls}
           extra={extra}
-        >{labelName}</List.Item>
+        >{labelName || field.name}</List.Item>
         <Modal
           visible={modal}
           onClose={this.closeModal}

@@ -9,7 +9,7 @@ let skipMerge = ['initialState', 'initialProps', 'isServer', 'store']
 const DEFAULT_KEY = '__NEXT_REDUX_STORE__'
 const isBrowser = typeof window !== 'undefined'
 
-function initStore(makeStore, initialState, context, config) {
+function initStore (makeStore, initialState, context, config) {
   let req = context.req
   let isServer = !!req && !isBrowser
   let storeKey = config.storeKey
@@ -40,7 +40,7 @@ function initStore(makeStore, initialState, context, config) {
 
 }
 
-function createKeaWapper(KeaContext, createLogic, Cmp) {
+function createKeaWapper (KeaContext, createLogic, Cmp) {
   let WrappedKea, ConnectedCmp, logics
   WrappedKea = class newWrappedKea extends React.Component {
     static childContextTypes = {
@@ -52,7 +52,7 @@ function createKeaWapper(KeaContext, createLogic, Cmp) {
       }
     }
 
-    render() {
+    render () {
       return this.props.children
     }
   }
@@ -75,7 +75,7 @@ function createKeaWapper(KeaContext, createLogic, Cmp) {
           }
         }
 
-        render() {
+        render () {
           return this.props.children
         }
       }
@@ -89,7 +89,7 @@ function createKeaWapper(KeaContext, createLogic, Cmp) {
   }
 }
 
-module.exports = function (createStore) {
+let exports = function (createStore) {
 
   let config = {storeKey: DEFAULT_KEY, debug: _debug}
   let connectArgs
@@ -130,7 +130,7 @@ module.exports = function (createStore) {
     // Since provide should always be after connect we connect here
     let ConnectedCmp, Cmp
 
-    function WrappedCmp(props) {
+    function WrappedCmp (props) {
       if (!KeaContext) {
         Cmp = createCmp()
         KeaContext = getKea()
@@ -236,12 +236,14 @@ module.exports = function (createStore) {
 
 }
 
-module.exports.setPromise = function (Promise) {
+exports.setPromise = function (Promise) {
   _Promise = Promise
 }
 
-module.exports.setDebug = function (debug) {
+exports.setDebug = function (debug) {
   _debug = debug
 }
 
-module.exports.setPromise(Promise)
+exports.setPromise(Promise)
+
+export default exports
