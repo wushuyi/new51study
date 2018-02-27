@@ -1,0 +1,73 @@
+@import 'libs/hotcss/px2rem';
+
+.option-item {
+  padding: 0 9*$hd;
+  border-top: 10*$hd solid #F2F2F2;
+  .title-outer {
+    height: 63*$hd;
+    display: flex;
+    align-items: center;
+    font-size: 22*$hd;
+    background: url(/static/images/bg/bg_signup_001.png) no-repeat center;
+    background-size: 100% 63*$hd;
+    .money {
+      margin-left: 24*$hd;
+      color: rgb(255, 97, 33);
+    }
+    .name {
+      flex: 1;
+      margin-left: 14*$hd;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .btn-type {
+      //flex: 1;
+      width: 27*$hd;
+      height: 27*$hd;
+      margin-right: 21*$hd;
+      background-repeat: no-repeat;
+      background-size: contain;
+      &.selected-icon {
+        background-image: url('/static/images/icon/icon_signup_selected.png');
+      }
+      &.unselect-icon {
+        background-image: url('/static/images/icon/icon_signup_unselect.png');
+      }
+    }
+    img {
+      display: block;
+      height: 42%;
+      margin-right: 21*$hd;
+    }
+  }
+  .content-outer {
+    padding: 6*$hd 9*$hd 6*$hd;
+    background: #FFFFFF;
+    box-shadow: 0 1*$hd 0 0 rgba(198, 198, 198, 0.50);
+    .content {
+      padding: 0 0.6rem;
+      font-size: 13.24*$hd;
+      color: #9E9E9E;
+      &.threeline {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+  }
+  .option-icon {
+    width: 19*$hd;
+    height: 10*$hd;
+    background-repeat: no-repeat;
+    background-size: contain;
+    margin: 6*$hd auto 0;
+    &.down-icon {
+      background-image: url('/static/images/icon/icon_arrow_down.png');
+    }
+    &.up-icon {
+      background-image: url('/static/images/icon/icon_arrow_up.png');
+    }
+  }
+
+}

@@ -1,0 +1,16 @@
+@import 'libs/hotcss/px2rem';
+@import "components/ui/form/config";
+
+.am-list-item{
+  :global(.am-list-content){
+    @include input-item
+  }
+  :global(.am-list-extra){
+    @include input;
+    flex-basis: 70%;
+  }
+  &.placeholder :global(.am-list-extra){
+    @include input-placeholder
+  }
+
+}

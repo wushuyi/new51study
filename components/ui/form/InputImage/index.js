@@ -349,7 +349,7 @@ export default class InputImage extends React.Component {
     const {percent, imgUrl, uploading, modal} = this.state
     const {imgW, imgH, direction} = this.state
     const {className: jsxName} = scoped
-    const cls = classnames(jsxName)
+    const cls = classnames(jsxName, 'am-input-item')
     // const extra = placeholder || `请选择${labelName || field.name}`
     let errProps = {}
     if (form.errors && form.touched[field.name] && form.errors[field.name]) {

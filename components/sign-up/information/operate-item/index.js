@@ -9,17 +9,18 @@ export default class OperateItem extends React.PureComponent {
     name: '我要报名',
     src: signupIcon,
     iconShow: false,
+    disabled: false,
     onClick: () => {
     }
   }
 
   render () {
-    const {name, onClick, iconShow, src} = this.props
+    const {name, onClick, iconShow, src, disabled} = this.props
     return (
       <Fragment>
         <WhiteSpace height={71}/>
         <div className="operate-outer" onClick={onClick}>
-          <div className="operate-item">
+          <div className={`operate-item ${disabled ? 'disabled' : ''}`}>
             <div className={iconShow ? 'operate-icon' : 'is-hidden'} style={iconShow && {
               backgroundImage: `url(${src})`
             } || {}}/>

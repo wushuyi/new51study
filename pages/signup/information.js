@@ -12,11 +12,22 @@ import { deferred } from 'redux-saga/utils'
 import { checkToken, ComponentPageError, authDidMount } from 'utils/pageAuth'
 import PagePullToRefresh from 'components/ui/page-pull-to-refresh'
 import { Formik, Field, Form } from 'formik'
+import { Persist } from 'formik-persist'
 import StudyBox from 'components/sign-up/information/study-box'
 import ParentBox from 'components/sign-up/information/parent-box'
 import WhiteSpace from 'components/ui/white-space'
 import TipSignUpItem from 'components/sign-up/information/tip-sign-up-item'
 import OperateItem from 'components/sign-up/information/operate-item'
+import OptionItem from 'components/sign-up/information/option-item'
+import { sleep } from 'utils'
+import pickBy from 'lodash/pickBy'
+import startsWith from 'lodash/startsWith'
+import mapKeys from 'lodash/mapKeys'
+import forEach from 'lodash/forEach'
+import clone from 'lodash/clone'
+import Modal from 'antd-mobile/lib/modal'
+
+const {alert} = Modal
 
 class Page extends React.PureComponent {
   static async getInitialProps (ctx) {
@@ -104,6 +115,69 @@ class Page extends React.PureComponent {
           validateOnBlur={true}
           initialValues={{}}
           onSubmit={(values, actions) => {
+            console.log('values', values)
+            let isValidate = true
+            let vals = {}
+            // let vals = {
+            //   'study-身份证照': 'http://7xszyu.com1.z0.glb.clouddn.com/media_blog_yaofan_1432_2018_02_27_17_24_24_362_wh300x300.jpg',
+            //   'parent-姓名': '213123',
+            //   'parent-职业': '12312312',
+            //   'study-groupName': false,
+            //   'study-爱好': '21312312',
+            //   'study-兴趣': '12312312',
+            //   'study-phone': '123 123',
+            //   'study-fullName': '123123123'
+            // }
+            vals = clone(values)
+            let inputProps = [].concat(parentBoxProps).concat(studyBoxProps)
+            forEach(inputProps, function (item) {
+              if (item.isRequired && !vals[item.name]) {
+                alert(`请填写${item.itemProps.labelName}`)
+                isValidate = false
+                return false
+              }
+              if (item.component === 'InputRadio') {
+                let itemKey = item.name
+                if (vals[itemKey]) {
+                  vals[itemKey] = item.itemProps.sourceData[vals[itemKey]].label
+                }
+              }
+              if (item.component === 'InputCheckbox') {
+                let itemKey = item.name
+                if (vals[itemKey]) {
+                  vals[itemKey] = vals[itemKey]
+                    .map((index) => {
+                      return item.itemProps.sourceData[index].label
+                    })
+                    .join(',')
+                }
+              }
+              if (item.name === 'study-phone') {
+                let itemKey = item.name
+                if (vals[itemKey]) {
+                  vals[itemKey] = vals[itemKey].split(' ').join('')
+                }
+              }
+            })
+            console.log('inputProps', inputProps)
+            if (!isValidate) {
+              actions.setSubmitting(false)
+              return false
+            }
+            let studys = pickBy(vals, (val, key) => {
+              return startsWith(key, 'study-')
+            })
+            studys = mapKeys(studys, (val, key) => {
+              return key.split('study-')[1]
+            })
+            let parents = pickBy(vals, (val, key) => {
+              return startsWith(key, 'parent-')
+            })
+            parents = mapKeys(parents, (val, key) => {
+              return key.split('parent-')[1]
+            })
+            console.log('studys, parents', studys, parents)
+
             sleep(3000).then(
               updatedUser => {
                 actions.setSubmitting(false)
@@ -133,8 +207,24 @@ class Page extends React.PureComponent {
               {parentBoxProps && parentBoxProps.length && <ParentBox data={parentBoxProps}/> || null}
               <WhiteSpace height={9}/>
               <InputChannelItem/>
+              <OptionItem/>
+              <OptionItem/>
+              <OptionItem/>
               <TipSignUpItem/>
-              <OperateItem/>
+              <Field
+                name="submit"
+                render={(ctx) => {
+                  const {field, form} = ctx
+                  const {submitForm, isSubmitting} = form
+                  return (
+                    <OperateItem
+                      disabled={isSubmitting}
+                      onClick={() => {
+                        !isSubmitting && submitForm()
+                      }}/>
+                  )
+                }}
+              />
             </Form>
           )}
         />

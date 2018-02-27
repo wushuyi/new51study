@@ -81,4 +81,8 @@ body {
   user-select: text;
 }
 
+.am-list-item.am-input-item {
+  height: auto;
+  min-height: 53*$hd;
+}
 
