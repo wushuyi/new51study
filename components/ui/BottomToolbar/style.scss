@@ -1,0 +1,28 @@
+@import 'libs/hotcss/px2rem';
+
+.toolbar-warp {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  .item {
+
+  }
+  .item__inner {
+    font-size: 14*$hd;
+    //color: #48576a;
+    color: #20a0ff;
+    padding: 0 6*$hd;
+  }
+  //.item__inner:hover{
+  //  color: #20a0ff;
+  //  cursor: pointer;
+  //}
+  .separator {
+    font-size: 14*$hd;
+  }
+  .item:last-child .separator {
+    display: none;
+  }
+}

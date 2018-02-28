@@ -1,0 +1,15 @@
+@import 'libs/hotcss/px2rem';
+
+.filter-btn {
+  height: 40*$hd;
+  line-height: 40*$hd;
+  width: 80*$hd;
+  background-color: #ff6121;
+  color: #fff;
+  font-size: 14*$hd;
+  text-align: center;
+  border-radius: 5*$hd;
+  position: fixed;
+  top: 0;
+  right: 0;
+}
