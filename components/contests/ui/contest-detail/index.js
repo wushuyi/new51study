@@ -14,21 +14,21 @@ const scoped = (
 export default class ContestDetail extends React.PureComponent {
 
   static propTypes = {
-    description: PropTypes.any
+    detail: PropTypes.any
   }
 
   static defaultProps = {
-    description: '华丽的富文本'
+    detail: '华丽的富文本'
   }
 
   render() {
-    const {description} = this.props
+    const {detail} = this.props
     const jsxName = scoped.props.className
     return (
       <Fragment>
         <Element className={`contest-detail ${jsxName}`}
                  name='contest-detail'
-                 dangerouslySetInnerHTML={{__html: processContent(description) || ''}}/>
+                 dangerouslySetInnerHTML={{__html: processContent(detail) || ''}}/>
         {/*language=CSS*/}
         {/*<style jsx>{Style}</style>*/}
         {scoped.props.children}

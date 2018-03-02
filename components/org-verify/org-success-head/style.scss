@@ -1,0 +1,31 @@
+@import 'libs/hotcss/px2rem';
+
+.success-head {
+  padding-top: 1px;
+  .icon {
+    width: 120*$hd;
+    padding-top: 120*$hd;
+    //background: #333333;
+    background-image: url("/static/images/icon/icon_scanlogin_success.png");
+    background-size: 120*$hd;
+    margin: 8*$hd auto;
+  }
+  .msg1 {
+    font-size: 16*$hd;
+    text-align: center;
+    p {
+      margin: 6*$hd 0;
+    }
+  }
+  .msg2 {
+    font-size: 16*$hd;
+    text-align: left;
+    padding: 0 18*$hd;
+    p {
+      margin: 14*$hd 0;
+    }
+  }
+  .line {
+    border-color: #FFFFFF;
+  }
+}

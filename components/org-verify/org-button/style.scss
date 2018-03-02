@@ -1,0 +1,25 @@
+@import 'libs/hotcss/px2rem';
+
+.org-button-warp {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.org-button {
+  //padding: 0 20*$hd;
+  font-size: 14*$hd;
+  height: 32*$hd;
+  line-height: 32*$hd;
+  text-align: center;
+  width: 90*$hd;
+  &.btn1 {
+    color: #FFFFFF;
+    background: #ff6121;
+  }
+  &.btn2 {
+    color: #FFFFFF;
+    background: #d5d2d3;
+    margin-left: 28*$hd;
+  }
+}

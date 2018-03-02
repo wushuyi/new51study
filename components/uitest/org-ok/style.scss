@@ -1,0 +1,32 @@
+@import 'libs/hotcss/px2rem';
+
+.res-head {
+  padding-top: 80*$hd;
+  .icon {
+    width: 100*$hd;
+    padding-top: 100*$hd;
+    //background: #333333;
+    background-size: 100*$hd;
+    margin: 8*$hd auto;
+    &.postinfo {
+      background-image: url("/static/images/icon/org-success.svg");
+    }
+    &.agree {
+      background-image: url("/static/images/icon/org-success.svg");
+    }
+    &.disagree {
+      background-image: url("/static/images/icon/org-disagree.svg");
+    }
+    &.waiting {
+      background-image: url("/static/images/icon/org-waiting.svg");
+    }
+  }
+  .msg1 {
+    font-size: 16*$hd;
+    text-align: center;
+    padding: 0 20*$hd;
+    p {
+      margin: 6*$hd 0;
+    }
+  }
+}
