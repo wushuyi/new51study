@@ -15,6 +15,7 @@ import OrgItem from 'components/sign-up/ui/search/org-item'
 import { getAllQudao, getQudaoSearch } from 'apis/sign-up/fill-information'
 import { getToken } from 'utils/auth'
 import isError from 'lodash/isError'
+import isArray from 'lodash/isArray'
 
 const {alert} = Modal
 
@@ -38,17 +39,13 @@ export default class InputChannelItem extends React.PureComponent {
       modal: false,
       text: '',
       number: '',
+      data: '',
     }
   }
 
   async componentDidMount () {
-    const token = getToken()
-    const res = await getAllQudao(139, 0, 30, token)
-    if (isError(res)) {
-      alert('接口错误请重试!')
-      return false
-    }
-    console.log(res.body.data)
+
+    await this.initList()
   }
 
   onWrapTouchStart = (e) => {
@@ -61,6 +58,128 @@ export default class InputChannelItem extends React.PureComponent {
       e.preventDefault()
     }
   }
+
+  initList = async () => {
+    const token = getToken()
+    const res = await getAllQudao(119, 0, 30, token)
+    console.log(res)
+    if (isError(res)) {
+      alert('接口错误请重试!')
+      return false
+    }
+    this.setState({
+      data: res.body.data
+    })
+  }
+
+  onSearch = async (text) => {
+    const token = getToken()
+    const res = await getQudaoSearch(text, 119, token)
+    console.log(res)
+    if (isError(res)) {
+      alert('接口错误请重试!')
+      return false
+    }
+    this.setState({
+      data: res.body.data
+    })
+  }
+
+  getResList = () => {
+    const {data} = this.state
+    if (isArray(data.content)) {
+      let doms = []
+      const itemProps = {
+        onSelect: this.onSelect,
+      }
+      doms.push(<WYXItem key="wyx-org" {...itemProps}/>)
+      data.content.forEach((value, key) => {
+        let {type, number} = value
+        switch (type) {
+          case 'ORG':
+            doms.push(
+              <OrgItem key={key} {...value} {...itemProps}/>
+            )
+            break
+          case 'STUDY':
+            doms.push(
+              <StudyItem key={key} {...value} {...itemProps}/>
+            )
+            break
+          case 'TEACHER':
+            doms.push(
+              <TeacherItem key={key} {...value} {...itemProps}/>
+            )
+            break
+        }
+      })
+      return doms
+    }else{
+      let doms = []
+      const itemProps = {
+        onSelect: this.onSelect,
+      }
+      if (data.numberUser) {
+        switch (data.numberUser.type) {
+          case 'ORG':
+            this.getOrgsBlock([data.numberUser], doms, itemProps);
+            break;
+          case 'STUDY':
+            this.getStudysBlock([data.numberUser], doms, itemProps);
+            break;
+          case 'TEACHER':
+            this.getTeachersBlock([data.numberUser], doms, itemProps);
+            break;
+        }
+      }
+      if (data.nameOrgs && data.nameOrgs.length) {
+        this.getOrgsBlock(data.nameOrgs, doms, itemProps);
+      }
+      if (data.nameTeachers && data.nameTeachers.length) {
+        this.getTeachersBlock(data.nameTeachers, doms, itemProps);
+      }
+      if (data.nameStudys && data.nameStudys.length) {
+        this.getStudysBlock(data.nameStudys, doms, itemProps);
+      }
+      return doms
+    }
+  }
+
+  getOrgsBlock = (items, doms, itemProps) => {
+    doms.push(
+      <div key='orgs-tit' styleName="title">搜到机构</div>
+    );
+    for (let i = 0; i < items.length; i++) {
+      let item = items[i];
+      doms.push(
+        <OrgItem key={'org-' + i}  {...item} {...itemProps}/>
+      );
+    }
+  };
+
+  getStudysBlock = (items, doms, itemProps) => {
+    doms.push(
+      <div key='study-tit' styleName="title">搜到学生</div>
+    );
+    for (let i = 0; i < items.length; i++) {
+      let item = items[i];
+      doms.push(
+        <StudyItem key={'study-' + i} {...item} {...itemProps}/>
+      );
+    }
+  };
+
+  getTeachersBlock = (items, doms, itemProps) => {
+    doms.push(
+      <div key='teacher-tit' styleName="title">搜到老师</div>
+    );
+    for (let i = 0; i < items.length; i++) {
+      let item = items[i];
+      doms.push(
+        <TeacherItem key={'teacher-' + i} {...item} {...itemProps}/>
+      );
+    }
+  };
 
   closeModal = () => {
     this.setState({
@@ -99,10 +218,11 @@ export default class InputChannelItem extends React.PureComponent {
                  onTouchStart: this.onWrapTouchStart,
                }}>
           <SearchItem onClose={this.closeModal}
-                      onSelect={this.onSelect}
+                      onSearch={this.onSearch}
                       placeholder="可查推荐您参赛的老师或机构"/>
           <div className="scroll">
-            <WYXItem {...itemProps}/>
+            {this.getResList()}
+            {/*<WYXItem {...itemProps}/>*/}
             {/*<TeacherItem {...itemProps}/>*/}
             {/*<StudyItem {...itemProps}/>*/}
             {/*<OrgItem {...itemProps}/>*/}

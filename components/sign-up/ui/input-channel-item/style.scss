@@ -9,3 +9,10 @@
   overflow: scroll;
   -webkit-overflow-scrolling: touch;
 }
+
+.title {
+  font-size: 14*$hd;
+  color: #7D7D7D;
+  padding: 12*$hd 0 6*$hd 9*$hd;
+  background: #F6F6F6;
+}

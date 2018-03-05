@@ -1,10 +1,14 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import Style from './style.scss'
+import Button from 'antd-mobile/lib/button'
 
 export default class OrgOk extends React.PureComponent {
   static defaultProps = {
-    state: 'disagree'
+    state: 'disagree',
+    onClick: () => {
+      console.log('run button')
+    },
   }
 
   constructor (props) {
@@ -12,7 +16,7 @@ export default class OrgOk extends React.PureComponent {
   }
 
   render () {
-    const {state} = this.props
+    const {state, onClick} = this.props
     return (
       <Fragment>
         <div className="res-head">
@@ -56,6 +60,10 @@ export default class OrgOk extends React.PureComponent {
               </div>
             </Fragment>
           )}
+          <div className="btn-box">
+            <Button type="primary" onClick={onClick}>{state === 'disagree' ? '修改认证资料' : '确认'}</Button>
+          </div>
+
         </div>
 
         {/*language=CSS*/}

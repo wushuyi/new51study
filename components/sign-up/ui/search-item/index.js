@@ -14,9 +14,17 @@ export default class SearchItem extends React.PureComponent {
     },
   }
 
+  constructor () {
+    super()
+    this.state = {
+      text: ''
+    }
+  }
+
   onSearch = () => {
     const {onSearch} = this.props
-    onSearch()
+    const {text} = this.state
+    onSearch(text)
   }
 
   onClose = () => {
@@ -42,7 +50,12 @@ export default class SearchItem extends React.PureComponent {
             <div className="search"/>
             <form className="form" action="./" method="get" autoComplete="off">
               <input className="input searchitemInput" type="search"
-                     placeholder={placeholder}/>
+                     placeholder={placeholder} value={this.state.text}
+                     onChange={(evt) => {
+                       this.setState({
+                         text: evt.target.value
+                       })
+                     }}/>
             </form>
           </div>
           <TouchFeedback activeClassName={`${prefixCls}-button-active`}>

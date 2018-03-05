@@ -65,7 +65,7 @@ export async function getQudaoSearch (query, evaluateId, token) {
   if (!token) {
     return new needAuthError(`can't read token`)
   }
-  const api = `/evaluates/${evaluateId}/singupDetail`
+  const api = `/evaluates/${evaluateId}/recommend/search`
   const requestURL = `${APIService}${api}`
   try {
     const res = await request.get(requestURL).query(APIVersion).query({
