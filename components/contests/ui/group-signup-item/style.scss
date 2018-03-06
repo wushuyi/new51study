@@ -1,0 +1,41 @@
+@import 'libs/hotcss/px2rem';
+
+@mixin oneline(){
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.group-item-wrapper {
+  width: 100%;
+  font-size: 16*$hd;
+  background: #fff;
+  overflow: hidden;
+  .group-item{
+    height: 71*$hd;
+    display: flex;
+    align-items: center;
+    margin:10*$hd 16*$hd 0;
+    background: #F6F6F6;
+    border: 1px solid #DFDFDF;
+    .price{
+      font-size: 20*$hd;
+      color: #FF6628;
+      margin-left: 12*$hd;
+      width:90*$hd;
+      @include oneline;
+    }
+    .title{
+      font-size: 18*$hd;
+      color: #323232;
+      width:200*$hd;
+      @include oneline;
+    }
+    .sign{
+      width:61*$hd;
+      height: 47*$hd;
+      background: url("/static/images/match/icon_default_match_take_will.png") no-repeat center;
+      background-size: 61*$hd 47*$hd;
+    }
+  }
+}

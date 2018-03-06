@@ -63,7 +63,6 @@ export default class OperateItem extends React.PureComponent {
         <style jsx>{Style}</style>
       </div>
     )
-
     return (
       <Fragment>
         <div className="operate-warp">

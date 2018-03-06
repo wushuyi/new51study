@@ -1,0 +1,21 @@
+@import 'libs/hotcss/px2rem';
+
+@mixin oneline(){
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.group-item {
+  width: 100%;
+  font-size: 16*$hd;
+  background: #fff;
+  padding: 10*$hd 20*$hd;
+  .title{
+    line-height: 31*$hd;
+    font-size: 14*$hd;
+    color: #FFFFFF;
+    background: #FD804D;
+    text-align: center;
+  }
+}
