@@ -32,13 +32,19 @@ const scoped = resolveScopedStyles((
   </scope>
 ))
 
-export default class InputChannelItem extends React.PureComponent {
+export default class ChannelItem extends React.PureComponent {
+  static defaultProps = {
+    onSelect: (name, number) => {
+      console.log('InputChannelItem onSelect')
+    }
+  }
+
   constructor (props, context) {
     super(props, context)
     this.state = {
       modal: false,
-      text: '',
-      number: '',
+      text: props.defaultName || '',
+      number: props.defaultNumber || '',
       data: '',
     }
   }
@@ -114,7 +120,7 @@ export default class InputChannelItem extends React.PureComponent {
         }
       })
       return doms
-    }else{
+    } else {
       let doms = []
       const itemProps = {
         onSelect: this.onSelect,
@@ -122,24 +128,24 @@ export default class InputChannelItem extends React.PureComponent {
       if (data.numberUser) {
         switch (data.numberUser.type) {
           case 'ORG':
-            this.getOrgsBlock([data.numberUser], doms, itemProps);
-            break;
+            this.getOrgsBlock([data.numberUser], doms, itemProps)
+            break
           case 'STUDY':
-            this.getStudysBlock([data.numberUser], doms, itemProps);
-            break;
+            this.getStudysBlock([data.numberUser], doms, itemProps)
+            break
           case 'TEACHER':
-            this.getTeachersBlock([data.numberUser], doms, itemProps);
-            break;
+            this.getTeachersBlock([data.numberUser], doms, itemProps)
+            break
         }
       }
       if (data.nameOrgs && data.nameOrgs.length) {
-        this.getOrgsBlock(data.nameOrgs, doms, itemProps);
+        this.getOrgsBlock(data.nameOrgs, doms, itemProps)
       }
       if (data.nameTeachers && data.nameTeachers.length) {
-        this.getTeachersBlock(data.nameTeachers, doms, itemProps);
+        this.getTeachersBlock(data.nameTeachers, doms, itemProps)
       }
       if (data.nameStudys && data.nameStudys.length) {
-        this.getStudysBlock(data.nameStudys, doms, itemProps);
+        this.getStudysBlock(data.nameStudys, doms, itemProps)
       }
       return doms
     }
@@ -148,38 +154,38 @@ export default class InputChannelItem extends React.PureComponent {
   getOrgsBlock = (items, doms, itemProps) => {
     doms.push(
       <div key='orgs-tit' styleName="title">搜到机构</div>
-    );
+    )
     for (let i = 0; i < items.length; i++) {
-      let item = items[i];
+      let item = items[i]
       doms.push(
         <OrgItem key={'org-' + i}  {...item} {...itemProps}/>
-      );
+      )
     }
-  };
+  }
 
   getStudysBlock = (items, doms, itemProps) => {
     doms.push(
       <div key='study-tit' styleName="title">搜到学生</div>
-    );
+    )
     for (let i = 0; i < items.length; i++) {
-      let item = items[i];
+      let item = items[i]
       doms.push(
         <StudyItem key={'study-' + i} {...item} {...itemProps}/>
-      );
+      )
     }
-  };
+  }
 
   getTeachersBlock = (items, doms, itemProps) => {
     doms.push(
       <div key='teacher-tit' styleName="title">搜到老师</div>
-    );
+    )
     for (let i = 0; i < items.length; i++) {
-      let item = items[i];
+      let item = items[i]
       doms.push(
         <TeacherItem key={'teacher-' + i} {...item} {...itemProps}/>
-      );
+      )
     }
-  };
+  }
 
   closeModal = () => {
     this.setState({
@@ -194,18 +200,17 @@ export default class InputChannelItem extends React.PureComponent {
   }
 
   onSelect = ({name, number}) => {
+    const {onSelect} = this.props
     this.setState({
       modal: false,
       text: name,
       number: number,
     })
+    onSelect(name, number)
   }
 
   render () {
     const {modal, text} = this.state
-    const itemProps = {
-      onSelect: this.onSelect,
-    }
     return (
       <Fragment>
         <SelectItem title="所属机构" text={text} onClick={this.showModal}/>
@@ -223,9 +228,6 @@ export default class InputChannelItem extends React.PureComponent {
           <div className="scroll">
             {this.getResList()}
             {/*<WYXItem {...itemProps}/>*/}
-            {/*<TeacherItem {...itemProps}/>*/}
-            {/*<StudyItem {...itemProps}/>*/}
-            {/*<OrgItem {...itemProps}/>*/}
           </div>
         </Modal>
         {scoped.styles}

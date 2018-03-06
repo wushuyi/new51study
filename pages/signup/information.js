@@ -3,8 +3,7 @@ import PropTypes from 'prop-types'
 import { withRedux } from 'store'
 import Layout from 'components/layout/default'
 import TitleItem from 'components/sign-up/ui/title-item'
-import InformationTitleItem from 'components/sign-up/ui/information-title-item'
-import InputChannelItem from 'components/sign-up/ui/input-channel-item'
+
 import Share from 'components/layout/share'
 import createLogic from 'pagelogic/signup/fillinformation'
 import { getToken } from 'utils/auth'
@@ -12,13 +11,14 @@ import { deferred } from 'redux-saga/utils'
 import { checkToken, ComponentPageError, authDidMount } from 'utils/pageAuth'
 import PagePullToRefresh from 'components/ui/page-pull-to-refresh'
 import { Formik, Field, Form } from 'formik'
-import { Persist } from 'formik-persist'
 import StudyBox from 'components/sign-up/information/study-box'
 import ParentBox from 'components/sign-up/information/parent-box'
 import WhiteSpace from 'components/ui/white-space'
 import TipSignUpItem from 'components/sign-up/information/tip-sign-up-item'
 import OperateItem from 'components/sign-up/information/operate-item'
-import OptionItem from 'components/sign-up/information/option-item'
+import { InputOptionItemsField } from 'components/sign-up/information/input-option-items'
+import { InputChannelItemField } from 'components/sign-up/information/input-channel-item'
+
 import { sleep } from 'utils'
 import pickBy from 'lodash/pickBy'
 import startsWith from 'lodash/startsWith'
@@ -206,10 +206,8 @@ class Page extends React.PureComponent {
 
               {parentBoxProps && parentBoxProps.length && <ParentBox data={parentBoxProps}/> || null}
               <WhiteSpace height={9}/>
-              <InputChannelItem/>
-              <OptionItem/>
-              <OptionItem/>
-              <OptionItem/>
+              <InputChannelItemField name="channel"/>
+              <InputOptionItemsField name="priceId"/>
               <TipSignUpItem/>
               <Field
                 name="submit"

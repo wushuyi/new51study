@@ -23,7 +23,7 @@ export default class OptionItem extends React.PureComponent {
   }
 
   static defaultProps = {
-    btnType: 1,
+    btnType: 0,
     canSingUp: false,
     charge: '0.10',
     descript: '这个是一毛钱的。这个是一毛钱的。这个是一毛钱的。这个是一毛钱的。这个是一毛钱的。这个是一毛钱的。这个是一毛钱的。',
