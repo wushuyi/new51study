@@ -64,9 +64,16 @@ export default class InputText extends React.Component {
     return false
   }
 
+  componentDidMount () {
+    const {field, form, defaultval, ...props} = this.props
+    if (defaultval) {
+      form.setFieldValue(field.name, defaultval)
+    }
+  }
+
   render () {
     const {field, form, ...props} = this.props
-    const {labelName, placeholder, styleFullLine, isRequire, ...restProps} = props
+    const {labelName, placeholder, styleFullLine, isRequire, defaultval, ...restProps} = props
     const cls = classnames(scoped.className, {
       'style-full-line': styleFullLine,
       'is-require': isRequire,
@@ -85,6 +92,7 @@ export default class InputText extends React.Component {
           className={cls}
           labelNumber={7}
           placeholder={placeholder || `请输入${labelName || field.name}`}
+          value={field.value}
           {...restProps}
           {...errProps}
           onChange={(val) => {

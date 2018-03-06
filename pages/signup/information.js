@@ -25,6 +25,7 @@ import startsWith from 'lodash/startsWith'
 import mapKeys from 'lodash/mapKeys'
 import forEach from 'lodash/forEach'
 import clone from 'lodash/clone'
+import get from 'lodash/get'
 import Modal from 'antd-mobile/lib/modal'
 
 const {alert} = Modal
@@ -102,9 +103,11 @@ class Page extends React.PureComponent {
       currSingupDetail,
       parentBoxProps,
       studyBoxProps,
+      submitState,
+
     } = this.props
 
-    console.log('parentBoxProps', parentBoxProps)
+    console.log('submitState', submitState)
 
     return (
       <Layout>
@@ -114,20 +117,10 @@ class Page extends React.PureComponent {
           validateOnChange={false}
           validateOnBlur={true}
           initialValues={{}}
-          onSubmit={(values, actions) => {
+          onSubmit={(values, formActions) => {
             console.log('values', values)
             let isValidate = true
             let vals = {}
-            // let vals = {
-            //   'study-身份证照': 'http://7xszyu.com1.z0.glb.clouddn.com/media_blog_yaofan_1432_2018_02_27_17_24_24_362_wh300x300.jpg',
-            //   'parent-姓名': '213123',
-            //   'parent-职业': '12312312',
-            //   'study-groupName': false,
-            //   'study-爱好': '21312312',
-            //   'study-兴趣': '12312312',
-            //   'study-phone': '123 123',
-            //   'study-fullName': '123123123'
-            // }
             vals = clone(values)
             let inputProps = [].concat(parentBoxProps).concat(studyBoxProps)
             forEach(inputProps, function (item) {
@@ -152,18 +145,35 @@ class Page extends React.PureComponent {
                     .join(',')
                 }
               }
-              if (item.name === 'study-phone') {
+              if (item.name === 'require-phone') {
                 let itemKey = item.name
                 if (vals[itemKey]) {
                   vals[itemKey] = vals[itemKey].split(' ').join('')
                 }
               }
             })
-            console.log('inputProps', inputProps)
             if (!isValidate) {
-              actions.setSubmitting(false)
+              formActions.setSubmitting(false)
               return false
             }
+            if (!get(values, 'channel.number')) {
+              alert(`请选择所属机构`)
+              formActions.setSubmitting(false)
+              return false
+            }
+            if (!values.priceId) {
+              alert(`请选择你要报名的套餐`)
+              formActions.setSubmitting(false)
+              return false
+            }
+            console.log('inputProps', inputProps)
+
+            let requires = pickBy(vals, (val, key) => {
+              return startsWith(key, 'require-')
+            })
+            requires = mapKeys(requires, (val, key) => {
+              return key.split('require-')[1]
+            })
             let studys = pickBy(vals, (val, key) => {
               return startsWith(key, 'study-')
             })
@@ -176,15 +186,40 @@ class Page extends React.PureComponent {
             parents = mapKeys(parents, (val, key) => {
               return key.split('parent-')[1]
             })
-            console.log('studys, parents', studys, parents)
 
-            sleep(3000).then(
-              updatedUser => {
-                actions.setSubmitting(false)
+            console.log('requires, studys, parents', requires, studys, parents)
+            let data = {
+              send: {
+                body: {
+                  text: studys,
+                  parentText: parents,
+                  baseInfo: requires,
+                  price: {
+                    id: values.priceId,
+                  }
+                },
               },
-              error => {
-                actions.setSubmitting(false)
-                actions.setErrors('错误!')
+              query: {
+                reference: values.channel.number
+              }
+            }
+            const def = deferred()
+
+            if (submitState === 'SIGNUPMODIFY') {
+              actions.postSignupModify(classId, data.query, data.send, def)
+            } else if (submitState === 'SIGNUPAPPLY') {
+              actions.postSignupApply(classId, data.query, data.send, def)
+            } else {
+              actions.postSignupApply(classId, data.query, data.send, def)
+            }
+
+            def.promise.then(
+              ok => {
+                formActions.setSubmitting(false)
+              },
+              err => {
+                formActions.setSubmitting(false)
+                formActions.setErrors('错误!')
               },
             )
           }}
@@ -216,6 +251,9 @@ class Page extends React.PureComponent {
                   const {submitForm, isSubmitting} = form
                   return (
                     <OperateItem
+                      name={submitState === 'SIGNUPMODIFY'
+                        ? '确认修改'
+                        : '确认提交'}
                       disabled={isSubmitting}
                       onClick={() => {
                         !isSubmitting && submitForm()
@@ -240,6 +278,8 @@ export default withRedux(Page, function (KeaContext, ctx) {
       mainLogic, [
         'syncAuthData',
         'initPage',
+        'postSignupApply',
+        'postSignupModify'
       ],
     ],
     props: [
@@ -248,6 +288,7 @@ export default withRedux(Page, function (KeaContext, ctx) {
         'currSingupDetail',
         'parentBoxProps',
         'studyBoxProps',
+        'submitState'
       ],
     ],
   })

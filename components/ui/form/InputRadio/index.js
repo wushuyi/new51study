@@ -12,6 +12,7 @@ import pick from 'lodash/pick'
 import shallowequal from 'shallowequal'
 import { isDev } from 'config/settings'
 import get from 'lodash/get'
+import isNumber from 'lodash/isNumber'
 
 const alert = Modal.alert
 
@@ -63,23 +64,27 @@ const testData = [
 export default class InputRadio extends React.Component {
   static defaultProps = {
     sourceData: testData,
-    defaultValue: false,
-  }
-
-  static value2index = function (value) {
-    return parseInt(value)
+    defaultval: false,
   }
 
   constructor (props, context) {
     super(props, context)
-    const {defaultValue} = props
-    let val
-    if (typeof defaultValue === 'number') {
-      val = InputRadio.value2index(defaultValue)
-    }
+    const {defaultval} = props
     this.state = {
-      prveIndex: val || null,
-      index: val || null,
+      prveIndex: null,
+      index: null,
+    }
+  }
+
+  componentDidMount () {
+    const {field, form, defaultval, ...props} = this.props
+    if (isNumber(defaultval)) {
+      let val = parseInt(defaultval)
+      form.setFieldValue(field.name, val)
+      this.setState({
+        prveIndex: val,
+        index: val,
+      })
     }
   }
 
@@ -119,10 +124,10 @@ export default class InputRadio extends React.Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    const {defaultValue: currVal} = this.props
-    const {defaultValue: nextVal} = nextProps
+    const {defaultval: currVal} = this.props
+    const {defaultval: nextVal} = nextProps
     if (currVal !== nextVal && typeof nextVal === 'number') {
-      let val = InputRadio.value2index(nextVal)
+      let val = parseInt(nextVal)
       this.setState({
         prveIndex: val,
         index: val,
@@ -134,7 +139,7 @@ export default class InputRadio extends React.Component {
     const {field, form, ...props} = this.props
     const {value, prveIndex} = this.state
 
-    const {sourceData, labelName, placeholder, defaultValue, styleFullLine, isRequire, ...restProps} = props
+    const {sourceData, labelName, placeholder, defaultval, styleFullLine, isRequire, ...restProps} = props
     const jsxName = scoped.className
     const cls = classnames(jsxName, {
       'style-full-line': styleFullLine,

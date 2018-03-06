@@ -97,7 +97,7 @@ const InnerForm = (props) => {
                    checkForm(e, props)
                  }}
                  disabled={btnLock}
-                 loading={btnLock}>登录</SubmitBtn>
+                 loading={btnLock}>注册</SubmitBtn>
       <style jsx>{Style1}</style>
       {/*<Persist name="form-auth-register"/>*/}
     </Fragment>

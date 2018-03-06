@@ -82,14 +82,21 @@ export default class InputImage extends React.Component {
 
   constructor (props, context) {
     super(props, context)
-    const {labelName, placeholder, field} = props
+    const {labelName, placeholder, defaultval, field} = props
     this.state = {
       modal: false,
-      imgUrl: null,
+      imgUrl: defaultval || null,
       percent: 0,
       uploading: false,
       direction: 0,
       controlViewCls: 'direction-0',
+    }
+  }
+
+  componentDidMount () {
+    const {field, form, defaultval, ...props} = this.props
+    if (defaultval) {
+      form.setFieldValue(field.name, defaultval)
     }
   }
 
@@ -136,22 +143,6 @@ export default class InputImage extends React.Component {
         imgUrl: nextField.value,
       })
     }
-  }
-
-  componentDidMount () {
-    const {initDate} = this.props
-    // this.setState({
-    //   modal: true,
-    // })
-    let date
-    if (initDate && initDate instanceof Date) {
-      date = initDate
-    } else {
-      date = new Date()
-    }
-    // this.setState({
-    //   date: date,
-    // })
   }
 
   uploadFile = (blob, fileKey) => {

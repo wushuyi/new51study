@@ -6,6 +6,8 @@ import { static as Immutable } from 'seamless-immutable'
 import * as Api from 'apis/sign-up/fill-information'
 import isError from 'lodash/isError'
 import { baseXhrError } from 'apis/utils/error'
+import indexOf from 'lodash/indexOf'
+import get from 'lodash/get'
 
 export default KeaContext => {
   const {kea} = KeaContext
@@ -83,6 +85,9 @@ export default KeaContext => {
       studyBoxProps: [
         () => [selectors.currSingupDetail],
         (singupDetail) => {
+          if (!get(singupDetail, 'ifApplyGroup')) {
+            return false
+          }
           let data = [], labels, defData
           const {ifApplyGroup, applyGroupStr, fullName, phone, groupName} = singupDetail
           const prefix = 'study-'
@@ -93,7 +98,7 @@ export default KeaContext => {
             defData = JSON.parse(singupDetail.text)
           }
           data.push({
-            name: prefix + 'fullName',
+            name: 'require-' + 'fullName',
             isRequired: true,
             component: 'InputText',
             itemProps: {
@@ -103,7 +108,7 @@ export default KeaContext => {
             },
           })
           data.push({
-            name: prefix + 'phone',
+            name: 'require-' + 'phone',
             isRequired: true,
             component: 'InputText',
             itemProps: {
@@ -116,21 +121,23 @@ export default KeaContext => {
 
           // 选择分组
           if (ifApplyGroup && applyGroupStr) {
-            let sourceData = applyGroupStr.split(',').map((item, index) => {
+            let listData = applyGroupStr.split(',')
+            let defaultval = indexOf(listData, groupName)
+            let sourceData = listData.map((item, index) => {
               return {
                 value: index,
                 label: item,
               }
             })
             data.push({
-              name: prefix + 'groupName',
+              name: 'require-' + 'groupName',
               isRequired: true,
               component: 'InputRadio',
               itemProps: {
                 labelName: '分组',
                 placeholder: '请选择组别',
                 sourceData,
-                defaultval: groupName,
+                defaultval,
               },
             })
           }
@@ -188,6 +195,7 @@ export default KeaContext => {
                     component: 'InputImage',
                     itemProps: {
                       labelName: item.desc || item.name,
+                      defaultval: (defData && defData[item.name]) || '',
                     },
                   }
                   break
@@ -205,8 +213,11 @@ export default KeaContext => {
       parentBoxProps: [
         () => [selectors.currSingupDetail],
         (singupDetail) => {
+          if (!get(singupDetail, 'ifApplyGroup')) {
+            return false
+          }
           let data = [], labels, defData
-          const {ifApplyGroup, applyGroupStr, fullName, phone, groupName} = singupDetail
+          const {ifNeedParentInfo} = singupDetail
           const prefix = 'parent-'
           if (singupDetail.parentInfoLabels) {
             labels = JSON.parse(singupDetail.parentInfoLabels)
@@ -224,7 +235,7 @@ export default KeaContext => {
                 case 0: {
                   conf = {
                     name: prefix + item.name,
-                    isRequired: item.isRequired || false,
+                    isRequired: ifNeedParentInfo && item.isRequired || false,
                     component: 'InputText',
                     itemProps: {
                       labelName: item.desc || item.name,
@@ -245,7 +256,7 @@ export default KeaContext => {
                   })
                   conf = {
                     name: prefix + item.name,
-                    isRequired: item.isRequired || false,
+                    isRequired: ifNeedParentInfo && item.isRequired || false,
                     component: 'InputRadio',
                     itemProps: {
                       labelName: item.desc || item.name,
@@ -267,7 +278,7 @@ export default KeaContext => {
                   })
                   conf = {
                     name: prefix + item.name,
-                    isRequired: item.isRequired || false,
+                    isRequired: ifNeedParentInfo && item.isRequired || false,
                     component: 'InputCheckbox',
                     itemProps: {
                       labelName: item.desc || item.name,
@@ -280,7 +291,7 @@ export default KeaContext => {
                 case 3:
                   conf = {
                     name: prefix + item.name,
-                    isRequired: item.isRequired || false,
+                    isRequired: ifNeedParentInfo && item.isRequired || false,
                     component: 'InputImage',
                     itemProps: {
                       labelName: item.desc || item.name,
@@ -296,6 +307,22 @@ export default KeaContext => {
           }
 
           return Immutable(data)
+        },
+        PropTypes.any,
+      ],
+      submitState: [
+        () => [selectors.currSingupDetail],
+        (singupDetail) => {
+          if (!get(singupDetail, 'ifApplyGroup')) {
+            return false
+          }
+          const {verify, state} = singupDetail
+          if (verify && verify === 'NotPass') {
+            return 'SIGNUPMODIFY'
+          }
+          if (state && state === 'UNSIGNUP') {
+            return 'SIGNUPAPPLY'
+          }
         },
         PropTypes.any,
       ],
