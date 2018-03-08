@@ -49,6 +49,7 @@ export class InputChannelItem extends React.Component {
         name: defaultName,
         number: defaultNumber
       })
+      form.setFieldTouched(field.name, true)
     }
 
   }

@@ -144,6 +144,15 @@ export class InputOptionItems extends React.Component {
     return false
   }
 
+  componentDidMount () {
+    const {field, form, priceId, ...props} = this.props
+    if (priceId) {
+      form.setFieldValue(field.name, priceId)
+      form.setFieldTouched(field.name, true)
+    }
+
+  }
+
   render () {
     const {field, form, ...props} = this.props
     return (

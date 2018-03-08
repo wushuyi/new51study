@@ -82,10 +82,10 @@ export default class InputImage extends React.Component {
 
   constructor (props, context) {
     super(props, context)
-    const {labelName, placeholder, defaultval, field} = props
+    const {labelName, placeholder, field} = props
     this.state = {
       modal: false,
-      imgUrl: defaultval || null,
+      imgUrl: null,
       percent: 0,
       uploading: false,
       direction: 0,
@@ -97,6 +97,10 @@ export default class InputImage extends React.Component {
     const {field, form, defaultval, ...props} = this.props
     if (defaultval) {
       form.setFieldValue(field.name, defaultval)
+      form.setFieldTouched(field.name, true)
+      this.setState({
+        imgUrl: defaultval
+      })
     }
   }
 

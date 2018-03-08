@@ -68,6 +68,7 @@ export default class InputText extends React.Component {
     const {field, form, defaultval, ...props} = this.props
     if (defaultval) {
       form.setFieldValue(field.name, defaultval)
+      form.setFieldTouched(field.name, true)
     }
   }
 

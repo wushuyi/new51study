@@ -131,6 +131,7 @@ export default class InputCheckbox extends React.Component {
     const {field, form, defaultval, ...props} = this.props
     if (isArray(defaultval)) {
       form.setFieldValue(field.name, defaultval)
+      form.setFieldTouched(field.name, true)
       this.setState({
         prveIndex: defaultval,
         index: defaultval,

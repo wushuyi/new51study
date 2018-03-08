@@ -81,6 +81,7 @@ export default class InputRadio extends React.Component {
     if (isNumber(defaultval)) {
       let val = parseInt(defaultval)
       form.setFieldValue(field.name, val)
+      form.setFieldTouched(field.name, true)
       this.setState({
         prveIndex: val,
         index: val,
