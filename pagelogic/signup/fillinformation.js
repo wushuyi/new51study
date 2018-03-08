@@ -326,6 +326,24 @@ export default KeaContext => {
         },
         PropTypes.any,
       ],
+      channelProps: [
+        () => [selectors.currSingupDetail, selectors.currId],
+        (singupDetail, currId) => {
+          if (!get(singupDetail, 'ifApplyGroup')) {
+            return false
+          }
+          const {channelNumber, channelName} = singupDetail
+          let data = {
+            itemProps: {
+              defaultName: channelName || '我要学平台',
+              defaultNumber: channelNumber,
+              evaluateId: currId
+            }
+          }
+          return Immutable(data)
+        },
+        PropTypes.any,
+      ],
     }),
 
     takeEvery: ({actions, workers}) => ({

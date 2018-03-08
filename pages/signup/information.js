@@ -55,7 +55,7 @@ class Page extends React.PureComponent {
     authData && store.dispatch(actions.syncAuthData(authData))
     try {
       const def = deferred()
-      store.dispatch(actions.initPage(139, def, token))
+      store.dispatch(actions.initPage(137, def, token))
       await def.promise
     } catch (err) {
       return {
@@ -104,6 +104,7 @@ class Page extends React.PureComponent {
       parentBoxProps,
       studyBoxProps,
       submitState,
+      channelProps,
 
     } = this.props
 
@@ -132,7 +133,7 @@ class Page extends React.PureComponent {
               if (item.component === 'InputRadio') {
                 let itemKey = item.name
                 if (vals[itemKey]) {
-                  vals[itemKey] = item.itemProps.sourceData[vals[itemKey]].label
+                  vals[itemKey] = get(item, `itemProps.sourceData[${vals[itemKey]}].label`) || ''
                 }
               }
               if (item.component === 'InputCheckbox') {
@@ -140,7 +141,7 @@ class Page extends React.PureComponent {
                 if (vals[itemKey]) {
                   vals[itemKey] = vals[itemKey]
                     .map((index) => {
-                      return item.itemProps.sourceData[index].label
+                      return get(item, `itemProps.sourceData[${index}].label`) || ''
                     })
                     .join(',')
                 }
@@ -241,7 +242,7 @@ class Page extends React.PureComponent {
 
               {parentBoxProps && parentBoxProps.length && <ParentBox data={parentBoxProps}/> || null}
               <WhiteSpace height={9}/>
-              <InputChannelItemField name="channel"/>
+              <InputChannelItemField name="channel" {...channelProps}/>
               <InputOptionItemsField name="priceId"/>
               <TipSignUpItem/>
               <Field
@@ -288,7 +289,8 @@ export default withRedux(Page, function (KeaContext, ctx) {
         'currSingupDetail',
         'parentBoxProps',
         'studyBoxProps',
-        'submitState'
+        'submitState',
+        'channelProps',
       ],
     ],
   })

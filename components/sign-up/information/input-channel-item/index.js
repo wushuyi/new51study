@@ -42,6 +42,17 @@ export class InputChannelItem extends React.Component {
     return false
   }
 
+  componentDidMount () {
+    const {field, form, defaultName, defaultNumber, ...props} = this.props
+    if (defaultName) {
+      form.setFieldValue(field.name, {
+        name: defaultName,
+        number: defaultNumber
+      })
+    }
+
+  }
+
   render () {
     const {field, form, ...props} = this.props
     return (

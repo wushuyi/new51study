@@ -3,8 +3,6 @@ import PropTypes from 'prop-types'
 import Style from './style.scss'
 import Style2 from './modal.scss'
 import Modal from 'antd-mobile/lib/modal/index'
-import Toast from 'antd-mobile/lib/toast/index'
-import Button from 'antd-mobile/lib/button'
 import SearchItem from 'components/sign-up/ui/search-item'
 import SelectItem from 'components/sign-up/ui/select-item'
 import { closest } from 'utils'
@@ -34,6 +32,7 @@ const scoped = resolveScopedStyles((
 
 export default class ChannelItem extends React.PureComponent {
   static defaultProps = {
+    evaluateId: 119,
     onSelect: (name, number) => {
       console.log('InputChannelItem onSelect')
     }
@@ -66,8 +65,9 @@ export default class ChannelItem extends React.PureComponent {
   }
 
   initList = async () => {
+    const {evaluateId} = this.props
     const token = getToken()
-    const res = await getAllQudao(119, 0, 30, token)
+    const res = await getAllQudao(evaluateId, 0, 30, token)
     console.log(res)
     if (isError(res)) {
       alert('接口错误请重试!')
@@ -79,8 +79,9 @@ export default class ChannelItem extends React.PureComponent {
   }
 
   onSearch = async (text) => {
+    const {evaluateId} = this.props
     const token = getToken()
-    const res = await getQudaoSearch(text, 119, token)
+    const res = await getQudaoSearch(text, evaluateId, token)
     console.log(res)
     if (isError(res)) {
       alert('接口错误请重试!')
