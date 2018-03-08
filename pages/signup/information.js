@@ -105,7 +105,7 @@ class Page extends React.PureComponent {
       studyBoxProps,
       submitState,
       channelProps,
-
+      optionProps,
     } = this.props
 
     console.log('submitState', submitState)
@@ -157,7 +157,7 @@ class Page extends React.PureComponent {
               formActions.setSubmitting(false)
               return false
             }
-            if (!get(values, 'channel.number')) {
+            if (!get(values, 'channel.name')) {
               alert(`请选择所属机构`)
               formActions.setSubmitting(false)
               return false
@@ -243,7 +243,7 @@ class Page extends React.PureComponent {
               {parentBoxProps && parentBoxProps.length && <ParentBox data={parentBoxProps}/> || null}
               <WhiteSpace height={9}/>
               <InputChannelItemField name="channel" {...channelProps}/>
-              <InputOptionItemsField name="priceId"/>
+              {optionProps && <InputOptionItemsField name="priceId" {...optionProps}/>}
               <TipSignUpItem/>
               <Field
                 name="submit"
@@ -291,6 +291,7 @@ export default withRedux(Page, function (KeaContext, ctx) {
         'studyBoxProps',
         'submitState',
         'channelProps',
+        'optionProps',
       ],
     ],
   })

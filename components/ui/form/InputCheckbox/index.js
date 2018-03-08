@@ -66,27 +66,14 @@ const testData = [
 export default class InputCheckbox extends React.Component {
   static defaultProps = {
     sourceData: testData,
-    defaultValue: false,
-  }
-
-  static values2arr = function (values) {
-    let arr = []
-    values.forEach((item, index) => {
-      arr[item] = true
-    })
-    return arr
+    defaultval: false,
   }
 
   constructor (props, context) {
     super(props, context)
-    const {defaultValue} = props
-    let val
-    if (defaultValue) {
-      val = InputCheckbox.values2arr(defaultValue)
-    }
     this.state = {
-      prveIndex: val || [],
-      index: val || [],
+      prveIndex: [],
+      index: [],
       touched: false,
     }
   }
@@ -127,17 +114,27 @@ export default class InputCheckbox extends React.Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    const {defaultValue: currVal} = this.props
-    const {defaultValue: nextVal} = nextProps
+    const {defaultval: currVal} = this.props
+    const {defaultval: nextVal} = nextProps
     if (isArray(nextVal)) {
       if (!currVal ||
         isArray(currVal) && currVal.join(',') !== nextVal.join(',')) {
-        let val = InputCheckbox.values2arr(nextVal)
         this.setState({
-          prveIndex: val,
-          index: val,
+          prveIndex: nextVal,
+          index: nextVal,
         })
       }
+    }
+  }
+
+  componentDidMount () {
+    const {field, form, defaultval, ...props} = this.props
+    if (isArray(defaultval)) {
+      form.setFieldValue(field.name, defaultval)
+      this.setState({
+        prveIndex: defaultval,
+        index: defaultval,
+      })
     }
   }
 
@@ -173,7 +170,7 @@ export default class InputCheckbox extends React.Component {
     const {field, form, ...props} = this.props
     const {value} = this.state
 
-    const {sourceData, labelName, placeholder, defaultValue, styleFullLine, isRequire, ...restProps} = props
+    const {sourceData, labelName, placeholder, defaultval, styleFullLine, isRequire, ...restProps} = props
     const jsxName = scoped.className
     const cls = classnames(jsxName, {
       'style-full-line': styleFullLine,
