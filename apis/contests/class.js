@@ -240,3 +240,57 @@ export async function getWorks(evaluateId, page = 0, size = 4) {
     return err
   }
 }
+
+/**
+ * API: /evaluate/applyDetail
+ * @param evaluateId
+ * @param token
+ * @returns {Promise<*>}
+ */
+export async function getApplyDetail(evaluateId, token) {
+
+  const api= `/evaluate/applyDetail`
+  const requestURL = `${APIService}${api}`
+  let data={
+    evaluateId
+  }
+  if(token){
+    data.token=token;
+  }
+  try {
+    const res = await request.get(requestURL)
+      .query(APIVersion)
+      .query(data)
+      .use(xhrCrypto)
+    return baseChcek(res)
+  } catch (err) {
+    return err
+  }
+}
+
+/**
+ * API: /evaluate/applyPrice
+ * @param evaluateId
+ * @param token
+ * @returns {Promise<*>}
+ */
+export async function getApplyPrice(evaluateId, token) {
+
+  const api= `/evaluate/applyPrice`
+  const requestURL = `${APIService}${api}`
+  let data={
+    evaluateId
+  }
+  if(token){
+    data.token=token;
+  }
+  try {
+    const res = await request.get(requestURL)
+      .query(APIVersion)
+      .query(data)
+      .use(xhrCrypto)
+    return baseChcek(res)
+  } catch (err) {
+    return err
+  }
+}

@@ -1,0 +1,29 @@
+@import 'libs/hotcss/px2rem';
+
+@mixin oneline(){
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.group-item {
+  width: 100%;
+  font-size: 14*$hd;
+  color: #43484B;
+  background: #fff;
+  padding: 10*$hd 20*$hd;
+  .left{
+    margin-right:10*$hd;
+  }
+  .right{
+    color: #FF6628;
+  }
+  .num{
+  }
+  .price{
+    margin-top: 6*$hd;
+  }
+  .total{
+    margin-top: 6*$hd;
+  }
+}

@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types'
 import { delay } from 'redux-saga'
 import { call, put } from 'redux-saga/effects'
-import * as groupApi from 'apis/contests/group'
 import * as classApi from 'apis/contests/class'
 import isError from 'lodash/isError'
 import { baseXhrError } from 'apis/utils/error'

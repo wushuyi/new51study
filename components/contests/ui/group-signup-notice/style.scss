@@ -1,0 +1,31 @@
+@import 'libs/hotcss/px2rem';
+
+@mixin oneline(){
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.group-item {
+  width: 100%;
+  font-size: 11*$hd;
+  background: #FCFCFC;
+  color: #828282;
+  padding: 7*$hd 20*$hd 16*$hd;
+  .title{
+    margin-bottom:7*$hd;
+    position: relative;
+    text-indent: 20*$hd;
+    &:before{
+      content: ' ';
+      width: 13*$hd;
+      height: 13*$hd;
+      position: absolute;
+      left: 0*$hd;
+      border:1px solid red;
+
+    }
+  }
+  .item{
+  }
+}
