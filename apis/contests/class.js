@@ -9,15 +9,15 @@ import { baseChcek, needAuthError } from 'apis/utils/error'
  * @param token
  * @returns {Promise<*>}
  */
-export async function getEvaluateFindById(evaluateId, token) {
+export async function getEvaluateFindById (evaluateId, token) {
 
-  const api= `/evaluate/findById`
+  const api = `/evaluate/findById`
   const requestURL = `${APIService}${api}`
-  let data={
+  let data = {
     evaluateId
   }
-  if(token){
-    data.token=token;
+  if (token) {
+    data.token = token
   }
   try {
     const res = await request.get(requestURL)
@@ -36,14 +36,14 @@ export async function getEvaluateFindById(evaluateId, token) {
  * @param token
  * @returns {Promise<*>}
  */
-export async function getFindLastEvaluate(evaluateId, token) {
-  const api= `/evaluate/findLastEvaluate`
+export async function getFindLastEvaluate (evaluateId, token) {
+  const api = `/evaluate/findLastEvaluate`
   const requestURL = `${APIService}${api}`
-  let data={
+  let data = {
     evaluateId
   }
-  if(token){
-    data.token=token;
+  if (token) {
+    data.token = token
   }
   try {
     const res = await request.get(requestURL)
@@ -62,7 +62,7 @@ export async function getFindLastEvaluate(evaluateId, token) {
  * @param token
  * @returns {Promise<*>}
  */
-export async function getEvaluatesOne(evaluateId, token) {
+export async function getEvaluatesOne (evaluateId, token) {
   if (!token) {
     return new needAuthError(`can't read token`)
   }
@@ -86,7 +86,7 @@ export async function getEvaluatesOne(evaluateId, token) {
  * @param evaluateId
  * @returns {Promise<*>}
  */
-export async function getEvaluatesOneShare(evaluateId) {
+export async function getEvaluatesOneShare (evaluateId) {
   const api = `/evaluates/${evaluateId}/info/one/forShare`
   const requestURL = `${APIService}${api}`
   try {
@@ -105,7 +105,7 @@ export async function getEvaluatesOneShare(evaluateId) {
  * @param token
  * @returns {Promise<*>}
  */
-export async function getEvaluatesTwo(evaluateId, token) {
+export async function getEvaluatesTwo (evaluateId, token) {
   if (!token) {
     return new needAuthError(`can't read token`)
   }
@@ -129,7 +129,7 @@ export async function getEvaluatesTwo(evaluateId, token) {
  * @param evaluateId
  * @returns {Promise<*>}
  */
-export async function getEvaluatesTwoShare(evaluateId) {
+export async function getEvaluatesTwoShare (evaluateId) {
   const api = `/evaluates/${evaluateId}/info/two/forShare`
   const requestURL = `${APIService}${api}`
   try {
@@ -148,7 +148,7 @@ export async function getEvaluatesTwoShare(evaluateId) {
  * @param position ('BISAIH5_LIST'|'BISAIH5')
  * @returns {Promise<*>}
  */
-export async function getAd(positionId, position = 'BISAIH5_LIST') {
+export async function getAd (positionId, position = 'BISAIH5_LIST') {
   const api = `/advert/position`
   const requestURL = `${APIService}${api}`
   try {
@@ -171,7 +171,7 @@ export async function getAd(positionId, position = 'BISAIH5_LIST') {
  * @param token
  * @returns {Promise<*>}
  */
-export async function postAd(adId, token) {
+export async function postAd (adId, token) {
   const api = `/Ad/${adId}/save`
   const requestURL = `${APIService}${api}`
   try {
@@ -194,7 +194,7 @@ export async function postAd(adId, token) {
  * @param size
  * @returns {Promise<*>}
  */
-export async function getNews(evaluateId, page = 0, size = 2) {
+export async function getNews (evaluateId, page = 0, size = 2) {
   const api = `/evaluate/new/findByEvaluateId`
   const requestURL = `${APIService}${api}`
   try {
@@ -221,7 +221,7 @@ export async function getNews(evaluateId, page = 0, size = 2) {
  * @param size
  * @returns {Promise<*>}
  */
-export async function getWorks(evaluateId, page = 0, size = 4) {
+export async function getWorks (evaluateId, page = 0, size = 4) {
   const api = `/evaluate/findWorkByEvaluateId`
   const requestURL = `${APIService}${api}`
   try {
@@ -247,15 +247,12 @@ export async function getWorks(evaluateId, page = 0, size = 4) {
  * @param token
  * @returns {Promise<*>}
  */
-export async function getApplyDetail(evaluateId, token) {
+export async function getApplyDetail (evaluateId) {
 
-  const api= `/evaluate/applyDetail`
+  const api = `/evaluate/applyDetail`
   const requestURL = `${APIService}${api}`
-  let data={
+  let data = {
     evaluateId
-  }
-  if(token){
-    data.token=token;
   }
   try {
     const res = await request.get(requestURL)
@@ -274,15 +271,12 @@ export async function getApplyDetail(evaluateId, token) {
  * @param token
  * @returns {Promise<*>}
  */
-export async function getApplyPrice(evaluateId, token) {
+export async function getApplyPrice (evaluateId) {
 
-  const api= `/evaluate/applyPrice`
+  const api = `/evaluate/applyPrice`
   const requestURL = `${APIService}${api}`
-  let data={
+  let data = {
     evaluateId
-  }
-  if(token){
-    data.token=token;
   }
   try {
     const res = await request.get(requestURL)

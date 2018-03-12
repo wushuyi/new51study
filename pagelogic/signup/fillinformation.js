@@ -86,7 +86,6 @@ export default KeaContext => {
       currSignupApply: [
         () => [selectors.classId, selectors.signupApply],
         (classId, signupApply) => {
-          console.log(signupApply)
           return signupApply[classId]
         },
         PropTypes.any,
@@ -150,7 +149,6 @@ export default KeaContext => {
               },
             })
           }
-          console.log(labels)
           if (labels) {
             for (let index in labels) {
               let item = labels[index]
@@ -255,7 +253,6 @@ export default KeaContext => {
             defData = JSON.parse(singupDetail.parentText)
           }
 
-          console.log(labels)
           if (labels) {
             for (let index in labels) {
               let item = labels[index]

@@ -28,6 +28,7 @@ export default class OperateItem extends React.PureComponent {
   static defaultProps = {
     src: signupIcon,
     iconShow: false,
+    onClick: false,
     // 测试数据
     /*    'beginAt': 1516204800000,
         'endAt': 1517414340000,

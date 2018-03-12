@@ -12,7 +12,7 @@ export function getSingUpLinkProps (props) {
       this.RichTextPopup.setState({showModal: true})
     }
   } else {
-    if (props.userType && props.userType !== 'STUDY') {
+    if (!props.onClick && props.userType && props.userType !== 'STUDY') {
       linkProps.onClick = (e) => {
         Toast.info('您不是学生不能报名', 2, null, false)
       }
@@ -28,9 +28,9 @@ export function getSingUpLinkProps (props) {
       linkProps.onClick = (e) => {
         Toast.info('报名时间截止', 2, null, false)
       }
-    } else if (props.ifSignupLimit && !props.ifNomination) {
+    } else if (!props.onClick && props.ifSignupLimit && !props.ifNomination) {
       linkProps.onClick = (e) => {
-        Toast.info('比赛晋级用户可报名', 2, null, false);
+        Toast.info('比赛晋级用户可报名', 2, null, false)
         //去报名列表
 
       }
@@ -45,6 +45,8 @@ export function getSingUpLinkProps (props) {
           },
         ])
       }
+    } else if (props.onClick) {
+      linkProps.onClick = props.onClick
     } else {
       if (contestStatus[props.applyState] === 1) {
         linkProps.link = `/signup/information/${props.evaluateId}`

@@ -8,11 +8,12 @@ import { getToken } from 'utils/auth'
 import { static as Immutable } from 'seamless-immutable'
 import get from 'lodash/get'
 import pick from 'lodash/pick'
+import map from 'lodash/map'
 import JudgesIcon from '/static/images/match/icon_default_match_internet_star008.png'
 import studentIcon from '/static/images/match/icon_default_match_internet_star003.png'
 import { contest } from 'config/shareMsg'
 import { contestStatus } from 'utils/wyx_const'
-import isPast from "date-fns/is_past"
+import isPast from 'date-fns/is_past'
 
 function getButtonText (props) {
   let name = contestStatus[props.applyState] === 1
@@ -70,6 +71,9 @@ export default KeaContext => {
       getAd: (classId, position, def) => ({classId, position, def}),
       syncAd: (classId, data, type) => ({classId, data, type}),
       postAd: (adId, def, token) => ({adId, token: token || getToken(), def}),
+
+      getApplyPrice: (classId, def) => ({classId, def}),
+      syncApplyPrice: (classId, data) => ({classId, data}),
     }),
 
     reducers: ({actions}) => ({
@@ -122,6 +126,13 @@ export default KeaContext => {
             return Immutable.setIn(state, [classId, type], data)
           },
         }],
+      applyPrice: [
+        Immutable({}), PropTypes.any, {
+          [actions.syncApplyPrice]: (state, payload) => {
+            const {classId, data} = payload
+            return Immutable.set(state, classId, data)
+          },
+        }],
     }),
 
     selectors: ({selectors}) => ({
@@ -158,6 +169,11 @@ export default KeaContext => {
       currAds: [
         () => [selectors.currId, selectors.ads],
         (currId, ads) => ads[currId],
+        PropTypes.any,
+      ],
+      currApplyPrice: [
+        () => [selectors.currId, selectors.applyPrice],
+        (currId, applyPrice) => applyPrice[currId],
         PropTypes.any,
       ],
       bannerCoverProps: [
@@ -466,6 +482,36 @@ export default KeaContext => {
         },
         PropTypes.any,
       ],
+      signupPopupProps: [
+        () => [selectors.currApplyPrice, selectors.signupBoxProps],
+        (ApplyPrice, signupBoxProps) => {
+          if (!get(ApplyPrice, 'epList')) {
+            return false
+          }
+          const {epList, id, ifNeedPay, isTeamApply} = ApplyPrice
+          const sourceData = map(epList, (o, i) => {
+            const {
+              charge: price,
+              descript,
+              id,
+              title
+            } = o
+            return {
+              price,
+              id,
+              title
+            }
+          })
+
+          return Immutable({
+            sourceData,
+            ifNeedPay,
+            isTeamApply,
+            signupProps: get(signupBoxProps, `dataList[0]`)
+          })
+        },
+        PropTypes.any,
+      ]
     }),
 
     takeEvery: ({actions, workers}) => ({
@@ -477,6 +523,7 @@ export default KeaContext => {
       [actions.getNews]: workers.getNews,
       [actions.getAd]: workers.getAd,
       [actions.postAd]: workers.postAd,
+      [actions.getApplyPrice]: workers.getApplyPrice,
     }),
 
     workers: {
@@ -558,6 +605,16 @@ export default KeaContext => {
         })
         if (isError(adsData2)) {
           def && def.reject(adsData2)
+          return false
+        }
+
+        const applyPriceData = yield * workers.getApplyPrice({
+          payload: {
+            classId: classId,
+          },
+        })
+        if (isError(applyPriceData)) {
+          def && def.reject(applyPriceData)
           return false
         }
 
@@ -684,6 +741,21 @@ export default KeaContext => {
         // def && def.resolve(res)
         // return data
       },
+      getApplyPrice: function * (action) {
+        const {actions} = this
+        const {classId, def} = action.payload
+        let res = yield call(classApi.getApplyPrice, classId)
+        if (isError(res)) {
+          yield call(baseXhrError, res)
+          def && def.reject(res)
+          return res
+        }
+
+        const data = res.body.data
+        yield put(actions.syncApplyPrice(classId, data))
+        def && def.resolve(res)
+        return data
+      }
     },
   })
   return logic

@@ -78,10 +78,10 @@ class Page extends React.PureComponent {
   }
 
   onRefresh = () => {
-    const {actions} = this.props
+    const {actions, classId} = this.props
     const def = deferred()
     let token = getToken()
-    actions.initPage(139, def, token)
+    actions.initPage(classId, def, token)
     return def.promise
   }
 
@@ -110,7 +110,7 @@ class Page extends React.PureComponent {
       redirectUri,
     } = this.props
 
-    console.log('submitState', redirectUri , isBrowser)
+    console.log('submitState', redirectUri, isBrowser)
     if (redirectUri && isBrowser) {
       window.location.href = redirectUri
     }

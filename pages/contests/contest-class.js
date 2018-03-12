@@ -23,6 +23,7 @@ import GoBackOrOpenApp from 'components/ui/goback-or-openapp'
 import { checkToken, authDidMount, ComponentPageError } from 'utils/pageAuth'
 import Share from 'components/layout/share'
 import WhiteSpace from 'components/ui/white-space'
+import SignupPopup from '../../components/contests/ui/signup-popup'
 
 class Page extends React.PureComponent {
   static async getInitialProps (ctx) {
@@ -101,6 +102,7 @@ class Page extends React.PureComponent {
       bisaiAdListProps,
       bisaiAdProps,
       operateItemProps,
+      signupPopupProps,
     } = this.props
     isBrowser && console.log(this.props)
 
@@ -113,7 +115,10 @@ class Page extends React.PureComponent {
 
           {agencyItemProps && <AgencyItem {...agencyItemProps}/>}
 
-          {signupBoxProps && <SignupBox isClass={true} {...signupBoxProps}/>}
+          {signupBoxProps && <SignupBox isClass={true} {...signupBoxProps} onClick={() => {
+            this.SignupPopup.showModal()
+          }}/>}
+
 
           {bisaiAdListProps && <AdList onAd={(AdId) => {actions.postAd(AdId)}} {...bisaiAdListProps}/>}
 
@@ -160,7 +165,10 @@ class Page extends React.PureComponent {
           {detailProps && <ContestDetail {...detailProps}/>}
           {operateItemProps && <WhiteSpace height={75}/>}
         </PagePullToRefresh>
-        {operateItemProps && <OperateItem {...operateItemProps}/>}
+        {operateItemProps && <OperateItem {...operateItemProps} onClick={() => {
+          this.SignupPopup.showModal()
+        }}/>}
+        {signupPopupProps && <SignupPopup ref={(i) => { this.SignupPopup = i}} {...signupPopupProps}/>}
         <GoBackOrOpenApp/>
       </Layout>
     )
@@ -197,6 +205,7 @@ export default withRedux(Page, function (KeaContext, ctx) {
         'bisaiAdListProps',
         'bisaiAdProps',
         'operateItemProps',
+        'signupPopupProps',
       ]
     ]
   })

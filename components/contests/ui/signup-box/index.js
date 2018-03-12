@@ -108,8 +108,9 @@ export default class SignupBox extends React.PureComponent {
     return list
   }
 
-  render() {
+  render () {
     const SLData = this.getSignupsData()
+    const {onClick} = this.props
     return (
       <Fragment>
         <div className="signup-box-warp">
@@ -118,7 +119,7 @@ export default class SignupBox extends React.PureComponent {
               const {key, ...signupProps} = o
               return (
                 <li className='item' key={key || index}>
-                  <SignupItem {...signupProps}/>
+                  <SignupItem {...signupProps} onClick={onClick}/>
                 </li>
               )
             })}

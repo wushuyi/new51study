@@ -130,6 +130,7 @@ export default class SignupItem extends React.PureComponent {
     isShowSingUpNumber: false,
     isClass: false,
     userType: false,
+    onClick: false,
   }
 
   constructor(props) {
