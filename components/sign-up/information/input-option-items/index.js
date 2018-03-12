@@ -56,8 +56,15 @@ export class OptionItems extends React.PureComponent {
   constructor (props) {
     super()
     this.state = {
-      SignUpId: props.priceId || false,
+      SignUpId: false,
     }
+  }
+
+  componentDidMount () {
+    const {priceId} = this.props
+    this.setState({
+      SignUpId: priceId
+    })
   }
 
   getItems = () => {
@@ -83,6 +90,7 @@ export class OptionItems extends React.PureComponent {
       }
       let item = items[i]
       if (i === 0) {
+        //默认展开第一项
         itemProps.isContentShow = true
       }
       let price_id = SignUpId
@@ -100,7 +108,7 @@ export class OptionItems extends React.PureComponent {
   }
 
   render () {
-    return(
+    return (
       <Fragment>
         {this.getItems()}
       </Fragment>

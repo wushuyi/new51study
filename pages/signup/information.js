@@ -27,6 +27,7 @@ import forEach from 'lodash/forEach'
 import clone from 'lodash/clone'
 import get from 'lodash/get'
 import Modal from 'antd-mobile/lib/modal'
+import { isBrowser } from 'utils/runEnv'
 
 const {alert} = Modal
 
@@ -55,7 +56,7 @@ class Page extends React.PureComponent {
     authData && store.dispatch(actions.syncAuthData(authData))
     try {
       const def = deferred()
-      store.dispatch(actions.initPage(137, def, token))
+      store.dispatch(actions.initPage(query.classId, def, token))
       await def.promise
     } catch (err) {
       return {
@@ -100,15 +101,19 @@ class Page extends React.PureComponent {
 
     const {
       classId,
-      currSingupDetail,
+      evaluateApplyId,
       parentBoxProps,
       studyBoxProps,
       submitState,
       channelProps,
       optionProps,
+      redirectUri,
     } = this.props
 
-    console.log('submitState', submitState)
+    console.log('submitState', redirectUri , isBrowser)
+    if (redirectUri && isBrowser) {
+      window.location.href = redirectUri
+    }
 
     return (
       <Layout>
@@ -126,7 +131,21 @@ class Page extends React.PureComponent {
             let inputProps = [].concat(parentBoxProps).concat(studyBoxProps)
             forEach(inputProps, function (item) {
               if (item.isRequired && !vals[item.name]) {
-                alert(`请填写${item.itemProps.labelName}`)
+                let name = item.itemProps.labelName
+                switch (item.component) {
+                  case 'InputText':
+                    alert(`请输入${name}`)
+                    break
+                  case 'InputRadio':
+                    alert(`请选择${name}`)
+                    break
+                  case 'InputCheckbox':
+                    alert(`请选择${name}`)
+                    break
+                  case 'InputImage':
+                    alert(`请上传${name}`)
+                    break
+                }
                 isValidate = false
                 return false
               }
@@ -162,7 +181,7 @@ class Page extends React.PureComponent {
               formActions.setSubmitting(false)
               return false
             }
-            if (!values.priceId) {
+            if (optionProps && !values.priceId) {
               alert(`请选择你要报名的套餐`)
               formActions.setSubmitting(false)
               return false
@@ -207,7 +226,7 @@ class Page extends React.PureComponent {
             const def = deferred()
 
             if (submitState === 'SIGNUPMODIFY') {
-              actions.postSignupModify(classId, data.query, data.send, def)
+              actions.postSignupModify(evaluateApplyId, data.query, data.send, def)
             } else if (submitState === 'SIGNUPAPPLY') {
               actions.postSignupApply(classId, data.query, data.send, def)
             } else {
@@ -286,12 +305,14 @@ export default withRedux(Page, function (KeaContext, ctx) {
     props: [
       mainLogic, [
         'classId',
+        'evaluateApplyId',
         'currSingupDetail',
         'parentBoxProps',
         'studyBoxProps',
         'submitState',
         'channelProps',
         'optionProps',
+        'redirectUri',
       ],
     ],
   })

@@ -36,9 +36,9 @@ export default KeaContext => {
         def,
       }),
       syncSignupApply: (classId, data) => ({classId, data}),
-      postSignupModify: (classId, preQuery, prePostData, def, token) => ({
+      postSignupModify: (evaluateApplyId, preQuery, prePostData, def, token) => ({
         token: token || getToken(),
-        classId,
+        evaluateApplyId,
         preQuery,
         prePostData,
         def,
@@ -62,7 +62,7 @@ export default KeaContext => {
             return Immutable.set(state, payload.classId, payload.data)
           },
         }],
-      SignupApply: [
+      signupApply: [
         Immutable({}), PropTypes.any, {
           [actions.syncSignupApply]: (state, payload) => {
             return Immutable.set(state, payload.classId, payload.data)
@@ -83,10 +83,18 @@ export default KeaContext => {
         },
         PropTypes.any,
       ],
+      currSignupApply: [
+        () => [selectors.classId, selectors.signupApply],
+        (classId, signupApply) => {
+          console.log(signupApply)
+          return signupApply[classId]
+        },
+        PropTypes.any,
+      ],
       studyBoxProps: [
         () => [selectors.currSingupDetail],
         (singupDetail) => {
-          if (!get(singupDetail, 'ifApplyGroup')) {
+          if (!get(singupDetail, 'state')) {
             return false
           }
           let data = [], labels, defData
@@ -162,7 +170,7 @@ export default KeaContext => {
                 case 1: {
                   let sourceDataSplit = item.text.split(',')
                   let defaultval
-                  if (defData[item.name]) {
+                  if (get(defData, item.name)) {
                     defaultval = sourceDataSplit.indexOf(defData[item.name])
                   }
                   let sourceData = sourceDataSplit.map((o, i) => {
@@ -186,7 +194,7 @@ export default KeaContext => {
                 case 2: {
                   let sourceDataSplit = item.text.split(',')
                   let defaultval
-                  if (defData[item.name]) {
+                  if (get(defData, item.name)) {
                     defaultval = sourceDataSplit.map((o, i) => {
                       return includes(defData[item.name], o)
                     })
@@ -234,7 +242,7 @@ export default KeaContext => {
       parentBoxProps: [
         () => [selectors.currSingupDetail],
         (singupDetail) => {
-          if (!get(singupDetail, 'ifApplyGroup')) {
+          if (!get(singupDetail, 'state')) {
             return false
           }
           let data = [], labels, defData
@@ -269,7 +277,7 @@ export default KeaContext => {
                 case 1: {
                   let sourceDataSplit = item.text.split(',')
                   let defaultval
-                  if (defData[item.name]) {
+                  if (get(defData, item.name)) {
                     defaultval = sourceDataSplit.indexOf(defData[item.name])
                   }
                   let sourceData = sourceDataSplit.map((o, i) => {
@@ -293,7 +301,7 @@ export default KeaContext => {
                 case 2: {
                   let sourceDataSplit = item.text.split(',')
                   let defaultval
-                  if (defData[item.name]) {
+                  if (get(defData, item.name)) {
                     defaultval = sourceDataSplit.map((o, i) => {
                       return includes(defData[item.name], o)
                     })
@@ -341,7 +349,7 @@ export default KeaContext => {
       submitState: [
         () => [selectors.currSingupDetail],
         (singupDetail) => {
-          if (!get(singupDetail, 'ifApplyGroup')) {
+          if (!get(singupDetail, 'state')) {
             return false
           }
           const {verify, state} = singupDetail
@@ -357,7 +365,7 @@ export default KeaContext => {
       channelProps: [
         () => [selectors.currSingupDetail, selectors.currId],
         (singupDetail, currId) => {
-          if (!get(singupDetail, 'ifApplyGroup')) {
+          if (!get(singupDetail, 'state')) {
             return false
           }
           const {channelNumber, channelName} = singupDetail
@@ -390,6 +398,35 @@ export default KeaContext => {
         },
         PropTypes.any,
       ],
+      evaluateApplyId: [
+        () => [selectors.currSingupDetail, selectors.submitState],
+        (singupDetail, submitState) => {
+          if (submitState !== 'SIGNUPMODIFY') {
+            return false
+          }
+          return get(singupDetail, 'evaluateApplyId')
+        },
+        PropTypes.any,
+      ],
+      redirectUri: [
+        () => [selectors.currSingupDetail, selectors.currSignupApply, selectors.classId],
+        (singupDetail, signupApply, classId) => {
+          if (!get(signupApply, 'state')) {
+            return false
+          }
+          const {ifNeedVerify} = singupDetail
+          const {state} = signupApply
+          if (state) {
+            if (ifNeedVerify !== 'Need' && state === 'LIVE') {
+              return `/signup/signupok/${classId}`
+            } else {
+              return `/signup/checkstatus/${classId}`
+            }
+          }
+          return false
+        },
+        PropTypes.any,
+      ]
     }),
 
     takeEvery: ({actions, workers}) => ({
@@ -453,10 +490,11 @@ export default KeaContext => {
       },
       postSignupModify: function * (action) {
         const {actions} = this
-        const {token, classId, preQuery, prePostData, def} = action.payload
+        const classId = yield this.get('classId')
+        const {token, evaluateApplyId, preQuery, prePostData, def} = action.payload
         let res
         res = yield call(Api.postSignupModify,
-          classId, preQuery, prePostData, token)
+          evaluateApplyId, preQuery, prePostData, token)
         if (isError(res)) {
           yield call(baseXhrError, res)
           def && def.reject(res)
@@ -464,7 +502,7 @@ export default KeaContext => {
         }
 
         const data = res.body.data
-        yield put(actions.syncSignupModify(classId, data))
+        yield put(actions.syncSignupApply(classId, data))
         def && def.resolve(res)
         return data
       },
