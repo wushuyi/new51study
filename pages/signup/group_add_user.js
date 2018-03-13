@@ -8,32 +8,19 @@ import { getToken } from '../../utils/auth'
 
 import Layout from 'components/layout/default'
 import Share from 'components/layout/share'
-import TitleItem from 'components/sign-up/ui/title-item'
-import InformationTitleItem from 'components/sign-up/ui/information-title-item'
+
 import { Formik, Field, Form } from 'formik'
-import InputBox from 'components/sign-up/information/input-box'
-import { InputChannelItemField } from 'components/sign-up/information/input-channel-item'
-import { InputOptionItemsField } from 'components/sign-up/information/input-option-items'
-import WhiteSpace from 'components/ui/white-space'
+
+import TitleItem from 'components/sign-up/ui/title-item'
 import OperateItem from 'components/sign-up/information/operate-item'
-import TipSignUpItem from 'components/sign-up/information/tip-sign-up-item'
 
-import GroupSignupInformation from 'components/contests/ui/group-signup-information'
-import GroupSignupAdd from 'components/contests/ui/group-signup-add'
-import GroupSignupFee from 'components/contests/ui/group-signup-fee'
-import GroupSignupNotice from 'components/contests/ui/group-signup-notice'
-import GroupSignupTitle from 'components/contests/ui/group-signup-title'
-import GroupSignupMember from 'components/contests/ui/group-signup-member'
-
-import Modal from 'antd-mobile/lib/modal'
+import InputBox from 'components/sign-up/information/input-box'
 import clone from 'lodash/clone'
 import forEach from 'lodash/forEach'
 import mapKeys from 'lodash/mapKeys'
 import get from 'lodash/get'
 import startsWith from 'lodash/startsWith'
 import pickBy from 'lodash/pickBy'
-
-const {alert} = Modal
 
 class Page extends React.Component {
   static async getInitialProps (ctx) {
@@ -60,7 +47,7 @@ class Page extends React.Component {
     authData && store.dispatch(actions.syncAuthData(authData))
     try {
       const def = deferred()
-      store.dispatch(actions.initPage(140, 5780, def, token))
+      store.dispatch(actions.initPage(140, 5778, def, token))
       await def.promise
     } catch (err) {
       return {
@@ -90,7 +77,6 @@ class Page extends React.Component {
 
   render () {
     const {err, actions} = this.props
-
     if (err) {
       return (
         <ComponentPageError {...this.props}/>
@@ -98,22 +84,16 @@ class Page extends React.Component {
     }
 
     const {
-      classId,
-      groupBoxProps,
-      channelProps,
-      optionProps,
-      pageState,
-      groupInfo,
+      currAppyId,
+      currApplyDetail,
+      addUserBoxProps,
     } = this.props
-    const {isMount} = this.state
 
-    if (pageState !== '未通过' && pageState !== '第一次报名') {
-      alert(pageState)
-    }
+    console.log('currApplyDetail', currApplyDetail)
     return (
       <Layout>
         <Share/>
-        <TitleItem title="团体比赛"/>
+        <TitleItem title="添加团体成员"/>
         <Formik
           validateOnChange={false}
           validateOnBlur={true}
@@ -123,7 +103,7 @@ class Page extends React.Component {
             let isValidate = true
             let vals = {}
             vals = clone(values)
-            let inputProps = groupBoxProps
+            let inputProps = addUserBoxProps
             forEach(inputProps, function (item) {
               if (item.isRequired && !vals[item.name]) {
                 let name = item.itemProps.labelName
@@ -171,16 +151,6 @@ class Page extends React.Component {
               formActions.setSubmitting(false)
               return false
             }
-            if (!get(values, 'channel.name')) {
-              alert(`请选择所属机构`)
-              formActions.setSubmitting(false)
-              return false
-            }
-            if (optionProps && !values.priceId) {
-              alert(`请选择你要报名的套餐`)
-              formActions.setSubmitting(false)
-              return false
-            }
             console.log('inputProps', inputProps)
 
             let requires = pickBy(vals, (val, key) => {
@@ -197,39 +167,19 @@ class Page extends React.Component {
             })
 
             console.log('requires, group', requires, group)
-            let defaultData = {
-              groupName: '',
-              evaluatePriceId: 138,
-              parentText: '',
-            }
+
             let data = {
-              ...defaultData,
-              evaluateId: classId,
-              type: 'TEAM',
+              evaluateApplyId: currAppyId,
               text: group,
-              referenceId: values.channel.number,
               ...requires
             }
             const def = deferred()
 
-            if (pageState !== '未通过') {
-              actions.postEvaluateApply(data, def)
-            } else {
-              actions.postSignupApply(classId, data.query, data.send, def)
-            }
+            actions.postSaveTeamUser(data, def)
 
             def.promise.then(
               ok => {
-                const def = deferred()
-                actions.postApplyOrder(ok.body.data.id, def)
-                def.promise.then(ok => {
-                    formActions.setSubmitting(false)
-                  },
-                  err => {
-                    formActions.setSubmitting(false)
-                    formActions.setErrors('错误!')
-                  }
-                )
+                formActions.setSubmitting(false)
               },
               err => {
                 formActions.setSubmitting(false)
@@ -242,12 +192,7 @@ class Page extends React.Component {
           }}
           render={({errors, touched, isSubmitting}) => (
             <Form>
-              <InformationTitleItem title="报名"/>
-              {groupBoxProps && <InputBox data={groupBoxProps}/>}
-              <WhiteSpace height={9}/>
-              <InputChannelItemField name="channel" {...channelProps}/>
-              {optionProps && <InputOptionItemsField name="priceId" {...optionProps}/>}
-              <TipSignUpItem title="＊报名成功后恕不接受退款,请详细确认报名信息"/>
+              {addUserBoxProps && <InputBox data={addUserBoxProps}/>}
               <Field
                 name="submit"
                 render={(ctx) => {
@@ -255,16 +200,16 @@ class Page extends React.Component {
                   const {submitForm, isSubmitting} = form
                   return (
                     <OperateItem
-                      name={pageState === '未通过'
-                        ? '确认修改'
-                        : '确认提交'}
+                      name='确认添加'
                       disabled={isSubmitting}
                       onClick={() => {
                         !isSubmitting && submitForm()
-                      }}/>
+                      }}
+                    />
                   )
                 }}
               />
+
             </Form>
           )}
         />
@@ -281,20 +226,16 @@ export default withRedux(Page, function (KeaContext) {
       mainLogic, [
         'syncAuthData',
         'initPage',
-        'postEvaluateApply',
-        'postApplyOrder',
+        'postSaveTeamUser',
       ]
 
     ],
     props: [
       mainLogic, [
-        'classId',
         'currApplyDetail',
-        'groupBoxProps',
-        'channelProps',
-        'optionProps',
-        'pageState',
-        'groupInfo',
+        'addUserBoxProps',
+        'currAppyId',
+        'currAddUserId',
       ]
     ]
   })

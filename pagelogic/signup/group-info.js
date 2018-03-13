@@ -17,15 +17,19 @@ export default KeaContext => {
   const logic = kea({
     path: (key) => ['scenes', 'pages', 'signup', 'information'],
     actions: () => ({
-      initPage: (classId, def, token) => ({
+      initPage: (classId, appyId, def, token) => ({
         token: token || getToken(),
         classId,
+        appyId,
         def,
       }),
       syncAuthData: (authData) => ({authData}),
       setCurrId: (currId) => ({currId}),
-      getApplyDetail: (classId, def, token) => ({
+      setAppyId: (id) => ({id}),
+      setAddUserId: (id) => ({id}),
+      getApplyDetail: (classId, appyId, def, token) => ({
         token: token || getToken(),
+        appyId,
         classId,
         def,
       }),
@@ -35,7 +39,16 @@ export default KeaContext => {
         data,
         def,
       }),
-      syncEvaluateApply: (classId, data) => ({classId, data}),
+      postApplyOrder: (evaluateApplyId, def, token) => ({
+        token: token || getToken(),
+        evaluateApplyId,
+        def,
+      }),
+      postSaveTeamUser: (data, def, token) => ({
+        token: token || getToken(),
+        data,
+        def,
+      }),
     }),
 
     reducers: ({actions}) => ({
@@ -48,15 +61,19 @@ export default KeaContext => {
         false, PropTypes.any, {
           [actions.setCurrId]: (state, payload) => parseInt(payload.currId),
         }],
+      currAppyId: [
+        false, PropTypes.any, {
+          [actions.setAppyId]: (state, payload) => parseInt(payload.id),
+        }
+      ],
+      currAddUserId: [
+        false, PropTypes.any, {
+          [actions.setAddUserId]: (state, payload) => parseInt(payload.id),
+        }
+      ],
       applyDetail: [
         Immutable({}), PropTypes.any, {
           [actions.syncApplyDetail]: (state, payload) => {
-            return Immutable.set(state, payload.classId, payload.data)
-          },
-        }],
-      evaluateApply: [
-        Immutable({}), PropTypes.any, {
-          [actions.syncEvaluateApply]: (state, payload) => {
             return Immutable.set(state, payload.classId, payload.data)
           },
         }],
@@ -304,23 +321,233 @@ export default KeaContext => {
         },
         PropTypes.any,
       ],
+      //singup
+      groupInfo: [
+        () => [selectors.currApplyDetail],
+        (applyDetail) => {
+          if (!get(applyDetail, 'itemName')) {
+            return false
+          }
+          let data = [], labels, defData
+          const {ifApplyGroup, applyGroupStr, itemName, fullName, phone, groupName} = applyDetail
+          const prefix = 'group-'
+          if (applyDetail.teamLabels) {
+            labels = JSON.parse(applyDetail.teamLabels)
+          }
+          if (applyDetail.text) {
+            defData = JSON.parse(applyDetail.text)
+          }
+          data.push({
+            name: '节目名称',
+            value: itemName
+          })
+          data.push({
+            name: '姓名',
+            value: fullName
+          })
+          data.push({
+            name: '手机',
+            value: phone
+          })
+          if (ifApplyGroup && applyGroupStr) {
+            data.push({
+              name: '分组',
+              value: groupName
+            })
+          }
+          if (labels) {
+            for (let index in labels) {
+              let item = labels[index]
+              switch (parseInt(item.type)) {
+                case 3:
+                  break
+                default:
+                  data.push({
+                    name: item.desc || item.name,
+                    value: defData[item.name]
+                  })
+              }
+            }
+          }
+          let text = map(data, (o, i) => {
+            return `${o.name}:${o.value};`
+          }).join('  ')
+          return text
+        },
+        PropTypes.any,
+      ],
+      //add_user
+      addUserBoxProps: [
+        () => [selectors.currApplyDetail],
+        (applyDetail) => {
+          if (!get(applyDetail, 'labels')) {
+            return false
+          }
+          let data = [], labels, defData
+          const {ifApplyGroup, applyGroupStr, itemName, fullName, phone, groupName} = applyDetail
+          const prefix = 'group-'
+          if (applyDetail.labels) {
+            labels = JSON.parse(applyDetail.labels)
+          }
+          if (applyDetail.text) {
+            defData = JSON.parse(applyDetail.text)
+          }
+
+          data.push({
+            name: 'require-' + 'fullName',
+            isRequired: true,
+            component: 'InputText',
+            itemProps: {
+              labelName: '姓名',
+              placeholder: '请输入真实姓名',
+              defaultval: fullName || '',
+            },
+          })
+          data.push({
+            name: 'require-' + 'phone',
+            isRequired: true,
+            component: 'InputText',
+            itemProps: {
+              labelName: '手机',
+              placeholder: '请输入手机号码',
+              type: 'phone',
+              defaultval: phone || '',
+            },
+          })
+          // 选择分组
+          if (ifApplyGroup && applyGroupStr) {
+            let listData = applyGroupStr.split(',')
+            let defaultval = indexOf(listData, groupName)
+            let sourceData = listData.map((item, index) => {
+              return {
+                value: index,
+                label: item,
+              }
+            })
+            data.push({
+              name: 'require-' + 'groupName',
+              isRequired: true,
+              component: 'InputRadio',
+              itemProps: {
+                labelName: '分组',
+                placeholder: '请选择组别',
+                sourceData,
+                defaultval,
+              },
+            })
+          }
+
+          if (labels) {
+            for (let index in labels) {
+              let item = labels[index]
+              let conf
+              switch (parseInt(item.type)) {
+                case 0:
+                  conf = {
+                    name: prefix + item.name,
+                    isRequired: item.isRequired,
+                    component: 'InputText',
+                    itemProps: {
+                      labelName: item.desc || item.name,
+                      defaultval: (defData && defData[item.name]) || '',
+                    },
+                  }
+                  break
+                case 1: {
+                  let sourceDataSplit = item.text.split(',')
+                  let defaultval
+                  if (get(defData, item.name)) {
+                    defaultval = sourceDataSplit.indexOf(defData[item.name])
+                  }
+                  let sourceData = sourceDataSplit.map((o, i) => {
+                    return {
+                      value: i,
+                      label: o,
+                    }
+                  })
+                  conf = {
+                    name: prefix + item.name,
+                    isRequired: item.isRequired,
+                    component: 'InputRadio',
+                    itemProps: {
+                      labelName: item.desc || item.name,
+                      sourceData,
+                      defaultval,
+                    },
+                  }
+                }
+                  break
+                case 2: {
+                  let sourceDataSplit = item.text.split(',')
+                  let defaultval
+                  if (get(defData, item.name)) {
+                    defaultval = sourceDataSplit.map((o, i) => {
+                      return includes(defData[item.name], o)
+                    })
+                  }
+                  let sourceData = sourceDataSplit.map((o, i) => {
+                    return {
+                      value: i,
+                      label: o,
+                    }
+                  })
+                  conf = {
+                    name: prefix + item.name,
+                    isRequired: item.isRequired,
+                    component: 'InputCheckbox',
+                    itemProps: {
+                      labelName: item.desc || item.name,
+                      sourceData,
+                      defaultval,
+                    },
+                  }
+                }
+                  break
+                case 3:
+                  conf = {
+                    name: prefix + item.name,
+                    isRequired: item.isRequired,
+                    component: 'InputImage',
+                    itemProps: {
+                      labelName: item.desc || item.name,
+                      defaultval: (defData && defData[item.name]) || '',
+                    },
+                  }
+                  break
+                default:
+                  break
+              }
+              data.push(conf)
+            }
+          }
+
+          return Immutable(data)
+        },
+        PropTypes.any,
+      ],
     }),
 
     takeEvery: ({actions, workers}) => ({
       [actions.initPage]: workers.initPage,
       [actions.getApplyDetail]: workers.getApplyDetail,
       [actions.postEvaluateApply]: workers.postEvaluateApply,
+      [actions.postApplyOrder]: workers.postApplyOrder,
+      [actions.postSaveTeamUser]: workers.postSaveTeamUser,
     }),
 
     workers: {
       initPage: function * (action) {
         const {workers, actions} = this
-        const {token, classId, def} = action.payload
+        const {token, classId, appyId, def} = action.payload
         yield put(actions.setCurrId(classId))
+        if (appyId) {
+          yield put(actions.setAppyId(appyId))
+        }
 
         const getApplyDetailData = yield * workers.getApplyDetail({
           payload: {
             token,
+            appyId,
             classId,
           },
         })
@@ -333,9 +560,9 @@ export default KeaContext => {
       },
       getApplyDetail: function * (action) {
         const {actions} = this
-        const {token, classId, def} = action.payload
+        const {token, classId, appyId, def} = action.payload
         let res
-        res = yield call(Api.getApplyDetail, classId, token)
+        res = yield call(Api.getApplyDetail, classId, appyId, token)
         if (isError(res)) {
           yield call(baseXhrError, res)
           def && def.reject(res)
@@ -360,10 +587,44 @@ export default KeaContext => {
         }
 
         const data = res.body.data
-        yield put(actions.syncEvaluateApply(classId, data))
+        yield put(actions.syncApplyDetail(classId, data))
         def && def.resolve(res)
         return data
-      }
+      },
+      postApplyOrder: function * (action) {
+        const {actions} = this
+        const classId = yield this.get('classId')
+        const {token, evaluateApplyId, def} = action.payload
+        let res
+        res = yield call(Api.postApplyOrder, evaluateApplyId, token)
+        if (isError(res)) {
+          yield call(baseXhrError, res)
+          def && def.reject(res)
+          return res
+        }
+
+        const data = res.body.data
+        // yield put(actions.syncApplyDetail(classId, data))
+        def && def.resolve(res)
+        return data
+      },
+      postSaveTeamUser: function * (action) {
+        const {actions} = this
+        const classId = yield this.get('classId')
+        const {token, data: sendData, def} = action.payload
+        let res
+        res = yield call(Api.postSaveTeamUser, sendData, token)
+        if (isError(res)) {
+          yield call(baseXhrError, res)
+          def && def.reject(res)
+          return res
+        }
+
+        const data = res.body.data
+        // yield put(actions.syncApplyDetail(classId, data))
+        def && def.resolve(res)
+        return data
+      },
     },
   })
   return logic

@@ -11,21 +11,24 @@ import { needAuthError, baseChcek } from '../utils/error'
  * @param token
  * @returns {Promise<*>}
  */
-export async function getApplyDetail (evaluateId, token, type = 'TEAM', appyId = '') {
+export async function getApplyDetail (evaluateId, appyId = '', token, type = 'TEAM',) {
   if (!token) {
     return new needAuthError(`can't read token`)
   }
   const api = `/evaluate/applyDetail`
   const requestURL = `${APIService}${api}`
+  let data = {
+    evaluateId,
+    type,
+    token
+  }
+  if (appyId) {
+    data.evaluateApplyId = appyId
+  }
   try {
     const res = await request.get(requestURL)
       .query(APIVersion)
-      .query({
-        evaluateId,
-        type,
-        appyId,
-        token
-      })
+      .query(data)
       .use(xhrCrypto)
     return baseChcek(res)
   } catch (err) {
@@ -33,6 +36,12 @@ export async function getApplyDetail (evaluateId, token, type = 'TEAM', appyId =
   }
 }
 
+/**
+ * API: evaluate/apply
+ * @param data
+ * @param token
+ * @returns {Promise<*>}
+ */
 export async function postEvaluateApply (data, token) {
   if (!token) {
     return new needAuthError(`can't read token`)
@@ -54,3 +63,60 @@ export async function postEvaluateApply (data, token) {
     return err
   }
 }
+
+/**
+ * API: evaluate/applyOrder
+ * @param evaluateApplyId
+ * @param token
+ * @returns {Promise<*>}
+ */
+export async function postApplyOrder (evaluateApplyId, token) {
+  if (!token) {
+    return new needAuthError(`can't read token`)
+  }
+  const api = `/evaluate/applyOrder`
+  const requestURL = `${APIService}${api}`
+  try {
+    const res = await request.post(requestURL)
+      .query(APIVersion)
+      .query({
+        token
+      })
+      .send({
+        evaluateApplyId
+      })
+      .use(xhrCrypto)
+    return baseChcek(res)
+  } catch (err) {
+    return err
+  }
+}
+
+/**
+ * API: evaluate/saveTeamUser
+ * @param data
+ * @param token
+ * @returns {Promise<*>}
+ */
+export async function postSaveTeamUser (data, token) {
+  if (!token) {
+    return new needAuthError(`can't read token`)
+  }
+  const api = `/evaluate/saveTeamUser`
+  const requestURL = `${APIService}${api}`
+  try {
+    const res = await request.post(requestURL)
+      .query(APIVersion)
+      .query({
+        token
+      })
+      .send({
+        ...data
+      })
+      .use(xhrCrypto)
+    return baseChcek(res)
+  } catch (err) {
+    return err
+  }
+}
+

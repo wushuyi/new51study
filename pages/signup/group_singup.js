@@ -1,0 +1,164 @@
+import React, { Fragment } from 'react'
+
+import { withRedux } from 'store'
+import createLogic from 'pagelogic/signup/group-info'
+import { deferred } from 'redux-saga/utils'
+import { checkToken, ComponentPageError, authDidMount } from 'utils/pageAuth'
+import { getToken } from '../../utils/auth'
+
+import Layout from 'components/layout/default'
+import Share from 'components/layout/share'
+import TitleItem from 'components/sign-up/ui/title-item'
+import InformationTitleItem from 'components/sign-up/ui/information-title-item'
+import { Formik, Field, Form } from 'formik'
+import InputBox from 'components/sign-up/information/input-box'
+import { InputChannelItemField } from 'components/sign-up/information/input-channel-item'
+import { InputOptionItemsField } from 'components/sign-up/information/input-option-items'
+import WhiteSpace from 'components/ui/white-space'
+import OperateItem from 'components/sign-up/information/operate-item'
+import TipSignUpItem from 'components/sign-up/information/tip-sign-up-item'
+
+import GroupSignupInformation from 'components/contests/ui/group-signup-information'
+import GroupSignupAdd from 'components/contests/ui/group-signup-add'
+import GroupSignupFee from 'components/contests/ui/group-signup-fee'
+import GroupSignupNotice from 'components/contests/ui/group-signup-notice'
+import GroupSignupTitle from 'components/contests/ui/group-signup-title'
+import GroupSignupMember from 'components/contests/ui/group-signup-member'
+
+import Modal from 'antd-mobile/lib/modal'
+import clone from 'lodash/clone'
+import forEach from 'lodash/forEach'
+import mapKeys from 'lodash/mapKeys'
+import get from 'lodash/get'
+import startsWith from 'lodash/startsWith'
+import pickBy from 'lodash/pickBy'
+
+const {alert} = Modal
+
+class Page extends React.Component {
+  static async getInitialProps (ctx) {
+    const {logics, KeaContext, isServer, store, req, query} = ctx
+    let initProps = {}
+    let token = getToken(req)
+
+    const {actions} = logics[0]
+
+    //验证token, 并获取 用户信息
+    const {err, needSave, authData} = await checkToken(token)
+    if (!err) {
+      initProps.auth = {
+        needSave,
+        authData,
+      }
+    } else {
+      token = ''
+      initProps.auth = {
+        needClear: true,
+      }
+    }
+
+    authData && store.dispatch(actions.syncAuthData(authData))
+    try {
+      const def = deferred()
+      store.dispatch(actions.initPage(140, 5780, def, token))
+      await def.promise
+    } catch (err) {
+      return {
+        err: {
+          name: err.name,
+          message: err.message,
+        },
+      }
+    }
+
+    return initProps
+  }
+
+  constructor () {
+    super()
+    this.state = {
+      isMount: false
+    }
+  }
+
+  async componentDidMount () {
+    authDidMount(this.props)
+    this.setState({
+      isMount: true
+    })
+  }
+
+  render () {
+    const {err, actions} = this.props
+
+    if (err) {
+      return (
+        <ComponentPageError {...this.props}/>
+      )
+    }
+
+    const {
+      classId,
+      groupBoxProps,
+      channelProps,
+      optionProps,
+      pageState,
+      groupInfo,
+    } = this.props
+    const {isMount} = this.state
+
+    if (pageState !== '未通过' && pageState !== '第一次报名') {
+      alert(pageState)
+    }
+    let page = 1
+    return (
+      <Layout>
+        <Share/>
+        <Fragment>
+          <TitleItem title="比赛报名"/>
+          {groupInfo && <GroupSignupInformation detail={groupInfo}/>}
+          <GroupSignupTitle/>
+          <GroupSignupMember/>
+          <GroupSignupAdd/>
+          <GroupSignupFee/>
+          <GroupSignupNotice/>
+
+          <OperateItem
+            name='确认付款'
+          />
+        </Fragment>
+      </Layout>
+    )
+  }
+}
+
+export default withRedux(Page, function (KeaContext) {
+  const {connect} = KeaContext
+  const mainLogic = createLogic(KeaContext)
+  const logic = connect({
+    actions: [
+      mainLogic, [
+        'syncAuthData',
+        'initPage',
+        'postEvaluateApply',
+        'postApplyOrder',
+      ]
+
+    ],
+    props: [
+      mainLogic, [
+        'classId',
+        'currApplyDetail',
+        'groupBoxProps',
+        'channelProps',
+        'optionProps',
+        'pageState',
+        'groupInfo',
+      ]
+    ]
+  })
+  return [
+    logic,
+    mainLogic,
+  ]
+})
