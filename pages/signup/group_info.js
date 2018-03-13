@@ -1,37 +1,32 @@
 import React, { Fragment } from 'react'
-import PropTypes from 'prop-types'
+
 import { withRedux } from 'store'
-import Layout from 'components/layout/default'
-import TitleItem from 'components/sign-up/ui/title-item'
-
-import Share from 'components/layout/share'
-import createLogic from 'pagelogic/signup/fillinformation'
-import { getToken } from 'utils/auth'
+import createLogic from 'pagelogic/signup/group-info'
 import { deferred } from 'redux-saga/utils'
-import { checkToken, ComponentPageError, authDidMount } from 'utils/pageAuth'
-import PagePullToRefresh from 'components/ui/page-pull-to-refresh'
-import { Formik, Field, Form } from 'formik'
+import { authDidMount, checkToken } from '../../utils/pageAuth'
+import { getToken } from '../../utils/auth'
+
+import Layout from 'components/layout/default'
+import Share from 'components/layout/share'
+import TitleItem from 'components/sign-up/ui/title-item'
 import InformationTitleItem from 'components/sign-up/ui/information-title-item'
+import { Formik, Field, Form } from 'formik'
 import InputBox from 'components/sign-up/information/input-box'
-import WhiteSpace from 'components/ui/white-space'
-import TipSignUpItem from 'components/sign-up/information/tip-sign-up-item'
-import OperateItem from 'components/sign-up/information/operate-item'
-import { InputOptionItemsField } from 'components/sign-up/information/input-option-items'
 import { InputChannelItemField } from 'components/sign-up/information/input-channel-item'
-
-import pickBy from 'lodash/pickBy'
-import startsWith from 'lodash/startsWith'
-import mapKeys from 'lodash/mapKeys'
-import forEach from 'lodash/forEach'
-import clone from 'lodash/clone'
-import get from 'lodash/get'
+import { InputOptionItemsField } from 'components/sign-up/information/input-option-items'
+import WhiteSpace from 'components/ui/white-space'
+import OperateItem from 'components/sign-up/information/operate-item'
 import Modal from 'antd-mobile/lib/modal'
-import { isBrowser } from 'utils/runEnv'
-
+import clone from 'lodash/clone'
+import forEach from 'lodash/forEach'
+import mapKeys from 'lodash/mapKeys'
+import get from 'lodash/get'
+import startsWith from 'lodash/startsWith'
+import pickBy from 'lodash/pickBy'
 
 const {alert} = Modal
 
-class Page extends React.PureComponent {
+class Page extends React.Component {
   static async getInitialProps (ctx) {
     const {logics, KeaContext, isServer, store, req, query} = ctx
     let initProps = {}
@@ -56,7 +51,7 @@ class Page extends React.PureComponent {
     authData && store.dispatch(actions.syncAuthData(authData))
     try {
       const def = deferred()
-      store.dispatch(actions.initPage(query.classId, def, token))
+      store.dispatch(actions.initPage(140, def, token))
       await def.promise
     } catch (err) {
       return {
@@ -73,24 +68,20 @@ class Page extends React.PureComponent {
   constructor () {
     super()
     this.state = {
-      modal: false,
+      isMount: false
     }
-  }
-
-  onRefresh = () => {
-    const {actions, classId} = this.props
-    const def = deferred()
-    let token = getToken()
-    actions.initPage(classId, def, token)
-    return def.promise
   }
 
   async componentDidMount () {
     authDidMount(this.props)
+    this.setState({
+      isMount: true
+    })
   }
 
   render () {
     const {err, actions} = this.props
+
     if (err) {
       return (
         <ComponentPageError {...this.props}/>
@@ -99,24 +90,21 @@ class Page extends React.PureComponent {
 
     const {
       classId,
-      evaluateApplyId,
-      parentBoxProps,
-      studyBoxProps,
-      submitState,
+      groupBoxProps,
       channelProps,
       optionProps,
-      redirectUri,
+      pageState,
     } = this.props
+    const {isMount} = this.state
 
-    console.log('submitState', redirectUri, isBrowser)
-    if (redirectUri && isBrowser) {
-      window.location.href = redirectUri
+    if (pageState !== '未通过' && pageState !== '第一次报名') {
+      alert(pageState)
     }
 
     return (
       <Layout>
         <Share/>
-        <TitleItem/>
+        <TitleItem title="团体比赛"/>
         <Formik
           validateOnChange={false}
           validateOnBlur={true}
@@ -126,7 +114,7 @@ class Page extends React.PureComponent {
             let isValidate = true
             let vals = {}
             vals = clone(values)
-            let inputProps = [].concat(parentBoxProps).concat(studyBoxProps)
+            let inputProps = [].concat(groupBoxProps)
             forEach(inputProps, function (item) {
               if (item.isRequired && !vals[item.name]) {
                 let name = item.itemProps.labelName
@@ -192,41 +180,33 @@ class Page extends React.PureComponent {
             requires = mapKeys(requires, (val, key) => {
               return key.split('require-')[1]
             })
-            let studys = pickBy(vals, (val, key) => {
-              return startsWith(key, 'study-')
+            let group = pickBy(vals, (val, key) => {
+              return startsWith(key, 'group-')
             })
-            studys = mapKeys(studys, (val, key) => {
-              return key.split('study-')[1]
-            })
-            let parents = pickBy(vals, (val, key) => {
-              return startsWith(key, 'parent-')
-            })
-            parents = mapKeys(parents, (val, key) => {
-              return key.split('parent-')[1]
+            group = mapKeys(group, (val, key) => {
+              return key.split('group-')[1]
             })
 
-            console.log('requires, studys, parents', requires, studys, parents)
+            console.log('requires, group', requires, group)
+            let defaultData = {
+              groupName: '',
+              evaluatePriceId: 138,
+              parentText: '',
+            }
             let data = {
-              send: {
-                body: {
-                  text: studys,
-                  parentText: parents,
-                  baseInfo: requires,
-                  price: {
-                    id: values.priceId,
-                  }
-                },
+              body: {
+                ...defaultData,
+                evaluateId: classId,
+                type: 'TEAM',
+                text: group,
+                referenceId: values.channel.number,
+                ...requires
               },
-              query: {
-                reference: values.channel.number
-              }
             }
             const def = deferred()
 
-            if (submitState === 'SIGNUPMODIFY') {
-              actions.postSignupModify(evaluateApplyId, data.query, data.send, def)
-            } else if (submitState === 'SIGNUPAPPLY') {
-              actions.postSignupApply(classId, data.query, data.send, def)
+            if (pageState !== '未通过') {
+              actions.postEvaluateApply(data, def)
             } else {
               actions.postSignupApply(classId, data.query, data.send, def)
             }
@@ -242,36 +222,15 @@ class Page extends React.PureComponent {
             )
           }}
           validate={(values, props) => {
-            // console.log(this, 'this')
-            // const errors = {}
-            // if (!values.email) {
-            //   errors.email = '请输入邮箱地址'
-            // } else if (
-            //   !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
-            // ) {
-            //   errors.email = '请输入正确的邮箱地址'
-            // }
-            // return errors
+
           }}
           render={({errors, touched, isSubmitting}) => (
             <Form>
-              {studyBoxProps && studyBoxProps.length && (
-                <Fragment>
-                  <InformationTitleItem title="学生"/>
-                  <InputBox data={studyBoxProps}/>
-                </Fragment>
-              ) || null}
-
-              {parentBoxProps && parentBoxProps.length && (
-                <Fragment>
-                  <InformationTitleItem title="家长"/>
-                  <InputBox data={parentBoxProps}/>
-                </Fragment>
-              ) || null}
+              <InformationTitleItem title="报名"/>
+              {groupBoxProps && <InputBox data={groupBoxProps}/>}
               <WhiteSpace height={9}/>
               <InputChannelItemField name="channel" {...channelProps}/>
               {optionProps && <InputOptionItemsField name="priceId" {...optionProps}/>}
-              <TipSignUpItem/>
               <Field
                 name="submit"
                 render={(ctx) => {
@@ -279,7 +238,7 @@ class Page extends React.PureComponent {
                   const {submitForm, isSubmitting} = form
                   return (
                     <OperateItem
-                      name={submitState === 'SIGNUPMODIFY'
+                      name={pageState === '未通过'
                         ? '确认修改'
                         : '确认提交'}
                       disabled={isSubmitting}
@@ -292,13 +251,12 @@ class Page extends React.PureComponent {
             </Form>
           )}
         />
-
       </Layout>
     )
   }
 }
 
-export default withRedux(Page, function (KeaContext, ctx) {
+export default withRedux(Page, function (KeaContext) {
   const {connect} = KeaContext
   const mainLogic = createLogic(KeaContext)
   const logic = connect({
@@ -306,23 +264,20 @@ export default withRedux(Page, function (KeaContext, ctx) {
       mainLogic, [
         'syncAuthData',
         'initPage',
-        'postSignupApply',
-        'postSignupModify'
-      ],
+        'postEvaluateApply',
+      ]
+
     ],
     props: [
       mainLogic, [
         'classId',
-        'evaluateApplyId',
-        'currSingupDetail',
-        'parentBoxProps',
-        'studyBoxProps',
-        'submitState',
+        'currApplyDetail',
+        'groupBoxProps',
         'channelProps',
         'optionProps',
-        'redirectUri',
-      ],
-    ],
+        'pageState'
+      ]
+    ]
   })
   return [
     logic,

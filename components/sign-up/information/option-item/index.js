@@ -13,7 +13,7 @@ export default class OptionItem extends React.PureComponent {
     btnType: PropTypes.any,
     canSingUp: PropTypes.bool,
     charge: PropTypes.string,
-    descript: PropTypes.string,
+    descript: PropTypes.any,
     id: PropTypes.number,
     isContentExtend: PropTypes.bool,
     isContentShow: PropTypes.bool,
@@ -25,7 +25,7 @@ export default class OptionItem extends React.PureComponent {
   static defaultProps = {
     btnType: 0,
     canSingUp: false,
-    charge: '0.10',
+    charge: false,
     descript: '这个是一毛钱的。这个是一毛钱的。这个是一毛钱的。这个是一毛钱的。这个是一毛钱的。这个是一毛钱的。这个是一毛钱的。',
     id: 73,
     isContentExtend: false,
@@ -76,12 +76,11 @@ export default class OptionItem extends React.PureComponent {
       'down-icon': !isContentExtend,
       'up-icon': isContentExtend
     })
-    let moneyText = Number(charge) === 0 ? '免费' : `¥${charge}`
     return (
       <Fragment>
         <div className="option-item">
           <div className="title-outer" onClick={this.onContentShow}>
-            <div className="money">{moneyText}</div>
+            {charge && <div className="money">{Number(charge) === 0 ? '免费' : `¥${charge}`}</div>}
             <div className="name">{title}</div>
             <div className={clsBtnType} onClick={this.onSignUp}/>
           </div>

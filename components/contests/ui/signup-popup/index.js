@@ -5,8 +5,10 @@ import Modal from 'antd-mobile/lib/modal'
 import List from 'antd-mobile/lib/list'
 import Button from 'antd-mobile/lib/button'
 import SignupPopupItem from './ui/signup-popup-item'
+import Router from 'next/router'
 
 import map from 'lodash/map'
+import Toast from 'antd-mobile/lib/toast/index'
 
 const data = {
   'ifNeedPay': true,
@@ -53,7 +55,8 @@ export default class SignupPopup extends React.PureComponent {
       }
     ],
     ifNeedPay: false,
-    isTeamApply: false
+    isTeamApply: false,
+    signupProps: false
   }
 
   constructor () {
@@ -76,7 +79,7 @@ export default class SignupPopup extends React.PureComponent {
   }
 
   render () {
-    const {sourceData, isTeamApply, ifNeedPay} = this.props
+    const {sourceData, isTeamApply, ifNeedPay, signupProps} = this.props
     return (
       <Fragment>
         {/*<Button onClick={this.showModal}>popup</Button>*/}
@@ -90,13 +93,52 @@ export default class SignupPopup extends React.PureComponent {
             <Fragment>
               {map(sourceData, (o, i) => {
                 return (
-                  <SignupPopupItem key={i} {...o}/>
+                  <SignupPopupItem
+                    onClick={() => {
+                      Router.push(
+                        {
+                          pathname: '/signup/information/',
+                          query: {classId: o.id},
+                        },
+                        `/signup/information/${o.id}`
+                      )
+                    }}
+                    key={i} {...o}/>
                 )
               })}
               {isTeamApply && (
                 <Fragment>
-                  <SignupPopupItem price='' title="参加团体比赛"/>
-                  <SignupPopupItem price='' title="发布团体比赛（机构、老师发布）"/>
+                  <SignupPopupItem price='' title="参加团体比赛"
+                                   onClick={() => {
+                                     if (signupProps.userType !== 'STUDY') {
+                                       Toast.info('老师和机构可发布比赛', 2, null, false)
+                                       return false
+                                     }
+
+                                     Router.push(
+                                       {
+                                         pathname: '/signup/information/',
+                                         query: {classId: 140},
+                                       },
+                                       `/signup/information/${140}`
+                                     )
+                                   }}
+                  />
+                  <SignupPopupItem price='' title="发布团体比赛（机构、老师发布）"
+                                   onClick={() => {
+                                     if (signupProps.userType === 'STUDY') {
+                                       Toast.info((<Fragment>学生身份可以参加<br/>不可发布比赛</Fragment>), 2, null, false)
+                                       return false
+                                     }
+                                     Router.push(
+                                       {
+                                         pathname: '/signup/information/',
+                                         query: {classId: 140},
+                                       },
+                                       `/signup/information/${140}`
+                                     )
+                                   }}
+                  />
                 </Fragment>
               )}
             </Fragment>

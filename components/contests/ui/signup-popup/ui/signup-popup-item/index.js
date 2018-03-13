@@ -13,11 +13,11 @@ export default class SignupPopupItem extends React.PureComponent {
     id: 137,
     price: '30.00',
     title: '中少儿组比赛',
-    onCLick: () => {}
+    onClick: () => {}
   }
 
   render () {
-    const {price, title, id, onCLick} = this.props
+    const {price, title, id, onClick} = this.props
     return (
       <Fragment>
         <div className="group-item-wrapper">
@@ -26,7 +26,7 @@ export default class SignupPopupItem extends React.PureComponent {
               <div className="price">¥{price}</div>
             )}
             <div className="title">{title}</div>
-            <div className="sign" onClick={onCLick}/>
+            <div className="sign" onClick={onClick}/>
           </div>
         </div>
         {/*language=CSS*/}

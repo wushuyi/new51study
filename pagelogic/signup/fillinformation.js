@@ -379,7 +379,7 @@ export default KeaContext => {
       ],
       optionProps: [
         () => [selectors.currSingupDetail],
-        (singupDetail, currId) => {
+        (singupDetail) => {
           if (!get(singupDetail, 'charges')) {
             return false
           }
