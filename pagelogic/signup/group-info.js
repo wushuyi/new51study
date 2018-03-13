@@ -11,6 +11,7 @@ import indexOf from 'lodash/indexOf'
 import includes from 'lodash/includes'
 import get from 'lodash/get'
 import map from 'lodash/map'
+import filter from 'lodash/filter'
 
 export default KeaContext => {
   const {kea} = KeaContext
@@ -373,6 +374,54 @@ export default KeaContext => {
             return `${o.name}:${o.value};`
           }).join('  ')
           return text
+        },
+        PropTypes.any,
+      ],
+      groupMemberProps: [
+        () => [selectors.currApplyDetail],
+        (applyDetail) => {
+          if (!get(applyDetail, 'teamApplyList')) {
+            return false
+          }
+          const {teamApplyList} = applyDetail
+          let data = map(teamApplyList, (o, i) => {
+            let {text, id, fullName, phone} = o
+            let dataText = {}
+            let preInfo = []
+            preInfo.push({
+              name: '姓名',
+              value: fullName
+            })
+            preInfo.push({
+              name: '手机',
+              value: phone
+            })
+            if (text) {
+              dataText = JSON.parse(text)
+              let info = {
+                ...dataText,
+              }
+              info = map(info, (o, i) => {
+                return {
+                  name: i,
+                  value: o
+                }
+              })
+              info = filter(info, (o, i) => {
+                return o.value && !includes(o.value, 'clouddn.com/')
+              })
+              preInfo = preInfo.concat(info)
+            }
+            let detail = map(preInfo, (o, i) => {
+              return `${o.name}:${o.value};`
+            }).join('  ')
+            return {
+              detail,
+              id: id
+            }
+          })
+
+          return Immutable(data)
         },
         PropTypes.any,
       ],

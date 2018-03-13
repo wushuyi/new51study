@@ -32,6 +32,7 @@ import mapKeys from 'lodash/mapKeys'
 import get from 'lodash/get'
 import startsWith from 'lodash/startsWith'
 import pickBy from 'lodash/pickBy'
+import map from 'lodash/map'
 
 const {alert} = Modal
 
@@ -60,7 +61,7 @@ class Page extends React.Component {
     authData && store.dispatch(actions.syncAuthData(authData))
     try {
       const def = deferred()
-      store.dispatch(actions.initPage(140, 5780, def, token))
+      store.dispatch(actions.initPage(140, 5778, def, token))
       await def.promise
     } catch (err) {
       return {
@@ -99,11 +100,9 @@ class Page extends React.Component {
 
     const {
       classId,
-      groupBoxProps,
-      channelProps,
-      optionProps,
       pageState,
       groupInfo,
+      groupMemberProps,
     } = this.props
     const {isMount} = this.state
 
@@ -118,7 +117,10 @@ class Page extends React.Component {
           <TitleItem title="比赛报名"/>
           {groupInfo && <GroupSignupInformation detail={groupInfo}/>}
           <GroupSignupTitle/>
-          <GroupSignupMember/>
+          {groupMemberProps && map(groupMemberProps, (o, i) => {
+            return (<GroupSignupMember key={i} {...o}/>)
+          })}
+
           <GroupSignupAdd/>
           <GroupSignupFee/>
           <GroupSignupNotice/>
@@ -148,12 +150,9 @@ export default withRedux(Page, function (KeaContext) {
     props: [
       mainLogic, [
         'classId',
-        'currApplyDetail',
-        'groupBoxProps',
-        'channelProps',
-        'optionProps',
         'pageState',
         'groupInfo',
+        'groupMemberProps',
       ]
     ]
   })
