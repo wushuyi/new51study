@@ -54,6 +54,11 @@ export default KeaContext => {
         data,
         def,
       }),
+      postRemoveTeamUser: (editorId, def, token) => ({
+        token: token || getToken(),
+        editorId,
+        def,
+      }),
     }),
 
     reducers: ({actions}) => ({
@@ -628,6 +633,7 @@ export default KeaContext => {
       [actions.postEvaluateApply]: workers.postEvaluateApply,
       [actions.postApplyOrder]: workers.postApplyOrder,
       [actions.postSaveTeamUser]: workers.postSaveTeamUser,
+      [actions.postRemoveTeamUser]: workers.postRemoveTeamUser,
     }),
 
     workers: {
@@ -709,6 +715,23 @@ export default KeaContext => {
         const {token, data: sendData, def} = action.payload
         let res
         res = yield call(Api.postSaveTeamUser, sendData, token)
+        if (isError(res)) {
+          yield call(baseXhrError, res)
+          def && def.reject(res)
+          return res
+        }
+
+        const data = res.body.data
+        // yield put(actions.syncApplyDetail(classId, data))
+        def && def.resolve(res)
+        return data
+      },
+      postRemoveTeamUser: function * (action) {
+        const {actions} = this
+        const classId = yield this.get('classId')
+        const {token, editorId, def} = action.payload
+        let res
+        res = yield call(Api.postRemoveTeamUser, editorId, token)
         if (isError(res)) {
           yield call(baseXhrError, res)
           def && def.reject(res)

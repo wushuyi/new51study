@@ -22,6 +22,10 @@ import get from 'lodash/get'
 import startsWith from 'lodash/startsWith'
 import pickBy from 'lodash/pickBy'
 import Router from 'next/router'
+import GroupSignupBanner from 'components/contests/ui/group-signup-banner'
+import Modal from 'antd-mobile/lib/modal/index'
+
+const {alert} = Modal
 
 class Page extends React.Component {
   static async getInitialProps (ctx) {
@@ -78,6 +82,29 @@ class Page extends React.Component {
     })
   }
 
+  onRemoveTeamUser = () => {
+    const {editorUserId, classId, currAppyId, actions} = this.props
+    const def = deferred()
+    actions.postRemoveTeamUser(editorUserId, def)
+    def.promise.then(
+      ok => {
+        Router.push(
+          {
+            pathname: '/signup/group_singup',
+            query: {
+              classId: classId,
+              appyId: currAppyId,
+            },
+          },
+          `/signup/group_singup/${classId}/${currAppyId}`
+        )
+      },
+      err => {
+        alert('提交服务端出错')
+      },
+    )
+  }
+
   render () {
     const {err, actions} = this.props
     if (err) {
@@ -99,6 +126,7 @@ class Page extends React.Component {
       <Layout>
         <Share/>
         <TitleItem title="添加团体成员"/>
+
         <Formik
           validateOnChange={false}
           validateOnBlur={true}
@@ -161,6 +189,7 @@ class Page extends React.Component {
               err => {
                 formActions.setSubmitting(false)
                 formActions.setErrors('错误!')
+                alert('提交服务端出错')
               },
             )
           }}
@@ -175,18 +204,28 @@ class Page extends React.Component {
                 render={(ctx) => {
                   const {field, form} = ctx
                   const {submitForm, isSubmitting} = form
-                  return (
-                    <OperateItem
-                      name={editorUserId ? '确认修改' : '确认提交'}
-                      disabled={isSubmitting}
-                      onClick={() => {
-                        !isSubmitting && submitForm()
-                      }}
-                    />
-                  )
+                  if (editorUserId) {
+                    return (
+                      <GroupSignupBanner
+                        onConfirm={() => {
+                          !isSubmitting && submitForm()
+                        }}
+                        onCancel={this.onRemoveTeamUser}
+                      />
+                    )
+                  } else {
+                    return (
+                      <OperateItem
+                        name={'确认提交'}
+                        disabled={isSubmitting}
+                        onClick={() => {
+                          !isSubmitting && submitForm()
+                        }}
+                      />
+                    )
+                  }
                 }}
               />
-
             </Form>
           )}
         />
@@ -203,8 +242,9 @@ export default withRedux(Page, function (KeaContext) {
       mainLogic, [
         'syncAuthData',
         'initPage',
-        'postSaveTeamUser',
         'setEditorId',
+        'postSaveTeamUser',
+        'postRemoveTeamUser',
       ]
 
     ],
