@@ -33,6 +33,7 @@ import get from 'lodash/get'
 import startsWith from 'lodash/startsWith'
 import pickBy from 'lodash/pickBy'
 import map from 'lodash/map'
+import Router from 'next/router'
 
 const {alert} = Modal
 
@@ -105,13 +106,10 @@ class Page extends React.Component {
       groupMemberProps,
       groupSignupAddProps,
       groupSignupFeeProps,
+      currAppyId,
     } = this.props
     const {isMount} = this.state
 
-    if (pageState !== '未通过' && pageState !== '第一次报名') {
-      alert(pageState)
-    }
-    let page = 1
     return (
       <Layout>
         <Share/>
@@ -136,7 +134,19 @@ class Page extends React.Component {
 
           <GroupSignupNotice/>
           <OperateItem
-            name='确认付款'
+            name={pageState}
+            onClick={() => {
+              const def = deferred()
+              actions.postApplyOrder(currAppyId, def)
+              def.promise.then(
+                ok => {
+                  console.log(ok)
+                },
+                err => {
+                  alert('提交服务端出错')
+                },
+              )
+            }}
           />
         </Fragment>
       </Layout>
@@ -160,6 +170,7 @@ export default withRedux(Page, function (KeaContext) {
     props: [
       mainLogic, [
         'classId',
+        'currAppyId',
         'pageState',
         'groupInfo',
         'groupMemberProps',

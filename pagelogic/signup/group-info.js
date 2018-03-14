@@ -317,11 +317,11 @@ export default KeaContext => {
           const {evaluateId, state, verify} = applyDetail
           let pageState = ''
           if (state === 'DRAFT') {
-            pageState = '第一次报名'
+            pageState = '确认提交'
           } else if (verify === 'Waiting') {
             pageState = '等待审核'
           } else if (verify === 'Pass' && state === 'UNPAID') {
-            pageState = '待付款'
+            pageState = '通过，确认付款'
           } else if (verify === 'NotPass') {
             pageState = '未通过'
           } else if (state === 'LIVE') {

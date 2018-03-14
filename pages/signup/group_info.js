@@ -104,9 +104,6 @@ class Page extends React.Component {
     } = this.props
     const {isMount} = this.state
 
-    if (pageState !== '未通过' && pageState !== '第一次报名') {
-      alert(pageState)
-    }
     return (
       <Layout>
         <Share/>
@@ -191,6 +188,7 @@ class Page extends React.Component {
               err => {
                 formActions.setSubmitting(false)
                 formActions.setErrors('错误!')
+                alert('提交服务端出错')
               },
             )
           }}
