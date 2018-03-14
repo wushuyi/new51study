@@ -1,0 +1,31 @@
+@import 'libs/hotcss/px2rem';
+
+@mixin oneline(){
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.group-item {
+  width: 100%;
+  height: 52*$hd;
+  font-size: 20*$hd;
+  color: #FF6628;
+  background: #F9F9F9;
+  display: flex;
+  align-items: center;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  border-top: 1*$hd solid #E3E3E3;
+  &>div{
+    width: 50%;
+    text-align: center;
+  }
+  .yes-btn{
+    border-right:1*$hd solid #E2E0E0;
+    box-sizing: border-box;
+  }
+  .del-btn{
+  }
+}
