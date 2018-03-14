@@ -14,13 +14,14 @@ import { Formik, Field, Form } from 'formik'
 import TitleItem from 'components/sign-up/ui/title-item'
 import OperateItem from 'components/sign-up/information/operate-item'
 
-import InputBox from 'components/sign-up/information/input-box'
+import InputBox, { transformData, validateInput } from 'components/sign-up/information/input-box'
 import clone from 'lodash/clone'
 import forEach from 'lodash/forEach'
 import mapKeys from 'lodash/mapKeys'
 import get from 'lodash/get'
 import startsWith from 'lodash/startsWith'
 import pickBy from 'lodash/pickBy'
+import Router from 'next/router'
 
 class Page extends React.Component {
   static async getInitialProps (ctx) {
@@ -47,7 +48,11 @@ class Page extends React.Component {
     authData && store.dispatch(actions.syncAuthData(authData))
     try {
       const def = deferred()
-      store.dispatch(actions.initPage(140, 5778, def, token))
+      let editorId = parseInt(query.editorId)
+      if (editorId) {
+        store.dispatch(actions.setEditorId(editorId))
+      }
+      store.dispatch(actions.initPage(parseInt(query.classId), parseInt(query.appyId), def, token))
       await def.promise
     } catch (err) {
       return {
@@ -84,9 +89,11 @@ class Page extends React.Component {
     }
 
     const {
+      classId,
       currAppyId,
       currApplyDetail,
       addUserBoxProps,
+      editorUserId,
     } = this.props
 
     console.log('currApplyDetail', currApplyDetail)
@@ -100,58 +107,14 @@ class Page extends React.Component {
           initialValues={{}}
           onSubmit={(values, formActions) => {
             console.log('values', values)
-            let isValidate = true
-            let vals = {}
-            vals = clone(values)
-            let inputProps = addUserBoxProps
-            forEach(inputProps, function (item) {
-              if (item.isRequired && !vals[item.name]) {
-                let name = item.itemProps.labelName
-                switch (item.component) {
-                  case 'InputText':
-                    alert(`请输入${name}`)
-                    break
-                  case 'InputRadio':
-                    alert(`请选择${name}`)
-                    break
-                  case 'InputCheckbox':
-                    alert(`请选择${name}`)
-                    break
-                  case 'InputImage':
-                    alert(`请上传${name}`)
-                    break
-                }
-                isValidate = false
-                return false
-              }
-              if (item.component === 'InputRadio') {
-                let itemKey = item.name
-                if (vals[itemKey]) {
-                  vals[itemKey] = get(item, `itemProps.sourceData[${vals[itemKey]}].label`) || ''
-                }
-              }
-              if (item.component === 'InputCheckbox') {
-                let itemKey = item.name
-                if (vals[itemKey]) {
-                  vals[itemKey] = vals[itemKey]
-                    .map((index) => {
-                      return get(item, `itemProps.sourceData[${index}].label`) || ''
-                    })
-                    .join(',')
-                }
-              }
-              if (item.name === 'require-phone') {
-                let itemKey = item.name
-                if (vals[itemKey]) {
-                  vals[itemKey] = vals[itemKey].split(' ').join('')
-                }
-              }
-            })
+            let isValidate, vals
+
+            isValidate = validateInput(addUserBoxProps, values)
             if (!isValidate) {
               formActions.setSubmitting(false)
               return false
             }
-            console.log('inputProps', inputProps)
+            vals = transformData(addUserBoxProps, values)
 
             let requires = pickBy(vals, (val, key) => {
               return startsWith(key, 'require-')
@@ -175,11 +138,27 @@ class Page extends React.Component {
             }
             const def = deferred()
 
-            actions.postSaveTeamUser(data, def)
-
+            if (editorUserId) {
+              actions.postSaveTeamUser({
+                ...data,
+                id: editorUserId,
+              }, def)
+            } else {
+              actions.postSaveTeamUser(data, def)
+            }
             def.promise.then(
               ok => {
                 formActions.setSubmitting(false)
+                Router.push(
+                  {
+                    pathname: '/signup/group_singup',
+                    query: {
+                      classId: classId,
+                      appyId: currAppyId,
+                    },
+                  },
+                  `/signup/group_singup/${classId}/${currAppyId}`
+                )
               },
               err => {
                 formActions.setSubmitting(false)
@@ -227,6 +206,7 @@ export default withRedux(Page, function (KeaContext) {
         'syncAuthData',
         'initPage',
         'postSaveTeamUser',
+        'setEditorId',
       ]
 
     ],
@@ -234,8 +214,9 @@ export default withRedux(Page, function (KeaContext) {
       mainLogic, [
         'currApplyDetail',
         'addUserBoxProps',
+        'classId',
         'currAppyId',
-        'currAddUserId',
+        'editorUserId',
       ]
     ]
   })

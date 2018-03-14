@@ -3,10 +3,10 @@ import { END } from 'redux-saga'
 import { getKeaSaga } from 'libs/next-kea-saga'
 import forEach from 'lodash/forEach'
 
-function withReduxSaga(BaseComponent) {
-  return function createCmp() {
+function withReduxSaga (BaseComponent) {
+  return function createCmp () {
     return class WrappedComponent extends Component {
-      static async getInitialProps(ctx) {
+      static async getInitialProps (ctx) {
         const {isServer, store, KeaContext} = ctx
 
         let props
@@ -16,11 +16,14 @@ function withReduxSaga(BaseComponent) {
 
         const {getCache, setCache} = KeaContext
         const mainSaga = getKeaSaga(getCache)
-
-        mainSaga.endSaga()
-        store.dispatch(END)
         let sagaTask = getCache('sagaTask', 'sagaTask')
-        await sagaTask.done
+
+        if (isServer) {
+          mainSaga.endSaga()
+          store.dispatch(END)
+          await sagaTask.done
+        }
+
         if (!isServer) {
           sagaTask = store._sagaMiddleware.run(mainSaga.keaSaga)
           setCache('sagaTask', {sagaTask})
@@ -37,7 +40,7 @@ function withReduxSaga(BaseComponent) {
         return props
       }
 
-      render() {
+      render () {
         return <BaseComponent {...this.props} />
       }
     }

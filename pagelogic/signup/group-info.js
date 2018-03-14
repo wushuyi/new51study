@@ -12,11 +12,14 @@ import includes from 'lodash/includes'
 import get from 'lodash/get'
 import map from 'lodash/map'
 import filter from 'lodash/filter'
+import find from 'lodash/find'
+import assign from 'lodash/assign'
+import Router from 'next/router'
 
 export default KeaContext => {
   const {kea} = KeaContext
   const logic = kea({
-    path: (key) => ['scenes', 'pages', 'signup', 'information'],
+    path: (key) => ['scenes', 'pages', 'signup', 'group'],
     actions: () => ({
       initPage: (classId, appyId, def, token) => ({
         token: token || getToken(),
@@ -27,7 +30,7 @@ export default KeaContext => {
       syncAuthData: (authData) => ({authData}),
       setCurrId: (currId) => ({currId}),
       setAppyId: (id) => ({id}),
-      setAddUserId: (id) => ({id}),
+      setEditorId: (id) => ({id}),
       getApplyDetail: (classId, appyId, def, token) => ({
         token: token || getToken(),
         appyId,
@@ -67,9 +70,9 @@ export default KeaContext => {
           [actions.setAppyId]: (state, payload) => parseInt(payload.id),
         }
       ],
-      currAddUserId: [
+      editorUserId: [
         false, PropTypes.any, {
-          [actions.setAddUserId]: (state, payload) => parseInt(payload.id),
+          [actions.setEditorId]: (state, payload) => parseInt(payload.id),
         }
       ],
       applyDetail: [
@@ -324,8 +327,8 @@ export default KeaContext => {
       ],
       //singup
       groupInfo: [
-        () => [selectors.currApplyDetail],
-        (applyDetail) => {
+        () => [selectors.currApplyDetail, selectors.classId, selectors.currAppyId],
+        (applyDetail, classId, currAppyId) => {
           if (!get(applyDetail, 'itemName')) {
             return false
           }
@@ -373,13 +376,17 @@ export default KeaContext => {
           let text = map(data, (o, i) => {
             return `${o.name}:${o.value};`
           }).join('  ')
-          return text
+          return Immutable({
+            detail: text,
+            classId,
+            currAppyId,
+          })
         },
         PropTypes.any,
       ],
       groupMemberProps: [
-        () => [selectors.currApplyDetail],
-        (applyDetail) => {
+        () => [selectors.currApplyDetail, selectors.classId, selectors.currAppyId],
+        (applyDetail, classId, currAppyId) => {
           if (!get(applyDetail, 'teamApplyList')) {
             return false
           }
@@ -417,7 +424,9 @@ export default KeaContext => {
             }).join('  ')
             return {
               detail,
-              id: id
+              editorId: id,
+              classId,
+              currAppyId,
             }
           })
 
@@ -427,19 +436,25 @@ export default KeaContext => {
       ],
       //add_user
       addUserBoxProps: [
-        () => [selectors.currApplyDetail],
-        (applyDetail) => {
+        () => [selectors.currApplyDetail, selectors.editorUserId],
+        (applyDetail, editorUserId) => {
           if (!get(applyDetail, 'labels')) {
             return false
           }
           let data = [], labels, defData
-          const {ifApplyGroup, applyGroupStr, itemName, fullName, phone, groupName} = applyDetail
+          const {ifApplyGroup, applyGroupStr, teamApplyList /*itemName, fullName, phone, groupName*/} = applyDetail
           const prefix = 'group-'
           if (applyDetail.labels) {
             labels = JSON.parse(applyDetail.labels)
           }
-          if (applyDetail.text) {
-            defData = JSON.parse(applyDetail.text)
+          if (editorUserId) {
+            defData = find(teamApplyList, (o) => {
+              return o.id === editorUserId
+            })
+            if (get(defData, 'text')) {
+              let {text, ...res} = defData
+              defData = assign(res, JSON.parse(text))
+            }
           }
 
           data.push({
@@ -449,7 +464,7 @@ export default KeaContext => {
             itemProps: {
               labelName: '姓名',
               placeholder: '请输入真实姓名',
-              defaultval: fullName || '',
+              defaultval: get(defData, 'fullName') || '',
             },
           })
           data.push({
@@ -460,13 +475,18 @@ export default KeaContext => {
               labelName: '手机',
               placeholder: '请输入手机号码',
               type: 'phone',
-              defaultval: phone || '',
+              defaultval: get(defData, 'phone') || '',
             },
           })
           // 选择分组
           if (ifApplyGroup && applyGroupStr) {
             let listData = applyGroupStr.split(',')
-            let defaultval = indexOf(listData, groupName)
+            let groupName = get(defData, 'groupName')
+            let defaultval = false
+            if (groupName) {
+              defaultval = indexOf(listData, groupName)
+            }
+
             let sourceData = listData.map((item, index) => {
               return {
                 value: index,
@@ -481,7 +501,7 @@ export default KeaContext => {
                 labelName: '分组',
                 placeholder: '请选择组别',
                 sourceData,
-                defaultval,
+                defaultval: defaultval,
               },
             })
           }

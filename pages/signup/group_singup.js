@@ -61,7 +61,7 @@ class Page extends React.Component {
     authData && store.dispatch(actions.syncAuthData(authData))
     try {
       const def = deferred()
-      store.dispatch(actions.initPage(140, 5778, def, token))
+      store.dispatch(actions.initPage(parseInt(query.classId), parseInt(query.appyId), def, token))
       await def.promise
     } catch (err) {
       return {
@@ -115,7 +115,7 @@ class Page extends React.Component {
         <Share/>
         <Fragment>
           <TitleItem title="比赛报名"/>
-          {groupInfo && <GroupSignupInformation detail={groupInfo}/>}
+          {groupInfo && <GroupSignupInformation {...groupInfo}/>}
           <GroupSignupTitle/>
           {groupMemberProps && map(groupMemberProps, (o, i) => {
             return (<GroupSignupMember key={i} {...o}/>)
