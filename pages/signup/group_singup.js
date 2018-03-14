@@ -103,6 +103,8 @@ class Page extends React.Component {
       pageState,
       groupInfo,
       groupMemberProps,
+      groupSignupAddProps,
+      groupSignupFeeProps,
     } = this.props
     const {isMount} = this.state
 
@@ -116,15 +118,23 @@ class Page extends React.Component {
         <Fragment>
           <TitleItem title="比赛报名"/>
           {groupInfo && <GroupSignupInformation {...groupInfo}/>}
-          <GroupSignupTitle/>
-          {groupMemberProps && map(groupMemberProps, (o, i) => {
-            return (<GroupSignupMember key={i} {...o}/>)
-          })}
 
-          <GroupSignupAdd/>
-          <GroupSignupFee/>
+          {groupMemberProps && (
+            <Fragment>
+              <GroupSignupTitle
+                title="团体成员"
+                num={groupMemberProps.length}
+              />
+              {map(groupMemberProps, (o, i) => {
+                return (<GroupSignupMember key={i} {...o}/>)
+              })}
+            </Fragment>
+          )}
+
+          {groupSignupAddProps && <GroupSignupAdd {...groupSignupAddProps}/>}
+          {groupSignupFeeProps && <GroupSignupFee {...groupSignupFeeProps}/>}
+
           <GroupSignupNotice/>
-
           <OperateItem
             name='确认付款'
           />
@@ -153,6 +163,8 @@ export default withRedux(Page, function (KeaContext) {
         'pageState',
         'groupInfo',
         'groupMemberProps',
+        'groupSignupAddProps',
+        'groupSignupFeeProps',
       ]
     ]
   })

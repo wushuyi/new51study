@@ -15,6 +15,7 @@ import filter from 'lodash/filter'
 import find from 'lodash/find'
 import assign from 'lodash/assign'
 import Router from 'next/router'
+import GroupSignupFee from '../../components/contests/ui/group-signup-fee'
 
 export default KeaContext => {
   const {kea} = KeaContext
@@ -591,6 +592,31 @@ export default KeaContext => {
           }
 
           return Immutable(data)
+        },
+        PropTypes.any,
+      ],
+      groupSignupAddProps: [
+        () => [selectors.classId, selectors.currAppyId],
+        (classId, currAppyId) => {
+          return Immutable({
+            classId,
+            currAppyId,
+          })
+        },
+        PropTypes.any,
+      ],
+      groupSignupFeeProps: [
+        () => [selectors.currApplyDetail],
+        (applyDetail) => {
+          if (!get(applyDetail, 'teamCount')) {
+            return false
+          }
+          const {teamCount, teamPrice, teamTotal} = applyDetail
+          return Immutable({
+            count: teamCount,
+            price: `￥${teamPrice}`,
+            total: `￥${teamTotal}`,
+          })
         },
         PropTypes.any,
       ],

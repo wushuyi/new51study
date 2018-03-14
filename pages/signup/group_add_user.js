@@ -49,9 +49,7 @@ class Page extends React.Component {
     try {
       const def = deferred()
       let editorId = parseInt(query.editorId)
-      if (editorId) {
-        store.dispatch(actions.setEditorId(editorId))
-      }
+      store.dispatch(actions.setEditorId(editorId || false))
       store.dispatch(actions.initPage(parseInt(query.classId), parseInt(query.appyId), def, token))
       await def.promise
     } catch (err) {
@@ -179,7 +177,7 @@ class Page extends React.Component {
                   const {submitForm, isSubmitting} = form
                   return (
                     <OperateItem
-                      name='确认添加'
+                      name={editorUserId ? '确认修改' : '确认提交'}
                       disabled={isSubmitting}
                       onClick={() => {
                         !isSubmitting && submitForm()

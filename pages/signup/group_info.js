@@ -155,7 +155,6 @@ class Page extends React.Component {
             })
 
             let data = {
-              // ...defaultData,
               evaluateId: classId,
               type: 'TEAM',
               text: group,
@@ -213,9 +212,7 @@ class Page extends React.Component {
                   const {submitForm, isSubmitting} = form
                   return (
                     <OperateItem
-                      name={pageState === '未通过'
-                        ? '确认修改'
-                        : '确认提交'}
+                      name={currAppyId ? '确认修改' : '确认提交'}
                       disabled={isSubmitting}
                       onClick={() => {
                         !isSubmitting && submitForm()
