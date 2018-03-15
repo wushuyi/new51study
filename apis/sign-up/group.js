@@ -120,3 +120,30 @@ export async function postSaveTeamUser (data, token) {
   }
 }
 
+/**
+ * API: /evaluate/removeTeamUser
+ * @param id
+ * @param token
+ * @returns {Promise<*>}
+ */
+export async function postRemoveTeamUser (id, token) {
+  if (!token) {
+    return new needAuthError(`can't read token`)
+  }
+  const api = `/evaluate/removeTeamUser`
+  const requestURL = `${APIService}${api}`
+  try {
+    const res = await request.post(requestURL)
+      .query(APIVersion)
+      .query({
+        token
+      })
+      .send({
+        id
+      })
+      .use(xhrCrypto)
+    return baseChcek(res)
+  } catch (err) {
+    return err
+  }
+}

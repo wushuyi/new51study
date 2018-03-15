@@ -48,6 +48,15 @@ app.prepare()
     server.get('/signup/information/:classId', (req, res) => {
       return app.render(req, res, '/signup/information', req.params)
     })
+    server.get('/signup/group_info/:classId/?:appyId', (req, res) => {
+      return app.render(req, res, '/signup/group_info', req.params)
+    })
+    server.get('/signup/group_singup/:classId/:appyId', (req, res) => {
+      return app.render(req, res, '/signup/group_singup', req.params)
+    })
+    server.get('/signup/group_add_user/:classId/:appyId/?:editorId', (req, res) => {
+      return app.render(req, res, '/signup/group_add_user', req.params)
+    })
     server.get('/contests/special-area/:classId', (req, res) => {
       return app.render(req, res, '/contests/special-area', req.params)
     })

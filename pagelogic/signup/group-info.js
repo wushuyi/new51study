@@ -11,11 +11,16 @@ import indexOf from 'lodash/indexOf'
 import includes from 'lodash/includes'
 import get from 'lodash/get'
 import map from 'lodash/map'
+import filter from 'lodash/filter'
+import find from 'lodash/find'
+import assign from 'lodash/assign'
+import Router from 'next/router'
+import GroupSignupFee from '../../components/contests/ui/group-signup-fee'
 
 export default KeaContext => {
   const {kea} = KeaContext
   const logic = kea({
-    path: (key) => ['scenes', 'pages', 'signup', 'information'],
+    path: (key) => ['scenes', 'pages', 'signup', 'group'],
     actions: () => ({
       initPage: (classId, appyId, def, token) => ({
         token: token || getToken(),
@@ -26,7 +31,7 @@ export default KeaContext => {
       syncAuthData: (authData) => ({authData}),
       setCurrId: (currId) => ({currId}),
       setAppyId: (id) => ({id}),
-      setAddUserId: (id) => ({id}),
+      setEditorId: (id) => ({id}),
       getApplyDetail: (classId, appyId, def, token) => ({
         token: token || getToken(),
         appyId,
@@ -49,6 +54,11 @@ export default KeaContext => {
         data,
         def,
       }),
+      postRemoveTeamUser: (editorId, def, token) => ({
+        token: token || getToken(),
+        editorId,
+        def,
+      }),
     }),
 
     reducers: ({actions}) => ({
@@ -66,9 +76,9 @@ export default KeaContext => {
           [actions.setAppyId]: (state, payload) => parseInt(payload.id),
         }
       ],
-      currAddUserId: [
+      editorUserId: [
         false, PropTypes.any, {
-          [actions.setAddUserId]: (state, payload) => parseInt(payload.id),
+          [actions.setEditorId]: (state, payload) => parseInt(payload.id),
         }
       ],
       applyDetail: [
@@ -323,8 +333,8 @@ export default KeaContext => {
       ],
       //singup
       groupInfo: [
-        () => [selectors.currApplyDetail],
-        (applyDetail) => {
+        () => [selectors.currApplyDetail, selectors.classId, selectors.currAppyId],
+        (applyDetail, classId, currAppyId) => {
           if (!get(applyDetail, 'itemName')) {
             return false
           }
@@ -372,25 +382,85 @@ export default KeaContext => {
           let text = map(data, (o, i) => {
             return `${o.name}:${o.value};`
           }).join('  ')
-          return text
+          return Immutable({
+            detail: text,
+            classId,
+            currAppyId,
+          })
+        },
+        PropTypes.any,
+      ],
+      groupMemberProps: [
+        () => [selectors.currApplyDetail, selectors.classId, selectors.currAppyId],
+        (applyDetail, classId, currAppyId) => {
+          if (!get(applyDetail, 'teamApplyList')) {
+            return false
+          }
+          const {teamApplyList} = applyDetail
+          let data = map(teamApplyList, (o, i) => {
+            let {text, id, fullName, phone} = o
+            let dataText = {}
+            let preInfo = []
+            preInfo.push({
+              name: '姓名',
+              value: fullName
+            })
+            preInfo.push({
+              name: '手机',
+              value: phone
+            })
+            if (text) {
+              dataText = JSON.parse(text)
+              let info = {
+                ...dataText,
+              }
+              info = map(info, (o, i) => {
+                return {
+                  name: i,
+                  value: o
+                }
+              })
+              info = filter(info, (o, i) => {
+                return o.value && !includes(o.value, 'clouddn.com/')
+              })
+              preInfo = preInfo.concat(info)
+            }
+            let detail = map(preInfo, (o, i) => {
+              return `${o.name}:${o.value};`
+            }).join('  ')
+            return {
+              detail,
+              editorId: id,
+              classId,
+              currAppyId,
+            }
+          })
+
+          return Immutable(data)
         },
         PropTypes.any,
       ],
       //add_user
       addUserBoxProps: [
-        () => [selectors.currApplyDetail],
-        (applyDetail) => {
+        () => [selectors.currApplyDetail, selectors.editorUserId],
+        (applyDetail, editorUserId) => {
           if (!get(applyDetail, 'labels')) {
             return false
           }
           let data = [], labels, defData
-          const {ifApplyGroup, applyGroupStr, itemName, fullName, phone, groupName} = applyDetail
+          const {ifApplyGroup, applyGroupStr, teamApplyList /*itemName, fullName, phone, groupName*/} = applyDetail
           const prefix = 'group-'
           if (applyDetail.labels) {
             labels = JSON.parse(applyDetail.labels)
           }
-          if (applyDetail.text) {
-            defData = JSON.parse(applyDetail.text)
+          if (editorUserId) {
+            defData = find(teamApplyList, (o) => {
+              return o.id === editorUserId
+            })
+            if (get(defData, 'text')) {
+              let {text, ...res} = defData
+              defData = assign(res, JSON.parse(text))
+            }
           }
 
           data.push({
@@ -400,7 +470,7 @@ export default KeaContext => {
             itemProps: {
               labelName: '姓名',
               placeholder: '请输入真实姓名',
-              defaultval: fullName || '',
+              defaultval: get(defData, 'fullName') || '',
             },
           })
           data.push({
@@ -411,13 +481,18 @@ export default KeaContext => {
               labelName: '手机',
               placeholder: '请输入手机号码',
               type: 'phone',
-              defaultval: phone || '',
+              defaultval: get(defData, 'phone') || '',
             },
           })
           // 选择分组
           if (ifApplyGroup && applyGroupStr) {
             let listData = applyGroupStr.split(',')
-            let defaultval = indexOf(listData, groupName)
+            let groupName = get(defData, 'groupName')
+            let defaultval = false
+            if (groupName) {
+              defaultval = indexOf(listData, groupName)
+            }
+
             let sourceData = listData.map((item, index) => {
               return {
                 value: index,
@@ -432,7 +507,7 @@ export default KeaContext => {
                 labelName: '分组',
                 placeholder: '请选择组别',
                 sourceData,
-                defaultval,
+                defaultval: defaultval,
               },
             })
           }
@@ -525,6 +600,31 @@ export default KeaContext => {
         },
         PropTypes.any,
       ],
+      groupSignupAddProps: [
+        () => [selectors.classId, selectors.currAppyId],
+        (classId, currAppyId) => {
+          return Immutable({
+            classId,
+            currAppyId,
+          })
+        },
+        PropTypes.any,
+      ],
+      groupSignupFeeProps: [
+        () => [selectors.currApplyDetail],
+        (applyDetail) => {
+          if (!get(applyDetail, 'teamCount')) {
+            return false
+          }
+          const {teamCount, teamPrice, teamTotal} = applyDetail
+          return Immutable({
+            count: teamCount,
+            price: `￥${teamPrice}`,
+            total: `￥${teamTotal}`,
+          })
+        },
+        PropTypes.any,
+      ],
     }),
 
     takeEvery: ({actions, workers}) => ({
@@ -533,6 +633,7 @@ export default KeaContext => {
       [actions.postEvaluateApply]: workers.postEvaluateApply,
       [actions.postApplyOrder]: workers.postApplyOrder,
       [actions.postSaveTeamUser]: workers.postSaveTeamUser,
+      [actions.postRemoveTeamUser]: workers.postRemoveTeamUser,
     }),
 
     workers: {
@@ -614,6 +715,23 @@ export default KeaContext => {
         const {token, data: sendData, def} = action.payload
         let res
         res = yield call(Api.postSaveTeamUser, sendData, token)
+        if (isError(res)) {
+          yield call(baseXhrError, res)
+          def && def.reject(res)
+          return res
+        }
+
+        const data = res.body.data
+        // yield put(actions.syncApplyDetail(classId, data))
+        def && def.resolve(res)
+        return data
+      },
+      postRemoveTeamUser: function * (action) {
+        const {actions} = this
+        const classId = yield this.get('classId')
+        const {token, editorId, def} = action.payload
+        let res
+        res = yield call(Api.postRemoveTeamUser, editorId, token)
         if (isError(res)) {
           yield call(baseXhrError, res)
           def && def.reject(res)

@@ -14,13 +14,18 @@ import { Formik, Field, Form } from 'formik'
 import TitleItem from 'components/sign-up/ui/title-item'
 import OperateItem from 'components/sign-up/information/operate-item'
 
-import InputBox from 'components/sign-up/information/input-box'
+import InputBox, { transformData, validateInput } from 'components/sign-up/information/input-box'
 import clone from 'lodash/clone'
 import forEach from 'lodash/forEach'
 import mapKeys from 'lodash/mapKeys'
 import get from 'lodash/get'
 import startsWith from 'lodash/startsWith'
 import pickBy from 'lodash/pickBy'
+import Router from 'next/router'
+import GroupSignupBanner from 'components/contests/ui/group-signup-banner'
+import Modal from 'antd-mobile/lib/modal/index'
+
+const {alert} = Modal
 
 class Page extends React.Component {
   static async getInitialProps (ctx) {
@@ -47,7 +52,9 @@ class Page extends React.Component {
     authData && store.dispatch(actions.syncAuthData(authData))
     try {
       const def = deferred()
-      store.dispatch(actions.initPage(140, 5778, def, token))
+      let editorId = parseInt(query.editorId)
+      store.dispatch(actions.setEditorId(editorId || false))
+      store.dispatch(actions.initPage(parseInt(query.classId), parseInt(query.appyId), def, token))
       await def.promise
     } catch (err) {
       return {
@@ -75,6 +82,29 @@ class Page extends React.Component {
     })
   }
 
+  onRemoveTeamUser = () => {
+    const {editorUserId, classId, currAppyId, actions} = this.props
+    const def = deferred()
+    actions.postRemoveTeamUser(editorUserId, def)
+    def.promise.then(
+      ok => {
+        Router.push(
+          {
+            pathname: '/signup/group_singup',
+            query: {
+              classId: classId,
+              appyId: currAppyId,
+            },
+          },
+          `/signup/group_singup/${classId}/${currAppyId}`
+        )
+      },
+      err => {
+        alert('提交服务端出错')
+      },
+    )
+  }
+
   render () {
     const {err, actions} = this.props
     if (err) {
@@ -84,9 +114,11 @@ class Page extends React.Component {
     }
 
     const {
+      classId,
       currAppyId,
       currApplyDetail,
       addUserBoxProps,
+      editorUserId,
     } = this.props
 
     console.log('currApplyDetail', currApplyDetail)
@@ -94,64 +126,21 @@ class Page extends React.Component {
       <Layout>
         <Share/>
         <TitleItem title="添加团体成员"/>
+
         <Formik
           validateOnChange={false}
           validateOnBlur={true}
           initialValues={{}}
           onSubmit={(values, formActions) => {
             console.log('values', values)
-            let isValidate = true
-            let vals = {}
-            vals = clone(values)
-            let inputProps = addUserBoxProps
-            forEach(inputProps, function (item) {
-              if (item.isRequired && !vals[item.name]) {
-                let name = item.itemProps.labelName
-                switch (item.component) {
-                  case 'InputText':
-                    alert(`请输入${name}`)
-                    break
-                  case 'InputRadio':
-                    alert(`请选择${name}`)
-                    break
-                  case 'InputCheckbox':
-                    alert(`请选择${name}`)
-                    break
-                  case 'InputImage':
-                    alert(`请上传${name}`)
-                    break
-                }
-                isValidate = false
-                return false
-              }
-              if (item.component === 'InputRadio') {
-                let itemKey = item.name
-                if (vals[itemKey]) {
-                  vals[itemKey] = get(item, `itemProps.sourceData[${vals[itemKey]}].label`) || ''
-                }
-              }
-              if (item.component === 'InputCheckbox') {
-                let itemKey = item.name
-                if (vals[itemKey]) {
-                  vals[itemKey] = vals[itemKey]
-                    .map((index) => {
-                      return get(item, `itemProps.sourceData[${index}].label`) || ''
-                    })
-                    .join(',')
-                }
-              }
-              if (item.name === 'require-phone') {
-                let itemKey = item.name
-                if (vals[itemKey]) {
-                  vals[itemKey] = vals[itemKey].split(' ').join('')
-                }
-              }
-            })
+            let isValidate, vals
+
+            isValidate = validateInput(addUserBoxProps, values)
             if (!isValidate) {
               formActions.setSubmitting(false)
               return false
             }
-            console.log('inputProps', inputProps)
+            vals = transformData(addUserBoxProps, values)
 
             let requires = pickBy(vals, (val, key) => {
               return startsWith(key, 'require-')
@@ -175,15 +164,32 @@ class Page extends React.Component {
             }
             const def = deferred()
 
-            actions.postSaveTeamUser(data, def)
-
+            if (editorUserId) {
+              actions.postSaveTeamUser({
+                ...data,
+                id: editorUserId,
+              }, def)
+            } else {
+              actions.postSaveTeamUser(data, def)
+            }
             def.promise.then(
               ok => {
                 formActions.setSubmitting(false)
+                Router.push(
+                  {
+                    pathname: '/signup/group_singup',
+                    query: {
+                      classId: classId,
+                      appyId: currAppyId,
+                    },
+                  },
+                  `/signup/group_singup/${classId}/${currAppyId}`
+                )
               },
               err => {
                 formActions.setSubmitting(false)
                 formActions.setErrors('错误!')
+                alert('提交服务端出错')
               },
             )
           }}
@@ -198,18 +204,28 @@ class Page extends React.Component {
                 render={(ctx) => {
                   const {field, form} = ctx
                   const {submitForm, isSubmitting} = form
-                  return (
-                    <OperateItem
-                      name='确认添加'
-                      disabled={isSubmitting}
-                      onClick={() => {
-                        !isSubmitting && submitForm()
-                      }}
-                    />
-                  )
+                  if (editorUserId) {
+                    return (
+                      <GroupSignupBanner
+                        onConfirm={() => {
+                          !isSubmitting && submitForm()
+                        }}
+                        onCancel={this.onRemoveTeamUser}
+                      />
+                    )
+                  } else {
+                    return (
+                      <OperateItem
+                        name={'确认提交'}
+                        disabled={isSubmitting}
+                        onClick={() => {
+                          !isSubmitting && submitForm()
+                        }}
+                      />
+                    )
+                  }
                 }}
               />
-
             </Form>
           )}
         />
@@ -226,7 +242,9 @@ export default withRedux(Page, function (KeaContext) {
       mainLogic, [
         'syncAuthData',
         'initPage',
+        'setEditorId',
         'postSaveTeamUser',
+        'postRemoveTeamUser',
       ]
 
     ],
@@ -234,8 +252,9 @@ export default withRedux(Page, function (KeaContext) {
       mainLogic, [
         'currApplyDetail',
         'addUserBoxProps',
+        'classId',
         'currAppyId',
-        'currAddUserId',
+        'editorUserId',
       ]
     ]
   })
