@@ -14,20 +14,9 @@
     display: flex;
     align-items: center;
     padding: 10*$hd;
-    background: #FFFFFF;
-    border: 1*$hd solid #E8CCCC;
-    border-radius: 3*$hd;
+    background:url("/static/images/match/bg_match_item.png") no-repeat left center;
+    background-size: 100% 98%;
     position: relative;
-    &:after{
-      content: ' ';
-      height: 20*$hd;
-      width: 10*$hd;
-      background: url("/static/images/icon/icon_default_author_right.png") no-repeat center;
-      background-size: 10*$hd 20*$hd;
-      position: absolute;
-      transform: rotate(180deg);
-      left: -10*$hd;
-    }
     .left{
       width: 100*$hd;
       .match-name{
