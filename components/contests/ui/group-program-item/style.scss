@@ -1,6 +1,6 @@
 @import 'libs/hotcss/px2rem';
 
-@mixin oneline(){
+@mixin oneline() {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -11,27 +11,28 @@
   background: #FFFFFF;
   display: flex;
   align-items: center;
-  .left{
-     width: 330*$hd;
+  border-bottom: 0.3*$hd solid #D8D8D8;
+  .left {
+    width: 330*$hd;
     display: flex;
     align-items: center;
-    .name{
+    .name {
       font-size: 13*$hd;
       color: #727272;
       max-width: 290*$hd;
-      padding-left:17*$hd;
+      padding-left: 10*$hd;
       @include oneline;
     }
-    .status{
+    .status {
       font-size: 8*$hd;
       color: #FF6628;
       border: 1px solid #FF6628;
       border-radius: 2px;
-      padding: 2*$hd 4*$hd;
+      padding: 2*$hd 8*$hd;
       margin-left: 5*$hd;
     }
   }
-  .take-in{
+  .take-in {
     font-size: 10*$hd;
     color: #FDFCFC;
     background: #FF6628;

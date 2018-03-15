@@ -1,0 +1,18 @@
+@import 'libs/hotcss/px2rem';
+
+.scroll {
+  position: absolute;
+  top: 42*$hd;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  overflow: scroll;
+  -webkit-overflow-scrolling: touch;
+}
+
+.title {
+  font-size: 14*$hd;
+  color: #7D7D7D;
+  padding: 12*$hd 0 6*$hd 9*$hd;
+  background: #F6F6F6;
+}

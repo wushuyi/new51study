@@ -12,7 +12,11 @@ import Share from 'components/layout/share'
 import Modal from 'antd-mobile/lib/modal'
 
 import TitleItem from 'components/sign-up/ui/title-item'
-import FindOrgItem from 'components/sign-up/ui/findorg-item'
+import GroupProgramTitle from 'components/contests/ui/group-program-title'
+import TeamItem from 'components/sign-up/ui/findorg-item/ui/team-item'
+
+import WhiteSpace from 'components/ui/white-space'
+import ApplyList from 'components/sign-up/teamitemlist/applyList'
 
 const {alert} = Modal
 
@@ -40,10 +44,11 @@ class Page extends React.Component {
 
     authData && store.dispatch(actions.syncAuthData(authData))
     try {
-
       const def = deferred()
       store.dispatch(actions.setCurrId(parseInt(query.classId)))
-      // await def.promise
+      store.dispatch(actions.setOrgId(parseInt(query.userId)))
+      store.dispatch(actions.findTeamItemByUserNumber(parseInt(query.classId), parseInt(query.userId), def, token))
+      await def.promise
     } catch (err) {
       return {
         err: {
@@ -79,14 +84,22 @@ class Page extends React.Component {
       )
     }
 
-    const {} = this.props
+    const {
+      teamItemProps,
+      applyListProps,
+    } = this.props
     const {isMount} = this.state
 
     return (
       <Layout>
         <Share/>
         <TitleItem title="团体比赛"/>
-        <FindOrgItem/>
+        <TeamItem showBtn={false} {...teamItemProps}/>
+        <WhiteSpace height="8"/>
+        <GroupProgramTitle/>
+        {applyListProps && <ApplyList {...applyListProps}/>}
+
+
       </Layout>
     )
   }
@@ -99,12 +112,17 @@ export default withRedux(Page, function (KeaContext) {
     actions: [
       mainLogic, [
         'setCurrId',
+        'setOrgId',
         'syncAuthData',
+        'findTeamItemByUserNumber',
       ]
 
     ],
     props: [
-      mainLogic, []
+      mainLogic, [
+        'teamItemProps',
+        'applyListProps',
+      ]
     ]
   })
   return [

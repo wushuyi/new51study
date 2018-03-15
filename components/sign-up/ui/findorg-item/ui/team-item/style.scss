@@ -1,0 +1,48 @@
+@import 'libs/hotcss/px2rem';
+
+.orgitem {
+  text-align: left;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 87*$hd;
+  padding: 0 0 0 11*$hd;
+  border-bottom: 0.3*$hd solid #D8D8D8;
+  background: #FFFFFF;
+  .avater {
+    img {
+      display: block;
+      width: 55*$hd;
+      height: 55*$hd;
+    }
+  }
+  .data {
+    width: 271*$hd;
+    margin-left: 11*$hd;
+    font-size: 14*$hd;
+    color: #333333;
+    & > div {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .address {
+      font-size: 12*$hd;
+      color: #FFB32D;
+    }
+    .autograph {
+      font-size: 12*$hd;
+      color: #999999;
+    }
+  }
+  .follow {
+    width: 54*$hd;
+    height: 28*$hd;
+    line-height: 28*$hd;
+    font-size: 12*$hd;
+    text-align: center;
+    color: #FFFFFF;
+    border-radius: 25*$hd;
+    background-color: #FF814E;
+  }
+}

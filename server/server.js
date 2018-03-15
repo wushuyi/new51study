@@ -57,6 +57,15 @@ app.prepare()
     server.get('/signup/group_add_user/:classId/:appyId/?:editorId', (req, res) => {
       return app.render(req, res, '/signup/group_add_user', req.params)
     })
+    server.get('/signup/find_org/:classId', (req, res) => {
+      return app.render(req, res, '/signup/find_org', req.params)
+    })
+    server.get('/signup/team_item_list/:classId/:userId', (req, res) => {
+      return app.render(req, res, '/signup/team_item_list', req.params)
+    })
+    server.get('/signup/team_item_form/:classId/:userId/:teamId', (req, res) => {
+      return app.render(req, res, '/signup/team_item_form', req.params)
+    })
     server.get('/contests/special-area/:classId', (req, res) => {
       return app.render(req, res, '/contests/special-area', req.params)
     })

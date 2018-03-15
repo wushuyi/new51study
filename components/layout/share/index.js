@@ -4,6 +4,7 @@ import Style from './style.scss'
 import Head from 'next/head'
 import { common } from 'config/shareMsg'
 import includes from 'lodash/includes'
+import { isDev } from 'config/settings'
 
 export default class Share extends React.PureComponent {
 
@@ -19,15 +20,18 @@ export default class Share extends React.PureComponent {
     imgUrl: common.imgUrl
   }
 
-  async componentDidMount() {
+  async componentDidMount () {
     await this.checkWx()
   }
 
-  async componentDidUpdate() {
+  async componentDidUpdate () {
     await this.checkWx()
   }
 
   checkWx = async () => {
+    if (isDev) {
+      return false
+    }
     const {title, description, imgUrl} = this.props
     if (includes(window.navigator.userAgent, 'MicroMessenger')) {
       const {wxShare} = await import('utils/wxshare')
@@ -35,7 +39,7 @@ export default class Share extends React.PureComponent {
     }
   }
 
-  render() {
+  render () {
     const {title, description, imgUrl} = this.props
     return (
       <Fragment>

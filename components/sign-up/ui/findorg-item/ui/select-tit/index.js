@@ -1,20 +1,17 @@
 import React, { Fragment } from 'react'
+import PropTypes from 'prop-types'
 import Style from './style.scss'
 
-export default class GroupProgramTitle extends React.PureComponent {
-
+export default class SelectTit extends React.PureComponent {
   static defaultProps = {
-    title: '团体节目列表'
+    title: '搜索结果'
   }
 
   render () {
     const {title} = this.props
     return (
       <Fragment>
-        <div className="group-item">
-          <div className="title">{title}</div>
-          <div className="line"/>
-        </div>
+        <div className="tit">{title}</div>
         {/*language=CSS*/}
         <style jsx>{Style}</style>
       </Fragment>
