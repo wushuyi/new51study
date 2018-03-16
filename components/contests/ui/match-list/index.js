@@ -61,7 +61,7 @@ export default class MatchList extends React.PureComponent {
           <MatchNavItem title={'报名·晋级比赛'}/>
           <div className='match-wrapper'>
             {prevEvaluates}
-            <CurrMatchItem title={title} tagType={!prevEvaluates.length?'bottom':!nextEvaluates.length?'top':''}/>
+            <CurrMatchItem title={title} tagType={!prevEvaluates.length&&!nextEvaluates.length?'no':!prevEvaluates.length?'bottom':!nextEvaluates.length?'top':''}/>
             {nextEvaluates}
           </div>
           <GoSpecialArea classId={id}/>
