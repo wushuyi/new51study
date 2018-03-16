@@ -47,6 +47,7 @@ class ScrollView extends React.PureComponent {
 
 export default class SignupPopup extends React.PureComponent {
   static defaultProps = {
+    classId: 140,
     sourceData: [
       {
         price: '0.02',
@@ -79,7 +80,7 @@ export default class SignupPopup extends React.PureComponent {
   }
 
   render () {
-    const {sourceData, isTeamApply, ifNeedPay, signupProps} = this.props
+    const {sourceData, isTeamApply, ifNeedPay, classId, signupProps} = this.props
     return (
       <Fragment>
         {/*<Button onClick={this.showModal}>popup</Button>*/}
@@ -98,9 +99,9 @@ export default class SignupPopup extends React.PureComponent {
                       Router.push(
                         {
                           pathname: '/signup/information',
-                          query: {classId: o.id},
+                          query: {classId: classId},
                         },
-                        `/signup/information/${o.id}`
+                        `/signup/information/${classId}`
                       )
                     }}
                     key={i} {...o}/>
@@ -118,9 +119,9 @@ export default class SignupPopup extends React.PureComponent {
                                      Router.push(
                                        {
                                          pathname: '/signup/find_org',
-                                         query: {classId: 137},
+                                         query: {classId: classId},
                                        },
-                                       `/signup/find_org/${137}`
+                                       `/signup/find_org/${classId}`
                                      )
                                    }}
                   />
@@ -133,9 +134,12 @@ export default class SignupPopup extends React.PureComponent {
                                      Router.push(
                                        {
                                          pathname: '/signup/group_info',
-                                         query: {classId: 137},
+                                         query: {
+                                           classId: classId,
+                                           editorId: false,
+                                         },
                                        },
-                                       `/signup/group_info/${137}`
+                                       `/signup/group_info/${classId}/false`
                                      )
                                    }}
                   />

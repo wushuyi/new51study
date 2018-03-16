@@ -14,8 +14,6 @@ import map from 'lodash/map'
 import filter from 'lodash/filter'
 import find from 'lodash/find'
 import assign from 'lodash/assign'
-import Router from 'next/router'
-import GroupSignupFee from '../../components/contests/ui/group-signup-fee'
 
 export default KeaContext => {
   const {kea} = KeaContext
@@ -672,6 +670,9 @@ export default KeaContext => {
 
         const data = res.body.data
         yield put(actions.syncApplyDetail(classId, data))
+        if (!appyId) {
+          yield put(actions.setAppyId(data.id))
+        }
         def && def.resolve(res)
         return data
       },

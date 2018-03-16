@@ -16,6 +16,7 @@ import isNumber from 'lodash/isNumber'
 import trim from 'lodash/trim'
 import get from 'lodash/get'
 import isArray from 'lodash/isArray'
+import sortBy from 'lodash/sortBy'
 
 const {alert} = Modal
 
@@ -169,7 +170,6 @@ export function validateInput (inputProps, values) {
           alert(`请选择${name}`)
           isValidate = false
         }
-        alert(`请选择${name}`)
         break
       case 'InputImage':
         if (item.isRequired && !itemValue) {

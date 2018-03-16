@@ -114,7 +114,7 @@ export default class InputCheckbox extends React.Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    const {defaultval: currVal} = this.props
+    const {defaultval: currVal, field, form} = this.props
     const {defaultval: nextVal} = nextProps
     if (isArray(nextVal)) {
       if (!currVal ||
@@ -122,6 +122,9 @@ export default class InputCheckbox extends React.Component {
         this.setState({
           prveIndex: nextVal,
           index: nextVal,
+        }, () => {
+          form.setFieldValue(field.name, this.getValue())
+          form.setFieldTouched(field.name, true)
         })
       }
     }
@@ -130,11 +133,12 @@ export default class InputCheckbox extends React.Component {
   componentDidMount () {
     const {field, form, defaultval, ...props} = this.props
     if (isArray(defaultval)) {
-      form.setFieldValue(field.name, defaultval)
-      form.setFieldTouched(field.name, true)
       this.setState({
         prveIndex: defaultval,
         index: defaultval,
+      }, () => {
+        form.setFieldValue(field.name, this.getValue())
+        form.setFieldTouched(field.name, true)
       })
     }
   }

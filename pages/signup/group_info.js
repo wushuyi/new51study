@@ -57,6 +57,7 @@ class Page extends React.Component {
     try {
       const def = deferred()
       // store.dispatch(actions.initPage(140, 5780, def, token))
+      console.log('run!!!!!!', parseInt(query.classId), parseInt(query.appyId))
       store.dispatch(actions.initPage(parseInt(query.classId), parseInt(query.appyId), def, token))
       await def.promise
     } catch (err) {

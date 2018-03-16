@@ -483,8 +483,8 @@ export default KeaContext => {
         PropTypes.any,
       ],
       signupPopupProps: [
-        () => [selectors.currApplyPrice, selectors.signupBoxProps],
-        (ApplyPrice, signupBoxProps) => {
+        () => [selectors.currApplyPrice, selectors.signupBoxProps, selectors.classId],
+        (ApplyPrice, signupBoxProps, classId) => {
           if (!get(ApplyPrice, 'epList')) {
             return false
           }
@@ -504,6 +504,7 @@ export default KeaContext => {
           })
 
           return Immutable({
+            classId,
             sourceData,
             ifNeedPay,
             isTeamApply,
