@@ -8,8 +8,7 @@ import * as Api from 'apis/sign-up/join_sign'
 import isError from 'lodash/isError'
 import { baseXhrError } from 'apis/utils/error'
 import get from 'lodash/get'
-import ApplyList from '../../components/sign-up/teamitemlist/applyList'
-import includes from 'lodash/includes'
+import createFormData from '../utils/createFormData'
 
 export default KeaContext => {
   const {kea} = KeaContext
@@ -128,93 +127,9 @@ export default KeaContext => {
           defData = {}
           const prefix = 'team-'
           if (labels) {
-            for (let index in labels) {
-              let item = labels[index]
-              let conf
-              switch (parseInt(item.type)) {
-                case 0:
-                  conf = {
-                    name: prefix + item.name,
-                    isRequired: item.isRequired,
-                    component: 'InputText',
-                    itemProps: {
-                      labelName: item.name || '',
-                      placeholder: item.desc || '',
-                      defaultval: (defData && defData[item.name]) || '',
-                    },
-                  }
-                  break
-                case 1: {
-                  let sourceDataSplit = item.text.split(',')
-                  let defaultval
-                  if (get(defData, item.name)) {
-                    defaultval = sourceDataSplit.indexOf(defData[item.name])
-                  }
-                  let sourceData = sourceDataSplit.map((o, i) => {
-                    return {
-                      value: i,
-                      label: o,
-                    }
-                  })
-                  conf = {
-                    name: prefix + item.name,
-                    isRequired: item.isRequired,
-                    component: 'InputRadio',
-                    itemProps: {
-                      labelName: item.name || '',
-                      placeholder: item.desc || '',
-                      sourceData,
-                      defaultval,
-                    },
-                  }
-                }
-                  break
-                case 2: {
-                  let sourceDataSplit = item.text.split(',')
-                  let defaultval
-                  if (get(defData, item.name)) {
-                    defaultval = sourceDataSplit.map((o, i) => {
-                      return includes(defData[item.name], o)
-                    })
-                  }
-                  let sourceData = sourceDataSplit.map((o, i) => {
-                    return {
-                      value: i,
-                      label: o,
-                    }
-                  })
-                  conf = {
-                    name: prefix + item.name,
-                    isRequired: item.isRequired,
-                    component: 'InputCheckbox',
-                    itemProps: {
-                      labelName: item.name || '',
-                      placeholder: item.desc || '',
-                      sourceData,
-                      defaultval,
-                    },
-                  }
-                }
-                  break
-                case 3:
-                  conf = {
-                    name: prefix + item.name,
-                    isRequired: item.isRequired,
-                    component: 'InputImage',
-                    itemProps: {
-                      labelName: item.name || '',
-                      placeholder: item.desc || '',
-                      defaultval: (defData && defData[item.name]) || '',
-                    },
-                  }
-                  break
-                default:
-                  break
-              }
-              data.push(conf)
-            }
+            let list = createFormData(labels, defData, prefix)
+            data = data.concat(list)
           }
-
           return Immutable(data)
         },
         PropTypes.any,
