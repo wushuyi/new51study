@@ -26,12 +26,6 @@ import GroupSignupTitle from 'components/contests/ui/group-signup-title'
 import GroupSignupMember from 'components/contests/ui/group-signup-member'
 
 import Modal from 'antd-mobile/lib/modal'
-import clone from 'lodash/clone'
-import forEach from 'lodash/forEach'
-import mapKeys from 'lodash/mapKeys'
-import get from 'lodash/get'
-import startsWith from 'lodash/startsWith'
-import pickBy from 'lodash/pickBy'
 import map from 'lodash/map'
 import Router from 'next/router'
 
@@ -84,10 +78,26 @@ class Page extends React.Component {
   }
 
   async componentDidMount () {
+    const {
+      classId,
+      currAppyId,
+    } = this.props
     authDidMount(this.props)
     this.setState({
       isMount: true
     })
+    if (!currAppyId) {
+      Router.replace(
+        {
+          pathname: '/signup/group_info',
+          query: {
+            classId: classId,
+            appyId: false,
+          },
+        },
+        `/signup/group_info/${classId}/false`
+      )
+    }
   }
 
   render () {

@@ -133,13 +133,13 @@ export default class SignupPopup extends React.PureComponent {
                                      }
                                      Router.push(
                                        {
-                                         pathname: '/signup/group_info',
+                                         pathname: '/signup/group_singup',
                                          query: {
                                            classId: classId,
                                            editorId: false,
                                          },
                                        },
-                                       `/signup/group_info/${classId}/false`
+                                       `/signup/group_singup/${classId}/false`
                                      )
                                    }}
                   />
