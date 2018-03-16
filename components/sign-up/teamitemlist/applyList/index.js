@@ -3,7 +3,12 @@ import PropTypes from 'prop-types'
 import Style from './style.scss'
 
 import GroupProgramItem from 'components/contests/ui/group-program-item'
+import Router from 'next/router'
 import map from 'lodash/map'
+import { deferred } from 'redux-saga/utils'
+import Modal from 'antd-mobile/lib/modal/index'
+
+const {alert} = Modal
 
 export default class ApplyList extends React.PureComponent {
 
@@ -23,10 +28,16 @@ export default class ApplyList extends React.PureComponent {
   }
 
   getList = () => {
-    const {dataList} = this.props
+    const {
+      dataList,
+      orgId: userId,
+      teamId,
+      classId,
+      actions,
+    } = this.props
     let doms = map(dataList, (o, i) => {
       let status = {}
-      const {verify, itemName, id} = o
+      const {verify, itemName, id, eatuId} = o
       switch (verify) {
         case 'Waiting':
           status = {
@@ -57,11 +68,40 @@ export default class ApplyList extends React.PureComponent {
         title: itemName,
         id: id,
         onClick: () => {
-          console.log('onclick')
+          if (status.btntit === '取消申请') {
+            let data = {
+              id: eatuId,
+              verify: 'NotPass'
+            }
+            const def = deferred()
+            actions.cancelApplyItem(data, def)
+            def.promise.then(
+              ok => {
+                alert('取消申请成功')
+                actions.findTeamItemByUserNumber(classId, userId)
+              },
+              err => {
+                alert('提交服务端出错')
+              },
+            )
+          } else {
+            Router.push(
+              {
+                pathname: '/signup/team_item_form',
+                query: {
+                  classId: classId,
+                  userId: userId,
+                  teamId: id,
+                },
+              },
+              `/signup/team_item_form/${classId}/${userId}/${id}`
+            )
+          }
+
         },
         ...status
       }
-      return <GroupProgramItem {...data}/>
+      return <GroupProgramItem key={i} {...data}/>
     })
     return doms
   }

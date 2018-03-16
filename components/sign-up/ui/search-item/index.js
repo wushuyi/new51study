@@ -48,15 +48,13 @@ export default class SearchItem extends React.PureComponent {
           {/*<div className="cancle" onClick={this.onClose}>取消</div>*/}
           <div className="searchitem">
             <div className="search"/>
-            <form className="form" action="./" method="get" autoComplete="off">
-              <input className="input searchitemInput" type="search"
-                     placeholder={placeholder} value={this.state.text}
-                     onChange={(evt) => {
-                       this.setState({
-                         text: evt.target.value
-                       })
-                     }}/>
-            </form>
+            <input className="input searchitemInput" type="search"
+                   placeholder={placeholder} value={this.state.text}
+                   onChange={(evt) => {
+                     this.setState({
+                       text: evt.target.value
+                     })
+                   }}/>
           </div>
           <TouchFeedback activeClassName={`${prefixCls}-button-active`}>
             <a className={`${prefixCls}-button button`}

@@ -10,11 +10,11 @@ import { QINIU } from 'config/settings'
 
 const AvatarQuery = '?imageView2/1/w/100/h/100/100'
 
-function getAvatarUrl(user_id) {
+function getAvatarUrl (user_id) {
 
   return `${QINIU.url}/pic_avatar_${user_id}.jpg${AvatarQuery}&cache=${getPicRandom()}`
 
-  function getPicRandom() {
+  function getPicRandom () {
     return format(new Date(), 'YYYYMMDDHHm')
   }
 }
@@ -34,19 +34,32 @@ export default class Avatar extends React.PureComponent {
     size: 55,
   }
 
-  constructor(props) {
+  constructor (props) {
     super()
     let {userId} = props
     this.state = {
       imgUrl: getAvatarUrl(userId),
     }
-    this.isMount = true
+    this.isMount = false
   }
 
-  async componentDidMount() {
-    let def = deferred()
+  async componentDidMount () {
+    this.isMount = true
     let {gender, userId} = this.props
+    this.setAvatar(gender, userId)
+  }
+
+  componentWillReceiveProps (nextProps) {
+    let {userId: currUserId} = this.props
+    let {gender, userId} = nextProps
+    if (userId !== currUserId) {
+      this.setAvatar(gender, userId)
+    }
+  }
+
+  setAvatar = (gender, userId) => {
     let img = new Image()
+    let def = deferred()
     img.onerror = () => {
       img.src = (gender === '男') ? headMaleUrl : headFemaleUrl
     }
@@ -54,17 +67,19 @@ export default class Avatar extends React.PureComponent {
       def.resolve(img.src)
     }
     img.src = getAvatarUrl(userId)
-    let url = await def.promise
-    this.isMount && this.setState({
-      imgUrl: url
+
+    def.promise.then((url) => {
+      this.isMount && this.setState({
+        imgUrl: url
+      })
     })
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     this.isMount = false
   }
 
-  render() {
+  render () {
     const {title, size} = this.props
     const {imgUrl} = this.state
     const style = {

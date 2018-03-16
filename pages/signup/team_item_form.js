@@ -87,7 +87,12 @@ class Page extends React.Component {
       )
     }
 
-    const {} = this.props
+    const {
+      orgId,
+      teamId,
+      classId,
+      teamItemFromProps,
+    } = this.props
     const {isMount} = this.state
 
     return (
@@ -103,55 +108,39 @@ class Page extends React.Component {
             console.log('values', values)
             let isValidate, vals
 
-            isValidate = validateInput(addUserBoxProps, values)
+            isValidate = validateInput(teamItemFromProps, values)
             if (!isValidate) {
               formActions.setSubmitting(false)
               return false
             }
-            vals = transformData(addUserBoxProps, values)
+            vals = transformData(teamItemFromProps, values)
 
-            let requires = pickBy(vals, (val, key) => {
-              return startsWith(key, 'require-')
+            let team = pickBy(vals, (val, key) => {
+              return startsWith(key, 'team-')
             })
-            requires = mapKeys(requires, (val, key) => {
-              return key.split('require-')[1]
+            team = mapKeys(team, (val, key) => {
+              return key.split('team-')[1]
             })
-            let group = pickBy(vals, (val, key) => {
-              return startsWith(key, 'group-')
-            })
-            group = mapKeys(group, (val, key) => {
-              return key.split('group-')[1]
-            })
-
-            console.log('requires, group', requires, group)
 
             let data = {
-              evaluateApplyId: currAppyId,
-              text: group,
-              ...requires
+              evaluateApplyId: teamId,
+              text: team,
             }
             const def = deferred()
 
-            if (editorUserId) {
-              actions.postSaveTeamUser({
-                ...data,
-                id: editorUserId,
-              }, def)
-            } else {
-              actions.postSaveTeamUser(data, def)
-            }
+            actions.postApplyItem(data, def)
             def.promise.then(
               ok => {
                 formActions.setSubmitting(false)
                 Router.push(
                   {
-                    pathname: '/signup/group_singup',
+                    pathname: '/signup/team_item_list',
                     query: {
                       classId: classId,
-                      appyId: currAppyId,
+                      userId: orgId,
                     },
                   },
-                  `/signup/group_singup/${classId}/${currAppyId}`
+                  `/signup/team_item_list/${classId}/${orgId}`
                 )
               },
               err => {
@@ -166,8 +155,7 @@ class Page extends React.Component {
           }}
           render={({errors, touched, isSubmitting}) => (
             <Form>
-              <InputBox/>
-              {/*{addUserBoxProps && <InputBox data={addUserBoxProps}/>}*/}
+              {teamItemFromProps && <InputBox data={teamItemFromProps}/>}
               <Field
                 name="submit"
                 render={(ctx) => {
@@ -202,11 +190,17 @@ export default withRedux(Page, function (KeaContext) {
         'setTeamId',
         'syncAuthData',
         'findTeamItemByUserNumber',
+        'postApplyItem',
       ]
 
     ],
     props: [
-      mainLogic, []
+      mainLogic, [
+        'orgId',
+        'teamId',
+        'classId',
+        'teamItemFromProps',
+      ]
     ]
   })
   return [

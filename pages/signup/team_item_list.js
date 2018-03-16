@@ -85,10 +85,23 @@ class Page extends React.Component {
     }
 
     const {
+      orgId,
+      teamId,
+      classId,
       teamItemProps,
       applyListProps,
     } = this.props
     const {isMount} = this.state
+
+    let appendProps = {
+      orgId,
+      teamId,
+      classId,
+      actions: {
+        cancelApplyItem: actions.cancelApplyItem,
+        findTeamItemByUserNumber: actions.findTeamItemByUserNumber,
+      }
+    }
 
     return (
       <Layout>
@@ -97,7 +110,7 @@ class Page extends React.Component {
         <TeamItem showBtn={false} {...teamItemProps}/>
         <WhiteSpace height="8"/>
         <GroupProgramTitle/>
-        {applyListProps && <ApplyList {...applyListProps}/>}
+        {applyListProps && <ApplyList {...applyListProps} {...appendProps}/>}
 
 
       </Layout>
@@ -115,11 +128,15 @@ export default withRedux(Page, function (KeaContext) {
         'setOrgId',
         'syncAuthData',
         'findTeamItemByUserNumber',
+        'cancelApplyItem',
       ]
 
     ],
     props: [
       mainLogic, [
+        'orgId',
+        'teamId',
+        'classId',
         'teamItemProps',
         'applyListProps',
       ]

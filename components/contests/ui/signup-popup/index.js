@@ -97,7 +97,7 @@ export default class SignupPopup extends React.PureComponent {
                     onClick={() => {
                       Router.push(
                         {
-                          pathname: '/signup/information/',
+                          pathname: '/signup/information',
                           query: {classId: o.id},
                         },
                         `/signup/information/${o.id}`
@@ -117,10 +117,10 @@ export default class SignupPopup extends React.PureComponent {
 
                                      Router.push(
                                        {
-                                         pathname: '/signup/information/',
-                                         query: {classId: 140},
+                                         pathname: '/signup/find_org',
+                                         query: {classId: 137},
                                        },
-                                       `/signup/information/${140}`
+                                       `/signup/find_org/${137}`
                                      )
                                    }}
                   />
@@ -132,10 +132,10 @@ export default class SignupPopup extends React.PureComponent {
                                      }
                                      Router.push(
                                        {
-                                         pathname: '/signup/information/',
-                                         query: {classId: 140},
+                                         pathname: '/signup/group_info',
+                                         query: {classId: 137},
                                        },
-                                       `/signup/information/${140}`
+                                       `/signup/group_info/${137}`
                                      )
                                    }}
                   />

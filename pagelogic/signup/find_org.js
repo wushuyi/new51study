@@ -9,6 +9,7 @@ import isError from 'lodash/isError'
 import { baseXhrError } from 'apis/utils/error'
 import get from 'lodash/get'
 import ApplyList from '../../components/sign-up/teamitemlist/applyList'
+import includes from 'lodash/includes'
 
 export default KeaContext => {
   const {kea} = KeaContext
@@ -31,6 +32,16 @@ export default KeaContext => {
         def,
       }),
       syncTeamItem: (classId, data) => ({classId, data}),
+      postApplyItem: (data, def, token) => ({
+        token: token || getToken(),
+        data,
+        def,
+      }),
+      cancelApplyItem: (data, def, token) => ({
+        token: token || getToken(),
+        data,
+        def,
+      }),
     }),
 
     reducers: ({actions}) => ({
@@ -104,11 +115,117 @@ export default KeaContext => {
         },
         PropTypes.any,
       ],
+      teamItemFromProps: [
+        () => [selectors.currTeamItem],
+        (teamItem) => {
+          if (!get(teamItem, 'teamUserLabels')) {
+            return false
+          }
+
+          const {teamUserLabels} = teamItem
+          let data = [], labels, defData
+          labels = JSON.parse(teamUserLabels)
+          defData = {}
+          const prefix = 'team-'
+          if (labels) {
+            for (let index in labels) {
+              let item = labels[index]
+              let conf
+              switch (parseInt(item.type)) {
+                case 0:
+                  conf = {
+                    name: prefix + item.name,
+                    isRequired: item.isRequired,
+                    component: 'InputText',
+                    itemProps: {
+                      labelName: item.name || '',
+                      placeholder: item.desc || '',
+                      defaultval: (defData && defData[item.name]) || '',
+                    },
+                  }
+                  break
+                case 1: {
+                  let sourceDataSplit = item.text.split(',')
+                  let defaultval
+                  if (get(defData, item.name)) {
+                    defaultval = sourceDataSplit.indexOf(defData[item.name])
+                  }
+                  let sourceData = sourceDataSplit.map((o, i) => {
+                    return {
+                      value: i,
+                      label: o,
+                    }
+                  })
+                  conf = {
+                    name: prefix + item.name,
+                    isRequired: item.isRequired,
+                    component: 'InputRadio',
+                    itemProps: {
+                      labelName: item.name || '',
+                      placeholder: item.desc || '',
+                      sourceData,
+                      defaultval,
+                    },
+                  }
+                }
+                  break
+                case 2: {
+                  let sourceDataSplit = item.text.split(',')
+                  let defaultval
+                  if (get(defData, item.name)) {
+                    defaultval = sourceDataSplit.map((o, i) => {
+                      return includes(defData[item.name], o)
+                    })
+                  }
+                  let sourceData = sourceDataSplit.map((o, i) => {
+                    return {
+                      value: i,
+                      label: o,
+                    }
+                  })
+                  conf = {
+                    name: prefix + item.name,
+                    isRequired: item.isRequired,
+                    component: 'InputCheckbox',
+                    itemProps: {
+                      labelName: item.name || '',
+                      placeholder: item.desc || '',
+                      sourceData,
+                      defaultval,
+                    },
+                  }
+                }
+                  break
+                case 3:
+                  conf = {
+                    name: prefix + item.name,
+                    isRequired: item.isRequired,
+                    component: 'InputImage',
+                    itemProps: {
+                      labelName: item.name || '',
+                      placeholder: item.desc || '',
+                      defaultval: (defData && defData[item.name]) || '',
+                    },
+                  }
+                  break
+                default:
+                  break
+              }
+              data.push(conf)
+            }
+          }
+
+          return Immutable(data)
+        },
+        PropTypes.any,
+      ]
     }),
 
     takeEvery: ({actions, workers}) => ({
       [actions.initPage]: workers.initPage,
       [actions.findTeamItemByUserNumber]: workers.findTeamItemByUserNumber,
+      [actions.postApplyItem]: workers.postApplyItem,
+      [actions.cancelApplyItem]: workers.cancelApplyItem,
     }),
 
     workers: {
@@ -144,6 +261,36 @@ export default KeaContext => {
 
         const data = res.body.data
         yield put(actions.syncTeamItem(classId, data))
+        def && def.resolve(res)
+        return data
+      },
+      postApplyItem: function * (action) {
+        const {actions} = this
+        const {token, data: postData, def} = action.payload
+        let res
+        res = yield call(Api.postApplyItem, postData, token)
+        if (isError(res)) {
+          yield call(baseXhrError, res)
+          def && def.reject(res)
+          return res
+        }
+
+        const data = res.body.data
+        def && def.resolve(res)
+        return data
+      },
+      cancelApplyItem: function * (action) {
+        const {actions} = this
+        const {token, data: postData, def} = action.payload
+        let res
+        res = yield call(Api.postApplyVerfiy, postData, token)
+        if (isError(res)) {
+          yield call(baseXhrError, res)
+          def && def.reject(res)
+          return res
+        }
+
+        const data = res.body.data
         def && def.resolve(res)
         return data
       },

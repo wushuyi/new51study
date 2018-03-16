@@ -13,6 +13,7 @@ import Modal from 'antd-mobile/lib/modal'
 
 import TitleItem from 'components/sign-up/ui/title-item'
 import FindOrgItem from 'components/sign-up/ui/findorg-item'
+import Router from 'next/router'
 
 const {alert} = Modal
 
@@ -79,14 +80,25 @@ class Page extends React.Component {
       )
     }
 
-    const {} = this.props
+    const {currId} = this.props
     const {isMount} = this.state
 
     return (
       <Layout>
         <Share/>
         <TitleItem title="团体比赛"/>
-        <FindOrgItem/>
+        <FindOrgItem evaluateId={currId} onSelect={(classId, userId) => {
+          Router.push(
+            {
+              pathname: '/signup/team_item_list',
+              query: {
+                classId: classId,
+                userId: userId,
+              },
+            },
+            `/signup/team_item_list/${classId}/${userId}`
+          )
+        }}/>
       </Layout>
     )
   }
@@ -104,7 +116,9 @@ export default withRedux(Page, function (KeaContext) {
 
     ],
     props: [
-      mainLogic, []
+      mainLogic, [
+        'currId',
+      ]
     ]
   })
   return [

@@ -133,10 +133,10 @@ export default class FindOrgItem extends React.PureComponent {
   }
 
   onSelect = (data) => {
-    const {evaluateId} = this.props
+    const {evaluateId, onSelect} = this.props
     const {name, number} = data
-
-    console.log(data, '111')
+    onSelect(evaluateId, number)
+    console.log(data, 'onSelect')
   }
 
   render () {
@@ -155,7 +155,8 @@ export default class FindOrgItem extends React.PureComponent {
                }}>
           <SearchItem onClose={this.closeModal}
                       onSearch={this.onSearch}
-                      placeholder="可查您要参加的团体比赛"/>
+                      placeholder="可查您要参加的团体比赛"
+          />
           <div className="scroll">
             <SelectTit title={ResList && ResList.length ? '搜索结果' : '没有结果...'}/>
             {ResList}
