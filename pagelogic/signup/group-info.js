@@ -14,6 +14,7 @@ import map from 'lodash/map'
 import filter from 'lodash/filter'
 import find from 'lodash/find'
 import assign from 'lodash/assign'
+import cloneDeep from 'lodash/cloneDeep'
 import createFormData from '../utils/createFormData'
 
 export default KeaContext => {
@@ -101,7 +102,7 @@ export default KeaContext => {
         },
         PropTypes.any,
       ],
-      groupBoxProps: [
+      baseGroupBoxProps: [
         () => [selectors.currApplyDetail],
         (applyDetail) => {
           if (!get(applyDetail, 'teamLabels')) {
@@ -175,7 +176,29 @@ export default KeaContext => {
             data = data.concat(list)
           }
 
-          return Immutable(data)
+          return data
+        },
+        PropTypes.any,
+      ],
+      groupBoxProps: [
+        () => [selectors.baseGroupBoxProps],
+        (groupBoxProps) => {
+          return groupBoxProps && Immutable(groupBoxProps)
+        },
+        PropTypes.any,
+      ],
+      rawGroupBoxProps: [
+        () => [selectors.baseGroupBoxProps],
+        (groupBoxProps) => {
+          if (!groupBoxProps) {
+            return false
+          }
+          let newProps = cloneDeep(groupBoxProps)
+          newProps = map(newProps, (o, i) => {
+            o.itemProps.disabled = true
+            return o
+          })
+          return Immutable(newProps)
         },
         PropTypes.any,
       ],
@@ -453,7 +476,7 @@ export default KeaContext => {
       groupSignupFeeProps: [
         () => [selectors.currApplyDetail],
         (applyDetail) => {
-          if (!get(applyDetail, 'teamCount')) {
+          if (!get(applyDetail, 'teamPrice')) {
             return false
           }
           const {teamCount, teamPrice, teamTotal} = applyDetail
@@ -461,6 +484,58 @@ export default KeaContext => {
             count: teamCount,
             price: `￥${teamPrice}`,
             total: `￥${teamTotal}`,
+          })
+        },
+        PropTypes.any,
+      ],
+      //status
+      numberPorps: [
+        () => [selectors.currApplyDetail],
+        (applyDetail) => {
+          if (!get(applyDetail, 'number')) {
+            return false
+          }
+          const {number} = applyDetail
+          return Immutable([
+            {
+              labelName: '参赛编号',
+              value: number,
+            }
+          ])
+        },
+        PropTypes.any,
+      ],
+      endFormProps: [
+        () => [selectors.currApplyDetail],
+        (applyDetail) => {
+          if (!get(applyDetail, 'number')) {
+            return false
+          }
+          const {orderNo, channelName} = applyDetail
+          return Immutable([
+            {
+              labelName: '渠道选择',
+              value: channelName || '我要学平台',
+            },
+            {
+              labelName: '订单号',
+              value: orderNo,
+            },
+          ])
+        },
+        PropTypes.any,
+      ],
+      appendSignupFeeProps: [
+        () => [selectors.currApplyDetail],
+        (applyDetail) => {
+          if (!get(applyDetail, 'teamAppendPrice')) {
+            return false
+          }
+          const {teamAppendCount, teamAppendPrice, teamAppendTotal} = applyDetail
+          return Immutable({
+            count: teamAppendCount,
+            price: `￥${teamAppendPrice}`,
+            total: `￥${teamAppendTotal}`,
           })
         },
         PropTypes.any,

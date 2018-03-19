@@ -6,15 +6,16 @@ export default class GroupSignupFee extends React.PureComponent {
     count: 3,
     price: '￥100',
     total: '￥300',
+    title: '报名人数'
   }
 
   render () {
-    const {count, price, total} = this.props
+    const {count, price, total, title} = this.props
     return (
       <Fragment>
         <div className="group-item">
           <div className="num">
-            <span className="left">报名人数</span><span>{count}</span>
+            <span className="left">{title}</span><span>{count}</span>
           </div>
           <div className="price">
             <span className="left">每人费用</span> <span className="right">{price}</span>

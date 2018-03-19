@@ -1,0 +1,20 @@
+@import 'libs/hotcss/px2rem';
+
+.warp {
+  padding: 15*$hd 0 19*$hd;
+  font-size: 14*$hd;
+  color: #9F9F9F;
+  text-align: center;
+  .tit-img {
+    background-image: url("/static/images/icon/icon_scanlogin_success.png");
+    width: 92*$hd;
+    height: 92*$hd;
+    background-size: contain;
+    margin: 0 auto;
+  }
+  .title {
+    font-size: 20*$hd;
+    color: #333333;
+    padding: 5*$hd 0 8*$hd 0;
+  }
+}

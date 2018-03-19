@@ -12,6 +12,9 @@
   :global(.am-input-label){
     @include input-item
   }
+  &:global(.am-input-disabled) :global(.am-input-label){
+    color: $item-color;
+  }
   :global(.am-input-control input::placeholder){
     @include input-placeholder
   }

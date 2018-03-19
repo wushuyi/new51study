@@ -11,6 +11,25 @@ import Share from 'components/layout/share'
 
 import Modal from 'antd-mobile/lib/modal'
 
+import { Formik, Field, Form } from 'formik'
+import TitleItem from 'components/sign-up/ui/title-item'
+import InformationTitleItem from 'components/sign-up/ui/information-title-item'
+import InputBox from 'components/sign-up/information/input-box'
+import WhiteSpace from 'components/ui/white-space'
+import StatusItem from '../../components/sign-up/groupSingupStatus/status-item'
+import BaseInput from '../../components/ui/form/InputText/baseInput'
+import List from 'antd-mobile/lib/list'
+
+import GroupSignupTitle from 'components/contests/ui/group-signup-title'
+import GroupSignupMember from 'components/contests/ui/group-signup-member'
+import GroupSignupFee from 'components/contests/ui/group-signup-fee'
+
+import GroupSignupBanner from 'components/contests/ui/group-signup-banner'
+import GroupProgramItem from 'components/contests/ui/group-program-item'
+import { InputOptionItemsField } from 'components/sign-up/information/input-option-items'
+
+import map from 'lodash/map'
+
 const {alert} = Modal
 
 class Page extends React.Component {
@@ -35,11 +54,11 @@ class Page extends React.Component {
       }
     }
 
-    // authData && store.dispatch(actions.syncAuthData(authData))
+    authData && store.dispatch(actions.syncAuthData(authData))
     try {
       const def = deferred()
-      // store.dispatch(actions.initPage(parseInt(query.classId), parseInt(query.appyId), def, token))
-      // await def.promise
+      store.dispatch(actions.initPage(parseInt(query.classId), parseInt(query.appyId), def, token))
+      await def.promise
     } catch (err) {
       return {
         err: {
@@ -75,13 +94,86 @@ class Page extends React.Component {
       )
     }
 
-    const {} = this.props
+    const {
+      rawGroupBoxProps,
+      groupMemberProps,
+      groupSignupFeeProps,
+      optionProps,
+      numberPorps,
+      endFormProps,
+      appendSignupFeeProps,
+    } = this.props
     const {isMount} = this.state
 
     return (
       <Layout>
         <Share/>
-        <h1>Hello</h1>
+        <TitleItem title="比赛报名"/>
+        <StatusItem/>
+        {numberPorps && (<List>
+          {map(numberPorps, (o, i) => {
+            return <BaseInput key={i} {...o}/>
+          })}
+
+        </List>)}
+
+        <WhiteSpace height={10}/>
+        <Formik
+          render={({errors, touched, isSubmitting}) => (
+            <Form>
+              {rawGroupBoxProps && <InputBox data={rawGroupBoxProps}/>}
+            </Form>
+          )}
+        />
+        <WhiteSpace height={10}/>
+        {endFormProps && (<List>
+          {map(endFormProps, (o, i) => {
+            return <BaseInput key={i} {...o}/>
+          })}
+        </List>)}
+
+        <WhiteSpace height={10}/>
+
+        <Formik
+          render={({errors, touched, isSubmitting}) => (
+            <Form>
+              {optionProps && <InputOptionItemsField name="priceId" {...optionProps}/>}
+            </Form>
+          )}
+        />
+        <WhiteSpace height={10}/>
+        <GroupSignupTitle
+          title="团体成员事情"
+          num="9/10"
+        />
+        <GroupProgramItem/>
+        <GroupProgramItem/>
+        <GroupProgramItem/>
+        <WhiteSpace height={10}/>
+        {groupSignupFeeProps && <GroupSignupFee title="团体报名人数" {...groupSignupFeeProps}/>}
+        <WhiteSpace height={10}/>
+        {appendSignupFeeProps && <GroupSignupFee title="追加报名人数" {...appendSignupFeeProps}/>}
+        <WhiteSpace height={10}/>
+        {groupMemberProps && (
+          <Fragment>
+            <GroupSignupTitle
+              title="团体成员报名资料"
+              num={groupMemberProps.length}
+            />
+            {map(groupMemberProps, (o, i) => {
+              return (<GroupSignupMember key={i} {...o}/>)
+            })}
+          </Fragment>
+        )}
+        <WhiteSpace height={10}/>
+        <GroupSignupBanner
+          onConfirm={() => {
+
+          }}
+          onCancel={() => {
+
+          }}
+        />
 
       </Layout>
     )
@@ -94,14 +186,22 @@ export default withRedux(Page, function (KeaContext) {
   const logic = connect({
     actions: [
       mainLogic, [
-
         'initPage',
+        'syncAuthData',
 
       ]
 
     ],
     props: [
-      mainLogic, []
+      mainLogic, [
+        'numberPorps',
+        'endFormProps',
+        'appendSignupFeeProps',
+        'rawGroupBoxProps',
+        'groupMemberProps',
+        'groupSignupFeeProps',
+        'optionProps',
+      ]
     ]
   })
   return [

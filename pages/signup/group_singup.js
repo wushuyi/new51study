@@ -9,15 +9,9 @@ import { getToken } from '../../utils/auth'
 import Layout from 'components/layout/default'
 import Share from 'components/layout/share'
 import TitleItem from 'components/sign-up/ui/title-item'
-import InformationTitleItem from 'components/sign-up/ui/information-title-item'
-import { Formik, Field, Form } from 'formik'
-import InputBox from 'components/sign-up/information/input-box'
-import { InputChannelItemField } from 'components/sign-up/information/input-channel-item'
-import { InputOptionItemsField } from 'components/sign-up/information/input-option-items'
-import WhiteSpace from 'components/ui/white-space'
 import OperateItem from 'components/sign-up/information/operate-item'
-import TipSignUpItem from 'components/sign-up/information/tip-sign-up-item'
 
+import WhiteSpace from 'components/ui/white-space'
 import GroupSignupInformation from 'components/contests/ui/group-signup-information'
 import GroupSignupAdd from 'components/contests/ui/group-signup-add'
 import GroupSignupFee from 'components/contests/ui/group-signup-fee'
@@ -129,7 +123,7 @@ class Page extends React.Component {
         <Fragment>
           <TitleItem title="比赛报名"/>
           {groupInfo && <GroupSignupInformation {...groupInfo}/>}
-
+          <WhiteSpace height={8}/>
           {groupMemberProps && (
             <Fragment>
               <GroupSignupTitle
@@ -141,10 +135,11 @@ class Page extends React.Component {
               })}
             </Fragment>
           )}
-
+          <WhiteSpace height={4}/>
           {groupSignupAddProps && <GroupSignupAdd {...groupSignupAddProps}/>}
+          <WhiteSpace height={4}/>
           {groupSignupFeeProps && <GroupSignupFee {...groupSignupFeeProps}/>}
-
+          <WhiteSpace height={4}/>
           <GroupSignupNotice/>
           <OperateItem
             name={pageState}

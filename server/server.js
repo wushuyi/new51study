@@ -54,6 +54,9 @@ app.prepare()
     server.get('/signup/group_singup/:classId/:appyId', (req, res) => {
       return app.render(req, res, '/signup/group_singup', req.params)
     })
+    server.get('/signup/group_singup_status/:classId/:appyId', (req, res) => {
+      return app.render(req, res, '/signup/group_singup_status', req.params)
+    })
     server.get('/signup/group_add_user/:classId/:appyId/?:editorId', (req, res) => {
       return app.render(req, res, '/signup/group_add_user', req.params)
     })
