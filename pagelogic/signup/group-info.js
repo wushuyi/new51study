@@ -171,7 +171,7 @@ export default KeaContext => {
             })
           }
           if (labels) {
-            let list = createFormData(labels, defData, prefix)
+            let list = createFormData(labels, defData, {prefix})
             data = data.concat(list)
           }
 
@@ -433,7 +433,7 @@ export default KeaContext => {
           }
 
           if (labels) {
-            let list = createFormData(labels, defData, prefix)
+            let list = createFormData(labels, defData, {prefix})
             data = data.concat(list)
           }
           return Immutable(data)

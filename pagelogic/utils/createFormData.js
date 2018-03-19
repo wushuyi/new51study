@@ -3,7 +3,9 @@ import includes from 'lodash/includes'
 import map from 'lodash/map'
 import a from 'lodash/assign'
 
-export default function createFormData (labels, defData, prefix = '', needRequired = true) {
+export default function createFormData (labels, defData, {
+  prefix = '', needRequired = true, disabled = false
+}) {
   let list = []
   for (let index in labels) {
     let item = labels[index]
@@ -20,6 +22,7 @@ export default function createFormData (labels, defData, prefix = '', needRequir
             labelName: item.name || '',
             placeholder: item.desc || '',
             defaultval: (defData && defData[item.name]) || '',
+            disabled: disabled
           },
         }
         break
@@ -44,6 +47,7 @@ export default function createFormData (labels, defData, prefix = '', needRequir
             placeholder: item.desc || '',
             sourceData,
             defaultval,
+            disabled: disabled
           },
         }
       }
@@ -72,6 +76,7 @@ export default function createFormData (labels, defData, prefix = '', needRequir
             placeholder: item.desc || '',
             sourceData,
             defaultval,
+            disabled: disabled
           },
         }
       }
@@ -85,6 +90,7 @@ export default function createFormData (labels, defData, prefix = '', needRequir
             labelName: item.name || '',
             placeholder: item.desc || '',
             defaultval: (defData && defData[item.name]) || '',
+            disabled: disabled
           },
         }
         break

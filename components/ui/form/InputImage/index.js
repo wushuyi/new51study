@@ -340,7 +340,7 @@ export default class InputImage extends React.Component {
 
   render () {
     let isV = false
-    const {field, form, labelName, placeholder, initDate, ...props} = this.props
+    const {field, form, labelName, placeholder, initDate, disabled, ...props} = this.props
     const {percent, imgUrl, uploading, modal} = this.state
     const {imgW, imgH, direction} = this.state
     const {className: jsxName} = scoped
@@ -368,7 +368,7 @@ export default class InputImage extends React.Component {
     isDev && console.log(field)
     const extra = (
       <Fragment>
-        <input type="file" onChange={this.onChange}/>
+        {!disabled && <input type="file" onChange={this.onChange}/>}
         {!imgUrl && (
           <div className={`${jsxName} placeholder`}>请选择图片</div>
         )}

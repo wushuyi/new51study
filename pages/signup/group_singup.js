@@ -81,6 +81,7 @@ class Page extends React.Component {
     const {
       classId,
       currAppyId,
+      pageState,
     } = this.props
     authDidMount(this.props)
     this.setState({
@@ -97,6 +98,8 @@ class Page extends React.Component {
         },
         `/signup/group_info/${classId}/false`
       )
+    } else if (pageState !== '确认提交') {
+
     }
   }
 
@@ -153,7 +156,7 @@ class Page extends React.Component {
                   console.log(ok)
                 },
                 err => {
-                  alert('提交服务端出错')
+                  // alert('提交服务端出错')
                 },
               )
             }}

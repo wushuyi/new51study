@@ -74,7 +74,7 @@ export default class InputText extends React.Component {
 
   render () {
     const {field, form, ...props} = this.props
-    const {labelName, placeholder, styleFullLine, isRequire, defaultval, ...restProps} = props
+    const {labelName, placeholder, styleFullLine, isRequire, defaultval, disabled, ...restProps} = props
     const cls = classnames(scoped.className, {
       'style-full-line': styleFullLine,
       'is-require': isRequire,
@@ -87,6 +87,28 @@ export default class InputText extends React.Component {
       }
     }
     isDev && console.log(field)
+    if (disabled) {
+      return (
+        <Fragment>
+          <InputItem
+            disabled
+            className={cls}
+            labelNumber={7}
+            placeholder={placeholder || `请输入${labelName || field.name}`}
+            value={field.value}
+            {...restProps}
+            {...errProps}
+            onChange={(val) => {
+              form.setFieldValue(field.name, val)
+            }}
+            onBlur={(val) => {
+              form.setFieldTouched(field.name, true)
+            }}
+          >{labelName || field.name}</InputItem>
+          {scoped.styles}
+        </Fragment>
+      )
+    }
     return (
       <Fragment>
         <InputItem

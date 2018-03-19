@@ -175,7 +175,7 @@ export default class InputCheckbox extends React.Component {
     const {field, form, ...props} = this.props
     const {value} = this.state
 
-    const {sourceData, labelName, placeholder, defaultval, styleFullLine, isRequire, ...restProps} = props
+    const {sourceData, labelName, placeholder, defaultval, styleFullLine, isRequire, disabled, ...restProps} = props
     const jsxName = scoped.className
     const cls = classnames(jsxName, {
       'style-full-line': styleFullLine,
@@ -189,6 +189,23 @@ export default class InputCheckbox extends React.Component {
       }
     }
     isDev && console.log(field)
+    if (disabled) {
+      return (
+        <Fragment>
+          <InputItemComponent
+            labelNumber={7}
+            disabled
+            clear
+            placeholder={placeholder || `请选择${labelName || field.name}`}
+            value={this.getValueText()}
+            {...restProps}
+            {...errProps}
+          >{labelName || field.name}</InputItemComponent>
+          {scoped.styles}
+        </Fragment>
+      )
+    }
+
     const popupContent = (
       <div className={`popup-content ${jsxName}`}>
         <List className={`popup-scroll ${jsxName}`}>
@@ -238,6 +255,7 @@ export default class InputCheckbox extends React.Component {
         >
           <InputItemComponent
             labelNumber={7}
+            disabled
             clear
             placeholder={placeholder || `请选择${labelName || field.name}`}
             value={this.getValueText()}
