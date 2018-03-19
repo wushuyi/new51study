@@ -27,6 +27,7 @@ import GroupSignupFee from 'components/contests/ui/group-signup-fee'
 import GroupSignupBanner from 'components/contests/ui/group-signup-banner'
 import GroupProgramItem from 'components/contests/ui/group-program-item'
 import { InputOptionItemsField } from 'components/sign-up/information/input-option-items'
+import GroupSignupApply from 'components/contests/ui/group-signup-apply'
 
 import map from 'lodash/map'
 
@@ -146,9 +147,9 @@ class Page extends React.Component {
           title="团体成员事情"
           num="9/10"
         />
-        <GroupProgramItem/>
-        <GroupProgramItem/>
-        <GroupProgramItem/>
+        <GroupSignupApply/>
+        <GroupSignupApply/>
+        <GroupSignupApply/>
         <WhiteSpace height={10}/>
         {groupSignupFeeProps && <GroupSignupFee title="团体报名人数" {...groupSignupFeeProps}/>}
         <WhiteSpace height={10}/>
