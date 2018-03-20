@@ -86,6 +86,17 @@ class Page extends React.Component {
     })
   }
 
+  onOperate = (data) => {
+    const {actions} = this.props
+    const def = deferred()
+    actions.cancelApplyItem(data, def)
+    def.promise.then(
+      ok => {
+        actions.reloadPage()
+      },
+    )
+  }
+
   render () {
     const {err, actions} = this.props
 
@@ -103,6 +114,7 @@ class Page extends React.Component {
       numberPorps,
       endFormProps,
       appendSignupFeeProps,
+      applyUserProps,
     } = this.props
     const {isMount} = this.state
 
@@ -143,14 +155,20 @@ class Page extends React.Component {
           )}
         />
         <WhiteSpace height={10}/>
-        <GroupSignupTitle
-          title="团体成员事情"
-          num="9/10"
-        />
-        <GroupSignupApply/>
-        <GroupSignupApply/>
-        <GroupSignupApply/>
-        <WhiteSpace height={10}/>
+
+        {applyUserProps && (
+          <Fragment>
+            <GroupSignupTitle
+              title="团体成员申请"
+              num={applyUserProps.length}
+            />
+            {map(applyUserProps, (o, i) => {
+              return (<GroupSignupApply key={i} onOperate={this.onOperate} {...o}/>)
+            })}
+            <WhiteSpace height={10}/>
+          </Fragment>
+        )}
+
         {groupSignupFeeProps && <GroupSignupFee title="团体报名人数" {...groupSignupFeeProps}/>}
         <WhiteSpace height={10}/>
         {appendSignupFeeProps && <GroupSignupFee title="追加报名人数" {...appendSignupFeeProps}/>}
@@ -162,11 +180,11 @@ class Page extends React.Component {
               num={groupMemberProps.length}
             />
             {map(groupMemberProps, (o, i) => {
-              return (<GroupSignupMember key={i} {...o}/>)
+              return (<GroupSignupMember key={i} isRaw={true} {...o}/>)
             })}
+            <WhiteSpace height={10}/>
           </Fragment>
         )}
-        <WhiteSpace height={10}/>
         <GroupSignupBanner
           onConfirm={() => {
 
@@ -189,7 +207,8 @@ export default withRedux(Page, function (KeaContext) {
       mainLogic, [
         'initPage',
         'syncAuthData',
-
+        'cancelApplyItem',
+        'reloadPage',
       ]
 
     ],
@@ -202,6 +221,7 @@ export default withRedux(Page, function (KeaContext) {
         'groupMemberProps',
         'groupSignupFeeProps',
         'optionProps',
+        'applyUserProps',
       ]
     ]
   })

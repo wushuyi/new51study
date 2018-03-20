@@ -10,6 +10,7 @@ export default class GroupSignupMember extends React.PureComponent {
     classId: false,
     currAppyId: false,
     editorId: false,
+    isRaw: false
   }
 
   onClick = () => {
@@ -30,7 +31,19 @@ export default class GroupSignupMember extends React.PureComponent {
   }
 
   render () {
-    const {detail} = this.props
+    const {detail, isRaw} = this.props
+    if (isRaw) {
+      return (
+        <Fragment>
+          <div className="group-item">
+            <div className="avatar"/>
+            <div className="detail">{detail}</div>
+          </div>
+          {/*language=CSS*/}
+          <style jsx>{Style}</style>
+        </Fragment>
+      )
+    }
     return (
       <Fragment>
         <TouchFeedback

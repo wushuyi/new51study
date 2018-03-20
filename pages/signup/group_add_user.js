@@ -88,16 +88,7 @@ class Page extends React.Component {
     actions.postRemoveTeamUser(editorUserId, def)
     def.promise.then(
       ok => {
-        Router.push(
-          {
-            pathname: '/signup/group_singup',
-            query: {
-              classId: classId,
-              appyId: currAppyId,
-            },
-          },
-          `/signup/group_singup/${classId}/${currAppyId}`
-        )
+        Router.back()
       },
       err => {
         alert('提交服务端出错')
@@ -175,16 +166,7 @@ class Page extends React.Component {
             def.promise.then(
               ok => {
                 formActions.setSubmitting(false)
-                Router.push(
-                  {
-                    pathname: '/signup/group_singup',
-                    query: {
-                      classId: classId,
-                      appyId: currAppyId,
-                    },
-                  },
-                  `/signup/group_singup/${classId}/${currAppyId}`
-                )
+                Router.back()
               },
               err => {
                 formActions.setSubmitting(false)

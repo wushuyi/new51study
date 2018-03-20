@@ -5,6 +5,7 @@ import { call, put } from 'redux-saga/effects'
 import { getToken } from '../../utils/auth'
 import { static as Immutable } from 'seamless-immutable'
 import * as Api from 'apis/sign-up/group'
+import { postApplyVerfiy } from 'apis/sign-up/join_sign'
 import isError from 'lodash/isError'
 import { baseXhrError } from 'apis/utils/error'
 import indexOf from 'lodash/indexOf'
@@ -28,6 +29,7 @@ export default KeaContext => {
         appyId,
         def,
       }),
+      reloadPage: () => ({}),
       syncAuthData: (authData) => ({authData}),
       setCurrId: (currId) => ({currId}),
       setAppyId: (id) => ({id}),
@@ -57,6 +59,11 @@ export default KeaContext => {
       postRemoveTeamUser: (editorId, def, token) => ({
         token: token || getToken(),
         editorId,
+        def,
+      }),
+      cancelApplyItem: (data, def, token) => ({
+        token: token || getToken(),
+        data,
         def,
       }),
     }),
@@ -540,15 +547,34 @@ export default KeaContext => {
         },
         PropTypes.any,
       ],
+      applyUserProps: [
+        () => [selectors.currApplyDetail],
+        (applyDetail) => {
+          if (!get(applyDetail, 'teamUserList')) {
+            return false
+          }
+          const {teamUserList} = applyDetail
+          if (!teamUserList.length) {
+            return false
+          }
+          let list = map(teamUserList, (o, i) => {
+            return o
+          })
+          return Immutable(list)
+        },
+        PropTypes.any,
+      ]
     }),
 
     takeEvery: ({actions, workers}) => ({
+      [actions.reloadPage]: workers.reloadPage,
       [actions.initPage]: workers.initPage,
       [actions.getApplyDetail]: workers.getApplyDetail,
       [actions.postEvaluateApply]: workers.postEvaluateApply,
       [actions.postApplyOrder]: workers.postApplyOrder,
       [actions.postSaveTeamUser]: workers.postSaveTeamUser,
       [actions.postRemoveTeamUser]: workers.postRemoveTeamUser,
+      [actions.cancelApplyItem]: workers.cancelApplyItem,
     }),
 
     workers: {
@@ -559,6 +585,27 @@ export default KeaContext => {
         if (appyId) {
           yield put(actions.setAppyId(appyId))
         }
+
+        const getApplyDetailData = yield * workers.getApplyDetail({
+          payload: {
+            token,
+            appyId,
+            classId,
+          },
+        })
+        if (isError(getApplyDetailData)) {
+          def && def.reject(getApplyDetailData)
+          return false
+        }
+
+        def && def.resolve('ok')
+      },
+      reloadPage: function * (action) {
+        const {workers, actions} = this
+        const {def} = action.payload
+        let token = getToken()
+        let appyId = yield this.get('currAppyId')
+        let classId = yield this.get('currId')
 
         const getApplyDetailData = yield * workers.getApplyDetail({
           payload: {
@@ -658,6 +705,21 @@ export default KeaContext => {
 
         const data = res.body.data
         // yield put(actions.syncApplyDetail(classId, data))
+        def && def.resolve(res)
+        return data
+      },
+      cancelApplyItem: function * (action) {
+        const {actions} = this
+        const {token, data: postData, def} = action.payload
+        let res
+        res = yield call(postApplyVerfiy, postData, token)
+        if (isError(res)) {
+          yield call(baseXhrError, res)
+          def && def.reject(res)
+          return res
+        }
+
+        const data = res.body.data
         def && def.resolve(res)
         return data
       },
