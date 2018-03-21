@@ -260,10 +260,11 @@ export default KeaContext => {
           if (!get(framework, 'prevEvaluates') && !get(framework, 'nextEvaluates')) {
             return false
           }
-          const {title, id, prevEvaluates, nextEvaluates} = framework
+          const {title, id, applyVerify,prevEvaluates, nextEvaluates} = framework
           return Immutable({
             title,
             id,
+            applyVerify,
             prevEvaluates,
             nextEvaluates
           })

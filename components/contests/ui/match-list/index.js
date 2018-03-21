@@ -15,7 +15,8 @@ export default class MatchList extends React.PureComponent {
     title: string,
     id:any,
     prevEvaluates: array,
-    nextEvaluates:array
+    nextEvaluates:array,
+    applyVerify:false
   }
 
   static defaultProps = {
@@ -26,12 +27,11 @@ export default class MatchList extends React.PureComponent {
   }
   constructor(props) {
     super(props);
-    this.navAnimation = {height: 0,duration: 500 };
-    this.contentAnimation = {height: 0,duration: 500 };
+    this.Animation = {height: 0,duration: 500 };
     this.state = {
-      navPaused: true,
+      navPaused: props.applyVerify==='Pass'? false:true,
       navReverse: false,
-      contentPaused: false,
+      contentPaused: props.applyVerify==='Pass'? true:false,
       contentReverse: false
     };
   }
@@ -85,13 +85,13 @@ export default class MatchList extends React.PureComponent {
     return (
       <Fragment>
         <div className="match-list">
-            <TweenOne  animation={this.navAnimation}
+            <TweenOne  animation={this.Animation}
                        paused={this.state.navPaused}
                        reverse={this.state.navReverse}
                        >
               <MatchNavItem title={'报名·晋级比赛'} onClick={this.onNavClick}/>
             </TweenOne>
-          <TweenOne  animation={this.contentAnimation}
+          <TweenOne  animation={this.Animation}
                      paused={this.state.contentPaused}
                      reverse={this.state.contentReverse}
                      >
