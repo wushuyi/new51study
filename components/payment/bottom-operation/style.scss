@@ -1,0 +1,50 @@
+@import 'libs/hotcss/px2rem';
+
+$button-color: #FB6831;
+$button-cancel-color: #929295;
+
+.warp {
+  width: 100%;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  background: #fff;
+}
+
+.tool-box {
+  padding: 10*$hd 30*$hd;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: center;
+  align-content: center;
+}
+
+.am-button {
+  height: 51*$hd;
+  font-size: 18*$hd;
+  text-align: center;
+  border-radius: 5*$hd;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #FFFFFF;
+  background: $button-color;
+  &.cancel {
+    background: $button-cancel-color;
+  }
+
+  &.am-button-active {
+    background-color: #ddd;
+  }
+
+}
+
+.btn-1 {
+  width: 320*$hd;
+}
+
+.btn-2 {
+  width: 130*$hd;
+}

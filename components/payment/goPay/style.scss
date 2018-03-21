@@ -1,0 +1,83 @@
+@import 'libs/hotcss/px2rem';
+
+
+
+
+.title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 38*$hd;
+  font-size: 15*$hd;
+  color: #9F9F9F;
+  padding: 0 15*$hd;
+  .close {
+    width: 40*$hd;
+    height: 100%;
+    background: url(/static/images/icon/pop_choosepay_close.png) no-repeat center;
+    background-size: 21*$hd;
+  }
+}
+.choose-list {
+  background: #fff;
+  margin-top: 1*$hd;
+  font-size: 17*$hd;
+  color: #000000;
+  .choose-item {
+    height: 58*$hd;
+    padding: 0 21*$hd 0 17*$hd;
+    display: flex;
+    align-items: center;
+    .alipay-icon {
+      width: 33*$hd;
+      height: 33*$hd;
+      background: url(/static/images/icon/pop_alipay.png) no-repeat center;
+      background-size: 33*$hd;
+    }
+    .wx-icon {
+      width: 33*$hd;
+      height: 33*$hd;
+      background: url(/static/images/icon/icon_thirdsign_weixin.png) no-repeat center;
+      background-size: 33*$hd;
+    }
+    .name {
+      flex: 1;
+      margin-left: 16*$hd;
+    }
+    .choose {
+      width: 22*$hd;
+      height: 22*$hd;
+      background: url(/static/images/icon/pop_choosepay_off.png) no-repeat center;
+      background-size: 22*$hd;
+      &.active {
+        background: url(/static/images/icon/pop_choosepay_on.png) no-repeat center;
+        background-size: 22*$hd;
+      }
+    }
+  }
+}
+.result {
+  background: #fff;
+  .detail {
+    font-size: 16*$hd;
+    color: #2B2828;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 26*$hd 18*$hd 0;
+    .money {
+      font-size: 26*$hd;
+      color: #FF6305;
+    }
+  }
+  .pay {
+    height: 48*$hd;
+    line-height: 48*$hd;
+    text-align: center;
+    font-size: 22*$hd;
+    background: #FF6628;
+    color: #fff;
+    border-radius: 6*$hd;
+    margin: 110*$hd 16*$hd 15*$hd;
+  }
+}

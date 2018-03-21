@@ -1,0 +1,8 @@
+@import 'libs/hotcss/px2rem';
+
+
+.am-list-item{
+  :global(.am-list-extra){
+    flex-basis: 66%;
+  }
+}
