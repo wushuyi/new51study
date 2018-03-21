@@ -9,16 +9,19 @@ export default class MatchNavItem extends React.PureComponent {
   }
 
   static defaultProps = {
-    title: false
+    title: false,
+    onClick:()=>{
+    }
   }
   render() {
     let {
-      title
+      title,
+      onClick
     } =this.props;
 
     return (
       <Fragment>
-        <div className="nav">
+        <div className="nav" onClick={onClick}>
           <div className="name">{title}</div>
           <div className="icon"></div>
         </div>

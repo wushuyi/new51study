@@ -4,13 +4,14 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 40*$hd;
+  height: 53*$hd;
   width: 337*$hd;
   font-size: 20*$hd;
   color: #FF6121;
-  border: 1px solid #FF5A14;
-  border-radius: 25*$hd;
-  margin: 13*$hd auto;
+  //border: 1px solid #FF5A14;
+  //border-radius: 25*$hd;
+  margin: 0 auto;
+  box-sizing: border-box;
   & > div{
     font-size: 20*$hd;
     color: #FF6121;
