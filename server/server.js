@@ -72,6 +72,12 @@ app.prepare()
     server.get('/contests/special-area/:classId', (req, res) => {
       return app.render(req, res, '/contests/special-area', req.params)
     })
+
+    server.get('/payment/:orderNo', (req, res) => {
+      return app.render(req, res, '/payment/index', req.params)
+    })
+
+    //orderNo
     /*server.get('/contests/contest-list/:classId', (req, res) => {
       return app.render(req, res, '/contests/contest-list', req.params)
     })*/
