@@ -16,14 +16,14 @@ export default class MatchList extends React.PureComponent {
     id:any,
     prevEvaluates: array,
     nextEvaluates:array,
-    applyVerify:false
   }
 
   static defaultProps = {
     id:false,
     title: false,
     prevEvaluates:false,
-    nextEvaluates:false
+    nextEvaluates:false,
+    applyVerify:false,
   }
   constructor(props) {
     super(props);
