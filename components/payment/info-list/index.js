@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import Style from './style.scss'
 import List from 'antd-mobile/lib/list'
 import dateFormat from 'date-fns/format'
+import map from 'lodash/map'
 
 const Item = List.Item
 const Brief = Item.Brief
@@ -21,26 +22,21 @@ const scoped = resolveScopedStyles((
 ))
 
 export default class InfoList extends React.PureComponent {
+  static defaultProps = {
+    sourceData: []
+  }
+
   render () {
+    const {sourceData} = this.props
     return (
       <Fragment>
         <div>
           <List renderHeader={() => '订单详情'}>
-            {/*<Item className={scoped.className} extra={'TTBSBM'}*/}
-            {/*>订单类型</Item>*/}
-            <Item className={scoped.className} extra={'团体报名:小巫666(153)'}
-            >订单名称</Item>
-            <Item className={scoped.className} extra={'TTBSBM0CRUZK88909'}
-            >订单编号</Item>
-            <Item className={scoped.className} extra={dateFormat(
-              1521187444000,
-              'YYYY-MM-DD HH:mm:ss',
-            )}
-            >创建时间</Item>
-            <Item className={scoped.className} extra={'0.01元'}
-            >商品单价</Item>
-            <Item className={scoped.className} extra={'3'}
-            >商品数量</Item>
+            {map(sourceData, (o, i) => {
+              return <Item key={i} className={scoped.className}
+                           extra={o.value}
+              >{o.name}</Item>
+            })}
           </List>
         </div>
         {/*language=CSS*/}

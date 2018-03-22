@@ -7,6 +7,8 @@ import { static as Immutable } from 'seamless-immutable'
 import * as Api from 'apis/payment/index'
 import isError from 'lodash/isError'
 import { baseXhrError } from 'apis/utils/error'
+import get from 'lodash/get'
+import dateFormat from 'date-fns/format'
 
 export default KeaContext => {
   const {kea} = KeaContext
@@ -53,7 +55,62 @@ export default KeaContext => {
       //   (currId) => currId,
       //   PropTypes.any,
       // ],
+      currOrderData: [
+        () => [selectors.orderNo, selectors.orderData],
+        (id, data) => Immutable(data[id]),
+        PropTypes.any,
+      ],
+      payInfoProps: [
+        () => [selectors.currOrderData],
+        (data) => {
+          if (!get(data, 'orderNo')) {
+            return false
+          }
+          const {orderNo, createdAt, total, name, list} = data
 
+          let dataList = [
+            {
+              name: '订单名称',
+              value: name
+            },
+            {
+              name: '订单编号',
+              value: orderNo
+            },
+            {
+              name: '创建时间',
+              value: dateFormat(
+                createdAt,
+                'YYYY-MM-DD HH:mm:ss',
+              )
+            },
+          ]
+          if (list.length === 1) {
+            const {count, price} = list[0]
+            dataList.push({
+              name: '单价',
+              value: `${price}元`
+            })
+            dataList.push({
+              name: '数量',
+              value: count
+            })
+          }
+          return Immutable(dataList)
+        },
+        PropTypes.any,
+      ],
+      totalProps: [
+        () => [selectors.currOrderData],
+        (data) => {
+          if (!get(data, 'orderNo')) {
+            return false
+          }
+          const {total} = data
+          return total
+        },
+        PropTypes.any,
+      ]
     }),
 
     takeEvery: ({actions, workers}) => ({

@@ -11,6 +11,12 @@ import Share from 'components/layout/share'
 
 import Modal from 'antd-mobile/lib/modal'
 
+import TitleItem from 'components/sign-up/ui/title-item'
+import InfoList from 'components/payment/info-list'
+import GoPay from 'components/payment/goPay'
+import BottomOperation from 'components/payment/bottom-operation'
+import { Price, ChooseList } from 'components/payment/goPay'
+
 const {alert} = Modal
 
 class Page extends React.Component {
@@ -75,14 +81,20 @@ class Page extends React.Component {
       )
     }
 
-    const {} = this.props
+    const {
+      payInfoProps,
+      totalProps,
+    } = this.props
     const {isMount} = this.state
 
     return (
       <Layout>
         <Share/>
-        <h1>Hello</h1>
-
+        <TitleItem title="支付订单"/>
+        {payInfoProps && <InfoList sourceData={payInfoProps}/>}
+        <ChooseList/>
+        {totalProps && <Price money={totalProps}/>}
+        <BottomOperation/>
       </Layout>
     )
   }
@@ -100,7 +112,10 @@ export default withRedux(Page, function (KeaContext) {
 
     ],
     props: [
-      mainLogic, []
+      mainLogic, [
+        'payInfoProps',
+        'totalProps',
+      ]
     ]
   })
   return [

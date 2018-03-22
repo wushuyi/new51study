@@ -1,16 +1,16 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import Style from './style.scss'
-import BottomOperation from '../bottom-operation'
+
 import cx from 'classnames'
 
-function Title () {
+export function Title () {
   return (
     <div className="am-list-header">选择支付方式</div>
   )
 }
 
-function Price ({money = '0'}) {
+export function Price ({money = '0'}) {
   return (
     <Fragment>
       <div className="result">
@@ -25,7 +25,7 @@ function Price ({money = '0'}) {
   )
 }
 
-class ChooseList extends React.PureComponent {
+export class ChooseList extends React.PureComponent {
   static defaultProps = {
     payType: '',
   }
@@ -57,6 +57,7 @@ class ChooseList extends React.PureComponent {
     })
     return (
       <Fragment>
+        <Title/>
         <div className="choose-list">
           <div className="choose-item"
                onClick={this.onChooseItem('wxpay')}>
@@ -70,34 +71,6 @@ class ChooseList extends React.PureComponent {
             <div className={alipayCls}/>
           </div>
         </div>
-        {/*language=CSS*/}
-        <style jsx>{Style}</style>
-      </Fragment>
-    )
-  }
-}
-
-export default class GoPay extends React.PureComponent {
-
-  static defaultProps = {
-    isActive: false,
-    money: 0,
-    payType: '',
-    hideWeiXin: false,
-    onPay: (type) => {
-
-    }
-  }
-
-  render () {
-    return (
-      <Fragment>
-        <Title/>
-        <ChooseList/>
-        <Price {...{
-          money: 888
-        }}/>
-        <BottomOperation/>
         {/*language=CSS*/}
         <style jsx>{Style}</style>
       </Fragment>
