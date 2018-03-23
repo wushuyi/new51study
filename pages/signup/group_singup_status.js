@@ -28,6 +28,7 @@ import GroupSignupBanner from 'components/contests/ui/group-signup-banner'
 import GroupProgramItem from 'components/contests/ui/group-program-item'
 import { InputOptionItemsField } from 'components/sign-up/information/input-option-items'
 import GroupSignupApply from 'components/contests/ui/group-signup-apply'
+import OperateItem from 'components/sign-up/information/operate-item'
 
 import map from 'lodash/map'
 
@@ -115,6 +116,7 @@ class Page extends React.Component {
       endFormProps,
       appendSignupFeeProps,
       applyUserProps,
+      currAppyId,
     } = this.props
     const {isMount} = this.state
 
@@ -185,12 +187,11 @@ class Page extends React.Component {
             <WhiteSpace height={10}/>
           </Fragment>
         )}
-        <GroupSignupBanner
-          onConfirm={() => {
-
-          }}
-          onCancel={() => {
-
+        <OperateItem
+          name={'上传作品'}
+          onClick={() => {
+            let link = `${location.origin}/signup/uploadwork/${currAppyId}`
+            window.location.href = link
           }}
         />
 
@@ -214,6 +215,7 @@ export default withRedux(Page, function (KeaContext) {
     ],
     props: [
       mainLogic, [
+        'currAppyId',
         'numberPorps',
         'endFormProps',
         'appendSignupFeeProps',
