@@ -75,7 +75,11 @@ class Page extends React.Component {
     const {actions} = this.props
 
     //微信返回支付
-    const {code, state, orderNo} = Router.router.query
+    const {code, state, orderNo, redirect_uri} = Router.router.query
+    let key = `payment-orderNo:${orderNo}`
+    if (redirect_uri) {
+      localStorage.setItem(key, decodeURIComponent(redirect_uri))
+    }
     if (code && state && orderNo) {
       const def = deferred()
       actions.getWxAppid(code, def)
@@ -125,14 +129,15 @@ class Page extends React.Component {
   }
 
   wx_subscription_pay (data = {}) {
+    const {onPaySuccess} = this
+    console.log('wx_subscription_pay->data:', data)
     WeixinJSBridge && WeixinJSBridge.invoke(
       'getBrandWCPayRequest',
       data,
       function (res) {
         let msg = res.err_msg
         if (msg === 'get_brand_wcpay_request:ok') {
-          alert('支付成功')
-          // browserHistory.push(`/goods/orderdetail/${commodityId}/${orderNo}?payType=WXPAY`)
+          onPaySuccess()
         } else {
           let err_msg
           if (msg === 'get_brand_wcpay_request:cancel') {
@@ -146,6 +151,23 @@ class Page extends React.Component {
         }
       }
     )
+  }
+
+  onPaySuccess = () => {
+    const {orderNo} = this.props
+    alert('支付成功', '', [
+      {
+        text: '确定',
+        onPress: () => {
+          let key = `payment-orderNo:${orderNo}`
+          let url = localStorage.getItem(key)
+          if (url) {
+            localStorage.removeItem(key)
+            window.location.href = url
+          }
+        }
+      },
+    ])
   }
 
   render () {
@@ -195,6 +217,7 @@ export default withRedux(Page, function (KeaContext) {
       mainLogic, [
         'payInfoProps',
         'totalProps',
+        'orderNo',
       ]
     ]
   })

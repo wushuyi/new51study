@@ -243,7 +243,7 @@ export default KeaContext => {
         const {actions} = this
         const {token, def} = action.payload
         const {orderNo} = yield this.get('payData')
-        let return_url = location.origin + `/payment/${orderNo}?payType=WXPAY`
+        let return_url = location.origin + `/payment?orderNo=${orderNo}&payType=WXPAY`
         let wxData = querystring.stringify({
           appid: auth.weixin.appid,
           redirect_uri: encodeURI(return_url),
