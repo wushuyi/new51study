@@ -165,7 +165,7 @@ export default class InputRadio extends React.Component {
             placeholder={placeholder || `请选择${labelName || field.name}`}
             value={(typeof prveIndex === 'number' &&
               get(sourceData, `[${prveIndex}].label`) &&
-              `${prveIndex + 1}. ${(sourceData[prveIndex].label.length > 10
+              `${(sourceData[prveIndex].label.length > 10
                 ? sourceData[prveIndex].label.slice(0,
                 10) + '...'
                 : sourceData[prveIndex].label)}`) || ''}
@@ -226,7 +226,7 @@ export default class InputRadio extends React.Component {
             placeholder={placeholder || `请选择${labelName || field.name}`}
             value={(typeof prveIndex === 'number' &&
               get(sourceData, `[${prveIndex}].label`) &&
-              `${prveIndex + 1}. ${(sourceData[prveIndex].label.length > 10
+              `${(sourceData[prveIndex].label.length > 10
                 ? sourceData[prveIndex].label.slice(0,
                 10) + '...'
                 : sourceData[prveIndex].label)}`) || ''}

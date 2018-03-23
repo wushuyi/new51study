@@ -148,7 +148,7 @@ export default class InputCheckbox extends React.Component {
     const {prveIndex} = this.state
     let res = prveIndex.map((boolean, index) => {
       // return boolean && `第${index + 1}项`
-      return boolean && `${index + 1}. ${(sourceData[index].label.length > 3
+      return boolean && `${(sourceData[index].label.length > 3
         ? sourceData[index].label.slice(0,
         3) + '...'
         : sourceData[index].label)}`
