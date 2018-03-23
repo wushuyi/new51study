@@ -18,7 +18,7 @@ import GoContestHome from 'components/contests/ui/go-contest-home'
 import AdBanner from 'components/contests/ui/ad-banner'
 import AdList from 'components/contests/ui/ad-list'
 import GoBackOrOpenApp from 'components/ui/goback-or-openapp'
-import MatchNavItem from 'components/contests/ui/match-nav-item';
+import AreaNavItem from 'components/contests/ui/area-nav-item';
 import { checkToken, authDidMount, ComponentPageError } from 'utils/pageAuth'
 import Share from 'components/layout/share'
 
@@ -111,7 +111,7 @@ class Page extends React.PureComponent {
 
           {bisaiAdListProps && <AdList onAd={(AdId) => {actions.postAd(AdId)}} {...bisaiAdListProps}/>}
           <div style={{backgroundColor:'#fff',overflow:'hidden'}}>
-            {<MatchNavItem title={'报名比赛'}/>}
+            {<AreaNavItem title={'报名比赛'}/>}
           </div>
           {goContestHomeProps && <GoContestHome {...goContestHomeProps}/>}
 

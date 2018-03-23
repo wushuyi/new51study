@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
-import Style from './style.scss'
+// import Style from './style.scss'
 import Modal from 'antd-mobile/lib/modal'
 import List from 'antd-mobile/lib/list'
 import Button from 'antd-mobile/lib/button'
@@ -9,7 +9,6 @@ import Router from 'next/router'
 
 import map from 'lodash/map'
 import Toast from 'antd-mobile/lib/toast/index'
-
 const data = {
   'ifNeedPay': true,
   'id': 140,
@@ -38,6 +37,8 @@ class ScrollView extends React.PureComponent {
             max-height: 66vh;
             overflow: scroll;
             -webkit-overflow-scrolling: touch;
+            padding-top: ${23*0.03864734299516908}rem;
+            background-color: #F6F6F6;
           }
         `}</style>
       </Fragment>
@@ -109,7 +110,7 @@ export default class SignupPopup extends React.PureComponent {
               })}
               {isTeamApply && (
                 <Fragment>
-                  <SignupPopupItem price='' title="参加团体比赛"
+                  <SignupPopupItem price='报名' title="参加团体比赛"
                                    onClick={() => {
                                      if (signupProps.userType !== 'STUDY') {
                                        Toast.info('老师和机构可发布比赛', 2, null, false)
@@ -125,7 +126,7 @@ export default class SignupPopup extends React.PureComponent {
                                      )
                                    }}
                   />
-                  <SignupPopupItem price='' title="发布团体比赛（机构、老师发布）"
+                  <SignupPopupItem price='报名' title="发布团体比赛（机构、老师发布）"
                                    onClick={() => {
                                      if (signupProps.userType === 'STUDY') {
                                        Toast.info((<Fragment>学生身份可以参加<br/>不可发布比赛</Fragment>), 2, null, false)
