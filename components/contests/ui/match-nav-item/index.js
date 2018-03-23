@@ -21,9 +21,9 @@ export default class MatchNavItem extends React.PureComponent {
 
     return (
       <Fragment>
-        <div className="nav" onClick={onClick}>
-          <div className="name">{title}</div>
-          <div className="icon"></div>
+        <div className="nav1" onClick={onClick}>
+          <div className="title">{title}</div>
+          <div className="jiantou"></div>
         </div>
         {/*language=CSS*/}
         <style jsx>{Style}</style>

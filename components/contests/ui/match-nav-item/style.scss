@@ -1,5 +1,23 @@
 @import 'libs/hotcss/px2rem';
 
+.nav1{
+  width: 100%;
+  height: 27*$hd;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14*$hd;
+  color: #585858;
+  background: #FCF6F6;
+  .jiantou{
+    width:20*$hd;
+    height:12*$hd;
+    margin-left: 10*$hd;
+    background: url("/static/images/icon/icon_arrow_up.png") no-repeat center;
+    background-size: 20*$hd 12*$hd;
+    transform: rotate(180deg);
+  }
+}
 .nav{
   display: flex;
   justify-content: center;
