@@ -316,7 +316,7 @@ export default (KeaContext) => {
             return false
           }
           let data = {
-            detail: framework.description
+            description: framework.description
           }
           return Immutable(data)
         },

@@ -151,7 +151,7 @@ class Page extends React.Component {
                   console.log(ok)
                 },
                 err => {
-                  // alert('提交服务端出错')
+
                 },
               )
             }}

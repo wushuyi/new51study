@@ -91,7 +91,7 @@ class Page extends React.Component {
         Router.back()
       },
       err => {
-        alert('提交服务端出错')
+
       },
     )
   }
@@ -171,7 +171,7 @@ class Page extends React.Component {
               err => {
                 formActions.setSubmitting(false)
                 formActions.setErrors('错误!')
-                alert('提交服务端出错')
+
               },
             )
           }}

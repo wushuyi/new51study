@@ -189,7 +189,7 @@ class Page extends React.Component {
               err => {
                 formActions.setSubmitting(false)
                 formActions.setErrors('错误!')
-                alert('提交服务端出错')
+
               },
             )
           }}

@@ -47,5 +47,36 @@ module.exports = {
   consts: {
     vedioSufFixStr: '?vframe/jpg/offset/0',
     goOpenOrDownAppUrl: `http://a.app.qq.com/o/simple.jsp?pkgname=com.sh.iwantstudy`,
+  },
+  payment: {
+    goAliPayData: {
+      'biz_content': {
+        'timeout_express': '15d',
+        'product_code': 'QUICK_WAP_PAY',
+        'total_amount': '',
+        'subject': '',
+        'body': '',
+        'out_trade_no': ''
+      },
+      'method': 'alipay.trade.wap.pay',
+      'charset': 'utf-8',
+      'version': '1.0',
+      'notify_url': 'https://api.5151study.com/pay/ali_notify',
+      'app_id': '2016110202482871',
+      'timestamp': '',
+      'sign_type': 'RSA'
+    },
+    queryAliPayData: {
+      'biz_content': {
+        'out_trade_no': ''
+      },
+      'method': 'alipay.trade.query',
+      'charset': 'utf-8',
+      'version': '1.0',
+      'app_id': '2016110202482871',
+      'timestamp': '',
+      'sign_type': 'RSA',
+      'sign': ''
+    }
   }
 }

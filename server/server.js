@@ -5,6 +5,7 @@ import compression from 'compression'
 import path from 'path'
 import next from 'next'
 import { auth } from 'server/auth'
+import assign from 'lodash/assign'
 
 const port = parseInt(process.env.PORT, 10) || 2000
 const dev = process.env.NODE_ENV !== 'production'
@@ -74,7 +75,7 @@ app.prepare()
     })
 
     server.get('/payment/:orderNo', (req, res) => {
-      return app.render(req, res, '/payment/index', req.params)
+      return app.render(req, res, '/payment', assign({}, req.query, req.params))
     })
 
     //orderNo

@@ -81,7 +81,7 @@ export default class ApplyList extends React.PureComponent {
                 actions.findTeamItemByUserNumber(classId, userId)
               },
               err => {
-                alert('提交服务端出错')
+
               },
             )
           } else {

@@ -9,6 +9,8 @@ import isError from 'lodash/isError'
 import { baseXhrError } from 'apis/utils/error'
 import get from 'lodash/get'
 import dateFormat from 'date-fns/format'
+import { payment, auth } from 'config/settings'
+import querystring from 'query-string'
 
 export default KeaContext => {
   const {kea} = KeaContext
@@ -27,6 +29,20 @@ export default KeaContext => {
         def,
       }),
       asyncOrderData: (orderNo, data) => ({orderNo, data}),
+      goAlipay: (def, token) => ({
+        token: token || getToken(),
+        def,
+      }),
+      goWxPay: (def, token) => ({
+        token: token || getToken(),
+        def,
+      }),
+      goWxAuthorize: (def) => ({def}),
+      getWxAppid: (code, def, token) => ({
+        token: token || getToken(),
+        code,
+        def,
+      }),
     }),
 
     reducers: ({actions}) => ({
@@ -110,12 +126,29 @@ export default KeaContext => {
           return total
         },
         PropTypes.any,
+      ],
+      payData: [
+        () => [selectors.currOrderData],
+        (data) => {
+          if (!get(data, 'orderNo')) {
+            return false
+          }
+          const {total, name, orderNo} = data
+          return {
+            total, name, orderNo
+          }
+        },
+        PropTypes.any,
       ]
     }),
 
     takeEvery: ({actions, workers}) => ({
       [actions.initPage]: workers.initPage,
       [actions.getOrderData]: workers.getOrderData,
+      [actions.goAlipay]: workers.goAlipay,
+      [actions.goWxPay]: workers.goWxPay,
+      [actions.goWxAuthorize]: workers.goWxAuthorize,
+      [actions.getWxAppid]: workers.getWxAppid,
     }),
 
     workers: {
@@ -150,6 +183,106 @@ export default KeaContext => {
         yield put(actions.asyncOrderData(orderNo, data))
         def && def.resolve(res)
         return data
+      },
+      goAlipay: function * (action) {
+        const {actions} = this
+        const {token, def} = action.payload
+        const {total, name, orderNo} = yield this.get('payData')
+        let return_url = location.origin + `/payment/${orderNo}?payType=ALIPAY`
+        let data_json = {
+          ...payment.goAliPayData,
+          timestamp: dateFormat(new Date(), 'YYYY-MM-DD HH:mm:ss'),
+          return_url: return_url,
+        }
+        data_json.biz_content = JSON.stringify({
+          ...data_json.biz_content,
+          'total_amount': total,
+          'subject': encodeURIComponent(name),
+          'body': encodeURIComponent(name),
+          'out_trade_no': orderNo
+        })
+        let res
+        res = yield call(Api.postAlirAssign, data_json, token)
+        if (isError(res)) {
+          yield call(baseXhrError, res)
+          def && def.reject(res)
+          return res
+        }
+        let sign = res.body.data
+        let querystr = querystring.stringify({
+          ...data_json,
+          sign: res.body.data
+        })
+        let pay_url = Api.getAlipayPayUrl + '?' + querystr
+        def && def.resolve(pay_url)
+        return pay_url
+      },
+      goWxPay: function * (action) {
+        const {actions} = this
+        const {token, def} = action.payload
+        const {orderNo} = yield this.get('payData')
+        let return_url = location.origin + `/payment/${orderNo}?payType=WXPAY`
+
+        let conf = {
+          orderNo,
+          type: 'MWEB',
+        }
+        let res
+        res = yield call(Api.getWxPayOrder, conf, token)
+        if (isError(res)) {
+          yield call(baseXhrError, res)
+          def && def.reject(res)
+          return res
+        }
+        let data = res.body.data
+        let pay_url = `${data.mwebUrl}&redirect_url=${encodeURIComponent(return_url)}`
+        def && def.resolve(pay_url)
+        return pay_url
+      },
+      goWxAuthorize: function * (action) {
+        const {actions} = this
+        const {token, def} = action.payload
+        const {orderNo} = yield this.get('payData')
+        let return_url = location.origin + `/payment/${orderNo}?payType=WXPAY`
+        let wxData = querystring.stringify({
+          appid: auth.weixin.appid,
+          redirect_uri: encodeURI(return_url),
+          response_type: 'code',
+          scope: 'snsapi_userinfo',
+          state: 'wyx_wx_state'
+        })
+        let pay_url = `${Api.getWXCodeUrl}?${(wxData)}#wechat_redirect`
+        def && def.resolve(pay_url)
+        return pay_url
+      },
+      getWxAppid: function * (action) {
+        const {actions} = this
+        const {code, token, def} = action.payload
+        let wxData = {
+          appid: auth.weixin.appid,
+          secret: auth.weixin.secret,
+          code,
+          grant_type: 'authorization_code'
+        }
+        let res
+        res = yield call(Api.getWxAppid, wxData, token)
+        if (isError(res)) {
+          yield call(baseXhrError, res)
+          def && def.reject(res)
+          return res
+        }
+        let data = JSON.parse(res.body.data)
+        data = data.openid
+        let payData = {
+          'appId': data.appId,
+          'timeStamp': data.timeStamp,
+          'nonceStr': data.nonceStr,
+          'package': data.package,
+          'signType': 'MD5',
+          'paySign': data.paySign
+        }
+        def && def.resolve(payData)
+        return payData
       },
     },
   })
