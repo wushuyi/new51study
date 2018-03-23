@@ -390,6 +390,17 @@ export default KeaContext => {
         },
         PropTypes.any,
       ],
+      orderNo: [
+        () => [selectors.currApplyDetail],
+        (applyDetail) => {
+          if (!get(applyDetail, 'number')) {
+            return false
+          }
+          const {orderNo} = applyDetail
+          return orderNo
+        },
+        PropTypes.any,
+      ],
       //add_user
       addUserBoxProps: [
         () => [selectors.currApplyDetail, selectors.editorUserId],

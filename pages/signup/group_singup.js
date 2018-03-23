@@ -75,12 +75,14 @@ class Page extends React.Component {
     const {
       classId,
       currAppyId,
+      editorUserId,
       pageState,
     } = this.props
     authDidMount(this.props)
     this.setState({
       isMount: true
     })
+
     if (!currAppyId) {
       Router.replace(
         {
@@ -92,8 +94,33 @@ class Page extends React.Component {
         },
         `/signup/group_info/${classId}/false`
       )
-    } else if (pageState !== '确认提交') {
+    } else if (pageState === '未通过') {
+      alert('报名未通过', '请修改报名资料', [
+        {
+          text: '确定',
+          onPress: () => {
+            Router.replace(
+              {
+                pathname: '/signup/group_info',
+                query: {
+                  classId: classId,
+                  appyId: currAppyId,
+                },
+              },
+              `/signup/group_info/${classId}/false`
+            )
+          }
+        },
+      ])
 
+    } else if (pageState === '报名成功') {
+      Router.replace({
+        pathname: '/signup/group_singup_status',
+        query: {
+          classId: classId,
+          editorId: editorUserId
+        },
+      }, `/signup/group_singup_status/${classId}/${editorUserId}`)
     }
   }
 
@@ -114,6 +141,7 @@ class Page extends React.Component {
       groupSignupAddProps,
       groupSignupFeeProps,
       currAppyId,
+      orderNo,
     } = this.props
     const {isMount} = this.state
 
@@ -144,16 +172,31 @@ class Page extends React.Component {
           <OperateItem
             name={pageState}
             onClick={() => {
-              const def = deferred()
-              actions.postApplyOrder(currAppyId, def)
-              def.promise.then(
-                ok => {
-                  console.log(ok)
-                },
-                err => {
+              if (pageState === '确认提交') {
+                const def = deferred()
+                actions.postApplyOrder(currAppyId, def)
+                def.promise.then(
+                  ok => {
+                    console.log(ok)
+                  },
+                  err => {
 
-                },
-              )
+                  },
+                )
+              }
+              if (pageState === '等待审核') {
+                alert('请等待审核')
+              }
+              if (pageState === '通过，确认付款') {
+                let redirect_uri = encodeURIComponent(location.href)
+                Router.push({
+                  pathname: '/payment',
+                  query: {
+                    orderNo: orderNo,
+                    redirect_uri,
+                  },
+                }, `/payment/${orderNo}?redirect_uri=${redirect_uri}`)
+              }
             }}
           />
         </Fragment>
@@ -179,6 +222,8 @@ export default withRedux(Page, function (KeaContext) {
       mainLogic, [
         'classId',
         'currAppyId',
+        'orderNo',
+        'editorUserId',
         'pageState',
         'groupInfo',
         'groupMemberProps',
