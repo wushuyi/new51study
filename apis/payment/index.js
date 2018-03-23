@@ -75,14 +75,16 @@ export async function postAlirAssign (sendData, token) {
 export async function getWxPayOrder (conf = {
   orderNo: '',
   type: 'MWEB',
-  openid: ''
+  openid: '',
+  tradeType: 'WXPAY',
 }, token) {
   const api = `/orders/wxPay`
   const requestURL = `${APIService}${api}`
 
   let data = {
     orderNo: conf.orderNo,
-    type: conf.type
+    type: conf.type,
+    tradeType: conf.tradeType,
   }
   if (conf.type === 'JSAPI') {
     data.openid = conf.openid
@@ -107,7 +109,27 @@ export async function getWxAppid (wxData = {}, token) {
   const requestURL = `${APIService}${api}`
   let query = encodeURIComponent(querystring.stringify(wxData))
   try {
-    const res = await request.get(requestURL+ '?' +query)
+    const res = await request.get(requestURL + '?' + query)
+      .use(xhrCrypto)
+    return baseChcek(res)
+  } catch (err) {
+    return err
+  }
+}
+
+export async function checkOrderNo (outTradeNo, type) {
+  const api = `/orders/checkOrderNo`
+  const requestURL = `${APIService}${api}`
+
+  let data = {
+    outTradeNo,
+    type,
+  }
+
+  try {
+    const res = await request.get(requestURL)
+      .query(APIVersion)
+      .query(data)
       .use(xhrCrypto)
     return baseChcek(res)
   } catch (err) {

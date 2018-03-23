@@ -42,9 +42,11 @@ app.prepare()
     server.get('/contests/contest-group/:groupId', (req, res) => {
       return app.render(req, res, '/contests/contest-group', req.params)
     })
-
     server.get('/contests/contest-class/:classId', (req, res) => {
       return app.render(req, res, '/contests/contest-class', req.params)
+    })
+    server.get('/contests/special-area/:classId', (req, res) => {
+      return app.render(req, res, '/contests/special-area', req.params)
     })
     server.get('/signup/information/:classId', (req, res) => {
       return app.render(req, res, '/signup/information', req.params)
@@ -69,9 +71,6 @@ app.prepare()
     })
     server.get('/signup/team_item_form/:classId/:userId/:teamId', (req, res) => {
       return app.render(req, res, '/signup/team_item_form', req.params)
-    })
-    server.get('/contests/special-area/:classId', (req, res) => {
-      return app.render(req, res, '/contests/special-area', req.params)
     })
 
     server.get('/payment/:orderNo', (req, res) => {

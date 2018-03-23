@@ -17,6 +17,7 @@ import BottomOperation from 'components/payment/bottom-operation'
 import { Price, ChooseList } from 'components/payment/goPay'
 import { is_weixin } from 'utils/runEnv'
 import Router from 'next/router'
+import { sleep } from 'utils/index'
 
 const {alert} = Modal
 
@@ -45,7 +46,7 @@ class Page extends React.Component {
     authData && store.dispatch(actions.syncAuthData(authData))
     try {
       const def = deferred()
-      store.dispatch(actions.initPage('TTBSBM0CRUZK88909', def, token))
+      store.dispatch(actions.initPage(query.orderNo, def, token))
       await def.promise
     } catch (err) {
       return {
@@ -75,13 +76,26 @@ class Page extends React.Component {
     const {actions} = this.props
 
     //微信返回支付
-    const {code, state, orderNo, redirect_uri} = Router.router.query
+    const {code, state, orderNo, outTradeNo, payType, redirect_uri} = Router.router.query
     let key = `payment-orderNo:${orderNo}`
     if (redirect_uri) {
       localStorage.setItem(key, decodeURIComponent(redirect_uri))
     }
+    if (outTradeNo && payType) {
+      const def = deferred()
+      await sleep(10)
+      actions.checkOrderNo(outTradeNo, payType, def)
+      def.promise.then(
+        (ok) => {
+          if (ok) {
+            this.onPaySuccess()
+          }
+        },
+      )
+    }
     if (code && state && orderNo) {
       const def = deferred()
+      await sleep(10)
       actions.getWxAppid(code, def)
       def.promise.then(
         (payData) => {
@@ -112,7 +126,7 @@ class Page extends React.Component {
       }
       def.promise.then(
         url => {
-          window.location.href = url
+          // window.location.href = url
           // console.log(url)
         },
       )
@@ -121,8 +135,8 @@ class Page extends React.Component {
       actions.goAlipay(def)
       def.promise.then(
         url => {
-          window.location.href = url
-          // console.log(url)
+          // window.location.href = url
+          console.log(url)
         },
       )
     }
@@ -210,6 +224,7 @@ export default withRedux(Page, function (KeaContext) {
         'goWxPay',
         'goWxAuthorize',
         'getWxAppid',
+        'checkOrderNo',
       ]
 
     ],

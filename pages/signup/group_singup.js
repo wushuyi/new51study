@@ -178,6 +178,7 @@ class Page extends React.Component {
                 def.promise.then(
                   ok => {
                     console.log(ok)
+                    actions.reloadPage()
                   },
                   err => {
 
@@ -188,7 +189,7 @@ class Page extends React.Component {
                 alert('请等待审核')
               }
               if (pageState === '通过，确认付款') {
-                let redirect_uri = encodeURIComponent(location.href)
+                let redirect_uri = encodeURIComponent(`${location.origin}/signup/group_singup_status/${classId}/${currAppyId}`)
                 Router.push({
                   pathname: '/payment',
                   query: {
@@ -213,6 +214,7 @@ export default withRedux(Page, function (KeaContext) {
       mainLogic, [
         'syncAuthData',
         'initPage',
+        'reloadPage',
         'postEvaluateApply',
         'postApplyOrder',
       ]
