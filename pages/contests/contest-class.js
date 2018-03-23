@@ -23,8 +23,7 @@ import GoBackOrOpenApp from 'components/ui/goback-or-openapp'
 import { checkToken, authDidMount, ComponentPageError } from 'utils/pageAuth'
 import Share from 'components/layout/share'
 import WhiteSpace from 'components/ui/white-space'
-import SignupPopup from '../../components/contests/ui/signup-popup'
-
+import SignupPopup from 'components/contests/ui/signup-popup'
 class Page extends React.PureComponent {
   static async getInitialProps (ctx) {
     const {logics, KeaContext, isServer, store, req, query} = ctx
@@ -119,13 +118,11 @@ class Page extends React.PureComponent {
             this.SignupPopup.showModal()
           }}/>}
 
-
           {bisaiAdListProps && <AdList onAd={(AdId) => {actions.postAd(AdId)}} {...bisaiAdListProps}/>}
 
           {matchListProps && <MatchList {...matchListProps}/>}
 
           {bisaiAdProps && <AdBanner onAd={(AdId) => {actions.postAd(AdId)}} {...bisaiAdProps}/>}
-
           {teachersProps && (
             <a href={`/contests/teacher-list/${classId}/false`}>
               <AvatarBox {...teachersProps}/>
@@ -155,7 +152,6 @@ class Page extends React.PureComponent {
               <WorksBox {...worksBoxProps}/>
             </a>
           )}
-
           {newsBoxProps && (
             <a href={`/contests/news-list/${classId}/true`}>
               <NewsBox {...newsBoxProps}/>

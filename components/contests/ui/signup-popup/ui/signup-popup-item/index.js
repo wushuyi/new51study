@@ -20,13 +20,13 @@ export default class SignupPopupItem extends React.PureComponent {
     const {price, title, id, onClick} = this.props
     return (
       <Fragment>
-        <div className="group-item-wrapper">
+        <div className="group-item-wrapper" onClick={onClick}>
           <div className="group-item">
-            {price && (
-              <div className="price">¥{price}</div>
-            )}
             <div className="title">{title}</div>
-            <div className="sign" onClick={onClick}/>
+            {price && (
+              <div className="price">{price}</div>
+            )}
+            {/*<div className="sign"/>*/}
           </div>
         </div>
         {/*language=CSS*/}

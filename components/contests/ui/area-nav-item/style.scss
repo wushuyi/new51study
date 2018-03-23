@@ -1,0 +1,26 @@
+@import 'libs/hotcss/px2rem';
+
+.nav{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 40*$hd;
+  width: 337*$hd;
+  font-size: 20*$hd;
+  color: #FF6121;
+  border: 1px solid #FF5A14;
+  border-radius: 25*$hd;
+  margin: 13*$hd auto;
+  box-sizing: border-box;
+  & > div{
+    font-size: 20*$hd;
+    color: #FF6121;
+  }
+  .icon{
+    width: 29*$hd;
+    height: 27*$hd;
+    margin-left: 27*$hd;
+    background: url("/static/images/match/icon_tag003.png") no-repeat center;
+    background-size: 29*$hd 27*$hd;
+  }
+}
