@@ -27,7 +27,7 @@ import clone from 'lodash/clone'
 import get from 'lodash/get'
 import Modal from 'antd-mobile/lib/modal'
 import { isBrowser } from 'utils/runEnv'
-
+import { transformData, validateInput } from '../../components/sign-up/information/input-box'
 
 const {alert} = Modal
 
@@ -124,56 +124,14 @@ class Page extends React.PureComponent {
           onSubmit={(values, formActions) => {
             console.log('values', values)
             let isValidate = true
-            let vals = {}
-            vals = clone(values)
             let inputProps = [].concat(parentBoxProps).concat(studyBoxProps)
-            forEach(inputProps, function (item) {
-              if (item.isRequired && !vals[item.name]) {
-                let name = item.itemProps.labelName
-                switch (item.component) {
-                  case 'InputText':
-                    alert(`请输入${name}`)
-                    break
-                  case 'InputRadio':
-                    alert(`请选择${name}`)
-                    break
-                  case 'InputCheckbox':
-                    alert(`请选择${name}`)
-                    break
-                  case 'InputImage':
-                    alert(`请上传${name}`)
-                    break
-                }
-                isValidate = false
-                return false
-              }
-              if (item.component === 'InputRadio') {
-                let itemKey = item.name
-                if (vals[itemKey]) {
-                  vals[itemKey] = get(item, `itemProps.sourceData[${vals[itemKey]}].label`) || ''
-                }
-              }
-              if (item.component === 'InputCheckbox') {
-                let itemKey = item.name
-                if (vals[itemKey]) {
-                  vals[itemKey] = vals[itemKey]
-                    .map((index) => {
-                      return get(item, `itemProps.sourceData[${index}].label`) || ''
-                    })
-                    .join(',')
-                }
-              }
-              if (item.name === 'require-phone') {
-                let itemKey = item.name
-                if (vals[itemKey]) {
-                  vals[itemKey] = vals[itemKey].split(' ').join('')
-                }
-              }
-            })
+
+            isValidate = validateInput(inputProps, values)
             if (!isValidate) {
               formActions.setSubmitting(false)
               return false
             }
+            let vals = transformData(inputProps, values)
             if (!get(values, 'channel.name')) {
               alert(`请选择所属机构`)
               formActions.setSubmitting(false)
