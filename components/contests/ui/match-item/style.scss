@@ -15,19 +15,19 @@
     align-items: center;
     padding: 10*$hd;
     background:url("/static/images/match/bg_match_item.png") no-repeat left center;
-    background-size: 100% 98%;
+    background-size: 100% 94%;
     position: relative;
     .left{
       width: 100*$hd;
       .match-name{
-        font-size: 11*$hd;
+        font-size: 13*$hd;
         color: #585858;
         @include oneline();
       }
       .org-name{
-        font-size: 9*$hd;
+        font-size: 11*$hd;
         color: #8E8E8E;
-        margin-top: 8*$hd;
+        margin-top: 9*$hd;
         @include oneline();
       }
     }
@@ -35,7 +35,7 @@
       width:130*$hd;
       text-align: right;
       .time{
-        font-size: 9*$hd;
+        font-size: 11*$hd;
         color: #585858;
         @include oneline();
       }
@@ -43,10 +43,10 @@
         display: inline-block;
         position: relative;
         vertical-align: top;
-        font-size: 9*$hd;
+        font-size: 11*$hd;
         color: #FF6121;
         padding: 0 5*$hd;
-        border: 1px solid #FF6121;
+        border: 1*$hd solid #FF6121;
         border-radius: 5*$hd;
         margin-top: 8*$hd;
         float: right;
@@ -55,7 +55,7 @@
     }
     .right{
       .look{
-        font-size: 8*$hd;
+        font-size: 10*$hd;
         color: #FF7C42;
         border: 1*$hd solid #FF5A14;
         padding: 2*$hd 10*$hd;

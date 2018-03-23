@@ -16,14 +16,15 @@ export default class MatchList extends React.PureComponent {
     id:any,
     prevEvaluates: array,
     nextEvaluates:array,
-    applyVerify:false
+    applyVerify:any
   }
 
   static defaultProps = {
     id:false,
     title: false,
     prevEvaluates:false,
-    nextEvaluates:false
+    nextEvaluates:false,
+    applyVerify:false
   }
   constructor(props) {
     super(props);
@@ -89,7 +90,7 @@ export default class MatchList extends React.PureComponent {
                        paused={this.state.navPaused}
                        reverse={this.state.navReverse}
                        >
-              <MatchNavItem title={'报名·晋级比赛'} onClick={this.onNavClick}/>
+              <MatchNavItem title={'报名比赛'} onClick={this.onNavClick}/>
             </TweenOne>
           <TweenOne  animation={this.Animation}
                      paused={this.state.contentPaused}
