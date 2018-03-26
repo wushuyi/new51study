@@ -53,13 +53,29 @@ export default class MatchList extends React.PureComponent {
         area:item.area,
         id:item.id,
         contestType:type,
-        tagType:(i==len-1)? (type==='prevEvaluates'?'down':type==='nextEvaluates'?'up':''):''
+        tagType:this.getTagType(i,len,type)
       }
       list.push(<MatchItem key={item.id} {...evaluateProps}/>);
     }
     return list
   }
-
+  getTagType =(i,len,type)=>{
+     let _type='';
+     if(type==='prevEvaluates'){
+        if(len>1){
+          if(i===0){
+            _type='down';
+          }
+        }else if(len===1){
+          _type='down';
+        }
+     }else if(type==='nextEvaluates'){
+        if(i===len-1){
+          _type='up';
+        }
+     }
+     return _type;
+  }
   onNavClick = () => {
     this.setState({
       navPaused: false,

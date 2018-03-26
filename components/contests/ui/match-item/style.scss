@@ -5,69 +5,65 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
-
+@mixin twoline(){
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical
+}
 .match-item{
   display: flex;
   align-items: center;
   padding: 0 0 0 16*$hd;
   .detail{
-    display: flex;
-    align-items: center;
-    padding: 10*$hd;
+    padding: 15*$hd;
     background:url("/static/images/match/bg_match_item.png") no-repeat left center;
-    background-size: 100% 94%;
+    background-size: 100% 77%;
     position: relative;
-    .left{
-      width: 100*$hd;
-      .match-name{
+    .match-name{
         font-size: 15*$hd;
         color: #585858;
-        @include oneline();
-      }
-      .org-name{
-        font-size: 11*$hd;
-        color: #8E8E8E;
-        margin-top: 9*$hd;
-        @include oneline();
-      }
+        width: 285*$hd;
+        text-align: justify;
     }
-    .center{
-      width:130*$hd;
-      text-align: right;
-      .time{
-        font-size: 11*$hd;
-        color: #585858;
-        @include oneline();
+    .content{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 285*$hd;
+      .center{
+        display: flex;
+        align-items: center;
+        .time{
+          font-size: 11*$hd;
+          color: #585858;
+          @include oneline();
+        }
+        .address{
+          max-width: 80*$hd;
+          font-size: 11*$hd;
+          padding: 0 5*$hd;
+          margin-left: 10*$hd;
+          color: #8E8E8E;
+          @include oneline();
+        }
       }
-      .address{
-        display: inline-block;
-        position: relative;
-        vertical-align: top;
-        font-size: 11*$hd;
-        //color: #FF6121;
-        padding: 0 5*$hd;
-        //border: 1*$hd solid #FF6121;
-        //border-radius: 5*$hd;
-        margin-top: 8*$hd;
-        float: right;
-        color: #8E8E8E;
-        @include oneline();
-      }
-    }
-    .right{
-      .look{
-        font-size: 10*$hd;
-        color: #FF7C42;
-        border: 0.5*$hd solid #FF5A14;
-        padding: 5*$hd 10*$hd;
-        text-align: center;
-        border-radius: 4*$hd;
-        margin-left: 5*$hd;
-        &.ok{
-          color: #fff;
-          background: #78D215;
+      .right{
+        .look{
+          font-size: 10*$hd;
+          color: #FF7C42;
+          border: 0.5*$hd solid #FF5A14;
+          padding: 5*$hd 10*$hd;
+          text-align: center;
           border-radius: 4*$hd;
-          border:0;
+          margin-left: 5*$hd;
+          &.ok{
+            color: #fff;
+            background: #78D215;
+            border-radius: 4*$hd;
+            border:0;
+          }
         }
       }
     }
@@ -79,7 +75,7 @@
   width: 40*$hd;
 }
 .match-tag-icon{
-  height: 68*$hd;
+  height: 100*$hd;
   width: 16*$hd;
   position: relative;
   margin: 0  10*$hd;
@@ -98,13 +94,13 @@
   border-radius: 50%;
   position: absolute;
   left:0;
-  top:26*$hd;
+  top:38*$hd;
 }
 
 .match-tag-icon.down .line{
   height: 50%;
   width: 2*$hd;
-  margin:34*$hd auto 0;
+  margin:52*$hd auto 0;
   background: #FF9193;
 }
 
@@ -116,7 +112,7 @@
   border-radius: 50%;
   position: absolute;
   left: 0;
-  top:26*$hd;
+  top:38*$hd;
 }
 .match-tag-icon.up .line{
   height: 50%;
