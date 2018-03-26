@@ -43,8 +43,8 @@ export default class TeamItem extends React.PureComponent {
           </div>
           <div className="data">
             <div>{name}</div>
-            {/*<div className="autograph">{autograph || ''}</div>*/}
-            {/*<div className="address">{addressCity || '未设置地址'}</div>*/}
+            <div className="autograph">{autograph || ''}</div>
+            <div className="address">{addressCity || '未设置地址'}</div>
           </div>
           {showBtn && <div className="follow" onClick={this.onSelect}>查看节目</div>}
         </div>
