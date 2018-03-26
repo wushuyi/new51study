@@ -53,22 +53,21 @@ export default class MatchItem extends React.PureComponent {
           </div>
           <Link {...linkProps}>
             <div className="detail">
-              <div className="left">
-                <div className="match-name">{title}</div>
-                <div className="org-name">{orgUserName}</div>
-              </div>
-              <div className="center">
-                <div className="time">
-                  {this.dateFormat(beginAt)} - {this.dateFormat(endAt)}
-                </div>
-                {area?<div className="address">{area}</div>:null}
-              </div>
-              <div className="right">
-                <a href="">
-                  <div className={contestType=='prevEvaluates'?"look":"look ok"}>
-                    {contestType=='prevEvaluates'?'查看比赛':'我要晋级'}
+              <div className="match-name">中央人民广播电台第五届“夏青杯”朗诵大赛【全国网络复赛】{title}</div>
+              <div className="content">
+                <div className="center">
+                  <div className="time">
+                    {this.dateFormat(beginAt)} - {this.dateFormat(endAt)}
                   </div>
-                </a>
+                  {area?<div className="address">{area}</div>:null}
+                </div>
+                <div className="right">
+                  <a href="">
+                    <div className={contestType=='prevEvaluates'?"look":"look ok"}>
+                      {contestType=='prevEvaluates'?'查看比赛':'我要晋级'}
+                    </div>
+                  </a>
+                </div>
               </div>
             </div>
           </Link>
