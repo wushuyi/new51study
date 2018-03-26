@@ -166,7 +166,7 @@ export function validateInput (inputProps, values) {
         }
         break
       case 'InputCheckbox':
-        if (item.isRequired && !itemValue.length) {
+        if (item.isRequired &&  !(itemValue && itemValue.length)) {
           alert(`请选择${name}`)
           isValidate = false
         }

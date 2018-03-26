@@ -61,9 +61,6 @@ export default KeaContext => {
           [actions.syncSingupDetail]: (state, payload) => {
             return Immutable.set(state, payload.classId, payload.data)
           },
-        }],
-      signupApply: [
-        Immutable({}), PropTypes.any, {
           [actions.syncSignupApply]: (state, payload) => {
             return Immutable.set(state, payload.classId, payload.data)
           },
@@ -83,13 +80,7 @@ export default KeaContext => {
         },
         PropTypes.any,
       ],
-      currSignupApply: [
-        () => [selectors.classId, selectors.signupApply],
-        (classId, signupApply) => {
-          return signupApply[classId]
-        },
-        PropTypes.any,
-      ],
+
       studyBoxProps: [
         () => [selectors.currSingupDetail],
         (singupDetail) => {
@@ -246,13 +237,13 @@ export default KeaContext => {
         PropTypes.any,
       ],
       redirectUri: [
-        () => [selectors.currSingupDetail, selectors.currSignupApply, selectors.classId],
-        (singupDetail, signupApply, classId) => {
-          if (!get(signupApply, 'state')) {
+        () => [selectors.currSingupDetail, selectors.classId],
+        (singupDetail, classId) => {
+          if (!get(singupDetail, 'state')) {
             return false
           }
           const {ifNeedVerify} = singupDetail
-          const {state} = signupApply
+          const {state} = singupDetail
           if (state) {
             if (ifNeedVerify !== 'Need' && state === 'LIVE') {
               return `/signup/signupok/${classId}`
