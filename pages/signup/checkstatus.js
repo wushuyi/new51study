@@ -14,15 +14,13 @@ import Modal from 'antd-mobile/lib/modal'
 import { Formik, Field, Form } from 'formik'
 
 import TitleItem from 'components/sign-up/ui/title-item'
-import StatusItem from 'components/sign-up/groupSingupStatus/status-item'
 import OperateItem from 'components/sign-up/information/operate-item'
 import InfoList from 'components/payment/info-list'
 import InformationTitleItem from 'components/sign-up/ui/information-title-item'
 import OptionItem from 'components/sign-up/information/option-item'
 import InputBox from 'components/sign-up/information/input-box'
 import Router from 'next/router'
-
-import { goOpenOrDownAppUrl } from 'config/settings'
+import { sleep } from 'utils/index'
 
 const {alert} = Modal
 
@@ -80,12 +78,51 @@ class Page extends React.Component {
   }
 
   onOperateBtn = () => {
-    const {signupokOperateProps} = this.props
+    const {actions, checkstatusPageState, signupokOperateProps, classId} = this.props
     const {type, isFirst, fullName, evaluateApplyId} = signupokOperateProps
-    if (type !== 'PIC') {
-      window.location.href = goOpenOrDownAppUrl
-    } else {
-      window.location.href = `/signup/uploadwork/${evaluateApplyId}?isFirst=${isFirst}&nickName=${fullName}`
+    switch (checkstatusPageState) {
+      case '等待审核':
+        alert('正在审核中，请过会儿再来')
+        break
+      case '未通过审核(点击修改)':
+        Router.replace(
+          {
+            pathname: '/signup/information',
+            query: {
+              classId: classId
+            },
+          },
+          `/signup/information/${classId}`
+        )
+        break
+      case '已通过审核,点击上传作品':
+        window.location.href = `/signup/uploadwork/${evaluateApplyId}?isFirst=${isFirst}&nickName=${fullName}`
+        break
+      case '已通过审核,点击支付':
+        const def = deferred()
+        let mask = alert('正在创建订单', '请等待...', [])
+        actions.postApplyOrder(evaluateApplyId, def)
+        //优化体验 最小遮罩显示1.5秒
+        let promise = Promise.all([def.promise, sleep(1500)])
+        promise.then(
+          ([ok, _]) => {
+            const {orderNo} = ok.body.data
+            let redirect_uri = encodeURIComponent(`/signup/checkstatus/${classId}`)
+            Router.push({
+              pathname: '/payment',
+              query: {
+                orderNo: orderNo,
+                redirect_uri,
+              },
+            }, `/payment/${orderNo}?redirect_uri=${redirect_uri}`)
+          },
+        ).finally(() => {
+          mask.close()
+        })
+
+        break
+      default:
+
     }
 
   }
@@ -101,15 +138,13 @@ class Page extends React.Component {
 
     const {
       classId,
-      statusProps,
       rawStudyBoxProps,
       rawParentBoxProps,
-      signupokTopInfoProps,
       signupokEndInfoProps,
       signupokOptionProps,
+      checkstatusPageState,
     } = this.props
     const {isMount} = this.state
-
     return (
       <Layout>
         <Share/>
@@ -125,7 +160,7 @@ class Page extends React.Component {
           )
         }}/>
         <Formik
-          onSubmit={()=>{}}
+          onSubmit={() => {}}
           render={({errors, touched, isSubmitting}) => (
             <Form>
               {rawStudyBoxProps && rawStudyBoxProps.length && (
@@ -149,8 +184,7 @@ class Page extends React.Component {
 
         {signupokOptionProps && <OptionItem {...signupokOptionProps}/>}
         <WhiteSpace height={8}/>
-
-        <OperateItem name="上传作品" onClick={this.onOperateBtn}/>
+        {checkstatusPageState && <OperateItem name={checkstatusPageState} onClick={this.onOperateBtn}/>}
       </Layout>
     )
   }
@@ -164,18 +198,18 @@ export default withRedux(Page, function (KeaContext) {
       mainLogic, [
         'syncAuthData',
         'initPage',
+        'postApplyOrder',
       ]
-
     ],
     props: [
       mainLogic, [
         'classId',
-        'signupokTopInfoProps',
         'signupokEndInfoProps',
         'rawStudyBoxProps',
         'rawParentBoxProps',
-        'statusProps',
         'signupokOptionProps',
+        'checkstatusPageState',
+        'checkstatusPageState',
         'signupokOperateProps',
       ]
     ]

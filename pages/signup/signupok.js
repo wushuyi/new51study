@@ -107,6 +107,7 @@ class Page extends React.Component {
       signupokTopInfoProps,
       signupokEndInfoProps,
       signupokOptionProps,
+      signupokOperateProps,
     } = this.props
     const {isMount} = this.state
 
@@ -127,7 +128,7 @@ class Page extends React.Component {
         <StatusItem {...statusProps}/>
         {signupokTopInfoProps && <InfoList sourceData={signupokTopInfoProps}/>}
         <Formik
-          onSubmit={()=>{}}
+          onSubmit={() => {}}
           render={({errors, touched, isSubmitting}) => (
             <Form>
               {rawStudyBoxProps && rawStudyBoxProps.length && (
@@ -152,7 +153,7 @@ class Page extends React.Component {
         {signupokOptionProps && <OptionItem {...signupokOptionProps}/>}
         <WhiteSpace height={8}/>
 
-        <OperateItem name="上传作品" onClick={this.onOperateBtn}/>
+        {signupokOperateProps && <OperateItem name="上传作品" onClick={this.onOperateBtn}/>}
       </Layout>
     )
   }

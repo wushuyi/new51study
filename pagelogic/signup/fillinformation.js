@@ -4,6 +4,7 @@ import { call, put } from 'redux-saga/effects'
 import { getToken } from '../../utils/auth'
 import { static as Immutable } from 'seamless-immutable'
 import * as Api from 'apis/sign-up/fill-information'
+import * as Api2 from 'apis/sign-up/group'
 import isError from 'lodash/isError'
 import { baseXhrError } from 'apis/utils/error'
 import indexOf from 'lodash/indexOf'
@@ -49,6 +50,11 @@ export default KeaContext => {
         def,
       }),
       syncSignupModify: (classId, data) => ({classId, data}),
+      postApplyOrder: (evaluateApplyId, def, token) => ({
+        token: token || getToken(),
+        evaluateApplyId,
+        def,
+      }),
     }),
 
     reducers: ({actions}) => ({
@@ -409,6 +415,33 @@ export default KeaContext => {
         },
         PropTypes.any,
       ],
+
+      //checkstatus
+      checkstatusPageState: [
+        () => [selectors.currSingupDetail],
+        (detail) => {
+          if (!get(detail, 'state')) {
+            return false
+          }
+          const {state, verify, ifNeedPay} = detail
+          let name = ''
+          if (state === 'FREEWAITINGVERIFY') {
+            name = '等待审核'
+          }
+          if (verify === 'NotPass') {
+            name = '未通过审核(点击修改)'
+          } else if (verify === 'Pass') {
+            name = '已通过审核,点击上传作品'
+            if (ifNeedPay === 'Need' && state === 'UNPAID') {
+              name = '已通过审核,点击支付'
+            }
+          } else if (verify === 'Waiting') {
+            name = '等待审核'
+          }
+          return name
+        },
+        PropTypes.any,
+      ],
     }),
 
     takeEvery: ({actions, workers}) => ({
@@ -416,6 +449,7 @@ export default KeaContext => {
       [actions.getSingupDetail]: workers.getSingupDetail,
       [actions.postSignupApply]: workers.postSignupApply,
       [actions.postSignupModify]: workers.postSignupModify,
+      [actions.postApplyOrder]: workers.postApplyOrder,
     }),
 
     workers: {
@@ -485,6 +519,23 @@ export default KeaContext => {
 
         const data = res.body.data
         yield put(actions.syncSignupApply(classId, data))
+        def && def.resolve(res)
+        return data
+      },
+      postApplyOrder: function * (action) {
+        const {actions} = this
+        const classId = yield this.get('classId')
+        const {token, evaluateApplyId, def} = action.payload
+        let res
+        res = yield call(Api2.postApplyOrder, evaluateApplyId, token)
+        if (isError(res)) {
+          yield call(baseXhrError, res)
+          def && def.reject(res)
+          return res
+        }
+
+        const data = res.body.data
+        // yield put(actions.syncApplyDetail(classId, data))
         def && def.resolve(res)
         return data
       },
