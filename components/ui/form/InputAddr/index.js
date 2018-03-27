@@ -137,7 +137,6 @@ export default class InputAddr extends React.PureComponent {
   }
 
   render () {
-    console.log(seasons)
     const cls = classnames(scoped.className, {
       'placeholder': false,
     })

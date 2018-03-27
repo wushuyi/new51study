@@ -125,6 +125,7 @@ class Page extends React.Component {
           )
         }}/>
         <Formik
+          onSubmit={()=>{}}
           render={({errors, touched, isSubmitting}) => (
             <Form>
               {rawStudyBoxProps && rawStudyBoxProps.length && (

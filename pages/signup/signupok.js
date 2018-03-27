@@ -127,6 +127,7 @@ class Page extends React.Component {
         <StatusItem {...statusProps}/>
         {signupokTopInfoProps && <InfoList sourceData={signupokTopInfoProps}/>}
         <Formik
+          onSubmit={()=>{}}
           render={({errors, touched, isSubmitting}) => (
             <Form>
               {rawStudyBoxProps && rawStudyBoxProps.length && (

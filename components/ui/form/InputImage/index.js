@@ -365,7 +365,6 @@ export default class InputImage extends React.Component {
       'v': isV,
       'h': !isV,
     })
-    isDev && console.log(field)
     const extra = (
       <Fragment>
         {!disabled && <input type="file" onChange={this.onChange}/>}

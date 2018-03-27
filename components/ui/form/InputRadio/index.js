@@ -153,8 +153,6 @@ export default class InputRadio extends React.Component {
         alert(form.errors[field.name])
       }
     }
-    isDev && console.log(field)
-    console.log('sourceData', sourceData)
     if (disabled) {
       return (
         <Fragment>

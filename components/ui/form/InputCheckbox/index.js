@@ -188,7 +188,6 @@ export default class InputCheckbox extends React.Component {
         alert(form.errors[field.name])
       }
     }
-    isDev && console.log(field)
     if (disabled) {
       return (
         <Fragment>

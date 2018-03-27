@@ -86,7 +86,6 @@ export default class InputText extends React.Component {
         alert(form.errors[field.name])
       }
     }
-    isDev && console.log(field)
     if (disabled) {
       return (
         <Fragment>
