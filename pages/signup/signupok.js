@@ -26,6 +26,8 @@ import startsWith from 'lodash/startsWith'
 import get from 'lodash/get'
 import Router from 'next/router'
 
+import { goOpenOrDownAppUrl } from 'config/settings'
+
 const {alert} = Modal
 
 class Page extends React.Component {
@@ -79,6 +81,17 @@ class Page extends React.Component {
     this.setState({
       isMount: true
     })
+  }
+
+  onOperateBtn = () => {
+    const {signupokOperateProps} = this.props
+    const {type, isFirst, fullName, evaluateApplyId} = signupokOperateProps
+    if (type !== 'PIC') {
+      window.location.href = goOpenOrDownAppUrl
+    } else {
+      window.location.href = `/signup/uploadwork/${evaluateApplyId}?isFirst=${isFirst}&nickName=${fullName}`
+    }
+
   }
 
   render () {
@@ -142,7 +155,7 @@ class Page extends React.Component {
         {signupokOptionProps && <OptionItem {...signupokOptionProps}/>}
         <WhiteSpace height={8}/>
 
-        <OperateItem name="上传作品"/>
+        <OperateItem name="上传作品" onClick={this.onOperateBtn}/>
       </Layout>
     )
   }
@@ -168,6 +181,7 @@ export default withRedux(Page, function (KeaContext) {
         'rawParentBoxProps',
         'statusProps',
         'signupokOptionProps',
+        'signupokOperateProps',
       ]
     ]
   })

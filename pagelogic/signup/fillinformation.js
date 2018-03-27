@@ -368,13 +368,30 @@ export default KeaContext => {
             return o.id === priceId
           })
           if (!charge) {
-            return false;
+            return false
           }
           let data = assign({}, charge, {
             isContentShow: true,
             btnType: 1,
-          });
+          })
           return Immutable(data)
+        },
+        PropTypes.any,
+      ],
+      signupokOperateProps: [
+        () => [selectors.currSingupDetail],
+        (detail) => {
+          let ifUploadWork = get(detail, 'ifUploadWork')
+          if (!ifUploadWork) {
+            return false
+          }
+          const {type, isFirst, fullName, evaluateApplyId} = detail
+          return Immutable({
+            type,
+            isFirst,
+            fullName,
+            evaluateApplyId
+          })
         },
         PropTypes.any,
       ],

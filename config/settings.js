@@ -1,6 +1,7 @@
 const prod = process.env.NODE_ENV === 'production'
 
 module.exports = {
+  goOpenOrDownAppUrl: 'https://a.app.qq.com/o/simple.jsp?pkgname=com.sh.iwantstudy',
   tokenKey: 'auth-token',
   defaultAuthPage: '/auth/login-code',
   defaultAuthOkPage: '/discovery/gradelist',
