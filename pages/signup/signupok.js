@@ -19,6 +19,12 @@ import OperateItem from 'components/sign-up/information/operate-item'
 import InfoList from 'components/payment/info-list'
 import InformationTitleItem from 'components/sign-up/ui/information-title-item'
 import OptionItem from 'components/sign-up/information/option-item'
+import InputBox from 'components/sign-up/information/input-box'
+import mapKeys from 'lodash/mapKeys'
+import pickBy from 'lodash/pickBy'
+import startsWith from 'lodash/startsWith'
+import get from 'lodash/get'
+import Router from 'next/router'
 
 const {alert} = Modal
 
@@ -84,34 +90,59 @@ class Page extends React.Component {
       )
     }
 
-    const {} = this.props
+    const {
+      classId,
+      statusProps,
+      rawStudyBoxProps,
+      rawParentBoxProps,
+      signupokTopInfoProps,
+      signupokEndInfoProps,
+      signupokOptionProps,
+    } = this.props
     const {isMount} = this.state
 
     return (
       <Layout>
         <Share/>
-        <TitleItem title="报名"/>
-        <StatusItem/>
-        <InfoList sourceData={[
-          {
-            name: '参赛编号',
-            value: '1370000000214',
-          },
-        ]}/>
-        <InformationTitleItem title="学生"/>
-        <InfoList/>
-        <InformationTitleItem title="家长"/>
-        <InfoList/>
-        <WhiteSpace height={8}/>
-        <InfoList sourceData={[
-          {
-            name: '订单号',
-            value: '1370000000214',
-          },
-        ]}/>
-        <OptionItem  />
+        <TitleItem title="报名" onBackClick={() => {
+          Router.push(
+            {
+              pathname: '/contests/contest-class',
+              query: {
+                classId: classId
+              },
+            },
+            `/contests/contest-class/${classId}`
+          )
+        }}/>
+        <StatusItem {...statusProps}/>
+        {signupokTopInfoProps && <InfoList sourceData={signupokTopInfoProps}/>}
+        <Formik
+          render={({errors, touched, isSubmitting}) => (
+            <Form>
+              {rawStudyBoxProps && rawStudyBoxProps.length && (
+                <Fragment>
+                  <InformationTitleItem title="学生"/>
+                  <InputBox data={rawStudyBoxProps}/>
+                </Fragment>
+              )}
 
-        <OperateItem  name="上传作品"/>
+              {rawParentBoxProps && rawParentBoxProps.length && (
+                <Fragment>
+                  <InformationTitleItem title="家长"/>
+                  <InputBox data={rawParentBoxProps}/>
+                </Fragment>
+              )}
+            </Form>
+          )}
+        />
+        <WhiteSpace height={8}/>
+        {signupokEndInfoProps && <InfoList sourceData={signupokEndInfoProps}/>}
+
+        {signupokOptionProps && <OptionItem {...signupokOptionProps}/>}
+        <WhiteSpace height={8}/>
+
+        <OperateItem name="上传作品"/>
       </Layout>
     )
   }
@@ -129,7 +160,15 @@ export default withRedux(Page, function (KeaContext) {
 
     ],
     props: [
-      mainLogic, []
+      mainLogic, [
+        'classId',
+        'signupokTopInfoProps',
+        'signupokEndInfoProps',
+        'rawStudyBoxProps',
+        'rawParentBoxProps',
+        'statusProps',
+        'signupokOptionProps',
+      ]
     ]
   })
   return [

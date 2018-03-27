@@ -4,5 +4,12 @@
 .am-list-item{
   :global(.am-list-extra){
     flex-basis: 66%;
+    color: #363636;
+    font-size: 16*$hd;
+  }
+  :global(.am-list-content){
+
+    color: #43484B;
+    font-size: 16*$hd;
   }
 }

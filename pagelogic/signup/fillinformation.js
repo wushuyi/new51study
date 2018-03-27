@@ -9,6 +9,11 @@ import { baseXhrError } from 'apis/utils/error'
 import indexOf from 'lodash/indexOf'
 import get from 'lodash/get'
 import createFormData from '../utils/createFormData'
+import cloneDeep from 'lodash/cloneDeep'
+import map from 'lodash/map'
+import padStart from 'lodash/padStart'
+import find from 'lodash/find'
+import assign from 'lodash/assign'
 
 export default KeaContext => {
   const {kea} = KeaContext
@@ -81,7 +86,7 @@ export default KeaContext => {
         PropTypes.any,
       ],
 
-      studyBoxProps: [
+      baseStudyBoxProps: [
         () => [selectors.currSingupDetail],
         (singupDetail) => {
           if (!get(singupDetail, 'state')) {
@@ -149,7 +154,29 @@ export default KeaContext => {
         },
         PropTypes.any,
       ],
-      parentBoxProps: [
+      studyBoxProps: [
+        () => [selectors.baseStudyBoxProps],
+        (studyBoxProps) => {
+          return studyBoxProps && Immutable(studyBoxProps)
+        },
+        PropTypes.any,
+      ],
+      rawStudyBoxProps: [
+        () => [selectors.baseStudyBoxProps],
+        (studyBoxProps) => {
+          if (!studyBoxProps) {
+            return false
+          }
+          let newProps = cloneDeep(studyBoxProps)
+          newProps = map(newProps, (o, i) => {
+            o.itemProps.disabled = true
+            return o
+          })
+          return Immutable(newProps)
+        },
+        PropTypes.any,
+      ],
+      baseParentBoxProps: [
         () => [selectors.currSingupDetail],
         (singupDetail) => {
           if (!get(singupDetail, 'state')) {
@@ -157,6 +184,9 @@ export default KeaContext => {
           }
           let data = [], labels, defData
           const {ifNeedParentInfo} = singupDetail
+          if (ifNeedParentInfo === 'Needless') {
+            return false
+          }
           const prefix = 'parent-'
           if (singupDetail.parentInfoLabels) {
             labels = JSON.parse(singupDetail.parentInfoLabels)
@@ -174,6 +204,30 @@ export default KeaContext => {
         },
         PropTypes.any,
       ],
+      parentBoxProps: [
+        () => [selectors.baseParentBoxProps],
+        (parentBoxProps) => {
+          return parentBoxProps && Immutable(parentBoxProps)
+        },
+        PropTypes.any,
+      ],
+      rawParentBoxProps: [
+        () => [selectors.baseParentBoxProps],
+        (parentBoxProps) => {
+          if (!parentBoxProps) {
+            return false
+          }
+          let newProps = cloneDeep(parentBoxProps)
+          newProps = map(newProps, (o, i) => {
+            o.itemProps.disabled = true
+            return o
+          })
+          return Immutable(newProps)
+        },
+        PropTypes.any,
+      ],
+
+      //fillinformation
       submitState: [
         () => [selectors.currSingupDetail],
         (singupDetail) => {
@@ -254,7 +308,90 @@ export default KeaContext => {
           return false
         },
         PropTypes.any,
-      ]
+      ],
+
+      //signupok
+      signupokTopInfoProps: [
+        () => [selectors.currSingupDetail],
+        (detail) => {
+          let EANumber = get(detail, 'EANumber')
+          if (!EANumber) {
+            return false
+          }
+          let num = Number(EANumber)
+          if (isNaN(num)) {
+            return
+          }
+          if (`${num}`.length <= 3) {
+            num = padStart(`${num}`, 3, '0')
+          }
+          let data = [
+            {
+              name: '参赛编号',
+              value: num,
+            },
+          ]
+          return Immutable(data)
+        },
+        PropTypes.any,
+      ],
+      signupokEndInfoProps: [
+        () => [selectors.currSingupDetail],
+        (detail) => {
+          let outTradeNo = get(detail, 'order.outTradeNo')
+          let channelName = get(detail, 'channelName')
+          if (!outTradeNo) {
+            return false
+          }
+          let data = [
+            {
+              name: '所属机构',
+              value: channelName || '我要学平台',
+            },
+            {
+              name: '订单号',
+              value: outTradeNo,
+            },
+          ]
+          return Immutable(data)
+        },
+        PropTypes.any,
+      ],
+      signupokOptionProps: [
+        () => [selectors.currSingupDetail],
+        (detail) => {
+          if (!get(detail, 'charges.length')) {
+            return false
+          }
+          let {charges, priceId} = detail
+          let charge = find(charges, (o) => {
+            return o.id === priceId
+          })
+          if (!charge) {
+            return false;
+          }
+          let data = assign({}, charge, {
+            isContentShow: true,
+            btnType: 1,
+          });
+          return Immutable(data)
+        },
+        PropTypes.any,
+      ],
+      statusProps: [
+        () => [selectors.currSingupDetail],
+        (detail) => {
+          if (!detail) {
+            return false
+          }
+          let data = {
+            describe: get(detail, 'title')
+          }
+
+          return Immutable(data)
+        },
+        PropTypes.any,
+      ],
     }),
 
     takeEvery: ({actions, workers}) => ({
