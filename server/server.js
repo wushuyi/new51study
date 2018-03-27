@@ -51,6 +51,9 @@ app.prepare()
     server.get('/signup/information/:classId', (req, res) => {
       return app.render(req, res, '/signup/information', req.params)
     })
+    server.get('/signup/signupok/:classId', (req, res) => {
+      return app.render(req, res, '/signup/signupok', req.params)
+    })
     server.get('/signup/group_info/:classId/?:appyId', (req, res) => {
       return app.render(req, res, '/signup/group_info', req.params)
     })

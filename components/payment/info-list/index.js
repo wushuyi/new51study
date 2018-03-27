@@ -21,17 +21,33 @@ const scoped = resolveScopedStyles((
   </scope>
 ))
 
+const test = [
+  {
+    name: '姓名',
+    value: '张三',
+  },
+  {
+    name: '手机',
+    value: '312312321',
+  },
+  {
+    name: '参赛编号',
+    value: '1370000000214',
+  }
+]
+
 export default class InfoList extends React.PureComponent {
   static defaultProps = {
-    sourceData: []
+    sourceData: test,
+    header: false, // () => '订单详情'
   }
 
   render () {
-    const {sourceData} = this.props
+    const {sourceData, header} = this.props
     return (
       <Fragment>
         <div>
-          <List renderHeader={() => '订单详情'}>
+          <List renderHeader={header}>
             {map(sourceData, (o, i) => {
               return <Item key={i} className={scoped.className}
                            extra={o.value}

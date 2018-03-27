@@ -203,7 +203,7 @@ class Page extends React.Component {
       <Layout>
         <Share/>
         <TitleItem title="支付订单"/>
-        {payInfoProps && <InfoList sourceData={payInfoProps}/>}
+        {payInfoProps && <InfoList header={() => '订单详情'} sourceData={payInfoProps} />}
         <ChooseList ref={this.saveChooseList}/>
         {totalProps && <Price money={totalProps}/>}
         <BottomOperation onClick={this.onSubmit}/>
