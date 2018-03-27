@@ -124,8 +124,6 @@ class Page extends React.Component {
             `/contests/contest-class/${classId}`
           )
         }}/>
-        <StatusItem {...statusProps}/>
-        {signupokTopInfoProps && <InfoList sourceData={signupokTopInfoProps}/>}
         <Formik
           render={({errors, touched, isSubmitting}) => (
             <Form>
