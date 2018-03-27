@@ -13,7 +13,7 @@ import Modal from 'antd-mobile/lib/modal'
 
 import TitleItem from 'components/sign-up/ui/title-item'
 import GroupProgramTitle from 'components/contests/ui/group-program-title'
-import TeamItem from 'components/sign-up/ui/findorg-item/ui/team-item'
+import TeamItem from 'components/sign-up/ui/findorg-item/ui/team-detail-item'
 
 import WhiteSpace from 'components/ui/white-space'
 import ApplyList from 'components/sign-up/teamitemlist/applyList'

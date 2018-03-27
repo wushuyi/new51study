@@ -4,7 +4,7 @@ import Style from './style.scss'
 export default class GroupProgramTitle extends React.PureComponent {
 
   static defaultProps = {
-    title: '团体节目列表'
+    title: '团体参赛节目列表'
   }
 
   render () {
