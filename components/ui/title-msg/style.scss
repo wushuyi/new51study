@@ -1,0 +1,15 @@
+@import 'libs/hotcss/px2rem';
+
+.tip{
+  width: 100%;
+  height: 40*$hd;
+  line-height: 40*$hd;
+  align-self: center;
+  text-indent: 15*$hd;
+  font-size: 14*$hd;
+  color: #D4973F;
+  background: #FFF3BB;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
