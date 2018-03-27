@@ -107,7 +107,7 @@ class Page extends React.Component {
         promise.then(
           ([ok, _]) => {
             const {orderNo} = ok.body.data
-            let redirect_uri = encodeURIComponent(`/signup/checkstatus/${classId}`)
+            let redirect_uri = encodeURIComponent(`${location.origin}/signup/checkstatus/${classId}`)
             Router.push({
               pathname: '/payment',
               query: {

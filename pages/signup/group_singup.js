@@ -22,6 +22,7 @@ import GroupSignupMember from 'components/contests/ui/group-signup-member'
 import Modal from 'antd-mobile/lib/modal'
 import map from 'lodash/map'
 import Router from 'next/router'
+import { sleep } from '../../utils'
 
 const {alert} = Modal
 
@@ -189,14 +190,26 @@ class Page extends React.Component {
                 alert('请等待审核')
               }
               if (pageState === '通过，确认付款') {
-                let redirect_uri = encodeURIComponent(`${location.origin}/signup/group_singup_status/${classId}/${currAppyId}`)
-                Router.push({
-                  pathname: '/payment',
-                  query: {
-                    orderNo: orderNo,
-                    redirect_uri,
+                const def = deferred()
+                let mask = alert('正在创建订单', '请等待...', [])
+                actions.postApplyOrder(currAppyId, def)
+                //优化体验 最小遮罩显示1.5秒
+                let promise = Promise.all([def.promise, sleep(1500)])
+                promise.then(
+                  ([ok, _]) => {
+                    const {orderNo} = ok.body.data
+                    let redirect_uri = encodeURIComponent(`${location.origin}/signup/group_singup_status/${classId}/${currAppyId}`)
+                    Router.push({
+                      pathname: '/payment',
+                      query: {
+                        orderNo: orderNo,
+                        redirect_uri,
+                      },
+                    }, `/payment/${orderNo}?redirect_uri=${redirect_uri}`)
                   },
-                }, `/payment/${orderNo}?redirect_uri=${redirect_uri}`)
+                ).finally(() => {
+                  mask.close()
+                })
               }
             }}
           />
