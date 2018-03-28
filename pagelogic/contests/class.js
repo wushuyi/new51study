@@ -446,11 +446,13 @@ export default KeaContext => {
           if (isPast(data.endAt)) {
             return false
           }
-          const name = getButtonText(data)
+          let name = getButtonText(data)
           // 不能上传作品
           if (name === '上传作品' && !data.ifUploadWork) {
             return false
           }
+          //调整显示
+          name = '参加报名'
           data.name = name
 
           return Immutable(data)
