@@ -215,7 +215,7 @@ export default KeaContext => {
           if (!get(applyDetail, 'state')) {
             return false
           }
-          const {channelNumber, channelName} = applyDetail
+          const {referenceId: channelNumber, referenceName: channelName} = applyDetail
           let data = {
             itemProps: {
               defaultName: channelName || '我要学平台',
