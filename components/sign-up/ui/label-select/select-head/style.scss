@@ -1,0 +1,41 @@
+@import 'libs/hotcss/px2rem';
+
+
+.title{
+  width: 100%;
+  height: 51*$hd;
+  line-height: 51*$hd;
+  background: #FBFBFB;
+  font-size: 18*$hd;
+  color: #000000;
+  text-align: center;
+  border-bottom: 1*$hd solid #D6D6D6;
+  .cancel{
+    float: left;
+    height: 100%;
+    width: 51*$hd;
+    margin-right:12*$hd;
+    background: url(/static/images/icon/match_back.png) no-repeat center;
+    background-size: 11*$hd 19*$hd;
+  }
+  .ok{
+    float: right;
+    height: 100%;
+    width: 51*$hd;
+    font-size: 14*$hd;
+    margin-right:12*$hd;
+    color: #FFFFFF;
+    &.hide{
+      visibility: hidden;
+    }
+    .confirm-btn{
+      width: 51*$hd;
+      height: 28*$hd;
+      line-height: 28*$hd;
+      margin-top: 10*$hd;
+      text-align: center;
+      background: #FF6121;
+      border-radius: 2*$hd;
+    }
+  }
+}

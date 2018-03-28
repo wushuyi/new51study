@@ -1,0 +1,8 @@
+@import 'libs/hotcss/px2rem';
+
+.modal-body{
+  min-height: 66vh;
+  max-height: 80vh;
+  overflow: scroll;
+  -webkit-overflow-scrolling: touch;
+}

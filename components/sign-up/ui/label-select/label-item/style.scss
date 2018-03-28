@@ -1,0 +1,35 @@
+@import 'libs/hotcss/px2rem';
+
+.label-item {
+  height: 36*$hd;
+  width: 93*$hd;
+  line-height: 36*$hd;
+  text-align: center;
+  font-size: 16*$hd;
+  color: #585858;
+  border: 1*$hd solid #B7B7B7;
+  border-radius: 1*$hd;
+  margin: 4*$hd 4*$hd 4*$hd 6*$hd;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  &.active {
+    color: #FF6002;
+    border-color: #FF6002;
+  }
+}
+
+.label-warp {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-content: flex-start;
+  background: #FFFFFF;
+  &.sub {
+    background: #f1f1f1;
+  }
+  &.hide {
+    display: none;
+  }
+}
