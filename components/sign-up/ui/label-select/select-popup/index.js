@@ -2,7 +2,6 @@ import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import Style from './style.scss'
 import LabelBody from 'components/sign-up/ui/label-select/label-body'
-import data from './data'
 import get from 'lodash/get'
 import map from 'lodash/map'
 
@@ -20,7 +19,7 @@ export default class SelectPopup extends React.PureComponent {
     super()
     this.state = {
       isMount: false,
-
+      btnShow: false,
       modalVisible: true
     }
   }
@@ -41,9 +40,15 @@ export default class SelectPopup extends React.PureComponent {
     })
   }
 
+  onChange = ({name, id}) => {
+    this.setState({
+      btnShow: !!name
+    })
+  }
+
   onConfirm = () => {
     const {onConfirm} = this.props
-    const {selectSubItemName, selectSubItemId} = this.state
+    const {selectSubItemName, selectSubItemId} = get(this, 'labelBody.state')
     onConfirm({
       name: selectSubItemName,
       id: selectSubItemId,
@@ -54,9 +59,7 @@ export default class SelectPopup extends React.PureComponent {
   }
 
   render () {
-    const {isMount, modalVisible, selectSubItemName} = this.state
-
-    let GroupBody = this.renderGroup()
+    const {isMount, modalVisible, btnShow} = this.state
 
     return (
       <Fragment>
@@ -66,11 +69,11 @@ export default class SelectPopup extends React.PureComponent {
           animationType="slide-up"
         >
           <SelectHead
-            btnShow={!selectSubItemName}
+            btnShow={btnShow}
             onCancel={this.onCancel}
             onConfirm={this.onConfirm}/>
           <div className="modal-body">
-            <LabelBody ref={this.refLabelBody}/>
+            <LabelBody onChange={this.onChange} ref={this.refLabelBody}/>
           </div>
         </Modal>}
 

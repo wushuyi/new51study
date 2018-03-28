@@ -16,7 +16,7 @@ export default class SelectHead extends React.Component {
     const {btnShow, onConfirm, onCancel, title, btnContent} = this.props
 
     let okCls = cx('ok', {
-      'hide': !!btnShow
+      'hide': !btnShow
     })
     return (
       <Fragment>

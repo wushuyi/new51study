@@ -8,7 +8,10 @@ import map from 'lodash/map'
 
 export default class LabelBody extends React.Component {
   static defaultProps = {
-    sourceData: data
+    sourceData: data,
+    onChange: () => {
+
+    }
   }
 
   constructor () {
@@ -29,19 +32,23 @@ export default class LabelBody extends React.Component {
   }
 
   onSelectItem = ({name, id}) => {
+    const {onChange} = this.props
     this.setState({
       selectItemId: id,
       selectItemName: name,
       selectSubItemId: false,
       selectSubItemName: '',
     })
+    onChange({name: '', id: false})
   }
 
   onSelectSubItem = ({name, id}) => {
+    const {onChange} = this.props
     this.setState({
       selectSubItemId: id,
       selectSubItemName: name,
     })
+    onChange({name, id})
   }
 
   renderGroup = () => {
