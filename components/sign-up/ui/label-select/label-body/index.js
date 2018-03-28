@@ -1,17 +1,14 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
-import Style from './style.scss'
+// import Style from './style.scss'
 import { LabelItem, LabelWarp } from 'components/sign-up/ui/label-select/label-item'
 import data from './data'
 import get from 'lodash/get'
 import map from 'lodash/map'
 
-import Modal from 'antd-mobile/lib/modal'
-import SelectHead from '../select-head'
-
-export default class LabelBody extends React.PureComponent {
+export default class LabelBody extends React.Component {
   static defaultProps = {
-    sourceData: data,
+    sourceData: data
   }
 
   constructor () {
@@ -36,6 +33,7 @@ export default class LabelBody extends React.PureComponent {
       selectItemId: id,
       selectItemName: name,
       selectSubItemId: false,
+      selectSubItemName: '',
     })
   }
 
@@ -118,26 +116,13 @@ export default class LabelBody extends React.PureComponent {
   }
 
   render () {
-    const {isMount} = this.state
-
     let GroupBody = this.renderGroup()
 
     return (
       <Fragment>
-        {isMount && <Modal
-          popup
-          visible={true}
-          onClose={() => {}}
-          animationType="slide-up"
-        >
-          <SelectHead/>
-          <div className="modal-body">
-            {GroupBody}
-          </div>
-        </Modal>}
-
+        {GroupBody}
         {/*language=CSS*/}
-        <style jsx>{Style}</style>
+        {/*<style jsx>{Style}</style>*/}
       </Fragment>
     )
   }
