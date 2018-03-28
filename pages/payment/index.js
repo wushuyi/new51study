@@ -44,6 +44,10 @@ class Page extends React.Component {
     }
 
     authData && store.dispatch(actions.syncAuthData(authData))
+    const {redirect_uri} = query
+    if (redirect_uri) {
+      store.dispatch(actions.setRedirectUri(decodeURIComponent(redirect_uri)))
+    }
     try {
       const def = deferred()
       store.dispatch(actions.initPage(query.orderNo, def, token))
@@ -75,12 +79,9 @@ class Page extends React.Component {
 
     const {actions} = this.props
 
-    //微信返回支付
-    const {code, state, orderNo, outTradeNo, payType, redirect_uri} = Router.router.query
-    let key = `payment-orderNo:${orderNo}`
-    if (redirect_uri) {
-      localStorage.setItem(key, decodeURIComponent(redirect_uri))
-    }
+    const {code, state, orderNo, outTradeNo, payType} = Router.router.query
+
+    //支付回调 调用 支付成功接口
     if (outTradeNo && payType) {
       const def = deferred()
       await sleep(10)
@@ -93,6 +94,7 @@ class Page extends React.Component {
         },
       )
     }
+    //微信返回支付
     if (code && state && orderNo) {
       const def = deferred()
       await sleep(10)
@@ -127,7 +129,7 @@ class Page extends React.Component {
       def.promise.then(
         url => {
           // window.location.href = url
-          // console.log(url)
+          console.log(url)
         },
       )
     } else if (payType === 'alipay') {
@@ -168,16 +170,13 @@ class Page extends React.Component {
   }
 
   onPaySuccess = () => {
-    const {orderNo} = this.props
+    const {orderNo, redirectUri} = this.props
     alert('支付成功', '', [
       {
         text: '确定',
         onPress: () => {
-          let key = `payment-orderNo:${orderNo}`
-          let url = localStorage.getItem(key)
-          if (url) {
-            localStorage.removeItem(key)
-            window.location.href = url
+          if (redirectUri) {
+            window.location.href = redirectUri
           }
         }
       },
@@ -203,7 +202,7 @@ class Page extends React.Component {
       <Layout>
         <Share/>
         <TitleItem title="支付订单"/>
-        {payInfoProps && <InfoList header={() => '订单详情'} sourceData={payInfoProps} />}
+        {payInfoProps && <InfoList header={() => '订单详情'} sourceData={payInfoProps}/>}
         <ChooseList ref={this.saveChooseList}/>
         {totalProps && <Price money={totalProps}/>}
         <BottomOperation onClick={this.onSubmit}/>
@@ -220,6 +219,7 @@ export default withRedux(Page, function (KeaContext) {
       mainLogic, [
         'initPage',
         'syncAuthData',
+        'setRedirectUri',
         'goAlipay',
         'goWxPay',
         'goWxAuthorize',
@@ -233,6 +233,7 @@ export default withRedux(Page, function (KeaContext) {
         'payInfoProps',
         'totalProps',
         'orderNo',
+        'redirectUri',
       ]
     ]
   })

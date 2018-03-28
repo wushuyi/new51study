@@ -49,6 +49,7 @@ export default KeaContext => {
           def,
         }
       },
+      setRedirectUri: (url) => ({url}),
     }),
 
     reducers: ({actions}) => ({
@@ -68,7 +69,13 @@ export default KeaContext => {
             return Immutable.set(state, orderNo, data)
           },
         }],
-
+      redirectUri: [
+        false, PropTypes.any, {
+          [actions.setRedirectUri]: (state, payload) => {
+            const {url} = payload
+            return url
+          },
+        }],
     }),
 
     selectors: ({selectors}) => ({
@@ -195,6 +202,7 @@ export default KeaContext => {
         const {actions} = this
         const {token, def} = action.payload
         const {total, name, orderNo} = yield this.get('payData')
+        const redirectUri = yield this.get('redirectUri')
 
         let conf = {
           orderNo,
@@ -209,7 +217,7 @@ export default KeaContext => {
           return res
         }
         let {outTradeNo} = res.body.data
-        let return_url = location.origin + `/payment/${orderNo}?outTradeNo=${outTradeNo}&payType=ALIPAY`
+        let return_url = location.origin + `/payment/${orderNo}?outTradeNo=${outTradeNo}&payType=ALIPAY&redirect_uri=${redirectUri}`
         let data_json = {
           ...payment.goAliPayData,
           timestamp: dateFormat(new Date(), 'YYYY-MM-DD HH:mm:ss'),
@@ -241,6 +249,7 @@ export default KeaContext => {
         const {actions} = this
         const {token, def} = action.payload
         const {orderNo} = yield this.get('payData')
+        const redirectUri = yield this.get('redirectUri')
         let conf = {
           orderNo,
           type: 'MWEB',
@@ -255,7 +264,7 @@ export default KeaContext => {
         }
         let data = res.body.data
         let {outTradeNo} = data
-        let return_url = location.origin + `/payment/${orderNo}?outTradeNo=${outTradeNo}&payType=WXPAY`
+        let return_url = location.origin + `/payment/${orderNo}?outTradeNo=${outTradeNo}&payType=WXPAY&redirect_uri=${redirectUri}`
         let pay_url = `${data.mwebUrl}&redirect_url=${encodeURIComponent(return_url)}`
         def && def.resolve(pay_url)
         return pay_url
@@ -264,7 +273,22 @@ export default KeaContext => {
         const {actions} = this
         const {token, def} = action.payload
         const {orderNo} = yield this.get('payData')
-        let return_url = location.origin + `/payment?orderNo=${orderNo}&payType=WXPAY`
+        const redirectUri = yield this.get('redirectUri')
+        let conf = {
+          orderNo,
+          type: 'JSAPI',
+          tradeType: 'WXPAY'
+        }
+        let res
+        res = yield call(Api.getWxPayOrder, conf, token)
+        if (isError(res)) {
+          yield call(baseXhrError, res)
+          def && def.reject(res)
+          return res
+        }
+        let data = res.body.data
+        let {outTradeNo} = data
+        let return_url = location.origin + `/payment/${orderNo}?outTradeNo=${outTradeNo}&payType=WXPAY&redirect_uri=${redirectUri}`
         let wxData = querystring.stringify({
           appid: auth.weixin.appid,
           redirect_uri: encodeURI(return_url),
