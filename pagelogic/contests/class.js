@@ -452,7 +452,7 @@ export default KeaContext => {
             return false
           }
           //调整显示
-          name = '参加报名'
+          name = '参加比赛'
           data.name = name
 
           return Immutable(data)
