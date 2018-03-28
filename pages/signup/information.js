@@ -28,6 +28,7 @@ import get from 'lodash/get'
 import Modal from 'antd-mobile/lib/modal'
 import { isBrowser } from 'utils/runEnv'
 import { transformData, validateInput } from '../../components/sign-up/information/input-box'
+import Router from 'next/router'
 
 const {alert} = Modal
 
@@ -108,9 +109,19 @@ class Page extends React.PureComponent {
       redirectUri,
     } = this.props
 
-    console.log('submitState', redirectUri, isBrowser)
-    if (redirectUri && isBrowser) {
-      window.location.href = redirectUri
+    //需要跳转时候不显示其它dom
+    if (submitState === 'REDIRECTURI' && isBrowser) {
+      setTimeout(()=>{
+        Router.replace(
+          redirectUri.router,
+          redirectUri.as
+        )
+      }, 10)
+      return (
+        <Layout>
+          <Share/>
+        </Layout>
+      )
     }
 
     return (
@@ -124,7 +135,8 @@ class Page extends React.PureComponent {
           onSubmit={(values, formActions) => {
             console.log('values', values)
             let isValidate = true
-            let inputProps = [].concat(parentBoxProps).concat(studyBoxProps)
+            let inputProps = [].concat(parentBoxProps || []).concat(studyBoxProps || [])
+            console.log(inputProps)
 
             isValidate = validateInput(inputProps, values)
             if (!isValidate) {

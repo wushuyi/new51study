@@ -12,6 +12,9 @@
   :global(.am-input-label) {
     color: $item-color;
     font-size: $item-font-size;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   &:global(.am-input-disabled) :global(.am-input-label){

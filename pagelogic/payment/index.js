@@ -209,7 +209,7 @@ export default KeaContext => {
           return res
         }
         let {outTradeNo} = res.body.data
-        let return_url = location.origin + `/payment/${orderNo}?outTradeNo=${outTradeNo}payType=ALIPAY`
+        let return_url = location.origin + `/payment/${orderNo}?outTradeNo=${outTradeNo}&payType=ALIPAY`
         let data_json = {
           ...payment.goAliPayData,
           timestamp: dateFormat(new Date(), 'YYYY-MM-DD HH:mm:ss'),
@@ -255,7 +255,7 @@ export default KeaContext => {
         }
         let data = res.body.data
         let {outTradeNo} = data
-        let return_url = location.origin + `/payment/${orderNo}?outTradeNo=${outTradeNo}payType=WXPAY`
+        let return_url = location.origin + `/payment/${orderNo}?outTradeNo=${outTradeNo}&payType=WXPAY`
         let pay_url = `${data.mwebUrl}&redirect_url=${encodeURIComponent(return_url)}`
         def && def.resolve(pay_url)
         return pay_url

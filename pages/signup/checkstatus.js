@@ -148,17 +148,7 @@ class Page extends React.Component {
     return (
       <Layout>
         <Share/>
-        <TitleItem title="报名" onBackClick={() => {
-          Router.push(
-            {
-              pathname: '/contests/contest-class',
-              query: {
-                classId: classId
-              },
-            },
-            `/contests/contest-class/${classId}`
-          )
-        }}/>
+        <TitleItem title="报名"/>
         <Formik
           onSubmit={() => {}}
           render={({errors, touched, isSubmitting}) => (

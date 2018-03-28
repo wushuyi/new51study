@@ -10,7 +10,10 @@
     font-size: 12*$hd;
   }
   :global(.am-input-label){
-    @include input-item
+    @include input-item;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   &:global(.am-input-disabled) :global(.am-input-label){
     color: $item-color;

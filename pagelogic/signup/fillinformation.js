@@ -15,6 +15,7 @@ import map from 'lodash/map'
 import padStart from 'lodash/padStart'
 import find from 'lodash/find'
 import assign from 'lodash/assign'
+import Router from 'next/router'
 
 export default KeaContext => {
   const {kea} = KeaContext
@@ -247,6 +248,7 @@ export default KeaContext => {
           if (state && state === 'UNSIGNUP') {
             return 'SIGNUPAPPLY'
           }
+          return 'REDIRECTURI'
         },
         PropTypes.any,
       ],
@@ -271,7 +273,7 @@ export default KeaContext => {
       optionProps: [
         () => [selectors.currSingupDetail],
         (singupDetail) => {
-          if (!get(singupDetail, 'charges')) {
+          if (!get(singupDetail, 'charges.length')) {
             return false
           }
           const {charges, priceId} = singupDetail
@@ -306,9 +308,21 @@ export default KeaContext => {
           const {state} = singupDetail
           if (state) {
             if (ifNeedVerify !== 'Need' && state === 'LIVE') {
-              return `/signup/signupok/${classId}`
+              return {
+                router: {
+                  pathname: '/signup/signupok',
+                  query: {classId: classId},
+                },
+                as: `/signup/information/${classId}`
+              }
             } else {
-              return `/signup/checkstatus/${classId}`
+              return {
+                router: {
+                  pathname: '/signup/checkstatus',
+                  query: {classId: classId},
+                },
+                as: `/signup/checkstatus/${classId}`
+              }
             }
           }
           return false

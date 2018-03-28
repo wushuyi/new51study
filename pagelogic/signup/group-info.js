@@ -230,7 +230,7 @@ export default KeaContext => {
       optionProps: [
         () => [selectors.currApplyDetail],
         (applyDetail) => {
-          if (!get(applyDetail, 'teamPriceList')) {
+          if (!get(applyDetail, 'teamPriceList.length')) {
             return false
           }
           const {teamPriceList} = applyDetail
