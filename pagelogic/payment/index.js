@@ -217,7 +217,7 @@ export default KeaContext => {
           return res
         }
         let {outTradeNo} = res.body.data
-        let return_url = location.origin + `/payment/${orderNo}?outTradeNo=${outTradeNo}&payType=ALIPAY&redirect_uri=${redirectUri}`
+        let return_url = location.origin + `/payment/${orderNo}?outTradeNo=${outTradeNo}&payType=ALIPAY&redirect_uri=${decodeURIComponent(redirectUri)}`
         let data_json = {
           ...payment.goAliPayData,
           timestamp: dateFormat(new Date(), 'YYYY-MM-DD HH:mm:ss'),
@@ -264,7 +264,7 @@ export default KeaContext => {
         }
         let data = res.body.data
         let {outTradeNo} = data
-        let return_url = location.origin + `/payment/${orderNo}?outTradeNo=${outTradeNo}&payType=WXPAY&redirect_uri=${redirectUri}`
+        let return_url = location.origin + `/payment/${orderNo}?outTradeNo=${outTradeNo}&payType=WXPAY&redirect_uri=${decodeURIComponent(redirectUri)}`
         let pay_url = `${data.mwebUrl}&redirect_url=${encodeURIComponent(return_url)}`
         def && def.resolve(pay_url)
         return pay_url
@@ -288,7 +288,7 @@ export default KeaContext => {
         }
         let data = res.body.data
         let {outTradeNo} = data
-        let return_url = location.origin + `/payment/${orderNo}?outTradeNo=${outTradeNo}&payType=WXPAY&redirect_uri=${redirectUri}`
+        let return_url = location.origin + `/payment/${orderNo}?outTradeNo=${outTradeNo}&payType=WXPAY&redirect_uri=${decodeURIComponent(redirectUri)}`
         let wxData = querystring.stringify({
           appid: auth.weixin.appid,
           redirect_uri: encodeURI(return_url),
