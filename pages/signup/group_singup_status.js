@@ -134,6 +134,7 @@ class Page extends React.Component {
 
         <WhiteSpace height={10}/>
         <Formik
+          onSubmit={() => {}}
           render={({errors, touched, isSubmitting}) => (
             <Form>
               {rawGroupBoxProps && <InputBox data={rawGroupBoxProps}/>}
@@ -150,6 +151,7 @@ class Page extends React.Component {
         <WhiteSpace height={10}/>
 
         <Formik
+          onSubmit={() => {}}
           render={({errors, touched, isSubmitting}) => (
             <Form>
               {optionProps && <InputOptionItemsField name="priceId" {...optionProps}/>}
