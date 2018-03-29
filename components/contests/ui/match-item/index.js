@@ -53,7 +53,7 @@ export default class MatchItem extends React.PureComponent {
           </div>
           <Link {...linkProps}>
             <div className="detail">
-              <div className="match-name">中央人民广播电台第五届“夏青杯”朗诵大赛【全国网络复赛】{title}</div>
+              <div className="match-name">{title}</div>
               <div className="content">
                 <div className="center">
                   <div className="time">
