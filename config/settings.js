@@ -1,4 +1,5 @@
 const prod = process.env.NODE_ENV === 'production'
+const isTest = process.env.IS_TEST === 'test'
 
 module.exports = {
   goOpenOrDownAppUrl: 'https://a.app.qq.com/o/simple.jsp?pkgname=com.sh.iwantstudy',
@@ -6,11 +7,12 @@ module.exports = {
   defaultAuthPage: '/auth/login-code',
   defaultAuthOkPage: '/discovery/gradelist',
   isDev: !prod,
+  isTest: isTest,
   APIVersion: {
     version: '1.0.0',
     platform: 'H5'
   },
-  APIService: prod ? 'https://api.5151study.com' : 'http://192.168.1.249:7080/API',
+  APIService: (prod && !isTest) ? 'https://api.5151study.com' : 'http://192.168.1.249:7080/API',
   NewAPIService: 'http://192.168.1.249:8003/api',
   QINIU: {
     url: prod ? 'http://7xpx8n.com1.z0.glb.clouddn.com/' : 'http://7xszyu.com1.z0.glb.clouddn.com/',

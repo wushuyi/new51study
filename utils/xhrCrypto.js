@@ -6,7 +6,7 @@ import assign from 'lodash/assign'
 // import some from 'lodash/some'
 // import startsWith from 'lodash/startsWith'
 import qs from 'query-string'
-import {isDev} from 'config/settings'
+import {isDev , isTest} from 'config/settings'
 
 // let key = 'f14e60cf5a2afbe8afe3e9dc'
 // let iv = 'f14e60cf5a2afbe8afe3e9dc'
@@ -80,7 +80,7 @@ function injectBrowser(request) {
 }
 
 export default function xhrCrypto(request) {
-  if(isDev){
+  if(isDev || isTest){
     return request
   }
   isNode ? injectNode(request) : injectBrowser(request)
