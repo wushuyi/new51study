@@ -59,8 +59,8 @@ export default class OperateItem extends React.PureComponent {
 
   render () {
     const props = this.props
-    const {src, iconShow, name} = props
-
+    const {src, iconShow} = props
+    let name=getButtonText(props);
     const buttonCls = classnames('operate-button', {
       'is-hidden': !iconShow,
     })

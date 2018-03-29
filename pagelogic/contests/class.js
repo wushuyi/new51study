@@ -229,8 +229,8 @@ export default KeaContext => {
         PropTypes.any,
       ],
       signupBoxProps: [
-        () => [selectors.currFramework, selectors.user],
-        (framework, user) => {
+        () => [selectors.currFramework, selectors.currApplyPrice,selectors.user],
+        (framework,applyPrice, user) => {
           if (!framework) {
             return false
           }
@@ -238,9 +238,10 @@ export default KeaContext => {
             'beginAt', 'endAt', 'ifSignupLimit',
             'signupEndAt', 'applyState', 'id',
             'evaluateApplyId', 'ifNomination', 'singUpNumber',
-            'label', 'ifWinner', 'description',
+            'label', 'ifWinner', 'description','prevEvaluates'
           ])
           data.evaluateId = data.id
+          data.applyPrice=applyPrice;
           data.detail = data.description
           delete data.description
           delete data.id
@@ -506,7 +507,6 @@ export default KeaContext => {
               title
             }
           })
-
           return Immutable({
             classId,
             sourceData,

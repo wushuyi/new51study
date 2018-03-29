@@ -83,6 +83,8 @@ export default class SignupBox extends React.PureComponent {
 
       const signupProps = {
         key: item.id,
+        prevEvaluates:item.prevEvaluates,
+        applyPrice:item.applyPrice,
         detail: item.detail,
         beginAt: item.beginAt,
         endAt: item.endAt,

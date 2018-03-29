@@ -1,0 +1,126 @@
+@import 'libs/hotcss/px2rem';
+
+@mixin oneline(){
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.match-item{
+  display: flex;
+  align-items: center;
+  padding: 0 0 0 16*$hd;
+  .detail{
+    display: flex;
+    align-items: center;
+    padding: 10*$hd;
+    background:url("/static/images/match/bg_match_item.png") no-repeat left center;
+    background-size: 100% 94%;
+    position: relative;
+    .left{
+      width: 100*$hd;
+      border:1px solid red;
+      .match-name{
+        font-size: 15*$hd;
+        color: #585858;
+        @include oneline();
+      }
+      .org-name{
+        font-size: 11*$hd;
+        color: #8E8E8E;
+        margin-top: 9*$hd;
+        @include oneline();
+      }
+    }
+    .center{
+      width:130*$hd;
+      text-align: right;
+      border:1px solid red;
+      .time{
+        font-size: 11*$hd;
+        color: #585858;
+        @include oneline();
+      }
+      .address{
+        display: inline-block;
+        position: relative;
+        vertical-align: top;
+        font-size: 11*$hd;
+        padding: 0 5*$hd;
+        margin-top: 8*$hd;
+        float: right;
+        color: #8E8E8E;
+        @include oneline();
+      }
+    }
+    .right{
+      border:1px solid red;
+      .look{
+        font-size: 10*$hd;
+        color: #FF7C42;
+        border: 0.5*$hd solid #FF5A14;
+        padding: 5*$hd 10*$hd;
+        text-align: center;
+        border-radius: 4*$hd;
+        margin-left: 5*$hd;
+        &.ok{
+          color: #fff;
+          background: #78D215;
+          border-radius: 4*$hd;
+          border:0;
+        }
+      }
+    }
+  }
+}
+.match-tag-name{
+  font-size: 10*$hd;
+  color: #575757;
+  width: 40*$hd;
+}
+.match-tag-icon{
+  height: 68*$hd;
+  width: 16*$hd;
+  position: relative;
+  margin: 0  10*$hd;
+}
+.match-tag-icon .line{
+  height: 100%;
+  width: 2*$hd;
+  margin: 0 auto;
+  background: #FF9193;
+}
+.match-tag-icon.down::before{
+  content: ' ';
+  width: 16*$hd;
+  height: 16*$hd;
+  background: #FF9595;
+  border-radius: 50%;
+  position: absolute;
+  left:0;
+  top:26*$hd;
+}
+
+.match-tag-icon.down .line{
+  height: 50%;
+  width: 2*$hd;
+  margin:34*$hd auto 0;
+  background: #FF9193;
+}
+
+.match-tag-icon.up::before{
+  content: ' ';
+  width: 16*$hd;
+  height: 16*$hd;
+  background: #FF9595;
+  border-radius: 50%;
+  position: absolute;
+  left: 0;
+  top:26*$hd;
+}
+.match-tag-icon.up .line{
+  height: 50%;
+  width: 2*$hd;
+  margin: 0 auto;
+  background: #FF9193;
+}
