@@ -4,7 +4,7 @@ import Style from './style.scss'
 import Head from 'next/head'
 import { common } from 'config/shareMsg'
 import includes from 'lodash/includes'
-import { isDev } from 'config/settings'
+import { isDev, isTest } from 'config/settings'
 
 export default class Share extends React.PureComponent {
 
@@ -29,7 +29,7 @@ export default class Share extends React.PureComponent {
   }
 
   checkWx = async () => {
-    if (isDev) {
+    if (isDev || isTest) {
       return false
     }
     const {title, description, imgUrl} = this.props
