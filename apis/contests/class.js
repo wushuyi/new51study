@@ -271,12 +271,13 @@ export async function getApplyDetail (evaluateId) {
  * @param token
  * @returns {Promise<*>}
  */
-export async function getApplyPrice (evaluateId) {
+export async function getApplyPrice (evaluateId, token) {
 
   const api = `/evaluate/applyPrice`
   const requestURL = `${APIService}${api}`
   let data = {
-    evaluateId
+    evaluateId,
+    token,
   }
   try {
     const res = await request.get(requestURL)

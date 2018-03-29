@@ -72,7 +72,7 @@ export default KeaContext => {
       syncAd: (classId, data, type) => ({classId, data, type}),
       postAd: (adId, def, token) => ({adId, token: token || getToken(), def}),
 
-      getApplyPrice: (classId, def) => ({classId, def}),
+      getApplyPrice: (classId, def, token) => ({classId, def, token: token || getToken()}),
       syncApplyPrice: (classId, data) => ({classId, data}),
     }),
 
@@ -229,8 +229,8 @@ export default KeaContext => {
         PropTypes.any,
       ],
       signupBoxProps: [
-        () => [selectors.currFramework, selectors.currApplyPrice,selectors.user],
-        (framework,applyPrice, user) => {
+        () => [selectors.currFramework, selectors.currApplyPrice, selectors.user],
+        (framework, applyPrice, user) => {
           if (!framework) {
             return false
           }
@@ -238,10 +238,10 @@ export default KeaContext => {
             'beginAt', 'endAt', 'ifSignupLimit',
             'signupEndAt', 'applyState', 'id',
             'evaluateApplyId', 'ifNomination', 'singUpNumber',
-            'label', 'ifWinner', 'description','prevEvaluates'
+            'label', 'ifWinner', 'description', 'prevEvaluates'
           ])
           data.evaluateId = data.id
-          data.applyPrice=applyPrice;
+          data.applyPrice = applyPrice
           data.detail = data.description
           delete data.description
           delete data.id
@@ -427,8 +427,8 @@ export default KeaContext => {
         PropTypes.any,
       ],
       operateItemProps: [
-        () => [selectors.currFramework,selectors.currApplyPrice,selectors.user],
-        (framework,applyPrice,user) => {
+        () => [selectors.currFramework, selectors.currApplyPrice, selectors.user],
+        (framework, applyPrice, user) => {
           if (!framework) {
             return false
           }
@@ -436,9 +436,9 @@ export default KeaContext => {
             'beginAt', 'endAt', 'ifSignupLimit',
             'signupEndAt', 'applyState', 'id',
             'evaluateApplyId', 'ifNomination', 'singUpNumber',
-            'label', 'ifWinner', 'ifUploadWork','prevEvaluates'
+            'label', 'ifWinner', 'ifUploadWork', 'prevEvaluates'
           ])
-          data.applyPrice=applyPrice;
+          data.applyPrice = applyPrice
           data.evaluateId = data.id
           delete data.id
           user && (data.userType = user.type)
@@ -748,8 +748,8 @@ export default KeaContext => {
       },
       getApplyPrice: function * (action) {
         const {actions} = this
-        const {classId, def} = action.payload
-        let res = yield call(classApi.getApplyPrice, classId)
+        const {classId, def, token} = action.payload
+        let res = yield call(classApi.getApplyPrice, classId, token)
         if (isError(res)) {
           yield call(baseXhrError, res)
           def && def.reject(res)

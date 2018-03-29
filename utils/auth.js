@@ -26,11 +26,11 @@ export function clearAuthData() {
 }
 
 export function getToken(req) {
-  if (isServer && req && req.cookies[tokenKey]) {
-    return req.cookies[tokenKey]
-  }
   if (isServer && req && req.query.token) {
     return req.query.token
+  }
+  if (isServer && req && req.cookies[tokenKey]) {
+    return req.cookies[tokenKey]
   }
   if (isServer) {
     return ''
