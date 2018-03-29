@@ -98,6 +98,10 @@ export default class SignupPopup extends React.PureComponent {
                 return (
                   <SignupPopupItem
                     onClick={() => {
+                      if (signupProps.userType !== 'STUDY') {
+                        Toast.info('老师和机构可发布比赛', 2, null, false)
+                        return false
+                      }
                       Router.push(
                         {
                           pathname: '/signup/information',
