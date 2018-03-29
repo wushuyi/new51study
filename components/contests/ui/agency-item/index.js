@@ -4,7 +4,7 @@ import Style from './style.scss'
 import defBgCover from '/static/images/icon/icon_default_head_female.png'
 import Avatar from 'components/ui/avatar'
 import { consts } from 'config/settings'
-import { isInApp } from '../../../../utils/bridgeAPP'
+import { isInApp } from 'utils/bridgeAPP'
 
 let tData
 // tData = {

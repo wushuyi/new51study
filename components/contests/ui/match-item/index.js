@@ -63,11 +63,9 @@ export default class MatchItem extends React.PureComponent {
             {area ? <div className="address">{area}</div> : null}
           </div>
           <div className="right">
-            <a href="">
-              <div className={contestType == 'prevEvaluates' ? 'look' : 'look ok'}>
-                {contestType == 'prevEvaluates' ? '查看比赛' : '我要晋级'}
-              </div>
-            </a>
+            <div className={contestType === 'prevEvaluates' ? 'look' : 'look ok'}>
+              {contestType === 'prevEvaluates' ? '查看比赛' : '我要晋级'}
+            </div>
           </div>
         </div>
       </div>
@@ -79,12 +77,12 @@ export default class MatchItem extends React.PureComponent {
       <Fragment>
         <div className="match-item">
           <div className="match-tag-name">
-            <div>{contestType == 'prevEvaluates' ? '报名' : '晋级'}</div>
+            <div>{contestType === 'prevEvaluates' ? '报名' : '晋级'}</div>
             <div>比赛</div>
           </div>
           <div
-            className={tagType == 'down' ? 'match-tag-icon down' : tagType == 'up' ? 'match-tag-icon up' : 'match-tag-icon'}>
-            <div className="line"></div>
+            className={tagType === 'down' ? 'match-tag-icon down' : tagType === 'up' ? 'match-tag-icon up' : 'match-tag-icon'}>
+            <div className="line"/>
           </div>
           {isInApp() ? <a onClick={this.onAppClick}>
               {Detail}

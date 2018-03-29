@@ -87,6 +87,66 @@ class Page extends React.PureComponent {
     return def.promise
   }
 
+  onAppClickTeachers = (evt) => {
+    if (isInApp()) {
+      const {clickAppProps} = this.props
+      const {contestid, isGroup, ifsignup, ifneedpay, ifsignuplimit, ifnomination, showTeacherList} = clickAppProps
+      evt.preventDefault()
+      evt.stopPropagation()
+      window.location.href = `/catch/contest/judgelist?contestid=${contestid}&isGroup=${isGroup}&ifsignup=${ifsignup}&ifneedpay=${ifneedpay}&ifsignuplimit=${ifsignuplimit}&ifnomination=${ifnomination}&showTeacherList=${showTeacherList}`
+    }
+  }
+
+  onAppClickRecommends = (evt) => {
+    if (isInApp()) {
+      const {clickAppProps} = this.props
+      const {contestid, isGroup, ifsignup, ifneedpay, ifsignuplimit, ifnomination, showTeacherList} = clickAppProps
+      evt.preventDefault()
+      evt.stopPropagation()
+      window.location.href = `/catch/contest/unionrecommend?contestid=${contestid}&isGroup=${isGroup}&ifsignup=${ifsignup}&ifneedpay=${ifneedpay}&ifsignuplimit=${ifsignuplimit}&ifnomination=${ifnomination}&showTeacherList=${showTeacherList}`
+    }
+  }
+
+  onAppClickCommodityBox = (evt) => {
+    if (isInApp()) {
+      const {clickAppProps} = this.props
+      const {contestid, isGroup, ifsignup, ifneedpay, ifsignuplimit, ifnomination, showTeacherList} = clickAppProps
+      evt.preventDefault()
+      evt.stopPropagation()
+      window.location.href = `/catch/contest/goodsrecommend?contestid=${contestid}&isGroup=${isGroup}&ifsignup=${ifsignup}&ifneedpay=${ifneedpay}&ifsignuplimit=${ifsignuplimit}&ifnomination=${ifnomination}&showTeacherList=${showTeacherList}`
+    }
+  }
+
+  onAppClickSignUpAvatarBox = (evt) => {
+    if (isInApp()) {
+      const {clickAppProps} = this.props
+      const {contestid, isGroup, ifsignup, ifneedpay, ifsignuplimit, ifnomination, showTeacherList} = clickAppProps
+      evt.preventDefault()
+      evt.stopPropagation()
+      window.location.href = `/catch/contest/signup?contestid=${contestid}&isGroup=${isGroup}&ifsignup=${ifsignup}&ifneedpay=${ifneedpay}&ifsignuplimit=${ifsignuplimit}&ifnomination=${ifnomination}&showTeacherList=${showTeacherList}`
+    }
+  }
+
+  onAppClickWorksBox = (evt) => {
+    if (isInApp()) {
+      const {clickAppProps} = this.props
+      const {contestid, isGroup, ifsignup, ifneedpay, ifsignuplimit, ifnomination, showTeacherList} = clickAppProps
+      evt.preventDefault()
+      evt.stopPropagation()
+      window.location.href = `/catch/contest/works?contestid=${contestid}&isGroup=${isGroup}&ifsignup=${ifsignup}&ifneedpay=${ifneedpay}&ifsignuplimit=${ifsignuplimit}&ifnomination=${ifnomination}&showTeacherList=${showTeacherList}`
+    }
+  }
+
+  onAppClickNewsBox = (evt) => {
+    if (isInApp()) {
+      const {clickAppProps} = this.props
+      const {contestid, isGroup, ifsignup, ifneedpay, ifsignuplimit, ifnomination, showTeacherList} = clickAppProps
+      evt.preventDefault()
+      evt.stopPropagation()
+      window.location.href = `/catch/contest/news?contestid=${contestid}&isGroup=${isGroup}&ifsignup=${ifsignup}&ifneedpay=${ifneedpay}&ifsignuplimit=${ifsignuplimit}&ifnomination=${ifnomination}&showTeacherList=${showTeacherList}`
+    }
+  }
+
   render () {
     const {err, actions} = this.props
     const {isMount} = this.state
@@ -137,36 +197,36 @@ class Page extends React.PureComponent {
 
           {bisaiAdProps && <AdBanner onAd={(AdId) => {actions.postAd(AdId)}} {...bisaiAdProps}/>}
           {teachersProps && (
-            <a href={`/contests/teacher-list/${classId}/false`}>
+            <a href={`/contests/teacher-list/${classId}/false`} onClick={this.onAppClickTeachers}>
               <AvatarBox {...teachersProps}/>
             </a>
           )}
 
           {recommendsProps && (
-            <a href={`/contests/recommend-list/${classId}`}>
+            <a href={`/contests/recommend-list/${classId}`} onClick={this.onAppClickRecommends}>
               <AvatarBox {...recommendsProps}/>
             </a>
           )}
 
           {commodityBoxProps && (
-            <a href={`/contests/goods-list/${classId}`}>
+            <a href={`/contests/goods-list/${classId}`} onClick={this.onAppClickCommodityBox}>
               <CommodityBox {...commodityBoxProps}/>
             </a>
           )}
 
           {signUpAvatarBoxProps && (
-            <a href={`/contests/study-list/${classId}`}>
+            <a href={`/contests/study-list/${classId}`} onClick={this.onAppClickSignUpAvatarBox}>
               <AvatarBox {...signUpAvatarBoxProps}/>
             </a>
           )}
 
           {worksBoxProps && (
-            <a href={`/newmatch/work/${classId}/false`}>
+            <a href={`/newmatch/work/${classId}/false`} onClick={this.onAppClickWorksBox}>
               <WorksBox {...worksBoxProps}/>
             </a>
           )}
           {newsBoxProps && (
-            <a href={`/contests/news-list/${classId}/false`}>
+            <a href={`/contests/news-list/${classId}/false`} onClick={this.onAppClickNewsBox}>
               <NewsBox {...newsBoxProps}/>
             </a>
           )}
@@ -217,6 +277,7 @@ export default withRedux(Page, function (KeaContext, ctx) {
         'bisaiAdProps',
         'operateItemProps',
         'signupPopupProps',
+        'clickAppProps',
       ]
     ]
   })

@@ -11,6 +11,7 @@ import Link from 'next/link'
 import startsWith from 'lodash/startsWith'
 import isArrayLike from 'lodash/isArrayLike'
 import get from 'lodash/get'
+import { isInApp } from 'utils/bridgeAPP'
 
 function getItems (sourceData) {
   return sourceData.map((item, index) => {
@@ -46,7 +47,7 @@ export default class AdBanner extends React.PureComponent {
       // },
     ],
 
-    onAd: (adId)=>{
+    onAd: (adId) => {
       console.log('onAd', adId)
     }
   }
@@ -97,11 +98,19 @@ export default class AdBanner extends React.PureComponent {
             {
               items.map((item, index) => {
                 let dom
-                if (get(item, 'linkProps.as')) {
+                if (isInApp()) {
+                  dom = (
+                    <div className="ad-img" onClick={() => {
+                      onAd(item.id)
+                      window.location.href = `/catch/contest/goContest?contestid=${item.id}`
+                    }}
+                         style={{backgroundImage: `url(${item.imgUrl})`}}/>
+                  )
+                } else if (get(item, 'linkProps.as')) {
                   dom = (
                     <Link {...item.linkProps}>
                       <a>
-                        <div className="ad-img" onClick={()=>{onAd(item.id)}}
+                        <div className="ad-img" onClick={() => {onAd(item.id)}}
                              style={{backgroundImage: `url(${item.imgUrl})`}}/>
                       </a>
                     </Link>
@@ -114,7 +123,7 @@ export default class AdBanner extends React.PureComponent {
                            ? '_self'
                            : '_blank'
                        }>
-                      <div className="ad-img" onClick={()=>{onAd(item.id)}}
+                      <div className="ad-img" onClick={() => {onAd(item.id)}}
                            style={{backgroundImage: `url(${item.imgUrl})`}}/>
                     </a>
                   )
