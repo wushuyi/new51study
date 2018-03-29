@@ -7,6 +7,7 @@ import { getSingUpLinkProps } from 'components/contests/ui/signup-item/utils'
 import isPast from 'date-fns/is_past'
 import { contestStatus } from 'utils/wyx_const'
 import Link from 'next/link'
+import WhiteSpace from 'components/ui/white-space'
 
 function getButtonText (props={}) {
    let {
@@ -78,6 +79,7 @@ export default class OperateItem extends React.PureComponent {
     )
     return (
       <Fragment>
+        <WhiteSpace height={75}/>
         <div className="operate-warp">
           {singUpLinkProps.linkProps ? (
             <Link {...singUpLinkProps.linkProps}>

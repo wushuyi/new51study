@@ -10,6 +10,7 @@ import { getLinkProps } from './utils'
 import Link from 'next/link'
 import startsWith from 'lodash/startsWith'
 import isArrayLike from 'lodash/isArrayLike'
+import get from 'lodash/get'
 
 function getItems (sourceData) {
   return sourceData.map((item, index) => {
@@ -96,7 +97,7 @@ export default class AdBanner extends React.PureComponent {
             {
               items.map((item, index) => {
                 let dom
-                if (item.linkProps.as) {
+                if (get(item, 'linkProps.as')) {
                   dom = (
                     <Link {...item.linkProps}>
                       <a>
@@ -105,7 +106,7 @@ export default class AdBanner extends React.PureComponent {
                       </a>
                     </Link>
                   )
-                } else if (item.linkProps.href) {
+                } else if (get(item, 'linkProps.href')) {
                   dom = (
                     <a href={item.linkProps.href}
                        target={

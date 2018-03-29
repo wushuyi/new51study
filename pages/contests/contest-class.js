@@ -159,7 +159,6 @@ class Page extends React.PureComponent {
           )}
 
           {detailProps && <ContestDetail {...detailProps}/>}
-          {operateItemProps && <WhiteSpace height={75}/>}
         </PagePullToRefresh>
         {operateItemProps && <OperateItem {...operateItemProps} onClick={() => {
           this.SignupPopup.showModal()
