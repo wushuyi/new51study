@@ -153,7 +153,7 @@ class Page extends React.PureComponent {
             </a>
           )}
           {newsBoxProps && (
-            <a href={`/contests/news-list/${classId}/true`}>
+            <a href={`/contests/news-list/${classId}/false`}>
               <NewsBox {...newsBoxProps}/>
             </a>
           )}
