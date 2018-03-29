@@ -259,15 +259,21 @@ export default KeaContext => {
         PropTypes.any,
       ],
       channelProps: [
-        () => [selectors.currSingupDetail, selectors.currId],
-        (singupDetail, currId) => {
+        () => [selectors.currSingupDetail, selectors.currId, selectors.submitState],
+        (singupDetail, currId, submitState) => {
           if (!get(singupDetail, 'state')) {
             return false
           }
           const {channelNumber, channelName} = singupDetail
+
+          //修改状态下默认显示我要学
+          let defaultName = channelName
+          if (submitState === 'SIGNUPMODIFY') {
+            defaultName = channelName || '我要学平台'
+          }
           let data = {
             itemProps: {
-              defaultName: channelName,
+              defaultName: defaultName,
               defaultNumber: channelNumber,
               evaluateId: currId
             }

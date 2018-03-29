@@ -210,15 +210,20 @@ export default KeaContext => {
         PropTypes.any,
       ],
       channelProps: [
-        () => [selectors.currApplyDetail, selectors.currId],
-        (applyDetail, currId) => {
+        () => [selectors.currApplyDetail, selectors.currId, selectors.pageState],
+        (applyDetail, currId, pageState) => {
           if (!get(applyDetail, 'state')) {
             return false
           }
           const {referenceId: channelNumber, referenceName: channelName} = applyDetail
+          //修改状态下默认显示我要学
+          let defaultName = channelName
+          if (pageState !== '确认提交') {
+            defaultName = channelName || '我要学平台'
+          }
           let data = {
             itemProps: {
-              defaultName: channelName,
+              defaultName: defaultName,
               defaultNumber: channelNumber,
               evaluateId: currId
             }
