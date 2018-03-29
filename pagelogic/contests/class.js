@@ -615,6 +615,7 @@ export default KeaContext => {
 
         const applyPriceData = yield * workers.getApplyPrice({
           payload: {
+            token: token,
             classId: classId,
           },
         })
