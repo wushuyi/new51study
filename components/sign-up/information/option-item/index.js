@@ -12,11 +12,9 @@ export default class OptionItem extends React.PureComponent {
   static propTypes = {
     btnType: PropTypes.any,
     canSingUp: PropTypes.bool,
-    charge: PropTypes.any,
-    descript: PropTypes.any,
+    charge: PropTypes.bool,
+    descript: PropTypes.string,
     id: PropTypes.number,
-    isContentExtend: PropTypes.bool,
-    isContentShow: PropTypes.bool,
     onSignUp: PropTypes.any,
     state: PropTypes.string,
     title: PropTypes.string
@@ -28,8 +26,6 @@ export default class OptionItem extends React.PureComponent {
     charge: false,
     descript: '这个是一毛钱的。这个是一毛钱的。这个是一毛钱的。这个是一毛钱的。这个是一毛钱的。这个是一毛钱的。这个是一毛钱的。',
     id: 73,
-    isContentExtend: false,
-    isContentShow: false,
     onSignUp: () => {
 
     },
@@ -39,21 +35,6 @@ export default class OptionItem extends React.PureComponent {
 
   constructor (props) {
     super(props)
-    this.state = {
-      isContentShow: props.isContentShow,
-      isContentExtend: props.isContentExtend,
-    }
-  }
-
-  onContentShow = () => {
-    this.setState({
-      isContentShow: !this.state.isContentShow
-    })
-  }
-  onContentExtend = () => {
-    this.setState({
-      isContentExtend: !this.state.isContentExtend
-    })
   }
 
   onSignUp = (evt) => {
@@ -66,31 +47,29 @@ export default class OptionItem extends React.PureComponent {
 
   render () {
     const {charge, title, descript, btnType} = this.props
-    const {isContentShow, isContentExtend} = this.state
 
     let clsBtnType = classnames('btn-type', {
       'selected-icon': btnType === 1,
       'unselect-icon': btnType === 0,
     })
-    let clsOption = classnames('option-icon', {
-      'down-icon': !isContentExtend,
-      'up-icon': isContentExtend
-    })
+
     return (
       <Fragment>
         <div className="option-item">
-          <div className="title-outer" onClick={this.onContentShow}>
+          <div className="title-outer" onClick={this.onSignUp}>
             {charge && <div className="money">{Number(charge) === 0 ? '免费' : `¥${charge}`}</div>}
             <div className="name">{title}</div>
-            <div className={clsBtnType} onClick={this.onSignUp}/>
+            <div className={clsBtnType}/>
           </div>
-          <div className={`content-outer ${!isContentShow ? 'is-hidden' : ''}`}>
-            <div className={!isContentExtend ? 'content threeline' : 'content'}>
+          {descript && <div className="content-outer">
+            {/*<div className={!isContentExtend ? 'content threeline' : 'content'}>*/}
+            <div className="content">
               {descript}
             </div>
-            <div className={clsOption}
-                 onClick={this.onContentExtend}/>
-          </div>
+            {/*<div className={clsOption}*/}
+            {/*onClick={this.onContentExtend}/>*/}
+          </div>}
+
         </div>
         {/*language=CSS*/}
         <style jsx>{Style}</style>
