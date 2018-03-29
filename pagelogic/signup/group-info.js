@@ -218,7 +218,7 @@ export default KeaContext => {
           const {referenceId: channelNumber, referenceName: channelName} = applyDetail
           let data = {
             itemProps: {
-              defaultName: channelName || '我要学平台',
+              defaultName: channelName,
               defaultNumber: channelNumber,
               evaluateId: currId
             }

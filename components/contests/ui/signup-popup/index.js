@@ -9,6 +9,7 @@ import Router from 'next/router'
 
 import map from 'lodash/map'
 import Toast from 'antd-mobile/lib/toast/index'
+
 const data = {
   'ifNeedPay': true,
   'id': 140,
@@ -37,7 +38,7 @@ class ScrollView extends React.PureComponent {
             max-height: 66vh;
             overflow: scroll;
             -webkit-overflow-scrolling: touch;
-            padding-top: ${23*0.03864734299516908}rem;
+            padding-top: ${23 * 0.03864734299516908}rem;
             background-color: #F6F6F6;
           }
         `}</style>
@@ -100,9 +101,12 @@ export default class SignupPopup extends React.PureComponent {
                       Router.push(
                         {
                           pathname: '/signup/information',
-                          query: {classId: classId},
+                          query: {
+                            classId: classId,
+                            priceid: o.id
+                          },
                         },
-                        `/signup/information/${classId}`
+                        `/signup/information/${classId}?priceid=${o.id}`
                       )
                     }}
                     key={i} {...o}/>

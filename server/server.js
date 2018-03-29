@@ -49,7 +49,7 @@ app.prepare()
       return app.render(req, res, '/contests/special-area', req.params)
     })
     server.get('/signup/information/:classId', (req, res) => {
-      return app.render(req, res, '/signup/information', req.params)
+      return app.render(req, res, '/signup/information', assign({}, req.query, req.params))
     })
     server.get('/signup/signupok/:classId', (req, res) => {
       return app.render(req, res, '/signup/signupok', req.params)

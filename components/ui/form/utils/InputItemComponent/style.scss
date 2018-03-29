@@ -21,10 +21,6 @@
     color: $item-color;
   }
 
-  :global(.am-input-control input:disabled) {
-    background-color: transparent;
-    opacity: 1;
-  }
 
   :global(.am-input-control input::placeholder) {
     @include input-placeholder
@@ -32,5 +28,11 @@
 
   :global(.am-input-control input) {
     @include input
+  }
+
+  :global(.am-input-control input:disabled) {
+    @include input;
+    background-color: transparent;
+    opacity: 1;
   }
 }

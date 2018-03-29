@@ -29,6 +29,7 @@ export default KeaContext => {
       }),
       syncAuthData: (authData) => ({authData}),
       setCurrId: (currId) => ({currId}),
+      setUrlPriceId: (id) => ({id}),
       getSingupDetail: (classId, def, token) => ({
         token: token || getToken(),
         classId,
@@ -68,6 +69,10 @@ export default KeaContext => {
         false, PropTypes.any, {
           [actions.setCurrId]: (state, payload) => parseInt(payload.currId),
         }],
+      urlPriceId: [
+        false, PropTypes.any, {
+          [actions.setUrlPriceId]: (state, payload) => parseInt(payload.id),
+        }],
       singupDetail: [
         Immutable({}), PropTypes.any, {
           [actions.syncSingupDetail]: (state, payload) => {
@@ -77,6 +82,7 @@ export default KeaContext => {
             return Immutable.set(state, payload.classId, payload.data)
           },
         }],
+
     }),
 
     selectors: ({selectors}) => ({
@@ -261,7 +267,7 @@ export default KeaContext => {
           const {channelNumber, channelName} = singupDetail
           let data = {
             itemProps: {
-              defaultName: channelName || '我要学平台',
+              defaultName: channelName,
               defaultNumber: channelNumber,
               evaluateId: currId
             }
@@ -271,8 +277,8 @@ export default KeaContext => {
         PropTypes.any,
       ],
       optionProps: [
-        () => [selectors.currSingupDetail],
-        (singupDetail) => {
+        () => [selectors.currSingupDetail, selectors.urlPriceId],
+        (singupDetail, urlPriceId) => {
           if (!get(singupDetail, 'charges.length')) {
             return false
           }
@@ -280,8 +286,7 @@ export default KeaContext => {
           let data = {
             itemProps: {
               srouceData: charges,
-              priceId: priceId
-
+              priceId: priceId || urlPriceId
             }
           }
           return Immutable(data)

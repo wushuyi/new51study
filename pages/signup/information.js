@@ -22,8 +22,6 @@ import { InputChannelItemField } from 'components/sign-up/information/input-chan
 import pickBy from 'lodash/pickBy'
 import startsWith from 'lodash/startsWith'
 import mapKeys from 'lodash/mapKeys'
-import forEach from 'lodash/forEach'
-import clone from 'lodash/clone'
 import get from 'lodash/get'
 import Modal from 'antd-mobile/lib/modal'
 import { isBrowser } from 'utils/runEnv'
@@ -55,8 +53,13 @@ class Page extends React.PureComponent {
     }
 
     authData && store.dispatch(actions.syncAuthData(authData))
+    console.log('priceid', query.priceid)
     try {
       const def = deferred()
+      //设置url 传入的套餐
+      if (get(query, 'priceid')) {
+        store.dispatch(actions.setUrlPriceId(parseInt(query.priceid)))
+      }
       store.dispatch(actions.initPage(query.classId, def, token))
       await def.promise
     } catch (err) {
@@ -111,7 +114,7 @@ class Page extends React.PureComponent {
 
     //需要跳转时候不显示其它dom
     if (submitState === 'REDIRECTURI' && isBrowser) {
-      setTimeout(()=>{
+      setTimeout(() => {
         Router.replace(
           redirectUri.router,
           redirectUri.as
@@ -276,6 +279,7 @@ export default withRedux(Page, function (KeaContext, ctx) {
       mainLogic, [
         'syncAuthData',
         'initPage',
+        'setUrlPriceId',
         'postSignupApply',
         'postSignupModify'
       ],
