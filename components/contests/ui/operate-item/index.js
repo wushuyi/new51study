@@ -6,6 +6,7 @@ import signupIcon from '/static/images/icon/icon_matchinfo_click.png'
 import { getSingUpLinkProps } from 'components/contests/ui/signup-item/utils'
 import isPast from 'date-fns/is_past'
 import { contestStatus } from 'utils/wyx_const'
+import Link from 'next/link'
 
 function getButtonText (props={}) {
    let {
