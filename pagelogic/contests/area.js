@@ -349,11 +349,11 @@ export default KeaContext => {
         () => [selectors.currFramework],
         (framework) => {
 
-          if (!get(framework, 'description')) {
+          if (!get(framework, 'detail')) {
             return false
           }
           let data = {
-            description: framework.description,
+            description: framework.detail,
           }
           return Immutable(data)
         },

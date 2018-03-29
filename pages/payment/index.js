@@ -128,7 +128,7 @@ class Page extends React.Component {
       }
       def.promise.then(
         url => {
-          // window.location.href = url
+          window.location.href = url
           console.log(url)
         },
       )
@@ -137,7 +137,7 @@ class Page extends React.Component {
       actions.goAlipay(def)
       def.promise.then(
         url => {
-          // window.location.href = url
+          window.location.href = url
           console.log(url)
         },
       )
