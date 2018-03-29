@@ -24,6 +24,8 @@ import { checkToken, authDidMount, ComponentPageError } from 'utils/pageAuth'
 import Share from 'components/layout/share'
 import WhiteSpace from 'components/ui/white-space'
 import SignupPopup from 'components/contests/ui/signup-popup'
+import { isInApp } from 'utils/bridgeAPP'
+
 class Page extends React.PureComponent {
   static async getInitialProps (ctx) {
     const {logics, KeaContext, isServer, store, req, query} = ctx
@@ -63,8 +65,18 @@ class Page extends React.PureComponent {
     return initProps
   }
 
+  constructor () {
+    super()
+    this.state = {
+      isMount: false
+    }
+  }
+
   componentDidMount () {
     authDidMount(this.props)
+    this.setState({
+      isMount: true
+    })
   }
 
   onRefresh = () => {
@@ -77,6 +89,7 @@ class Page extends React.PureComponent {
 
   render () {
     const {err, actions} = this.props
+    const {isMount} = this.state
     if (err) {
       return (
         <ComponentPageError {...this.props}/>
@@ -160,11 +173,14 @@ class Page extends React.PureComponent {
 
           {detailProps && <ContestDetail {...detailProps}/>}
         </PagePullToRefresh>
-        {operateItemProps && <OperateItem {...operateItemProps} onClick={() => {
-          this.SignupPopup.showModal()
-        }}/>}
-        {signupPopupProps && <SignupPopup ref={(i) => { this.SignupPopup = i}} {...signupPopupProps}/>}
-        <GoBackOrOpenApp/>
+        {(isMount && !isInApp()) && <Fragment>
+          {operateItemProps && <OperateItem {...operateItemProps} onClick={() => {
+            this.SignupPopup.showModal()
+          }}/>}
+          {signupPopupProps && <SignupPopup ref={(i) => { this.SignupPopup = i}} {...signupPopupProps}/>}
+          <GoBackOrOpenApp/>
+        </Fragment>}
+
       </Layout>
     )
   }

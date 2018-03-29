@@ -12,7 +12,6 @@ class Page extends React.Component {
 
   constructor(props) {
     super()
-    this.redirect(props.url)
   }
 
   redirect = (url) => {
@@ -22,6 +21,10 @@ class Page extends React.Component {
       setRedirect(redirect_uri)
       Router.replace(uri, uri, {shallow: true})
     }
+  }
+
+  componentDidMount() {
+    this.redirect(this.props.url)
   }
 
   componentWillReceiveProps(nextProps) {

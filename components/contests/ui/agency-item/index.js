@@ -4,6 +4,7 @@ import Style from './style.scss'
 import defBgCover from '/static/images/icon/icon_default_head_female.png'
 import Avatar from 'components/ui/avatar'
 import { consts } from 'config/settings'
+import { isInApp } from '../../../../utils/bridgeAPP'
 
 let tData
 // tData = {
@@ -54,8 +55,36 @@ export default class AgencyItem extends React.PureComponent {
     return orgLinkProps
   }
 
+  onAppClickAvatar = (evt) => {
+    if (isInApp()) {
+      const {orgUserNumber} = this.props
+      evt.preventDefault()
+      evt.stopPropagation()
+      window.location.href = `/catch/contest/agency?groupOrgNumber=${orgUserNumber}`
+    }
+  }
+
+  onAppClickChatPeople = (evt) => {
+    if (isInApp()) {
+      const {clickAppProps} = this.props
+      const {contestid, isGroup, ifsignup, ifneedpay, ifsignuplimit, ifnomination, showTeacherList} = clickAppProps
+      evt.preventDefault()
+      evt.stopPropagation()
+      window.location.href = `/catch/contest/somechat?contestid=${contestid}&isGroup=${isGroup}&ifsignup=${ifsignup}&ifneedpay=${ifneedpay}&ifsignuplimit=${ifsignuplimit}&ifnomination=${ifnomination}&showTeacherList=${showTeacherList}`
+    }
+  }
+
+  onAppClickChatSomeone = (evt) => {
+    if (isInApp()) {
+      const {orgUserNumber, title} = this.props
+      evt.preventDefault()
+      evt.stopPropagation()
+      window.location.href = `/catch/contest/onechat?orgName=${title}&orgUserNumber=${orgUserNumber}`
+    }
+  }
+
   render () {
-    const {onChat, onHome, orgUserNumber, title, chatPeopleName} = tData || this.props
+    const {onChat, onHome, orgUserNumber, title, chatPeopleName} = this.props
 
     let orgLinkProps = this.getLinkProps()
 
@@ -64,24 +93,24 @@ export default class AgencyItem extends React.PureComponent {
         <div className="agency-warp">
           {orgLinkProps.linkProps ? (
             <Link {...orgLinkProps.linkProps}>
-              <a>
+              <a onClick={this.onAppClickAvatar}>
                 <Avatar userId={orgUserNumber}/>
               </a>
             </Link>) : (
-            <a href={orgLinkProps.link} target="_blank">
+            <a href={orgLinkProps.link} target="_blank" onClick={this.onAppClickAvatar}>
               <Avatar userId={orgUserNumber}/>
             </a>
           )}
           <div className="agency-content">
             {title}
           </div>
-          <a href={consts.goOpenOrDownAppUrl} target="_blank">
+          <a href={consts.goOpenOrDownAppUrl} target="_blank" onClick={this.onAppClickChatPeople}>
             <div className="chat-people">
               <div className="icon-chat"/>
               <div>{chatPeopleName}</div>
             </div>
           </a>
-          <a href={consts.goOpenOrDownAppUrl} target="_blank">
+          <a href={consts.goOpenOrDownAppUrl} target="_blank" onClick={this.onAppClickChatSomeone}>
             <div className="chat-someone">
               <div className="icon-chat"/>
               <div>客服</div>

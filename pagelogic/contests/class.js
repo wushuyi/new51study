@@ -210,9 +210,29 @@ export default KeaContext => {
         },
         PropTypes.any,
       ],
+      clickAppProps: [
+        () => [selectors.currId, selectors.currFramework, selectors.currOne],
+        (currId, framework, one) => {
+          if (!get(framework, 'orgUserNumber')) {
+            return false
+          }
+          const {ifNeedPay, ifSignupLimit, ifNomination, showTeacherList} = framework
+          const {ifSignUp} = one
+          return Immutable({
+            contestid: currId,
+            isGroup: false,
+            ifsignup: contestStatus[ifSignUp],
+            ifneedpay: ifNeedPay ? 1 : 0,
+            ifsignuplimit: ifSignupLimit,
+            ifnomination: ifNomination,
+            showTeacherList: showTeacherList,
+          })
+        },
+        PropTypes.any,
+      ],
       agencyItemProps: [
-        () => [selectors.currId, selectors.currFramework],
-        (currId, framework) => {
+        () => [selectors.currId, selectors.currFramework, selectors.clickAppProps],
+        (currId, framework, clickAppProps) => {
           if (!get(framework, 'orgUserNumber')) {
             return false
           }
@@ -223,20 +243,20 @@ export default KeaContext => {
             orgUserNumber,
             orgUrl: false,
             title,
-            chatPeopleName: '总群',
+            clickAppProps: clickAppProps
           })
         },
         PropTypes.any,
       ],
       signupBoxProps: [
-        () => [selectors.currFramework, selectors.currApplyPrice, selectors.user],
-        (framework, applyPrice, user) => {
+        () => [selectors.currFramework, selectors.currApplyPrice, selectors.user, selectors.clickAppProps],
+        (framework, applyPrice, user, clickAppProps) => {
           if (!framework) {
             return false
           }
           let data = pick(framework, [
             'beginAt', 'endAt', 'ifSignupLimit',
-            'signupEndAt', 'applyState', 'id','verify',
+            'signupEndAt', 'applyState', 'id', 'verify',
             'evaluateApplyId', 'ifNomination', 'singUpNumber',
             'label', 'ifWinner', 'description', 'prevEvaluates'
           ])
@@ -251,6 +271,7 @@ export default KeaContext => {
           return Immutable({
             dataList,
             maxItem: 100,
+            clickAppProps: clickAppProps
           })
         },
         PropTypes.any,
@@ -434,7 +455,7 @@ export default KeaContext => {
           }
           let data = pick(framework, [
             'beginAt', 'endAt', 'ifSignupLimit',
-            'signupEndAt', 'applyState', 'id','verify',
+            'signupEndAt', 'applyState', 'id', 'verify',
             'evaluateApplyId', 'ifNomination', 'singUpNumber',
             'label', 'ifWinner', 'ifUploadWork', 'prevEvaluates'
           ])

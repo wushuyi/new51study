@@ -5,8 +5,9 @@ import Style from './style.scss'
 import bgurl from 'static/images/bg/bg_no_pic_default.jpg'
 import { px2rem } from 'utils/hotcss'
 import { deferred } from 'redux-saga/utils'
+import { isInApp } from 'utils/bridgeAPP'
 
-function guessUrlSize(str) {
+function guessUrlSize (str) {
   let rex = /wh(\d+)x(\d+)/
   let res = str.match(rex)
 
@@ -35,7 +36,7 @@ export default class BannerCover extends React.PureComponent {
     linkData: {destName: '11', lng: null, lat: null}
   }
 
-  constructor(props) {
+  constructor (props) {
     super()
     const {bgCover} = props
     let size = bgCover && guessUrlSize(bgCover)
@@ -47,11 +48,11 @@ export default class BannerCover extends React.PureComponent {
     this.isMount = true
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     this.isMount = false
   }
 
-  async componentDidMount() {
+  async componentDidMount () {
     const {bgCover} = this.props
     const {isMeasure} = this.state
     if (!isMeasure) {
@@ -64,7 +65,7 @@ export default class BannerCover extends React.PureComponent {
     }
   }
 
-  async componentWillReceiveProps(nextProps) {
+  async componentWillReceiveProps (nextProps) {
     if (nextProps.bgCover !== this.props.bgCover) {
       let size = await this.needMeasure(nextProps.bgCover)
       this.isMount && this.setState({
@@ -104,7 +105,17 @@ export default class BannerCover extends React.PureComponent {
     }
   }
 
-  render() {
+  onAppClick = (evt) => {
+    const {linkData} = this.props
+    const {lng, lat, destName} = linkData
+    if (isInApp()) {
+      evt.preventDefault()
+      evt.stopPropagation()
+      window.location.href = `/catch/contest/ifMapDetail?addressname=${destName}&longitude=${lng}&latitude=${lat}`
+    }
+  }
+
+  render () {
     const {bgCover, area, linkData} = this.props
     const {height, isVertical, isMeasure} = this.state
     const linkProps = this.getLinkProps(linkData)
@@ -120,7 +131,7 @@ export default class BannerCover extends React.PureComponent {
           ) : (
             <div className='bg-cover' title="比赛封面"/>
           )}
-          <a className="position-outer" {...linkProps}>
+          <a className="position-outer" {...linkProps} onClick={this.onAppClick}>
             <div className="position"/>
             <span>{area}</span>
           </a>

@@ -14,20 +14,21 @@ import Link from 'next/link'
 import Router from 'next/router'
 import { defaultAuthPage } from 'config/settings'
 import { goAuth } from 'utils/auth'
-import {getSingUpLinkProps, getContestLinkProps} from './utils'
+import { getSingUpLinkProps, getContestLinkProps } from './utils'
+import { isInApp } from 'utils/bridgeAPP'
 
-function getDeadDays(time) {
+function getDeadDays (time) {
   const now = new Date()
   const diffDay = differenceInDays(time, now)
   return diffDay > 0 ? diffDay : 0
 }
 
-function dateFormat(time) {
+function dateFormat (time) {
   return format(time, 'YYYY-MM-DD')
 }
 
 //获取比赛状态
-function getSignupState(props) {
+function getSignupState (props) {
   if (isPast(props.endAt)) {
     //已结束
     return '已结束'
@@ -78,7 +79,7 @@ function getSignupState(props) {
 }
 
 //获取按钮背景图
-function singupIcon(signupState) {
+function singupIcon (signupState) {
   const imgKV = {
     '已结束': 'expire-time',
     '已晋级': 'success-advanced',
@@ -116,7 +117,7 @@ export default class SignupItem extends React.PureComponent {
     ifSignupLimit: false,
     signupEndAt: 1495295700000,
     applyState: 'LIVE',
-    verify:'verify',
+    verify: 'verify',
     signUpGroupType: false,
     evaluateId: 43,
     evaluateApplyId: null,
@@ -133,21 +134,37 @@ export default class SignupItem extends React.PureComponent {
     onClick: false,
   }
 
-  constructor(props) {
+  constructor (props) {
     super()
     this.state = {
       signupState: getSignupState(props)
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps (nextProps) {
     this.setState({
       signupState: getSignupState(nextProps)
     })
   }
 
+  onAppClickSingupBrn = (evt) => {
+    if (isInApp()) {
+      const {clickAppProps} = this.props
+      const {contestid, isGroup, ifsignup, ifneedpay, ifsignuplimit, ifnomination, showTeacherList} = clickAppProps
+      evt.preventDefault()
+      evt.stopPropagation()
+      window.location.href = `/catch/contest/ifsignup?contestid=${contestid}&isGroup=${isGroup}&ifsignup=${ifsignup}&ifneedpay=${ifneedpay}&ifsignuplimit=${ifsignuplimit}&ifnomination=${ifnomination}&showTeacherList=${showTeacherList}`
+    }
+  }
 
-  render() {
+  onAppClickContent = (evt) => {
+    if (isInApp()) {
+      evt.preventDefault()
+      evt.stopPropagation()
+    }
+  }
+
+  render () {
     const props = this.props
     const {signupState} = this.state
 
@@ -197,11 +214,13 @@ export default class SignupItem extends React.PureComponent {
           <div className="signup-item-content">
             {props.isClass ? componentContent : (contestLinkProps.linkProps ? (
               <Link {...contestLinkProps.linkProps}>
-                <a>
+                <a onClick={this.onAppClickContent}>
                   {componentContent}
                 </a>
               </Link>) : (
-              <a href={contestLinkProps.link} onClick={contestLinkProps.onClick}>
+              isInApp() ? <a onClick={this.onAppClickContent}>
+                {componentContent}
+              </a> : <a href={contestLinkProps.link} onClick={contestLinkProps.onClick}>
                 {componentContent}
               </a>
             ))}
@@ -209,11 +228,13 @@ export default class SignupItem extends React.PureComponent {
 
           {singUpLinkProps.linkProps ? (
             <Link {...singUpLinkProps.linkProps}>
-              <a>
+              <a onClick={this.onAppClickSingupBrn}>
                 {componentSingup}
               </a>
             </Link>) : (
-            <a href={singUpLinkProps.link} onClick={singUpLinkProps.onClick}>
+            isInApp() ? <a onClick={this.onAppClickSingupBrn}>
+              {componentSingup}
+            </a> : <a href={singUpLinkProps.link} onClick={singUpLinkProps.onClick}>
               {componentSingup}
             </a>
           )}
