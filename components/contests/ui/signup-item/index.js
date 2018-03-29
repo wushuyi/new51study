@@ -116,7 +116,7 @@ export default class SignupItem extends React.PureComponent {
     ifSignupLimit: false,
     signupEndAt: 1495295700000,
     applyState: 'LIVE',
-
+    verify:'verify',
     signUpGroupType: false,
     evaluateId: 43,
     evaluateApplyId: null,

@@ -236,7 +236,7 @@ export default KeaContext => {
           }
           let data = pick(framework, [
             'beginAt', 'endAt', 'ifSignupLimit',
-            'signupEndAt', 'applyState', 'id',
+            'signupEndAt', 'applyState', 'id','verify',
             'evaluateApplyId', 'ifNomination', 'singUpNumber',
             'label', 'ifWinner', 'description','prevEvaluates'
           ])
@@ -434,7 +434,7 @@ export default KeaContext => {
           }
           let data = pick(framework, [
             'beginAt', 'endAt', 'ifSignupLimit',
-            'signupEndAt', 'applyState', 'id',
+            'signupEndAt', 'applyState', 'id','verify',
             'evaluateApplyId', 'ifNomination', 'singUpNumber',
             'label', 'ifWinner', 'ifUploadWork','prevEvaluates'
           ])

@@ -9,6 +9,7 @@ export function getSingUpLinkProps (props) {
   console.log(props)
   let {
     applyState,
+    verify,
     isWillBeginLately,
     beginAt,
     endAt,
@@ -59,12 +60,12 @@ export function getSingUpLinkProps (props) {
       if (userType === 'STUDY') {
         if (contestStatus[applyState] === 1) {
           //有报名限制并且不是候选人
-          if (ifSignupLimit && ifNomination) {
+          if (ifSignupLimit && !ifNomination) {
             if (prevEvaluates && prevEvaluates.length > 0) {
               //弹出比赛列表
             } else {
               linkProps.onClick = (e) => {
-                Toast.info('比赛晋级用户可报名', 2, null, false)
+                Toast.info('暂未获得报名资格', 2, null, false)
               }
             }
           } else {
@@ -77,18 +78,32 @@ export function getSingUpLinkProps (props) {
               }
             }
           }
-        } else if (contestStatus[applyState] === 0) {
-          linkProps.linkProps = {
-            href: {pathname: '/signup/signupok', query: {classId: props.evaluateId}},
-            as: {pathname: `/signup/signupok/${props.evaluateId}`},
-            prefetch: true
-          }
-        } else {
-          linkProps.linkProps = {
-            href: {pathname: '/signup/checkstatus', query: {classId: props.evaluateId}},
-            as: {pathname: `/signup/checkstatus/${props.evaluateId}`},
-            prefetch: true
-          }
+        }else{
+         if (verify=== 'Waiting' || verify=== 'NotPass' || verify=== 'Pass') {
+           if (ifSignupLimit && !ifNomination) {
+             linkProps.onClick = (e) => {
+               Toast.info('比赛晋级用户可报名', 2, null, false)
+             }
+           }else{
+             linkProps.linkProps = {
+               href: {pathname: '/signup/checkstatus', query: {classId: props.evaluateId}},
+               as: {pathname: `/signup/checkstatus/${props.evaluateId}`},
+               prefetch: true
+             }
+           }
+          }else if (verify=== 'LIVE'){
+           if (ifSignupLimit && !ifNomination) {
+             linkProps.onClick = (e) => {
+               Toast.info('比赛晋级用户可报名', 2, null, false)
+             }
+           }else{
+             linkProps.linkProps = {
+               href: {pathname: '/signup/signupok', query: {classId: props.evaluateId}},
+               as: {pathname: `/signup/signupok/${props.evaluateId}`},
+               prefetch: true
+             }
+           }
+         }
         }
       } else {
         if (isTeamApply || (epList && epList.length > 0)) {
