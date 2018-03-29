@@ -7,12 +7,19 @@ import { getSingUpLinkProps } from 'components/contests/ui/signup-item/utils'
 import isPast from 'date-fns/is_past'
 import { contestStatus } from 'utils/wyx_const'
 
-function getButtonText (props) {
-  let name = contestStatus[props.applyState] === 1
-    ? '我要报名'
-    : contestStatus[props.applyState] === 0
-      ? '上传作品'
-      : '查看报名结果'
+function getButtonText (props={}) {
+   let {
+     userType,
+     applyState
+   }=props;
+  let name ='我要报名';
+  if(userType==='STUDY'){
+     name = contestStatus[applyState] === 1
+      ? '我要报名'
+      : contestStatus[applyState] === 0
+        ? '上传作品'
+        : '查看报名结果'
+   }
   return name
 }
 
@@ -23,12 +30,16 @@ export default class OperateItem extends React.PureComponent {
     ifUploadWork: PropTypes.any,
     src: PropTypes.any,
     name: PropTypes.any,
+    userType:PropTypes.any,
+    applyPrice:PropTypes.any
   }
 
   static defaultProps = {
     src: signupIcon,
     iconShow: false,
     onClick: false,
+    userType:false,
+    applyPrice:false,
     // 测试数据
     /*    'beginAt': 1516204800000,
         'endAt': 1517414340000,

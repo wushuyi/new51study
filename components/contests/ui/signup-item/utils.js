@@ -6,35 +6,45 @@ import isFuture from 'date-fns/is_future'
 import isPast from 'date-fns/is_past'
 
 export function getSingUpLinkProps (props) {
+  console.log(props);
+  let {
+    applyState,
+    isWillBeginLately,
+    beginAt,
+    endAt,
+    signupEndAt,
+    ifSignupLimit,
+    prevEvaluates,
+    userType,
+    ifNomination,
+    applyPrice
+  }=props || {};
+
+  let {
+    isTeamApply,
+    epList
+  }=applyPrice ||{};
+
   let linkProps = {}
-  if (props.isWillBeginLately) {
+  if (isWillBeginLately) {
     linkProps.onClick = (e) => {
       this.RichTextPopup.setState({showModal: true})
     }
   } else {
-    if (!props.onClick && props.userType && props.userType !== 'STUDY') {
-      linkProps.onClick = (e) => {
-        Toast.info('您不是学生不能报名', 2, null, false)
-      }
-    } else if (isFuture(props.beginAt)) {
+
+    if (isFuture(beginAt)) {
       linkProps.onClick = (e) => {
         Toast.info('未开始', 2, null, false)
       }
-    } else if (isPast(props.endAt)) {
+    } else if (isPast(endAt)) {
       linkProps.onClick = (e) => {
         Toast.info('已结束', 2, null, false)
       }
-    } else if (isPast(props.signupEndAt)) {
+    } else if (isPast(signupEndAt)) {
       linkProps.onClick = (e) => {
         Toast.info('报名时间截止', 2, null, false)
       }
-    } else if (!props.onClick && props.ifSignupLimit && !props.ifNomination) {
-      linkProps.onClick = (e) => {
-        Toast.info('比赛晋级用户可报名', 2, null, false)
-        //去报名列表
-
-      }
-    } else if (!props.userType) {
+    }else if (!userType) {
       linkProps.onClick = (e) => {
         Modal.alert('前往登录', '报名需要登录', [
           {text: '稍后', onPress: () => {}},
@@ -45,16 +55,43 @@ export function getSingUpLinkProps (props) {
           },
         ])
       }
-    } else if (props.onClick) {
-      linkProps.onClick = props.onClick
-    } else {
-      if (contestStatus[props.applyState] === 1) {
-        linkProps.link = `/signup/information/${props.evaluateId}`
-      } else if (contestStatus[props.applyState] === 0) {
-        linkProps.link = `/signup/SignUpOk/${props.evaluateId}`
-      } else {
-        linkProps.link = `/signup/checkstatus/${props.evaluateId}`
-      }
+    }else if(userType){
+       if(userType === 'STUDY'){
+           if(contestStatus[applyState] === 1){
+                //有报名限制并且不是候选人
+                if(ifSignupLimit && ifNomination){
+                     if(prevEvaluates && prevEvaluates.length>0){
+                        //弹出比赛列表
+                     }else{
+                       linkProps.onClick = (e) => {
+                         Toast.info('比赛晋级用户可报名', 2, null, false)
+                       }
+                     }
+                }else{
+                   if(isTeamApply || (epList && epList.length>0)){
+                       //弹出报名列表
+                     linkProps.onClick = props.onClick
+                   }else{
+                     linkProps.onClick = (e) => {
+                       Toast.info('当前比赛暂未开启报名', 2, null, false)
+                     }
+                   }
+                }
+           }else if(contestStatus[applyState] === 0){
+             linkProps.link = `/signup/SignUpOk/${props.evaluateId}`
+           }else{
+             linkProps.link = `/signup/checkstatus/${props.evaluateId}`
+           }
+       }else{
+          if(isTeamApply || (epList && epList.length>0)){
+             //弹出报名列表
+            linkProps.onClick = props.onClick
+          }else {
+            linkProps.onClick = (e) => {
+              Toast.info('学生用户可报名', 2, null, false)
+            }
+          }
+       }
     }
   }
   return linkProps

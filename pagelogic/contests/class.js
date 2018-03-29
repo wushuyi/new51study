@@ -426,8 +426,8 @@ export default KeaContext => {
         PropTypes.any,
       ],
       operateItemProps: [
-        () => [selectors.currFramework, selectors.user],
-        (framework, user) => {
+        () => [selectors.currFramework,selectors.currApplyPrice,selectors.user],
+        (framework,applyPrice,user) => {
           if (!framework) {
             return false
           }
@@ -435,8 +435,9 @@ export default KeaContext => {
             'beginAt', 'endAt', 'ifSignupLimit',
             'signupEndAt', 'applyState', 'id',
             'evaluateApplyId', 'ifNomination', 'singUpNumber',
-            'label', 'ifWinner', 'ifUploadWork',
+            'label', 'ifWinner', 'ifUploadWork','prevEvaluates'
           ])
+          data.applyPrice=applyPrice;
           data.evaluateId = data.id
           delete data.id
           user && (data.userType = user.type)
