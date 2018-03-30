@@ -84,12 +84,14 @@ class Page extends React.Component {
     //支付回调 调用 支付成功接口
     if (outTradeNo && payType) {
       const def = deferred()
-      await sleep(10)
+      await sleep(100)
       actions.checkOrderNo(outTradeNo, payType, def)
       def.promise.then(
         (ok) => {
           if (ok) {
             this.onPaySuccess()
+          } else {
+            alert('支付失败')
           }
         },
       )
