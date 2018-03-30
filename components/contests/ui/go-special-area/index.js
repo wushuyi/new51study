@@ -15,7 +15,6 @@ export default class goSpecialArea extends React.PureComponent {
       href: {pathname: '/contests/special-area', query: {classId: classId}},
       as: {pathname: `/contests/special-area/${classId}`},
       prefetch: true,
-      shallow: true
     }
   }
 

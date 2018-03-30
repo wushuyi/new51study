@@ -15,7 +15,7 @@ import { contest } from 'config/shareMsg'
 export default KeaContext => {
   const {kea} = KeaContext
   const logic = kea({
-    path: (key) => ['scenes', 'pages', 'contests', 'class'],
+    path: (key) => ['scenes', 'pages', 'contests', 'area'],
     actions: () => ({
       initPage: (classId, def, token) => ({
         token: token || getToken(),

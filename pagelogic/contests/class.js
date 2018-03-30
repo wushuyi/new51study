@@ -173,7 +173,9 @@ export default KeaContext => {
       ],
       currApplyPrice: [
         () => [selectors.currId, selectors.applyPrice],
-        (currId, applyPrice) => applyPrice[currId],
+        (currId, applyPrice) => {
+          return get(applyPrice, currId)
+        },
         PropTypes.any,
       ],
       mapLinkProps: [
