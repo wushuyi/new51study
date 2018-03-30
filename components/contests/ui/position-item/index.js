@@ -20,7 +20,6 @@ export default class PositionItem extends React.PureComponent {
       evt.preventDefault()
       evt.stopPropagation()
       if (!lng || !lat) {
-        alert('找不到坐标位置')
         return false
       }
       window.location.href = `/catch/contest/ifMapDetail?addressname=${destName}&longitude=${lng}&latitude=${lat}`

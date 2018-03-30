@@ -109,7 +109,6 @@ export default class BannerCover extends React.PureComponent {
     const {linkData} = this.props
     const {lng, lat, destName} = linkData
     if (!lng || !lat) {
-      alert('找不到坐标位置')
       evt.preventDefault()
       evt.stopPropagation()
       return false
