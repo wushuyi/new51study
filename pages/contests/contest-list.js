@@ -95,7 +95,10 @@ class Page extends React.PureComponent {
             {map(matchListProps, (o, i) => {
               const {classId, ...resProps} = o
               return <Fragment key={i}>
-                <Link href={{pathname: '/contests/contest-class', query: {classId: classId}}} prefetch>
+                <Link
+                  href={{pathname: '/contests/contest-class', query: {classId: classId}}}
+                  as={`/contests/contest-class/${classId}`}
+                  prefetch>
                   <a>
                     <MatchItem {...resProps}/>
                   </a>

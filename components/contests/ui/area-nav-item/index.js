@@ -2,7 +2,7 @@ import React, { Fragment } from 'react'
 import Style from './style.scss'
 import {string,array,any} from 'prop-types'
 
-export default class MatchNavItem extends React.PureComponent {
+export default class AreaNavItem extends React.PureComponent {
 
   static propTypes = {
     title: string

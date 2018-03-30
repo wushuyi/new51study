@@ -183,6 +183,24 @@ export default KeaContext => {
         },
         PropTypes.any,
       ],
+      areaNavLinkProps: [
+        () => [selectors.currFramework, selectors.classId],
+        (framework, classId) => {
+          if (!framework) {
+            return false
+          }
+          const {title} = framework
+          return Immutable({
+            href: {
+              pathname: '/contests/contest-list',
+              query: {classId: classId, title: title}
+            },
+            as: `/contests/contest-list/${classId}?title=${encodeURIComponent(title)}`,
+            prefetch: true
+          })
+        },
+        PropTypes.any,
+      ],
       agencyItemProps: [
         () => [selectors.currId, selectors.currFramework],
         (currId, framework) => {
