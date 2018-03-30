@@ -26,17 +26,18 @@ export default class MatchItem extends React.PureComponent {
   }
 
   static defaultProps = {
-    url: '/assets/images/bg/bg_no_pic_default.jpg',
+    url: 'http://7xszyu.com1.z0.glb.clouddn.com/1522039545274_wh90x127.jpg',
     beginAt: 1513061760000,
     endAt: 1518245760000,
     title: '我要学',
     area: '上海',
     orgName: '我要学',
     charge: '￥0.01~0.02',
+    orgCharge: false,
   }
 
   render() {
-    const {url, beginAt, endAt, title, area, orgName, charge} = this.props
+    const {url, beginAt, endAt, title, area, orgName, charge, orgCharge} = this.props
 
     const coverBoxProps = {
       url,
@@ -53,11 +54,11 @@ export default class MatchItem extends React.PureComponent {
           <div className="content">
             {area && (
               <div className="item addr-icon">
-                <div className="oneline">地 点：{area}</div>
+                <div className="oneline">区　域：{area}</div>
               </div>
             )}
             <div className="item time-icon">
-              <div className="oneline">时 间：{formatDate(beginAt)}－{formatDate(endAt)}</div>
+              <div className="oneline">时　间：{formatDate(beginAt)}－{formatDate(endAt)}</div>
             </div>
             {orgName && (
               <div className="item org-icon">
@@ -66,7 +67,7 @@ export default class MatchItem extends React.PureComponent {
             )}
             {charge && (
               <div className="item charge-icon">
-                <div className="oneline">报名费：{charge}</div>
+                <div className="oneline">报名费：{charge}　{orgCharge && <span className="org-charge">免费</span>}</div>
               </div>
             )}
 

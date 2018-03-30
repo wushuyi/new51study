@@ -11,75 +11,148 @@ import { from, static as Immutable } from 'seamless-immutable'
 import map from 'lodash/map'
 import forEach from 'lodash/forEach'
 import indexOf from 'lodash/indexOf'
-
-function update(source, newSource) {
-  let data = source
-  let ids = map(source, function (o) {
-    return o.id
-  })
-  forEach(newSource, function (o, i, s) {
-    let updateKey = indexOf(ids, o.id)
-    if (updateKey > -1) {
-      data = Immutable.set(data, updateKey, o)
-    } else {
-      data = Immutable.set(data, data.length, o)
-    }
-  })
-  return data
-}
-
-const PATE_SIZE = 5
+import * as Api from 'apis/contests/list'
+import get from 'lodash/get'
+import MatchItem from '../../components/discovery/ui/match-item'
 
 export default KeaContext => {
   const {kea} = KeaContext
   const logic = kea({
-    path: (key) => ['scenes', 'pages', 'discovery', 'gradelist'],
+    path: (key) => ['scenes', 'pages', 'contests', 'list'],
     actions: () => ({
-      getList: (page, def, token) => ({token: token || getToken(), page, def}),
-      syncData: (data) => ({data}),
-      appendData: (data) => ({data})
+      initPage: (classId, def, token) => ({classId, token: token || getToken(), def}),
+      syncAuthData: (authData) => ({authData}),
+      setCurrId: (id) => ({id}),
+      setTitle: (str) => ({str}),
+      getEvaluateFindById: (classId, def, token) => ({
+        classId,
+        def,
+        token: token || getToken(),
+      }),
+      asyncEvaluateData: (classId, data) => ({classId, data})
     }),
 
     reducers: ({actions}) => ({
-      gradelist: [false, PropTypes.any, {
-        [actions.syncData]: (state, payload) => Immutable(payload.data),
-        [actions.appendData]: (state, payload) => update(state, payload.data)
+      user: [
+        false, PropTypes.any, {
+          [actions.syncAuthData]: (state, payload) => Immutable(
+            payload.authData),
+        }],
+      currId: [
+        false, PropTypes.any, {
+          [actions.setCurrId]: (state, payload) => parseInt(payload.id),
+        }],
+      title: [
+        false, PropTypes.any, {
+          [actions.setTitle]: (state, payload) => payload.str,
+        }],
+      evaluateData: [false, PropTypes.any, {
+        [actions.asyncEvaluateData]: (state, payload) => {
+          return Immutable.set(state, payload.classId, payload.data)
+        }
       }],
     }),
 
+    selectors: ({selectors}) => ({
+      classId: [
+        () => [selectors.currId],
+        (currId) => currId,
+        PropTypes.any,
+      ],
+      isFirstEvaluates: [
+        () => [selectors.title],
+        (title) => !!title,
+        PropTypes.any,
+      ],
+      matchListProps: [
+        () => [selectors.evaluateData, selectors.classId],
+        (evaluateData, classId) => {
+          let evaluateDatas = get(evaluateData, classId)
+          let sourceData = map(evaluateDatas, (o, i) => {
+            const {pic: url, beginAt, endAt, title, area, orgName, charge, originalPrice: orgCharge, id: classId} = o
+            return {
+              url,
+              beginAt,
+              endAt,
+              title,
+              area,
+              orgName,
+              charge,
+              orgCharge,
+              classId,
+            }
+          })
+          return Immutable(sourceData)
+        },
+        PropTypes.any,
+      ],
+    }),
+
     takeEvery: ({actions, workers}) => ({
-      [actions.getList]: workers.getList,
+      [actions.initPage]: workers.initPage,
+      [actions.getEvaluateFindById]: workers.getEvaluateFindById,
     }),
 
     workers: {
-      getList: function * (action) {
-        const {actions} = this
-        const gradelist = yield this.get('gradelist')
-        isDev && console.log('gradelist:', gradelist)
-        const {token, page, def} = action.payload
-        let res
-        if (page === 'next') {
-          let page = Math.floor(gradelist.length / PATE_SIZE)
-          res = yield call(getKaojiList, page, PATE_SIZE, token)
+      initPage: function * (action) {
+        const {workers, actions} = this
+        const {token, classId, def} = action.payload
+        yield put(actions.setCurrId(classId))
+        const isFirstEvaluates = yield this.get('isFirstEvaluates')
+
+        let evaluateData
+        if (isFirstEvaluates) {
+          evaluateData = yield * workers.getEvaluateFindFirstEvaluates({
+            payload: {
+              token,
+              classId: classId,
+            },
+          })
         } else {
-          res = yield call(getKaojiList, page, PATE_SIZE, token)
+          evaluateData = yield * workers.getEvaluateFindById({
+            payload: {
+              token,
+              classId: classId,
+            },
+          })
         }
 
+        if (isError(evaluateData)) {
+          def && def.reject(evaluateData)
+          return false
+        }
+
+        def && def.resolve('ok')
+      },
+      getEvaluateFindById: function * (action) {
+        const {actions} = this
+        const {token, classId, def} = action.payload
+        let res = yield call(Api.getEvaluateFindById, classId, token)
         if (isError(res)) {
           yield call(baseXhrError, res)
           def && def.reject(res)
           return res
         }
+
         const data = res.body.data
-        // isDev && console.log(data)
-        if (page === 0) {
-          yield put(actions.syncData(data))
-        } else {
-          yield put(actions.appendData(data))
+        yield put(actions.asyncEvaluateData(classId, get(data, 'prevEvaluates')))
+        def && def.resolve(res)
+        return data
+      },
+      getEvaluateFindFirstEvaluates: function * (action) {
+        const {actions} = this
+        const {token, classId, def} = action.payload
+        let res = yield call(Api.getEvaluateFindFirstEvaluates, classId, token)
+        if (isError(res)) {
+          yield call(baseXhrError, res)
+          def && def.reject(res)
+          return res
         }
 
+        const data = res.body.data
+        yield put(actions.asyncEvaluateData(classId, data))
         def && def.resolve(res)
-        return res
+        return data
       },
     }
   })

@@ -48,6 +48,9 @@ app.prepare()
     server.get('/contests/special-area/:classId', (req, res) => {
       return app.render(req, res, '/contests/special-area', req.params)
     })
+    server.get('/contests/contest-list/:classId', (req, res) => {
+      return app.render(req, res, '/contests/contest-list', assign({}, req.query, req.params))
+    })
     server.get('/signup/information/:classId', (req, res) => {
       return app.render(req, res, '/signup/information', assign({}, req.query, req.params))
     })

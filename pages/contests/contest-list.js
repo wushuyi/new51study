@@ -1,21 +1,23 @@
 import React, { Fragment } from 'react'
 import { withRedux } from 'store'
 import Layout from 'components/layout/default'
-import createLogic from 'pagelogic/contests/class'
+import createLogic from 'pagelogic/contests/list'
 import { getToken } from 'utils/auth'
 import { deferred } from 'redux-saga/utils'
 import { isBrowser } from 'utils/runEnv'
 import PagePullToRefresh from 'components/ui/page-pull-to-refresh'
-import TopbarBack from 'components/common/ui/topbar-back'
 import ListSignUpTopTitle from 'components/contests/ui/list-signup-toptitle'
-import ListSignUpTitle from 'components/contests/ui/list-signup-title'
-import ListSignUpItem from 'components/contests/ui/list-signup-item'
 import GoBackOrOpenApp from 'components/ui/goback-or-openapp'
 import { checkToken, authDidMount, ComponentPageError } from 'utils/pageAuth'
 import Share from 'components/layout/share'
+import TitleItem from 'components/sign-up/ui/title-item'
+import MatchItem from 'components/discovery/ui/match-item'
+import map from 'lodash/map'
+import TitleMsg from 'components/ui/title-msg'
+import Link from 'next/link'
 
 class Page extends React.PureComponent {
-  static async getInitialProps(ctx) {
+  static async getInitialProps (ctx) {
     const {logics, KeaContext, isServer, store, req, query} = ctx
     let initProps = {}
     let token = getToken(req)
@@ -36,10 +38,13 @@ class Page extends React.PureComponent {
       }
     }
 
-    // authData && store.dispatch(actions.syncAuthData(authData))
+    authData && store.dispatch(actions.syncAuthData(authData))
     try {
       const def = deferred()
-      // store.dispatch(actions.initPage(query.classId, def, token))
+      if (query.title) {
+        store.dispatch(actions.setTitle(decodeURIComponent(query.title)))
+      }
+      store.dispatch(actions.initPage(query.classId, def, token))
       await def.promise
     } catch (err) {
       return {
@@ -53,19 +58,19 @@ class Page extends React.PureComponent {
     return initProps
   }
 
-  componentDidMount() {
+  componentDidMount () {
     authDidMount(this.props)
   }
 
   onRefresh = () => {
-    const {actions} = this.props
+    const {actions, classId} = this.props
     const def = deferred()
     let token = getToken()
-    // actions.initPage(Router.query.classId, def, token)
+    actions.initPage(classId, def, token)
     return def.promise
   }
 
-  render() {
+  render () {
     const {err, actions} = this.props
     if (err) {
       return (
@@ -74,18 +79,30 @@ class Page extends React.PureComponent {
     }
 
     const {
-
+      title,
+      matchListProps,
     } = this.props
     isBrowser && console.log(this.props)
 
     return (
       <Layout>
-        <Share {...shareProps}/>
+        <Share/>
+        <TitleItem title={'比赛报名'}/>
         <PagePullToRefresh onRefresh={this.onRefresh}>
-          <TopbarBack title={"比赛报名"}/>
-          {<ListSignUpTopTitle/>}
-          {<ListSignUpTitle/>}
-          {<ListSignUpItem />}
+          <div style={{minHeight: '80vh'}}>
+            <TitleMsg title="此比赛不支持越级报名，请从以下阶段中选择可报名的阶段。"/>
+            {title && <ListSignUpTopTitle title={title}/>}
+            {map(matchListProps, (o, i) => {
+              const {classId, ...resProps} = o
+              return <Fragment key={i}>
+                <Link href={{pathname: '/contests/contest-class', query: {classId: classId}}} prefetch>
+                  <a>
+                    <MatchItem {...resProps}/>
+                  </a>
+                </Link>
+              </Fragment>
+            })}
+          </div>
         </PagePullToRefresh>
         <GoBackOrOpenApp/>
       </Layout>
@@ -99,10 +116,16 @@ export default withRedux(Page, function (KeaContext, ctx) {
   const logic = connect({
     actions: [
       mainLogic, [
+        'syncAuthData',
+        'initPage',
+        'setTitle',
       ]
     ],
     props: [
       mainLogic, [
+        'classId',
+        'title',
+        'matchListProps',
       ]
     ]
   })
