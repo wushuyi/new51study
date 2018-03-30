@@ -112,7 +112,7 @@ class Page extends React.Component {
       actions.getWxAppid(code, def)
       def.promise.then(
         (openid) => {
-          //为了解决 微信支付回调又刷新
+      /*    //为了解决 微信支付回调又刷新
           let uri = encodeURIComponent(redirectUri)
           Router.replace({
             pathname: '/payment',
@@ -120,7 +120,7 @@ class Page extends React.Component {
               orderNo: orderNo,
               redirect_uri: uri,
             },
-          }, `/payment/${orderNo}?redirect_uri=${uri}`, {shallow: true})
+          }, `/payment/${orderNo}?redirect_uri=${uri}`, {shallow: true})*/
           const def = deferred()
           actions.goWxJSPay(openid, def)
           def.promise.then(({payData, outTradeNo}) => {

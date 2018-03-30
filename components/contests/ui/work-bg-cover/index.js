@@ -5,7 +5,7 @@ import { consts } from 'config/settings'
 import defaultBgCover from '/static/images/bg/bg_no_pic_default.jpg'
 
 const BgCoverQuery = `?imageView2/1/w/${191 * 2}/h/${115 * 2}/100`
-const vedioBgCoverQuery = consts.vedioSufFixStr + `/w/${191 * 2}/h/${115 * 2}`
+const vedioBgCoverQuery = consts.vedioSufFixStr
 
 export default class WorkBgCover extends React.PureComponent {
   static propTypes = {
