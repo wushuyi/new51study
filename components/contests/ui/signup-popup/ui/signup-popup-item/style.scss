@@ -24,7 +24,7 @@
     .price {
       font-size: 20*$hd;
       color: #FF6628;
-      width: 90*$hd;
+      min-width: 90*$hd;
       text-align: right;
       @include oneline;
     }
