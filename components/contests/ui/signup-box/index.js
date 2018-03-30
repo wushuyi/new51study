@@ -98,7 +98,7 @@ export default class SignupBox extends React.PureComponent {
         isShowSingUpNumber: isShowSingUpNumber,
         isWillBeginLately: isOutDateFlag && !isWillBeginFlag && isFuture(item.beginAt) ? isWillBeginFlag = true : false,
         label: item.label,
-        signUpGroupType: true,
+        signUpGroupType: isClass?false:true,
         signupEndAt: item.signupEndAt,
         singUpNumber: item.singUpNumber,
         userType: item.userType,

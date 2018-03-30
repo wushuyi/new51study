@@ -29,35 +29,48 @@ function dateFormat (time) {
 
 //获取比赛状态
 function getSignupState (props) {
-  if (isPast(props.endAt)) {
+  let {
+    endAt,
+    signUpGroupType,
+    isWillBeginLately,
+    ifSignupLimit,
+    ifWinner,
+    applyState,
+    index,
+    ifNomination,
+    userType,
+    verify
+  }=props ||{};
+
+  if (isPast(endAt)) {
     //已结束
     return '已结束'
   }
-  if (props.signUpGroupType) {
-    if (props.isWillBeginLately) {
+  if (signUpGroupType) {
+    if (isWillBeginLately) {
       return '等待开始'
     }
-    if (!props.ifSignupLimit) {
-      if (props.ifWinner) {
+    if (!ifSignupLimit) {
+      if (ifWinner) {
         return '已晋级'
-      } else if (contestStatus[props.applyState] !== 1) {
+      } else if (contestStatus[applyState] !== 1) {
         return '已报名'
       } else {
-        if (props.index === 0) {
+        if (index === 0) {
           return '未报名'
         } else {
           return '确认参赛'
         }
       }
     } else {
-      if (props.ifNomination) {
-        if (props.ifWinner) {
+      if (ifNomination) {
+        if (ifWinner) {
           return '已晋级'
 
-        } else if (contestStatus[props.applyState] !== 1) {
+        } else if (contestStatus[applyState] !== 1) {
           return '已报名'
         } else {
-          if (props.index === 0) {
+          if (index === 0) {
             return '未报名'
           } else {
             return '确认参赛'
@@ -68,11 +81,24 @@ function getSignupState (props) {
       }
     }
   } else {
-    if (contestStatus[props.applyState] === 0) {
-      //已报名
-      return '已报名'
-    } else {
-      //未报名
+    console.log('111111')
+    if(userType==='STUDY'){
+      if (contestStatus[applyState] === 1) {
+        return '未报名'
+      } else {
+         if(verify==='Waiting' || verify==='NotPass'){
+           return '确认参赛'
+         }else{
+           if(verify==='Pass'){
+               if(contestStatus[applyState]===2){
+                 return '确认参赛'
+               }else if(contestStatus[applyState] ===0){
+                 return '已报名'
+               }
+           }
+         }
+      }
+    }else{
       return '未报名'
     }
   }

@@ -450,9 +450,6 @@ export default KeaContext => {
           }
           const {state, verify, ifNeedPay} = detail
           let name = ''
-          if (state === 'FREEWAITINGVERIFY') {
-            name = '等待审核'
-          }
           if (verify === 'NotPass') {
             name = '未通过审核(点击修改)'
           } else if (verify === 'Pass') {

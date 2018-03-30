@@ -24,7 +24,7 @@ export default class SignupPopupItem extends React.PureComponent {
           <div className="group-item">
             <div className="title">{title}</div>
             {price && (
-              <div className="price">{price}</div>
+              <div className="price">{price>0?`￥${price}`:'免费'}</div>
             )}
             {/*<div className="sign"/>*/}
           </div>
