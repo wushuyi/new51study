@@ -3,13 +3,13 @@ import request from 'superagent'
 import { baseChcek, needAuthError } from 'apis/utils/error'
 import xhrCrypto from 'utils/xhrCrypto'
 
-/**
- * 获取比赛报名信息
- * API: /evaluates/${evaluateId}/singupDetail
- * @param evaluateId
- * @param token
- * @returns {Promise<*>}
- */
+// /**
+//  * 获取比赛报名信息
+//  * API: /evaluates/${evaluateId}/singupDetail
+//  * @param evaluateId
+//  * @param token
+//  * @returns {Promise<*>}
+//  */
 export async function getSingupDetail (evaluateId, token) {
   if (!token) {
     return new needAuthError(`can't read token`)
@@ -20,6 +20,27 @@ export async function getSingupDetail (evaluateId, token) {
     const res = await request.get(requestURL).query(APIVersion).query({
       token,
     }).use(xhrCrypto)
+    return baseChcek(res)
+  } catch (err) {
+    return err
+  }
+}
+
+export async function getApplyDetail (evaluateId, token) {
+  if (!token) {
+    return new needAuthError(`can't read token`)
+  }
+  const api = `/evaluate/applyDetail`
+  const requestURL = `${APIService}${api}`
+  let data = {
+    evaluateId,
+    token,
+  }
+  try {
+    const res = await request.get(requestURL)
+      .query(APIVersion)
+      .query(data)
+      .use(xhrCrypto)
     return baseChcek(res)
   } catch (err) {
     return err
@@ -135,8 +156,7 @@ export async function deleteFollow (userId, token) {
  * @param token
  * @returns {Promise<*>}
  */
-export async function postSignupApply (
-  evaluateId, preQuery, prePostData, token) {
+export async function postSignupApply (evaluateId, preQuery, prePostData, token) {
   if (!token) {
     return new needAuthError(`can't read token`)
   }
@@ -162,8 +182,7 @@ export async function postSignupApply (
  * @param token
  * @returns {Promise<*>}
  */
-export async function postSignupModify (
-  evaluateApplyId, preQuery, prePostData, token) {
+export async function postSignupModify (evaluateApplyId, preQuery, prePostData, token) {
   if (!token) {
     return new needAuthError(`can't read token`)
   }

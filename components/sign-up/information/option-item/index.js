@@ -12,7 +12,7 @@ export default class OptionItem extends React.PureComponent {
   static propTypes = {
     btnType: PropTypes.any,
     canSingUp: PropTypes.bool,
-    charge: PropTypes.bool,
+    charge: PropTypes.any,
     descript: PropTypes.string,
     id: PropTypes.number,
     onSignUp: PropTypes.any,

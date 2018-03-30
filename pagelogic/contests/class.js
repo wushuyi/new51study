@@ -226,7 +226,7 @@ export default KeaContext => {
       clickAppProps: [
         () => [selectors.currId, selectors.currFramework, selectors.currOne],
         (currId, framework, one) => {
-          if (!get(framework, 'orgUserNumber') || !get(one, 'ifSignUp')) {
+          if (!get(one, 'ifSignUp')) {
             return false
           }
 

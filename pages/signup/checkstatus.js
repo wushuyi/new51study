@@ -78,13 +78,13 @@ class Page extends React.Component {
   }
 
   onOperateBtn = () => {
-    const {actions, checkstatusPageState, signupokOperateProps, classId} = this.props
+    const {actions, pageState, signupokOperateProps, classId} = this.props
     const {type, isFirst, fullName, evaluateApplyId} = signupokOperateProps
-    switch (checkstatusPageState) {
+    switch (pageState) {
       case '等待审核':
         alert('正在审核中，请过会儿再来')
         break
-      case '未通过审核(点击修改)':
+      case '未通过': //未通过审核(点击修改)
         Router.replace(
           {
             pathname: '/signup/information',
@@ -95,10 +95,17 @@ class Page extends React.Component {
           `/signup/information/${classId}`
         )
         break
-      case '已通过审核,点击上传作品':
-        window.location.href = `/signup/uploadwork/${evaluateApplyId}?isFirst=${isFirst}&nickName=${fullName}`
+      case '报名成功': //已通过审核,点击上传作品
+        Router.replace(
+          {
+            pathname: '/signup/signupok',
+            query: {classId: classId},
+          },
+          `/signup/signupok/${classId}`
+        )
+        // window.location.href = `/signup/uploadwork/${evaluateApplyId}?isFirst=${isFirst}&nickName=${fullName}`
         break
-      case '已通过审核,点击支付':
+      case '通过，确认付款': //已通过审核,点击支付
         const def = deferred()
         let mask = alert('正在创建订单', '请等待...', [])
         actions.postApplyOrder(evaluateApplyId, def)
@@ -127,6 +134,19 @@ class Page extends React.Component {
 
   }
 
+  getBtnName = (pageState) => {
+    switch (pageState) {
+      case '等待审核':
+        return '等待审核'
+      case '未通过':
+        return '未通过审核(点击修改)'
+      case '报名成功':
+        return '已通过审核,点击上传作品'
+      case '通过，确认付款':
+        return ' 已通过审核,点击支付'
+    }
+  }
+
   render () {
     const {err, actions} = this.props
 
@@ -142,9 +162,28 @@ class Page extends React.Component {
       rawParentBoxProps,
       signupokEndInfoProps,
       signupokOptionProps,
-      checkstatusPageState,
+      pageState,
+      redirectUri,
     } = this.props
     const {isMount} = this.state
+
+    //需要跳转时候不显示其它dom
+    if (pageState === '报名成功') {
+      if (isMount) {
+        setTimeout(() => {
+          Router.replace(
+            redirectUri.router,
+            redirectUri.as
+          )
+        }, 10)
+      }
+      return (
+        <Layout>
+          <Share/>
+        </Layout>
+      )
+    }
+
     return (
       <Layout>
         <Share/>
@@ -174,7 +213,7 @@ class Page extends React.Component {
 
         {signupokOptionProps && <OptionItem {...signupokOptionProps}/>}
         <WhiteSpace height={8}/>
-        {checkstatusPageState && <OperateItem name={checkstatusPageState} onClick={this.onOperateBtn}/>}
+        {pageState && <OperateItem name={this.getBtnName(pageState)} onClick={this.onOperateBtn}/>}
       </Layout>
     )
   }
@@ -194,13 +233,13 @@ export default withRedux(Page, function (KeaContext) {
     props: [
       mainLogic, [
         'classId',
+        'pageState',
         'signupokEndInfoProps',
         'rawStudyBoxProps',
         'rawParentBoxProps',
         'signupokOptionProps',
-        'checkstatusPageState',
-        'checkstatusPageState',
         'signupokOperateProps',
+        'redirectUri',
       ]
     ]
   })

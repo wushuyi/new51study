@@ -78,6 +78,7 @@ class Page extends React.PureComponent {
     super()
     this.state = {
       modal: false,
+      isMount: false,
     }
   }
 
@@ -91,6 +92,9 @@ class Page extends React.PureComponent {
 
   async componentDidMount () {
     authDidMount(this.props)
+    this.setState({
+      isMount: true
+    })
   }
 
   render () {
@@ -110,16 +114,19 @@ class Page extends React.PureComponent {
       channelProps,
       optionProps,
       redirectUri,
+      pageState,
     } = this.props
-
+    const {isMount} = this.state
     //需要跳转时候不显示其它dom
-    if (submitState === 'REDIRECTURI' && isBrowser) {
-      setTimeout(() => {
-        Router.replace(
-          redirectUri.router,
-          redirectUri.as
-        )
-      }, 10)
+    if (pageState !== '未通过' && pageState !== '确认提交') {
+      if (isMount) {
+        setTimeout(() => {
+          Router.replace(
+            redirectUri.router,
+            redirectUri.as
+          )
+        }, 10)
+      }
       return (
         <Layout>
           <Share/>
@@ -138,7 +145,7 @@ class Page extends React.PureComponent {
           onSubmit={(values, formActions) => {
             console.log('values', values)
             let isValidate = true
-            let inputProps = [].concat(parentBoxProps || []).concat(studyBoxProps || [])
+            let inputProps = [].concat(studyBoxProps || []).concat(parentBoxProps || [])
             console.log(inputProps)
 
             isValidate = validateInput(inputProps, values)
@@ -179,30 +186,26 @@ class Page extends React.PureComponent {
             })
 
             console.log('requires, studys, parents', requires, studys, parents)
+
             let data = {
-              send: {
-                body: {
-                  text: studys,
-                  parentText: parents,
-                  baseInfo: requires,
-                  price: {
-                    id: values.priceId,
-                  }
-                },
-              },
-              query: {
-                reference: values.channel.number
-              }
+              evaluateId: classId,
+              type: 'USER',
+              text: studys,
+              parentText: parents,
+              referenceId: values.channel.number,
+              evaluatePriceId: values.priceId,
+              ...requires
             }
+
             const def = deferred()
 
-            if (submitState === 'SIGNUPMODIFY') {
-              actions.postSignupModify(evaluateApplyId, data.query, data.send, def)
-            } else if (submitState === 'SIGNUPAPPLY') {
-              actions.postSignupApply(classId, data.query, data.send, def)
-            } else {
-              actions.postSignupApply(classId, data.query, data.send, def)
+            if (pageState === '确认提交') {
+              actions.postSignupApply(data, def)
+            } else if (pageState === '未通过') {
+              data.evaluateApplyId = evaluateApplyId
+              actions.postSignupApply(data, def)
             }
+            console.log(data)
 
             def.promise.then(
               ok => {
@@ -252,9 +255,10 @@ class Page extends React.PureComponent {
                   const {submitForm, isSubmitting} = form
                   return (
                     <OperateItem
-                      name={submitState === 'SIGNUPMODIFY'
-                        ? '确认修改'
-                        : '确认提交'}
+                      // name={submitState === 'SIGNUPMODIFY'
+                      //   ? '确认修改'
+                      //   : '确认提交'}
+                      name={pageState === '未通过' ? '确认修改' : '确认提交'}
                       disabled={isSubmitting}
                       onClick={() => {
                         !isSubmitting && submitForm()
@@ -281,7 +285,6 @@ export default withRedux(Page, function (KeaContext, ctx) {
         'initPage',
         'setUrlPriceId',
         'postSignupApply',
-        'postSignupModify'
       ],
     ],
     props: [
@@ -295,6 +298,7 @@ export default withRedux(Page, function (KeaContext, ctx) {
         'channelProps',
         'optionProps',
         'redirectUri',
+        'pageState',
       ],
     ],
   })

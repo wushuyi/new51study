@@ -36,11 +36,9 @@ export default KeaContext => {
         def,
       }),
       syncSingupDetail: (classId, data) => ({classId, data}),
-      postSignupApply: (classId, preQuery, prePostData, def, token) => ({
+      postSignupApply: (data, def, token) => ({
         token: token || getToken(),
-        classId,
-        preQuery,
-        prePostData,
+        data,
         def,
       }),
       syncSignupApply: (classId, data) => ({classId, data}),
@@ -98,7 +96,63 @@ export default KeaContext => {
         },
         PropTypes.any,
       ],
-
+      pageState: [
+        () => [selectors.currSingupDetail],
+        (applyDetail) => {
+          if (!get(applyDetail, 'state')) {
+            return false
+          }
+          const {evaluateId, state, verify} = applyDetail
+          let pageState = ''
+          if (state === 'DRAFT') {
+            pageState = '确认提交'
+          } else if (verify === 'Waiting') {
+            pageState = '等待审核'
+          } else if (verify === 'Pass' && state === 'UNPAID') {
+            pageState = '通过，确认付款'
+          } else if (verify === 'NotPass') {
+            pageState = '未通过'
+          } else if (state === 'LIVE') {
+            pageState = '报名成功'
+          }
+          return pageState
+        },
+        PropTypes.any,
+      ],
+      redirectUri: [
+        () => [selectors.pageState, selectors.classId],
+        (pageState, classId) => {
+          if (!pageState) {
+            return false
+          }
+          if (pageState === '通过，确认付款' || pageState === '等待审核') {
+            return {
+              router: {
+                pathname: '/signup/checkstatus',
+                query: {classId: classId},
+              },
+              as: `/signup/checkstatus/${classId}`
+            }
+          } else if (pageState === '未通过' || pageState === '确认提交') {
+            return {
+              router: {
+                pathname: '/signup/information',
+                query: {classId: classId},
+              },
+              as: `/signup/information/${classId}`
+            }
+          } else if (pageState === '报名成功') {
+            return {
+              router: {
+                pathname: '/signup/signupok',
+                query: {classId: classId},
+              },
+              as: `/signup/signupok/${classId}`
+            }
+          }
+        },
+        PropTypes.any,
+      ],
       baseStudyBoxProps: [
         () => [selectors.currSingupDetail],
         (singupDetail) => {
@@ -244,6 +298,7 @@ export default KeaContext => {
       submitState: [
         () => [selectors.currSingupDetail],
         (singupDetail) => {
+          return false
           if (!get(singupDetail, 'state')) {
             return false
           }
@@ -259,16 +314,16 @@ export default KeaContext => {
         PropTypes.any,
       ],
       channelProps: [
-        () => [selectors.currSingupDetail, selectors.currId, selectors.submitState],
-        (singupDetail, currId, submitState) => {
+        () => [selectors.currSingupDetail, selectors.currId, selectors.pageState],
+        (singupDetail, currId, pageState) => {
           if (!get(singupDetail, 'state')) {
             return false
           }
-          const {channelNumber, channelName} = singupDetail
+          const {referenceId: channelNumber, referenceName: channelName} = singupDetail
 
           //修改状态下默认显示我要学
           let defaultName = channelName
-          if (submitState === 'SIGNUPMODIFY') {
+          if (pageState !== '确认提交') {
             defaultName = channelName || '我要学平台'
           }
           let data = {
@@ -285,10 +340,10 @@ export default KeaContext => {
       optionProps: [
         () => [selectors.currSingupDetail, selectors.urlPriceId],
         (singupDetail, urlPriceId) => {
-          if (!get(singupDetail, 'charges.length')) {
+          if (!get(singupDetail, 'epList.length')) {
             return false
           }
-          const {charges, priceId} = singupDetail
+          const {epList: charges, priceId} = singupDetail
           let data = {
             itemProps: {
               srouceData: charges,
@@ -300,52 +355,22 @@ export default KeaContext => {
         PropTypes.any,
       ],
       evaluateApplyId: [
-        () => [selectors.currSingupDetail, selectors.submitState],
-        (singupDetail, submitState) => {
-          if (submitState !== 'SIGNUPMODIFY') {
+        () => [selectors.currSingupDetail, selectors.pageState],
+        (singupDetail, pageState) => {
+          if (pageState === '确认提交') {
             return false
           }
-          return get(singupDetail, 'evaluateApplyId')
+          return get(singupDetail, 'id')
         },
         PropTypes.any,
       ],
-      redirectUri: [
-        () => [selectors.currSingupDetail, selectors.classId],
-        (singupDetail, classId) => {
-          if (!get(singupDetail, 'state')) {
-            return false
-          }
-          const {ifNeedVerify} = singupDetail
-          const {state} = singupDetail
-          if (state) {
-            if (ifNeedVerify !== 'Need' && state === 'LIVE') {
-              return {
-                router: {
-                  pathname: '/signup/signupok',
-                  query: {classId: classId},
-                },
-                as: `/signup/information/${classId}`
-              }
-            } else {
-              return {
-                router: {
-                  pathname: '/signup/checkstatus',
-                  query: {classId: classId},
-                },
-                as: `/signup/checkstatus/${classId}`
-              }
-            }
-          }
-          return false
-        },
-        PropTypes.any,
-      ],
+
 
       //signupok
       signupokTopInfoProps: [
         () => [selectors.currSingupDetail],
         (detail) => {
-          let EANumber = get(detail, 'EANumber')
+          let EANumber = get(detail, 'number')
           if (!EANumber) {
             return false
           }
@@ -369,8 +394,8 @@ export default KeaContext => {
       signupokEndInfoProps: [
         () => [selectors.currSingupDetail],
         (detail) => {
-          let outTradeNo = get(detail, 'order.outTradeNo')
-          let channelName = get(detail, 'channelName')
+          let outTradeNo = get(detail, 'orderNo')
+          let channelName = get(detail, 'referenceName')
           if (!outTradeNo) {
             return false
           }
@@ -391,13 +416,10 @@ export default KeaContext => {
       signupokOptionProps: [
         () => [selectors.currSingupDetail],
         (detail) => {
-          if (!get(detail, 'charges.length')) {
+          if (!get(detail, 'ep')) {
             return false
           }
-          let {charges, priceId} = detail
-          let charge = find(charges, (o) => {
-            return o.id === priceId
-          })
+          let {ep: charge} = detail
           if (!charge) {
             return false
           }
@@ -416,7 +438,7 @@ export default KeaContext => {
           if (!ifUploadWork) {
             return false
           }
-          const {type, isFirst, fullName, evaluateApplyId} = detail
+          const {type, isFirst, fullName, id: evaluateApplyId} = detail
           return Immutable({
             type,
             isFirst,
@@ -437,30 +459,6 @@ export default KeaContext => {
           }
 
           return Immutable(data)
-        },
-        PropTypes.any,
-      ],
-
-      //checkstatus
-      checkstatusPageState: [
-        () => [selectors.currSingupDetail],
-        (detail) => {
-          if (!get(detail, 'state')) {
-            return false
-          }
-          const {state, verify, ifNeedPay} = detail
-          let name = ''
-          if (verify === 'NotPass') {
-            name = '未通过审核(点击修改)'
-          } else if (verify === 'Pass') {
-            name = '已通过审核,点击上传作品'
-            if (ifNeedPay === 'Need' && state === 'UNPAID') {
-              name = '已通过审核,点击支付'
-            }
-          } else if (verify === 'Waiting') {
-            name = '等待审核'
-          }
-          return name
         },
         PropTypes.any,
       ],
@@ -497,7 +495,7 @@ export default KeaContext => {
         const {actions} = this
         const {token, classId, def} = action.payload
         let res
-        res = yield call(Api.getSingupDetail, classId, token)
+        res = yield call(Api2.getApplyDetail, classId, '', token, 'USER')
         if (isError(res)) {
           yield call(baseXhrError, res)
           def && def.reject(res)
@@ -511,10 +509,10 @@ export default KeaContext => {
       },
       postSignupApply: function * (action) {
         const {actions} = this
-        const {token, classId, preQuery, prePostData, def} = action.payload
+        const classId = yield this.get('classId')
+        const {token, data: sendData, def} = action.payload
         let res
-        res = yield call(Api.postSignupApply,
-          classId, preQuery, prePostData, token)
+        res = yield call(Api2.postEvaluateApply, sendData, token)
         if (isError(res)) {
           yield call(baseXhrError, res)
           def && def.reject(res)
