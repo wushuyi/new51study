@@ -1,0 +1,35 @@
+@import 'libs/hotcss/px2rem';
+.item {
+  display: flex;
+  height: 40*$hd;
+  align-items: center;
+  padding-left: 11*$hd;
+  font-size: 16*$hd;
+  color: #424242;
+  background: #FFFFFF;
+  .left-tag {
+    display: block;
+    width: 20*$hd;
+    height: 20*$hd;
+  }
+  .content-outer {
+    height: 40*$hd;
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-left: 5*$hd;
+    padding-right: 14*$hd;
+    .address {
+      max-width: 300*$hd;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .right-tag {
+      display: block;
+      width: 10*$hd;
+      height: 16*$hd;
+    }
+  }
+}

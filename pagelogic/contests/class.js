@@ -176,19 +176,30 @@ export default KeaContext => {
         (currId, applyPrice) => applyPrice[currId],
         PropTypes.any,
       ],
-      bannerCoverProps: [
+      mapLinkProps: [
         () => [selectors.currFramework],
         (framework) => {
           if (!framework) {
             return false
           }
+          const {area, lng, lat} = framework
+          return Immutable({
+            destName: area,
+            lng,
+            lat,
+          })
+        },
+        PropTypes.any,
+      ],
+      bannerCoverProps: [
+        () => [selectors.currFramework, selectors.mapLinkProps],
+        (framework, mapLinkProps) => {
+          if (!framework) {
+            return false
+          }
           const {bannerUrl: bgCover, area, lng, lat} = framework
           return Immutable({
-            linkData: {
-              destName: area,
-              lng,
-              lat,
-            },
+            linkData: mapLinkProps,
             bgCover,
             area,
           })

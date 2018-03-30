@@ -8,12 +8,11 @@ import { defaultAuthPage } from 'config/settings'
 
 class Page extends React.PureComponent {
 
-  constructor(props) {
+  constructor (props) {
     super()
-
   }
 
-  componentDidMount() {
+  componentDidMount () {
     clearToken()
     clearAuthData()
     setTimeout(function () {
@@ -22,7 +21,7 @@ class Page extends React.PureComponent {
     })
   }
 
-  render() {
+  render () {
     return (
       <Layout>
         <div>退出成功!</div>

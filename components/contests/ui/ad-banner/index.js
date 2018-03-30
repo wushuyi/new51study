@@ -102,7 +102,7 @@ export default class AdBanner extends React.PureComponent {
                   dom = (
                     <div className="ad-img" onClick={() => {
                       onAd(item.id)
-                      window.location.href = `/catch/contest/goContest?contestid=${item.id}`
+                      window.location.href = `/catch/contest/ifAd?adId=${item.id}`
                     }}
                          style={{backgroundImage: `url(${item.imgUrl})`}}/>
                   )

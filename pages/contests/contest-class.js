@@ -25,6 +25,7 @@ import Share from 'components/layout/share'
 import WhiteSpace from 'components/ui/white-space'
 import SignupPopup from 'components/contests/ui/signup-popup'
 import { isInApp } from 'utils/bridgeAPP'
+import PositionItem from '../../components/contests/ui/position-item'
 
 class Page extends React.PureComponent {
   static async getInitialProps (ctx) {
@@ -175,6 +176,7 @@ class Page extends React.PureComponent {
       bisaiAdProps,
       operateItemProps,
       signupPopupProps,
+      mapLinkProps,
     } = this.props
     isBrowser && console.log(this.props)
 
@@ -230,6 +232,7 @@ class Page extends React.PureComponent {
               <NewsBox {...newsBoxProps}/>
             </a>
           )}
+          {mapLinkProps &&  <PositionItem {...mapLinkProps}/>}
 
           {detailProps && <ContestDetail {...detailProps}/>}
         </PagePullToRefresh>
@@ -278,6 +281,7 @@ export default withRedux(Page, function (KeaContext, ctx) {
         'operateItemProps',
         'signupPopupProps',
         'clickAppProps',
+        'mapLinkProps',
       ]
     ]
   })

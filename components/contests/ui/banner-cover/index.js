@@ -6,6 +6,9 @@ import bgurl from 'static/images/bg/bg_no_pic_default.jpg'
 import { px2rem } from 'utils/hotcss'
 import { deferred } from 'redux-saga/utils'
 import { isInApp } from 'utils/bridgeAPP'
+import Modal from 'antd-mobile/lib/modal'
+
+const {alert} = Modal
 
 function guessUrlSize (str) {
   let rex = /wh(\d+)x(\d+)/
@@ -97,9 +100,6 @@ export default class BannerCover extends React.PureComponent {
 
   getLinkProps = (linkData) => {
     const {lng, lat, destName} = linkData
-    if (!lng || !lat) {
-      return false
-    }
     return {
       href: `/map/mapdetail?lat=${lat}&lng=${lng}&destName=${destName}`
     }
@@ -108,6 +108,12 @@ export default class BannerCover extends React.PureComponent {
   onAppClick = (evt) => {
     const {linkData} = this.props
     const {lng, lat, destName} = linkData
+    if (!lng || !lat) {
+      alert('找不到坐标位置')
+      evt.preventDefault()
+      evt.stopPropagation()
+      return false
+    }
     if (isInApp()) {
       evt.preventDefault()
       evt.stopPropagation()
