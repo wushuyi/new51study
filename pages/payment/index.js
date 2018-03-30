@@ -46,7 +46,7 @@ class Page extends React.Component {
     authData && store.dispatch(actions.syncAuthData(authData))
     const {redirect_uri} = query
     if (redirect_uri) {
-      store.dispatch(actions.setRedirectUri(decodeURIComponent(redirect_uri)))
+      store.dispatch(actions.setRedirectUri(encodeURIComponent(redirect_uri)))
     }
     try {
       const def = deferred()
