@@ -1,5 +1,5 @@
 const prod = process.env.NODE_ENV === 'production'
-// const isTest = true
+const isTest = false
 
 module.exports = {
   goOpenOrDownAppUrl: 'https://a.app.qq.com/o/simple.jsp?pkgname=com.sh.iwantstudy',
