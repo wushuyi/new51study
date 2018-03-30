@@ -37,8 +37,10 @@ export const contestStatus = {
   'LIVE': 0, //已报名，ifWinner->true 已晋级
   'DIE': 1, //未报名
   'UNPAID': 2, //未付款
-  'FREEWAITINGVERIFY': 'FREEWAITINGVERIFY',
-  'WaitingVerify': 'WaitingVerify', //待评审
-  'WaitingDecide': 'WaitingDecide', //待定
-  'Pass': 'Pass' //晋级
 };
+
+export const verifyStatus={
+  Waiting: 'Waiting',
+  Pass: 'Pass',
+  NotPass: 'NotPass',
+}
