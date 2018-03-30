@@ -224,9 +224,10 @@ export default KeaContext => {
       clickAppProps: [
         () => [selectors.currId, selectors.currFramework, selectors.currOne],
         (currId, framework, one) => {
-          if (!get(framework, 'orgUserNumber')) {
+          if (!get(framework, 'orgUserNumber') || !get(one, 'ifSignUp')) {
             return false
           }
+
           const {ifNeedPay, ifSignupLimit, ifNomination, showTeacherList} = framework
           const {ifSignUp} = one
           return Immutable({
