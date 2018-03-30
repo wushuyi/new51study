@@ -81,7 +81,6 @@ function getSignupState (props) {
       }
     }
   } else {
-    console.log('111111')
     if(userType==='STUDY'){
       if (contestStatus[applyState] === 1) {
         return '未报名'
