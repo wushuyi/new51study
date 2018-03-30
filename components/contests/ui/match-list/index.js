@@ -106,7 +106,7 @@ export default class MatchList extends React.PureComponent {
                        paused={this.state.navPaused}
                        reverse={this.state.navReverse}
                        >
-              <MatchNavItem title={'报名比赛'} onClick={this.onNavClick}/>
+              <MatchNavItem title={'展开赛程'} onClick={this.onNavClick}/>
             </TweenOne>
           <TweenOne  animation={this.Animation}
                      paused={this.state.contentPaused}
