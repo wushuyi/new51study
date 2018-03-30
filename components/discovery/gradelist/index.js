@@ -130,6 +130,7 @@ export default class Demo extends React.PureComponent {
       }
       return <TopicItem {...props}/>
     }
+    return null
   }
 
   render() {
