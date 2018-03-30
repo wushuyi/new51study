@@ -18,12 +18,13 @@ import GoContestHome from 'components/contests/ui/go-contest-home'
 import AdBanner from 'components/contests/ui/ad-banner'
 import AdList from 'components/contests/ui/ad-list'
 import GoBackOrOpenApp from 'components/ui/goback-or-openapp'
-import AreaNavItem from 'components/contests/ui/area-nav-item';
+import AreaNavItem from 'components/contests/ui/area-nav-item'
 import { checkToken, authDidMount, ComponentPageError } from 'utils/pageAuth'
 import Share from 'components/layout/share'
+import Link from 'next/link'
 
 class Page extends React.PureComponent {
-  static async getInitialProps(ctx) {
+  static async getInitialProps (ctx) {
     const {logics, KeaContext, isServer, store, req, query} = ctx
     let initProps = {}
     let token = getToken(req)
@@ -61,7 +62,7 @@ class Page extends React.PureComponent {
     return initProps
   }
 
-  componentDidMount() {
+  componentDidMount () {
     authDidMount(this.props)
   }
 
@@ -73,7 +74,7 @@ class Page extends React.PureComponent {
     return def.promise
   }
 
-  render() {
+  render () {
     const {err, actions} = this.props
     if (err) {
       return (
@@ -97,6 +98,7 @@ class Page extends React.PureComponent {
       shareProps,
       bisaiAdListProps,
       bisaiAdProps,
+      areaNavLinkProps,
     } = this.props
     isBrowser && console.log(this.props)
 
@@ -110,9 +112,15 @@ class Page extends React.PureComponent {
           {agencyItemProps && <AgencyItem {...agencyItemProps}/>}
 
           {bisaiAdListProps && <AdList onAd={(AdId) => {actions.postAd(AdId)}} {...bisaiAdListProps}/>}
-          <div style={{backgroundColor:'#fff',overflow:'hidden'}}>
-            {<AreaNavItem title={'报名比赛'}/>}
-          </div>
+          <Link {...areaNavLinkProps}>
+            <a>
+              <div style={{backgroundColor: '#fff', overflow: 'hidden'}}>
+                {<AreaNavItem title={'报名比赛'}/>}
+              </div>
+            </a>
+          </Link>
+
+
           {goContestHomeProps && <GoContestHome {...goContestHomeProps}/>}
 
           {bisaiAdProps && <AdBanner onAd={(AdId) => {actions.postAd(AdId)}} {...bisaiAdProps}/>}
@@ -188,7 +196,8 @@ export default withRedux(Page, function (KeaContext, ctx) {
         'detailProps',
         'shareProps',
         'bisaiAdListProps',
-        'bisaiAdProps'
+        'bisaiAdProps',
+        'areaNavLinkProps',
       ]
     ]
   })

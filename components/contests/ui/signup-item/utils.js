@@ -63,8 +63,10 @@ export function getSingUpLinkProps (props) {
           if (ifSignupLimit && !ifNomination) {
             if (prevEvaluates && prevEvaluates.length > 0) {
               //弹出比赛列表
-              linkProps.onClick = (e) => {
-                Toast.info('弹出比赛列表', 2, null, false)
+              linkProps.linkProps = {
+                href: {pathname: '/contests/contest-list', query: {classId: props.evaluateId}},
+                as: {pathname: `/contests/contest-list/${props.evaluateId}`},
+                prefetch: true
               }
             } else {
               linkProps.onClick = (e) => {
