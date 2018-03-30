@@ -30,9 +30,9 @@ export default class MatchList extends React.PureComponent {
     super(props);
     this.Animation = {height: 0,opacity:0,duration: 500 };
     this.state = {
-      navPaused: props.applyVerify==='Pass'? false:true,
+      navPaused: props.applyVerify !== 'Pass',
       navReverse: false,
-      contentPaused: props.applyVerify==='Pass'? true:false,
+      contentPaused: props.applyVerify === 'Pass',
       contentReverse: false
     };
   }
