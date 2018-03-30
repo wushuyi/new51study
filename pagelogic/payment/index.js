@@ -11,6 +11,7 @@ import get from 'lodash/get'
 import dateFormat from 'date-fns/format'
 import { payment, auth } from 'config/settings'
 import querystring from 'query-string'
+import { auth as privateAuth } from 'config/privateSettings'
 
 export default KeaContext => {
   const {kea} = KeaContext
@@ -37,10 +38,18 @@ export default KeaContext => {
         token: token || getToken(),
         def,
       }),
-      goWxAuthorize: (def) => ({def}),
+      goWxAuthorize: (def, token) => ({
+        token: token || getToken(),
+        def
+      }),
       getWxAppid: (code, def, token) => ({
         token: token || getToken(),
         code,
+        def,
+      }),
+      goWxJSPay: (openid, def, token) => ({
+        token: token || getToken(),
+        openid,
         def,
       }),
       checkOrderNo: (outTradeNo, type, def) => {
@@ -162,6 +171,7 @@ export default KeaContext => {
       [actions.goWxPay]: workers.goWxPay,
       [actions.goWxAuthorize]: workers.goWxAuthorize,
       [actions.getWxAppid]: workers.getWxAppid,
+      [actions.goWxJSPay]: workers.goWxJSPay,
       [actions.checkOrderNo]: workers.checkOrderNo,
     }),
 
@@ -274,21 +284,21 @@ export default KeaContext => {
         const {token, def} = action.payload
         const {orderNo} = yield this.get('payData')
         const redirectUri = yield this.get('redirectUri')
-        let conf = {
-          orderNo,
-          type: 'JSAPI',
-          tradeType: 'WXPAY'
-        }
-        let res
-        res = yield call(Api.getWxPayOrder, conf, token)
-        if (isError(res)) {
-          yield call(baseXhrError, res)
-          def && def.reject(res)
-          return res
-        }
-        let data = res.body.data
-        let {outTradeNo} = data
-        let return_url = location.origin + `/payment/${orderNo}?outTradeNo=${outTradeNo}&payType=WXPAY&redirect_uri=${encodeURIComponent(redirectUri)}`
+        // let conf = {
+        //   orderNo,
+        //   type: 'JSAPI',
+        //   tradeType: 'WXPAY'
+        // }
+        // let res
+        // res = yield call(Api.getWxPayOrder, conf, token)
+        // if (isError(res)) {
+        //   yield call(baseXhrError, res)
+        //   def && def.reject(res)
+        //   return res
+        // }
+        // let data = res.body.data
+        // let {outTradeNo} = data
+        let return_url = location.origin + `/payment/${orderNo}?payType=WXPAY&type=JSAPI&redirect_uri=${encodeURIComponent(redirectUri)}`
         let wxData = querystring.stringify({
           appid: auth.weixin.appid,
           redirect_uri: encodeURI(return_url),
@@ -301,11 +311,10 @@ export default KeaContext => {
         return pay_url
       },
       getWxAppid: function * (action) {
-        const {actions} = this
         const {code, token, def} = action.payload
         let wxData = {
           appid: auth.weixin.appid,
-          secret: auth.weixin.secret,
+          secret: privateAuth.weixin.secret,
           code,
           grant_type: 'authorization_code'
         }
@@ -318,6 +327,27 @@ export default KeaContext => {
         }
         let data = JSON.parse(res.body.data)
         data = data.openid
+        def && def.resolve(data)
+        return data
+      },
+      goWxJSPay: function * (action) {
+        const {openid, token, def} = action.payload
+        const {orderNo} = yield this.get('payData')
+        let conf = {
+          orderNo,
+          type: 'JSAPI',
+          tradeType: 'WXPAY',
+          openid: openid,
+        }
+        let res
+        res = yield call(Api.getWxPayOrder, conf, token)
+        if (isError(res)) {
+          yield call(baseXhrError, res)
+          def && def.reject(res)
+          return res
+        }
+        let data = res.body.data
+        let {outTradeNo} = data
         let payData = {
           'appId': data.appId,
           'timeStamp': data.timeStamp,
@@ -326,7 +356,9 @@ export default KeaContext => {
           'signType': 'MD5',
           'paySign': data.paySign
         }
-        def && def.resolve(payData)
+        def && def.resolve({
+          payData, outTradeNo
+        })
         return payData
       },
       checkOrderNo: function * (action) {

@@ -49,7 +49,7 @@ export function baseChcek (res) {
   if (res.body.code === 1444) {
     return new needAuthError(res.body.message)
   }
-  if (res.body.code === 200) {
+  if (res.body.code === 200 || res.status === 200) {
     return res
   } else {
     return new resError(res.body.message)

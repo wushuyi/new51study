@@ -8,11 +8,11 @@ export const isServer = !isBrowser;
 export function is_weixin() {
   let isWeiXin = false;
   let ua = window.navigator.userAgent.toLowerCase();
-  if (ua.match(/MicroMessenger/i) === 'micromessenger') {
+  if (ua.match(/MicroMessenger/i) == 'micromessenger') {
     isWeiXin = true;
   }
   return isWeiXin;
-};
+}
 
 /***
  * 是否是QQ客户端

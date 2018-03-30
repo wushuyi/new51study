@@ -96,14 +96,20 @@ class Page extends React.Component {
         },
       )
     }
+
     //微信返回支付
     if (code && state && orderNo) {
       const def = deferred()
-      await sleep(10)
+      await sleep(100)
+      console.log('code', code)
       actions.getWxAppid(code, def)
       def.promise.then(
-        (payData) => {
-          this.wx_subscription_pay(payData)
+        (openid) => {
+          const def = deferred()
+          actions.goWxJSPay(openid, def)
+          def.promise.then(({payData, outTradeNo}) => {
+            this.wx_subscription_pay(payData, outTradeNo)
+          })
         },
       )
 
@@ -131,7 +137,7 @@ class Page extends React.Component {
       def.promise.then(
         url => {
           window.location.href = url
-          console.log(url)
+          // console.log(url)
         },
       )
     } else if (payType === 'alipay') {
@@ -146,8 +152,10 @@ class Page extends React.Component {
     }
   }
 
-  wx_subscription_pay (data = {}) {
+  //微信内公众号支付
+  wx_subscription_pay = (data = {}, outTradeNo) => {
     const {onPaySuccess} = this
+    const {actions} = this.props
     console.log('wx_subscription_pay->data:', data)
     WeixinJSBridge && WeixinJSBridge.invoke(
       'getBrandWCPayRequest',
@@ -155,7 +163,17 @@ class Page extends React.Component {
       function (res) {
         let msg = res.err_msg
         if (msg === 'get_brand_wcpay_request:ok') {
-          onPaySuccess()
+          const def = deferred()
+          actions.checkOrderNo(outTradeNo, 'WXPAY', def)
+          def.promise.then(
+            (ok) => {
+              if (ok) {
+                onPaySuccess()
+              } else {
+                alert('支付失败')
+              }
+            },
+          )
         } else {
           let err_msg
           if (msg === 'get_brand_wcpay_request:cancel') {
@@ -227,6 +245,7 @@ export default withRedux(Page, function (KeaContext) {
         'goWxAuthorize',
         'getWxAppid',
         'checkOrderNo',
+        'goWxJSPay',
       ]
 
     ],
