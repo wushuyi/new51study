@@ -46,7 +46,7 @@ class Page extends React.Component {
     authData && store.dispatch(actions.syncAuthData(authData))
     const {redirect_uri} = query
     if (redirect_uri) {
-      store.dispatch(actions.setRedirectUri(encodeURIComponent(redirect_uri)))
+      store.dispatch(actions.setRedirectUri(decodeURIComponent(redirect_uri)))
     }
     try {
       const def = deferred()
@@ -85,40 +85,23 @@ class Page extends React.Component {
     if (outTradeNo && payType) {
       const def = deferred()
       await sleep(100)
-      actions.checkOrderNo(outTradeNo, payType, def)
-      def.promise.then(
-        (ok) => {
-          if (ok) {
-            this.onPaySuccess()
-          } else {
-            const def = deferred()
-            setTimeout(() => {
-              actions.checkOrderNo(outTradeNo, payType, def)
-              def.promise.then(
-                (ok) => {
-                  if (ok) {
-                    this.onPaySuccess()
-                  } else {
-                    const def = deferred()
-                    setTimeout(() => {
-                      actions.checkOrderNo(outTradeNo, payType, def)
-                      def.promise.then(
-                        (ok) => {
-                          if (ok) {
-                            this.onPaySuccess()
-                          } else {
-                            alert('支付状态故障!')
-                          }
-                        },
-                      )
-                    }, 1000)
-                  }
-                },
-              )
-            }, 1000)
-          }
-        },
-      )
+      let onPress = () => {
+        actions.checkOrderNo(outTradeNo, payType, def)
+        def.promise.then(
+          (ok) => {
+            if (ok) {
+              this.onPaySuccess()
+            } else {
+              window.location.href = redirectUri
+            }
+          },
+        )
+      }
+      alert('支付结果确认', '', [
+        {text: '继续支付', onPress},
+        {text: '已完成', onPress},
+      ])
+
     }
 
     //微信返回支付
@@ -203,7 +186,7 @@ class Page extends React.Component {
               if (ok) {
                 onPaySuccess()
               } else {
-                alert('支付失败')
+                alert('支付状态故障!')
               }
             },
           )
