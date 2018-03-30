@@ -77,7 +77,7 @@ class Page extends React.Component {
       isMount: true
     })
 
-    const {actions} = this.props
+    const {actions, redirectUri} = this.props
 
     const {code, state, orderNo, outTradeNo, payType} = Router.router.query
 
@@ -91,7 +91,31 @@ class Page extends React.Component {
           if (ok) {
             this.onPaySuccess()
           } else {
-            alert('支付失败')
+            const def = deferred()
+            setTimeout(() => {
+              actions.checkOrderNo(outTradeNo, payType, def)
+              def.promise.then(
+                (ok) => {
+                  if (ok) {
+                    this.onPaySuccess()
+                  } else {
+                    const def = deferred()
+                    setTimeout(() => {
+                      actions.checkOrderNo(outTradeNo, payType, def)
+                      def.promise.then(
+                        (ok) => {
+                          if (ok) {
+                            this.onPaySuccess()
+                          } else {
+                            alert('支付状态故障!')
+                          }
+                        },
+                      )
+                    }, 1000)
+                  }
+                },
+              )
+            }, 1000)
           }
         },
       )
@@ -105,6 +129,15 @@ class Page extends React.Component {
       actions.getWxAppid(code, def)
       def.promise.then(
         (openid) => {
+          //为了解决 微信支付回调又刷新
+          let uri = encodeURIComponent(redirectUri)
+          Router.replace({
+            pathname: '/payment',
+            query: {
+              orderNo: orderNo,
+              redirect_uri: uri,
+            },
+          }, `/payment/${orderNo}?redirect_uri=${uri}`, {shallow: true})
           const def = deferred()
           actions.goWxJSPay(openid, def)
           def.promise.then(({payData, outTradeNo}) => {
