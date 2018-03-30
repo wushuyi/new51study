@@ -209,6 +209,29 @@ export default KeaContext => {
         },
         PropTypes.any,
       ],
+      pageState: [
+        () => [selectors.currApplyDetail],
+        (applyDetail) => {
+          if (!get(applyDetail, 'state')) {
+            return false
+          }
+          const {evaluateId, state, verify} = applyDetail
+          let pageState = ''
+          if (state === 'DRAFT') {
+            pageState = '确认提交'
+          } else if (verify === 'Waiting') {
+            pageState = '等待审核'
+          } else if (verify === 'Pass' && state === 'UNPAID') {
+            pageState = '通过，确认付款'
+          } else if (verify === 'NotPass') {
+            pageState = '未通过'
+          } else if (state === 'LIVE') {
+            pageState = '报名成功'
+          }
+          return pageState
+        },
+        PropTypes.any,
+      ],
       channelProps: [
         () => [selectors.currApplyDetail, selectors.currId, selectors.pageState],
         (applyDetail, currId, pageState) => {
@@ -260,29 +283,6 @@ export default KeaContext => {
             }
           }
           return Immutable(data)
-        },
-        PropTypes.any,
-      ],
-      pageState: [
-        () => [selectors.currApplyDetail],
-        (applyDetail) => {
-          if (!get(applyDetail, 'state')) {
-            return false
-          }
-          const {evaluateId, state, verify} = applyDetail
-          let pageState = ''
-          if (state === 'DRAFT') {
-            pageState = '确认提交'
-          } else if (verify === 'Waiting') {
-            pageState = '等待审核'
-          } else if (verify === 'Pass' && state === 'UNPAID') {
-            pageState = '通过，确认付款'
-          } else if (verify === 'NotPass') {
-            pageState = '未通过'
-          } else if (state === 'LIVE') {
-            pageState = '报名成功'
-          }
-          return pageState
         },
         PropTypes.any,
       ],
