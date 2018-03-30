@@ -136,10 +136,11 @@ export default class BannerCover extends React.PureComponent {
           ) : (
             <div className='bg-cover' title="比赛封面"/>
           )}
-          <a className="position-outer" {...linkProps} onClick={this.onAppClick}>
+          {area?(<a className="position-outer" {...linkProps} onClick={this.onAppClick}>
             <div className="position"/>
             <span>{area}</span>
           </a>
+          ):null}
         </div>
         <style jsx>{Style}</style>
         {/*language=SCSS*/}
