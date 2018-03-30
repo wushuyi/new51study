@@ -121,7 +121,7 @@ export default class SignupPopup extends React.PureComponent {
                   <SignupPopupItem price='报名' title="参加团体比赛"
                                    onClick={() => {
                                      if (signupProps.userType !== 'STUDY') {
-                                       Toast.info('老师和机构可发布比赛', 2, null, false)
+                                       Toast.info((<Fragment>仅学生可以参加团体比赛<br/>机构/老师可发布团体比赛</Fragment>), 2, null, false)
                                        return false
                                      }
 
@@ -137,7 +137,7 @@ export default class SignupPopup extends React.PureComponent {
                   <SignupPopupItem price='报名' title="发布团体比赛（机构、老师发布）"
                                    onClick={() => {
                                      if (signupProps.userType === 'STUDY') {
-                                       Toast.info((<Fragment>学生身份可以参加<br/>不可发布比赛</Fragment>), 2, null, false)
+                                       Toast.info('仅机构/老师可以发布团体比赛,学生可以参加团体比赛', 2, null, false)
                                        return false
                                      }
                                      Router.push(

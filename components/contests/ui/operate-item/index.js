@@ -12,15 +12,25 @@ import WhiteSpace from 'components/ui/white-space'
 function getButtonText (props={}) {
    let {
      userType,
-     applyState
+     applyState,
+     verify
    }=props;
   let name ='我要报名';
   if(userType==='STUDY'){
-     name = contestStatus[applyState] === 1
-      ? '我要报名'
-      : contestStatus[applyState] === 0
-        ? '上传作品'
-        : '查看报名结果'
+
+    if(contestStatus[applyState] === 1){
+      name ='我要报名';
+    }else{
+       if(verify==='Waiting'||verify==='NotPass'){
+         name ='查看报名结果';
+       }else if(verify==='Pass'){
+           if(contestStatus[applyState] === 2){
+             name ='查看报名结果';
+           }else if(contestStatus[applyState] === 0){
+             name ='上传作品';
+           }
+       }
+    }
    }
   return name
 }
