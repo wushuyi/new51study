@@ -214,7 +214,7 @@ export default class ChannelItem extends React.PureComponent {
     const {modal, text} = this.state
     return (
       <Fragment>
-        <SelectItem title="所属机构" text={text} onClick={this.showModal}/>
+        <SelectItem title="所属机构/老师" text={text} onClick={this.showModal}/>
         <Modal visible={modal}
                popup
                animationType="slide-up"

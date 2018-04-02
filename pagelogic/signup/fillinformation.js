@@ -401,7 +401,7 @@ export default KeaContext => {
           }
           let data = [
             {
-              name: '所属机构',
+              name: '所属机构/老师',
               value: channelName || '我要学平台',
             },
             {

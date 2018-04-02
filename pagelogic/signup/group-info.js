@@ -534,7 +534,7 @@ export default KeaContext => {
           const {orderNo, number, referenceName: channelName} = applyDetail
           return Immutable([
             {
-              labelName: '所属机构',
+              labelName: '所属机构/老师',
               value: channelName || '我要学平台',
             },
             {
