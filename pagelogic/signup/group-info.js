@@ -159,7 +159,7 @@ export default KeaContext => {
           // 选择分组
           if (ifApplyGroup && applyGroupStr) {
             let listData = applyGroupStr.split(',')
-            let defaultval = indexOf(listData, groupName)
+            let defaultval = groupName ? indexOf(listData, groupName) : false
             let sourceData = listData.map((item, index) => {
               return {
                 value: index,
@@ -531,15 +531,19 @@ export default KeaContext => {
           if (!get(applyDetail, 'number')) {
             return false
           }
-          const {orderNo, channelName} = applyDetail
+          const {orderNo, number, referenceName: channelName} = applyDetail
           return Immutable([
             {
-              labelName: '渠道选择',
+              labelName: '所属机构',
               value: channelName || '我要学平台',
             },
             {
               labelName: '订单号',
               value: orderNo,
+            },
+            {
+              labelName: '参赛编号',
+              value: number,
             },
           ])
         },

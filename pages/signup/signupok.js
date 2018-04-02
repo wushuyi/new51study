@@ -20,9 +20,13 @@ import InfoList from 'components/payment/info-list'
 import InformationTitleItem from 'components/sign-up/ui/information-title-item'
 import OptionItem from 'components/sign-up/information/option-item'
 import InputBox from 'components/sign-up/information/input-box'
+import BaseInput from 'components/ui/form/InputText/baseInput'
+import List from 'antd-mobile/lib/list'
+
 import Router from 'next/router'
 
 import { goOpenOrDownAppUrl } from 'config/settings'
+import map from 'lodash/map'
 
 const {alert} = Modal
 
@@ -108,6 +112,7 @@ class Page extends React.Component {
       signupokEndInfoProps,
       signupokOptionProps,
       signupokOperateProps,
+      endFormProps,
     } = this.props
     const {isMount} = this.state
 
@@ -144,6 +149,17 @@ class Page extends React.Component {
                   <InputBox data={rawParentBoxProps}/>
                 </Fragment>
               )}
+
+              {endFormProps && <Fragment>
+                <WhiteSpace height={10}/>
+                <List>
+                  {map(endFormProps, (o, i) => {
+                    return <BaseInput key={i} {...o}/>
+                  })}
+                </List>
+              </Fragment>}
+
+
             </Form>
           )}
         />
@@ -180,6 +196,7 @@ export default withRedux(Page, function (KeaContext) {
         'statusProps',
         'signupokOptionProps',
         'signupokOperateProps',
+        'endFormProps',
       ]
     ]
   })

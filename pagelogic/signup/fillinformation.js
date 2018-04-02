@@ -395,6 +395,7 @@ export default KeaContext => {
         (detail) => {
           let outTradeNo = get(detail, 'orderNo')
           let channelName = get(detail, 'referenceName')
+          let number = get(detail, 'number')
           if (!outTradeNo) {
             return false
           }
@@ -406,6 +407,10 @@ export default KeaContext => {
             {
               name: '订单号',
               value: outTradeNo,
+            },
+            {
+              name: '参赛编号',
+              value: number,
             },
           ]
           return Immutable(data)
