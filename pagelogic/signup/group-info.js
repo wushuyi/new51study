@@ -454,10 +454,7 @@ export default KeaContext => {
           if (ifApplyGroup && applyGroupStr) {
             let listData = applyGroupStr.split(',')
             let groupName = get(defData, 'groupName')
-            let defaultval = false
-            if (groupName) {
-              defaultval = indexOf(listData, groupName)
-            }
+            let defaultval = groupName ? indexOf(listData, groupName) : false
 
             let sourceData = listData.map((item, index) => {
               return {

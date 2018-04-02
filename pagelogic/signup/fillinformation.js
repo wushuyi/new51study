@@ -193,7 +193,7 @@ export default KeaContext => {
           // 选择分组
           if (ifApplyGroup && applyGroupStr) {
             let listData = applyGroupStr.split(',')
-            let defaultval = indexOf(listData, groupName)
+            let defaultval = groupName ? indexOf(listData, groupName) : false
             let sourceData = listData.map((item, index) => {
               return {
                 value: index,
@@ -364,7 +364,6 @@ export default KeaContext => {
         },
         PropTypes.any,
       ],
-
 
       //signupok
       signupokTopInfoProps: [
